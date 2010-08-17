@@ -4,7 +4,7 @@ The [http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-duplex/sr
 
 The examples use a simple [http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-duplex/src/test/protos/pingpong.proto PingPong] service where a client can call "ping" on a server.
 
-= Client Code =
+== Client Code ==
 
 Firstly we declare who the client is and who the server is that we're going to connect to. Note that the client does not actually bind to port 1234, it is just used as a "name".
 {{{
@@ -56,6 +56,37 @@ Finally to close the RpcClientChannel so it cannot be used anymore do, call clos
 	bootstrap.releaseExternalResources();
 }}}
 	
+== Server Code ==
+
+The server side is pretty similar to the client above. The server needs to know "who" it is, and be given a port on which to bind to on the machine it is running on. Note you can configure a local address to bind onto also ( multi-homing support ) through the Netty localAddress option. The server's hostname should normally be the server's hostname which resolves in DNS to the server machine, however it is just a name ( like the client's port is just a name ).
+{{{
+    	PeerInfo serverInfo = new PeerInfo("serverHostname", 8080);
+}}}
+You need then to create a DuplexTcpServerBootstrap and provide it an RpcCallExecutor.
+{{{
+    	ThreadPoolCallExecutor executor = new ThreadPoolCallExecutor(10, 10);
+    	
+        DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(
+        		serverInfo,
+                new NioServerSocketChannelFactory(
+                        Executors.newCachedThreadPool(),
+                        Executors.newCachedThreadPool()),
+                executor);
+}}}
+Then you need to register your server side services with the bootstrap. Again here the registration is dynamic and can change at runtime.
+{{{
+    	bootstrap.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
+}}}
+Finally binding the bootstrap to the TCP port will start off the socket accepting and clients can start to connect.
+{{{
+        Channel c = bootstrap.bind();
+}}}
+If you want to track the RPC peering events with clients, use a RpcClientConnectionRegistry or a TcpConnectionEventListener for TCP connection events. This is the mechanism you can use to "discover" RPC clients before they "call" any service.
+{{{
+    	RpcClientConnectionRegistry eventLogger = new RpcClientConnectionRegistry();
+    	bootstrap.registerConnectionEventListener(eventLogger);
+}}}
+You can then also close the server by closing the channel which the bootstrap is bound to and finally releaseExternalResources on final shutdown.
 
 == Runtime Dependencies ==
 The external dependencies have been kept to a minimum. Netty and commons logging are the only compile time dependencies. At runtime an additional logging facility is optional. Compiled against java 1.6.
