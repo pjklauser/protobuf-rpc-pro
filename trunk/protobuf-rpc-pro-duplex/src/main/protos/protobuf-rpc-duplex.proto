@@ -1,0 +1,65 @@
+// Copyright (c) 2010 Peter Klauser
+
+//
+// TcpClient->TcpServer : ConnectRequest
+// TcpServer->TcpClient : ConnectResponse
+// 
+// RpcClient->RpcServer : RpcRequest, RpcCancel
+// RpcServer->RpcClient : RpcResponse, RpcError
+//  remember TcpClient can be both RpcClient or RpcServer
+//  and a TcpServer can be both RpcClient or RpcServer
+
+option java_package = "com.googlecode.protobuf.pro.duplex.wire";
+option java_outer_classname = "DuplexProtocol";
+
+// This is default, but it's nice to be explicit
+option optimize_for = SPEED;
+
+
+message ConnectRequest {
+    required int32 correlationId = 1;
+    required string clientHostName = 2;
+    required int32 clientPort = 3;
+    required string clientPID = 4;
+}
+
+message ConnectResponse {
+    required int32 correlationId = 1;
+    optional string serverPID = 2;
+    optional ConnectErrorCode errorCode = 3;
+}
+
+enum ConnectErrorCode {
+  ALREADY_CONNECTED = 0; // Client with same name already connected.
+}
+
+message RpcRequest {
+    required int32 correlationId = 1; //TODO optional to support null callback
+    required string serviceIdentifier = 2;
+    required string methodIdentifier = 3;
+    required bytes requestBytes = 4;
+}
+
+message RpcResponse {
+    required int32 correlationId = 1;
+    required bytes responseBytes = 2;
+}
+
+message RpcError {
+    required int32 correlationId = 1;
+    required string errorMessage = 2; 
+}
+
+message RpcCancel {
+    required int32 correlationId = 1;
+}
+
+message WirePayload {
+	optional ConnectRequest connectRequest = 1;
+	optional ConnectResponse connectResponse = 2;
+	optional RpcRequest rpcRequest = 3;
+	optional RpcResponse rpcResponse = 4;
+	optional RpcError rpcError = 5;
+	optional RpcCancel rpcCancel = 6;
+}
+

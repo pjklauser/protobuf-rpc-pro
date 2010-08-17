@@ -1,0 +1,12 @@
+configurable max packet length
+
+perf comparison
+	socket-rpc std java
+	mina
+	netty
+	
+Howto - extend for SSL 
+
+Howto - extend for compression
+
+
