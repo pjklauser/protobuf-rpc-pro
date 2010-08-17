@@ -35,8 +35,6 @@ public class MainTcpClient {
                 Executors.newCachedThreadPool()),
                 executor);
         
-        // Configure the client.
-
         // Set up the event pipeline factory.
     	RpcServerConnectionRegistry eventLogger = new RpcServerConnectionRegistry();
     	bootstrap.registerConnectionEventListener(eventLogger);
@@ -83,7 +81,7 @@ public class MainTcpClient {
 			
 			Thread.sleep(1000);
 			
-			bootstrap.releaseExternalResources();
+			bootstrap.releaseExternalResources(); // check if this closes.
 		}
 	}
 	

@@ -32,6 +32,13 @@ import org.apache.commons.logging.LogFactory;
 import com.google.protobuf.RpcCallback;
 
 /**
+ * A ThreadPoolCallExecutor uses a pool of threads to handle the running of server side RPC calls.
+ * It is necessary to use separate threads to handle server RPC calls than the threads which serve
+ * the RPC client calls, in order to avoid deadlock on the single Netty Channel.
+ * 
+ * You can choose bounds for number of Threads to service the calls, and the BlockingQueue size and
+ * implementation through the choice of constructors. {@link java.util.concurrent.ThreadPoolExecutor}
+ * discusses the choices here in detail.
  * 
  * By default we use {@link java.util.concurrent.ArrayBlockingQueue} to begin to throttle inbound calls
  * without building up a significant backlog ( introducing latency ). The ArrayBlockingQueue gives less
