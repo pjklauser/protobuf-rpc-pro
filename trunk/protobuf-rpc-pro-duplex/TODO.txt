@@ -1,5 +1,8 @@
 configurable max packet length
 
+downstream pendent:
+ DEBUG com.googlecode.protobuf.pro.duplex.RpcClient >>> Received [1000]RpcResponse.
+ 
 perf comparison
 	socket-rpc std java
 	mina

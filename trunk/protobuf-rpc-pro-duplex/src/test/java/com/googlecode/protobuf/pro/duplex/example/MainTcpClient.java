@@ -15,25 +15,32 @@ import com.googlecode.protobuf.pro.duplex.client.RpcServerConnectionRegistry;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.Ping;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService;
-import com.googlecode.protobuf.pro.duplex.test.PingPong.Pong;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService.BlockingInterface;
+import com.googlecode.protobuf.pro.duplex.test.PingPong.Pong;
 
 public class MainTcpClient {
 	
 	private static Log log = LogFactory.getLog(MainTcpClient.class);
 	
 	public static void main(String[] args) throws Exception {
-		PeerInfo client = new PeerInfo("clienthost", 8081);
-    	
-//    	SameThreadExecutor executor = new SameThreadExecutor();
-    	ThreadPoolCallExecutor executor = new ThreadPoolCallExecutor(3, 10);
+		if ( args.length != 4 ) {
+			System.err.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort>");
+			System.exit(-1);
+		}
+		String serverHostname = args[0];
+		int serverPort = Integer.parseInt(args[1]);
+		String clientHostname = args[2];
+		int clientPort = Integer.parseInt(args[3]);
 
-    	DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(
+		PeerInfo client = new PeerInfo(clientHostname, clientPort);
+		PeerInfo server = new PeerInfo(serverHostname, serverPort);
+    	
+		DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(
         		client, 
         		new NioClientSocketChannelFactory(
                 Executors.newCachedThreadPool(),
                 Executors.newCachedThreadPool()),
-                executor);
+                new ThreadPoolCallExecutor(3, 10));
         
         // Set up the event pipeline factory.
     	RpcServerConnectionRegistry eventLogger = new RpcServerConnectionRegistry();
@@ -41,7 +48,7 @@ public class MainTcpClient {
         
     	RpcClientChannel channel = null;
 		try {
-	    	channel = bootstrap.peerWith("localhost", 8080);
+	    	channel = bootstrap.peerWith(server);
 	    	long startTS = 0;
 	    	long endTS = 0;
 			int numCalls = 10000;
