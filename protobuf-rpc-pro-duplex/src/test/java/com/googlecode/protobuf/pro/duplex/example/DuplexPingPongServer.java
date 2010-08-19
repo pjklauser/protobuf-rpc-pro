@@ -14,6 +14,7 @@ import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
+import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
@@ -27,10 +28,16 @@ public class DuplexPingPongServer {
 	private static Log log = LogFactory.getLog(RpcClient.class);
 
     public static void main(String[] args) throws Exception {
-    	PeerInfo serverInfo = new PeerInfo("server'sHostname", 8080);
+		if ( args.length != 2 ) {
+			System.err.println("usage: <serverHostname> <serverPort>");
+			System.exit(-1);
+		}
+		String serverHostname = args[0];
+		int serverPort = Integer.parseInt(args[1]);
+		
+    	PeerInfo serverInfo = new PeerInfo(serverHostname, serverPort);
     	
-//    	SameThreadExecutor executor = new SameThreadExecutor();
-    	ThreadPoolCallExecutor executor = new ThreadPoolCallExecutor(3, 10);
+    	RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 10);
     	
         // Configure the server.
         DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(

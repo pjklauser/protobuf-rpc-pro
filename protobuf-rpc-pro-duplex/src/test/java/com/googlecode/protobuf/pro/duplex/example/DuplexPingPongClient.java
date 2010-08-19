@@ -14,21 +14,33 @@ import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.client.RpcServerConnectionRegistry;
+import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.Ping;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService;
-import com.googlecode.protobuf.pro.duplex.test.PingPong.Pong;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService.BlockingInterface;
+import com.googlecode.protobuf.pro.duplex.test.PingPong.Pong;
 
 public class DuplexPingPongClient {
 
 	private static Log log = LogFactory.getLog(RpcClient.class);
 	
     public static void main(String[] args) throws Exception {
-    	PeerInfo client = new PeerInfo("localhost", 8081);
+		if ( args.length != 4 ) {
+			System.err.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort>");
+			System.exit(-1);
+		}
+		String serverHostname = args[0];
+		int serverPort = Integer.parseInt(args[1]);
+		String clientHostname = args[2];
+		int clientPort = Integer.parseInt(args[3]);
+		
+		PeerInfo client = new PeerInfo(clientHostname, clientPort);
+		PeerInfo server = new PeerInfo(serverHostname, serverPort);
     	
 //    	SameThreadExecutor executor = new SameThreadExecutor();
-    	ThreadPoolCallExecutor executor = new ThreadPoolCallExecutor(3, 10);
+		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 10);
+		
     	DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(
         		client, 
         		new NioClientSocketChannelFactory(
@@ -49,7 +61,7 @@ public class DuplexPingPongClient {
     	RpcServerConnectionRegistry eventLogger = new RpcServerConnectionRegistry();
     	bootstrap.registerConnectionEventListener(eventLogger);
         
-        RpcClient rpcClient = bootstrap.peerWith("localhost", 8080);
+        RpcClient rpcClient = bootstrap.peerWith(server);
         
         
 		BlockingInterface myService = PingPongService.newBlockingStub(rpcClient);
