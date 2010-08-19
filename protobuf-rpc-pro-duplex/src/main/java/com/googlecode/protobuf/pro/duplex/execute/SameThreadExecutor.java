@@ -23,6 +23,18 @@ import org.apache.commons.logging.LogFactory;
 import com.google.protobuf.RpcCallback;
 
 /**
+ * An RpcServerCallExecutor which directly calls the RPC service using the same
+ * thread that is processing the IO data. This strategy is most efficient however
+ * succeptable to deadlock if you are intending to perform reverse RPC calls from
+ * server to client. In this case use {@link ThreadPoolCallExecutor}.
+ * 
+ * Furthermore RPC call cancellation does not work with this execution strategy.
+ * In Netty, the same IO-Thread handles message receipt for a single TCP socket
+ * connection, therefore although this code allows for cancellation of the RPC
+ * call, in practice the cancellation will always arrive after the call has finished
+ * processing ( because in this model the same Thread handles the cancel and the RPC 
+ * call ).
+ * 
  * @author Peter Klauser
  *
  */
