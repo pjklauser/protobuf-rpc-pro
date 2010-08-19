@@ -27,6 +27,13 @@ import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 
 /**
+ * The RpcClientConnectionRegistry keeps track of the RPC clients
+ * that the RPC server knows about. 
+ * 
+ * It listens for TCP connection events and transforms them into 
+ * RPC connection events which are fired towards the registered 
+ * RpcConnectionEventListener.
+ * 
  * @author Peter Klauser
  *
  */

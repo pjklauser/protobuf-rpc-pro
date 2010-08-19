@@ -21,7 +21,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +33,10 @@ import com.google.protobuf.RpcCallback;
 /**
  * A ThreadPoolCallExecutor uses a pool of threads to handle the running of server side RPC calls.
  * It is necessary to use separate threads to handle server RPC calls than the threads which serve
- * the RPC client calls, in order to avoid deadlock on the single Netty Channel.
+ * the RPC client calls, in order to avoid deadlock on the single Netty Channel. If you are not
+ * performing reverse RPC calls from server to client, then you can use the {@link SameThreadExecutor}
+ * to not incur the performance penalty of a thread context switch from IO-Thread to RPC call executor
+ * thread.
  * 
  * You can choose bounds for number of Threads to service the calls, and the BlockingQueue size and
  * implementation through the choice of constructors. {@link java.util.concurrent.ThreadPoolExecutor}

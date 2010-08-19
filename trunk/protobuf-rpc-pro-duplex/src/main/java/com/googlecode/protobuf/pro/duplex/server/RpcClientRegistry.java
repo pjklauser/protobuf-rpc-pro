@@ -18,27 +18,50 @@ package com.googlecode.protobuf.pro.duplex.server;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 
 /**
+ * An RpcClientRegistry keeps an account of all connected RpcClients of an RpcServer.
+ * 
  * @author Peter Klauser
  *
  */
 public class RpcClientRegistry {
+	
+	private static Log log = LogFactory.getLog(RpcClientRegistry.class);
 	
 	private Map<String, RpcClient> clientNameMap = new ConcurrentHashMap<String, RpcClient>();
 	
 	public RpcClientRegistry() {
 	}
 
+	/**
+	 * Attempt to register an RpcClient which has newly connected, during
+	 * connection handshake. If the client is already connected, return false.
+	 * 
+	 * @param rpcClient
+	 * @return true if registration is successful, false if already connected.
+	 */
 	public boolean registerRpcClient( RpcClient rpcClient ) {
-		if ( !clientNameMap.containsKey(rpcClient.getClientInfo().getName())) {
+		RpcClient existingClient = clientNameMap.get(rpcClient.getClientInfo().getName());
+		if ( existingClient == null ) {
 			clientNameMap.put(rpcClient.getClientInfo().getName(), rpcClient);
 			return true;
+		}
+		if ( log.isDebugEnabled() ) {
+			log.debug("RpcClient " + rpcClient.getClientInfo() + " is already registered with " + existingClient.getClientInfo());
 		}
 		return false;
 	}
 	
+	/**
+	 * Remove the RpcClient from the registry, at connection close time.
+	 * 
+	 * @param rpcClient
+	 */
 	public void removeRpcClient( RpcClient rpcClient ) {
 		clientNameMap.remove(rpcClient.getClientInfo().getName());
 	}

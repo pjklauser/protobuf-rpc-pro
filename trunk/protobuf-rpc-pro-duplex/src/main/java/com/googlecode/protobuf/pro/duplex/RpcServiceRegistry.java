@@ -23,6 +23,9 @@ import java.util.Map;
 import com.google.protobuf.Service;
 
 /**
+ * The RpcServiceRegistry holds a reference to each RPC service 
+ * implementation that can service calls.
+ * 
  * @author Peter Klauser
  *
  */
