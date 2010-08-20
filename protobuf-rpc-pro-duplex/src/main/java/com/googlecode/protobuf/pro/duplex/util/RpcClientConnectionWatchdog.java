@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
 */
-package com.googlecode.protobuf.pro.duplex.client;
+package com.googlecode.protobuf.pro.duplex.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,12 +24,20 @@ import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
+import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 
+/**
+ * The idea is for someone to try to keep a connection alive
+ * 
+ * TODO investigate using a "DelayQueue" for this.
+ * 
+ * @author Peter Klauser
+ *
+ */
 public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 	
     private static Log log = LogFactory.getLog(RpcClientConnectionWatchdog.class);
-	//private static final Logger log = Logger.getLogger(RpcClientConnectionWatchdog.class);
 	
 	private List<RetryState> watchedClients = new ArrayList<RetryState>();
 	

@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
@@ -30,6 +32,8 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineException;
 import org.jboss.netty.channel.ChannelPipelineFactory;
+import org.jboss.netty.channel.group.ChannelGroup;
+import org.jboss.netty.channel.group.DefaultChannelGroup;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
@@ -47,16 +51,27 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
-public class DuplexTcpClientBootstrap extends ClientBootstrap implements ChannelPipelineFactory {
+public class DuplexTcpClientBootstrap extends ClientBootstrap {
 
+	//TODO toString
+	
+	private static Log log = LogFactory.getLog(DuplexTcpClientBootstrap.class);
+	
 	private PeerInfo clientInfo;
 	private RpcServiceRegistry rpcServiceRegistry = new RpcServiceRegistry();
-	private RpcServerCallExecutor rpcCallExecutor;
+	private RpcServerCallExecutor rpcServerCallExecutor;
 	private RpcLogger logger = new CategoryPerServiceLogger();
 	
 	private AtomicInteger correlationId = new AtomicInteger(1);
 
 	private List<TcpConnectionEventListener> connectionEventListeners = new ArrayList<TcpConnectionEventListener>();
+	
+	/**
+	 * All Netty Channels created and bound by this DuplexTcpClientBootstrap.
+	 * 
+	 * We keep hold of them to be able to do a clean shutdown.
+	 */
+	private ChannelGroup allChannels = new DefaultChannelGroup();
 	
     /**
      * Creates a new instance stipulating client info.
@@ -75,11 +90,11 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap implements Channel
      * 
      * @param clientInfo
      * @param channelFactory
-     * @param rpcCallExecutor
+     * @param rpcServerCallExecutor
      */
-    public DuplexTcpClientBootstrap(PeerInfo clientInfo, ChannelFactory channelFactory, RpcServerCallExecutor rpcCallExecutor ) {
+    public DuplexTcpClientBootstrap(PeerInfo clientInfo, ChannelFactory channelFactory, RpcServerCallExecutor rpcServerCallExecutor ) {
     	this( clientInfo, channelFactory);
-    	setRpcCallExecutor(rpcCallExecutor);
+    	setRpcServerCallExecutor(rpcServerCallExecutor);
     }
     
 	public RpcClient peerWith( PeerInfo serverInfo ) throws IOException {
@@ -168,6 +183,20 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap implements Channel
         return rpcClient;
     }
     
+	/**
+	 * Unbind and close a Channel previously opened by this Bootstrap.
+	 * 
+	 * @param channel
+	 */
+	public void close( Channel channel ) {
+		if ( allChannels.remove(channel) ) {
+			log.info("Closing IO Channel " + channel);
+			channel.close();
+		} else {
+			log.warn("IO Channel " + channel + " not know by this Bootstrap.");
+		}
+	}
+	
     protected RpcClientHandler completePipeline(RpcClient rpcClient) {
 		TcpConnectionEventListener informer = new TcpConnectionEventListener(){
 			@Override
@@ -186,13 +215,33 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap implements Channel
 		RpcClientHandler rpcClientHandler = new RpcClientHandler(rpcClient, informer);
 		rpcClient.getChannel().getPipeline().replace(Handler.CLIENT_CONNECT, Handler.RPC_CLIENT, rpcClientHandler);
 		
-		RpcServer rpcServer = new RpcServer(rpcClient, rpcServiceRegistry, rpcCallExecutor, logger);
+		RpcServer rpcServer = new RpcServer(rpcClient, rpcServiceRegistry, rpcServerCallExecutor, logger);
 		RpcServerHandler rpcServerHandler = new RpcServerHandler(rpcServer); 
 		rpcClient.getChannel().getPipeline().addAfter(Handler.RPC_CLIENT, Handler.RPC_SERVER, rpcServerHandler);
 		
 		return rpcClientHandler;
     }
     
+	/* (non-Javadoc)
+	 * @see org.jboss.netty.bootstrap.Bootstrap#releaseExternalResources()
+	 */
+	@Override
+	public void releaseExternalResources() {
+		log.debug("Closing all channels.");
+		allChannels.close().awaitUninterruptibly();
+		log.debug("Releasing IO-Layer external resources.");
+		super.releaseExternalResources();
+		if ( rpcServerCallExecutor != null ) {
+			log.debug("Releasing RPC Executor external resources.");
+			rpcServerCallExecutor.shutdown();
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "ClientBootstrap:"+clientInfo;
+	}
+	
 	public void registerConnectionEventListener( TcpConnectionEventListener listener ) {
 		getConnectionEventListeners().add(listener);
 	}
@@ -268,17 +317,17 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap implements Channel
 	}
 
 	/**
-	 * @return the rpcCallExecutor
+	 * @return the rpcServerCallExecutor
 	 */
-	public RpcServerCallExecutor getRpcCallExecutor() {
-		return rpcCallExecutor;
+	public RpcServerCallExecutor getRpcServerCallExecutor() {
+		return rpcServerCallExecutor;
 	}
 
 	/**
 	 * @param rpcCallExecutor the rpcCallExecutor to set
 	 */
-	public void setRpcCallExecutor(RpcServerCallExecutor rpcCallExecutor) {
-		this.rpcCallExecutor = rpcCallExecutor;
+	public void setRpcServerCallExecutor(RpcServerCallExecutor rpcServerCallExecutor) {
+		this.rpcServerCallExecutor = rpcServerCallExecutor;
 	}
 
 	/**
