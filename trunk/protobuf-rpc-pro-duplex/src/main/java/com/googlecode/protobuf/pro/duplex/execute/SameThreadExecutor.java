@@ -15,6 +15,8 @@
 */
 package com.googlecode.protobuf.pro.duplex.execute;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.WeakHashMap;
 
 import org.apache.commons.logging.Log;
@@ -119,4 +121,19 @@ public class SameThreadExecutor implements RpcServerCallExecutor {
 			// callback.
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor#shutdown()
+	 */
+	@Override
+	public void shutdown() {
+		List<Thread> threadsRunning = new ArrayList<Thread>();
+		threadsRunning.addAll(runningCalls.keySet());
+		
+		for( Thread t : threadsRunning ) {
+			cancel( (Runnable)t );
+		}
+	}
+	
+	
 }

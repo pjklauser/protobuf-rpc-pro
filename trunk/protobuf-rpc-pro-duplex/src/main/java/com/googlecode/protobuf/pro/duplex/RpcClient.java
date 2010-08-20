@@ -81,6 +81,11 @@ public class RpcClient implements RpcClientChannel {
 			.setRequestBytes(request.toByteString())
 			.build();
 		WirePayload payload = WirePayload.newBuilder().setRpcRequest(rpcRequest).build();
+		
+		if ( log.isDebugEnabled() ) {
+			log.debug("Sending ["+rpcRequest.getCorrelationId()+"]RpcRequest.");
+		}
+		
 		channel.write(payload).awaitUninterruptibly();
 	}
 

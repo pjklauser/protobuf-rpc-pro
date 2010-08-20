@@ -49,4 +49,9 @@ public interface RpcServerCallExecutor {
 	 * @param executor the executor registered in the callState during execute.
 	 */
 	public void cancel( Runnable executor );
+	
+	/**
+	 * Shutdown the Executor.
+	 */
+	public void shutdown();
 }

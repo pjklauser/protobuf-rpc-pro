@@ -26,6 +26,8 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
+import org.jboss.netty.channel.group.ChannelGroup;
+import org.jboss.netty.channel.group.DefaultChannelGroup;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
@@ -44,21 +46,29 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 	private final PeerInfo serverInfo;
 	private final RpcServiceRegistry rpcServiceRegistry = new RpcServiceRegistry();
 	private final RpcClientRegistry rpcClientRegistry = new RpcClientRegistry();
+	private final RpcServerCallExecutor rpcServerCallExecutor;
+
+	/**
+	 * All Netty Channels created and bound by this DuplexTcpServerBootstrap.
+	 * 
+	 * We keep hold of them to be able to do a clean shutdown.
+	 */
+	private ChannelGroup allChannels = new DefaultChannelGroup();
 	
-	public DuplexTcpServerBootstrap(PeerInfo serverInfo, ChannelFactory channelFactory, RpcServerCallExecutor rpcServerCallExecutor) {
-		this(serverInfo, channelFactory, rpcServerCallExecutor, new CategoryPerServiceLogger());
+	public DuplexTcpServerBootstrap(PeerInfo serverInfo, ChannelFactory channelFactory, RpcServerCallExecutor executor) {
+		this(serverInfo, channelFactory, executor, new CategoryPerServiceLogger());
 	}
 	
-	public DuplexTcpServerBootstrap(PeerInfo serverInfo, ChannelFactory channelFactory, RpcServerCallExecutor rpcServerCallExecutor, RpcLogger logger) {
+	public DuplexTcpServerBootstrap(PeerInfo serverInfo, ChannelFactory channelFactory, RpcServerCallExecutor executor, RpcLogger logger) {
 		super(channelFactory);
 		if ( serverInfo == null ) {
 			throw new IllegalArgumentException("serverInfo");
 		}
-		if ( rpcServerCallExecutor == null ) {
-			throw new IllegalArgumentException("rpcServerCallExecutor");
+		if ( executor == null ) {
+			throw new IllegalArgumentException("executor");
 		}
 		this.serverInfo = serverInfo;
-
+		this.rpcServerCallExecutor = executor;
 		TcpConnectionEventListener informer = new TcpConnectionEventListener(){
 			@Override
 			public void connectionClosed(RpcClient client) {
@@ -88,12 +98,48 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 				log.warn("localAddress " + localAddress + " does not match serverInfo's port " + serverInfo.getPort());
 			}
 		}
-		return super.bind(localAddress);
+		Channel c = super.bind(localAddress);
+		
+		allChannels.add(c);
+		
+		return c;
 	}
 	
 	@Override
 	public Channel bind() {
     	return bind( new InetSocketAddress(serverInfo.getPort()));
+	}
+	
+	/**
+	 * Unbind and close a Channel previously opened by this Bootstrap.
+	 * 
+	 * @param channel
+	 */
+	public void close( Channel channel ) {
+		if ( allChannels.remove(channel) ) {
+			log.info("Closing IO Channel " + channel);
+			channel.close();
+		} else {
+			log.warn("IO Channel " + channel + " not know by this Bootstrap.");
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.jboss.netty.bootstrap.Bootstrap#releaseExternalResources()
+	 */
+	@Override
+	public void releaseExternalResources() {
+		log.debug("Closing all channels.");
+		allChannels.close().awaitUninterruptibly();
+		log.debug("Releasing IO-Layer external resources.");
+		super.releaseExternalResources();
+		log.debug("Releasing RPC Executor external resources.");
+		this.rpcServerCallExecutor.shutdown();
+	}
+
+	@Override
+	public String toString() {
+		return "ServerBootstrap:"+serverInfo;
 	}
 	
 	private List<TcpConnectionEventListener> getListenersCopy() {

@@ -1,14 +1,15 @@
 configurable max packet length
 
-downstream pendent:
- DEBUG com.googlecode.protobuf.pro.duplex.RpcClient >>> Received [1000]RpcResponse.
- 
+demo - make ping up and pong down separate services.
+
 perf comparison
 	socket-rpc std java
 	mina
 	netty
 	
 Howto - extend for SSL 
+http://download-llnw.oracle.com/javase/1.5.0/docs/guide/security/jsse/samples/sslengine/SSLEngineSimpleDemo.java
+http-client sslengine
 
 Howto - extend for compression
 
