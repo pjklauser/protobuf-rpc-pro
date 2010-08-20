@@ -1,19 +1,24 @@
 package com.googlecode.protobuf.pro.duplex.example;
 
-import java.io.IOException;
 import java.util.concurrent.Executors;
 
-import org.jboss.netty.channel.Channel;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
+import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 import com.googlecode.protobuf.pro.duplex.server.RpcClientConnectionRegistry;
+import com.googlecode.protobuf.pro.duplex.util.CleanShutdownHandler;
 
-public class PingPongServer {
+public class PingServer {
 	
-	public static void main(String[] args) throws IOException {
+	private static Log log = LogFactory.getLog(PingServer.class);
+	
+	public static void main(String[] args) throws Exception {
 		if ( args.length != 2 ) {
 			System.err.println("usage: <serverHostname> <serverPort>");
 			System.exit(-1);
@@ -23,6 +28,8 @@ public class PingPongServer {
 		
     	PeerInfo serverInfo = new PeerInfo(serverHostname, serverPort);
     	
+		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
+
         // Configure the server.
         DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(
         		serverInfo,
@@ -31,13 +38,17 @@ public class PingPongServer {
                         Executors.newCachedThreadPool()),
                         new ThreadPoolCallExecutor(10, 10));
 
+        shutdownHandler.addResource(bootstrap);
+        
     	RpcClientConnectionRegistry clientRegistry = new RpcClientConnectionRegistry();
     	bootstrap.registerConnectionEventListener(clientRegistry);
 
-    	bootstrap.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
+    	Service pingService = PingService.newReflectiveService(new DefaultPingPongServiceImpl());
+    	bootstrap.getRpcServiceRegistry().registerService(pingService);
     	
     	// Bind and start to accept incoming connections.
-        Channel c = bootstrap.bind();
+        bootstrap.bind();
+        log.info("Serving " + bootstrap);
 	}
 	
 }

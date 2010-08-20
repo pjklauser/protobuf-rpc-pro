@@ -6,4 +6,4 @@ set EXAMPLE_CLASS=com.googlecode.protobuf.pro.duplex.example.%1
 
 set EXAMPLE_ARGS=-Dlog4j.configuration="file:..\lib\log4j.properties"
 
-javaw -classpath %CLASSPATH% %EXAMPLE_ARGS% %EXAMPLE_CLASS% %2 %3 %4 %5 %6 %7 %8 %9
+java -classpath %CLASSPATH% %EXAMPLE_ARGS% %EXAMPLE_CLASS% %2 %3 %4 %5 %6 %7 %8 %9

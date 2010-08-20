@@ -10,14 +10,16 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
+import com.google.protobuf.Service;
 import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.Ping;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.PingPongService;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.PingPongService.BlockingInterface;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.Pong;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.PongService;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.PongService.BlockingInterface;
 import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
@@ -56,20 +58,19 @@ public class DuplexPingPongServer {
     	RpcClientConnectionRegistry eventLogger = new RpcClientConnectionRegistry();
     	bootstrap.registerConnectionEventListener(eventLogger);
 
-    	bootstrap.getRpcServiceRegistry().registerService(new PingPongServiceImpl());
+    	Service pingService = PingService.newReflectiveService(new PingServiceImpl());
+    	bootstrap.getRpcServiceRegistry().registerService(pingService);
     	
     	// Bind and start to accept incoming connections.
         Channel c = bootstrap.bind();
         
         System.out.println("Bound to " + c.getLocalAddress());
-        /*
-        Thread.sleep(10000);
-        c.close();
-        bootstrap.releaseExternalResources();
-        */
+        
+        //TODO shutdown thread - release
     }
     
-	static class PingPongServiceImpl extends PingPongService {
+    
+	static class PingServiceImpl implements PingService.Interface {
 
 		@Override
 		public void ping(RpcController controller, Ping request,
@@ -77,38 +78,21 @@ public class DuplexPingPongServer {
 			
 			
 			RpcClientChannel channel = ServerRpcController.getRpcChannel(controller);
-			BlockingInterface myService = PingPongService.newBlockingStub(channel);
+			BlockingInterface myService = PongService.newBlockingStub(channel);
 			RpcController clientController = channel.newRpcController();
 
-			byte[] clientResult = new byte[0];
+			Ping clientResponse = null;
 			try {
-				Ping clientRequest = Ping.newBuilder().setProcessingTime(100).setPingData(ByteString.copyFromUtf8("ClientPing")).setPongDataLength(100).build();
+				Pong clientRequest = Pong.newBuilder().setNumber(100).setPongData(ByteString.copyFromUtf8("ClientPing")).build();
 
-				Pong clientResponse = myService.ping(clientController, clientRequest);
-				clientResult = clientResponse.getPongData().toByteArray();
-				
+				clientResponse = myService.pong(clientController, clientRequest);
 			} catch ( ServiceException e ) {
 				controller.setFailed("Client call failed with " + e.getMessage());
 				done.run(null);
 				return;
 			}
-			/*
-			try {
-				Thread.sleep(1000);
-			} catch ( InterruptedException e ) {
-				Thread.currentThread().interrupt();
-			}
-			*/
-			Pong response = Pong.newBuilder().setPongData(ByteString.copyFrom(clientResult)).build();
+			Pong response = Pong.newBuilder().setNumber(clientResponse.getNumber()).setPongData(clientResponse.getPingData()).build();
 			done.run(response);
-		}
-
-		@Override
-		public void fail(RpcController controller, Ping request,
-				RpcCallback<Pong> done) {
-			
-			controller.setFailed("Failed.");
-			done.run(null);
 		}
 	}
 }
