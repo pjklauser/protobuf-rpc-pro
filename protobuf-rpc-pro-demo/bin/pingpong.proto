@@ -4,17 +4,19 @@ option java_package = "com.googlecode.protobuf.pro.duplex.example";
 option java_outer_classname = "PingPong";
 
 message Ping {
-    required int32 processingTime = 1;
-    required int32 pongDataLength = 2;
-    required bytes pingData = 3;
+	required int32 number = 1;
+    required bytes pingData = 2;
 }
 
 message Pong {
-    required bytes pongData = 1;
+	required int32 number = 1;
+    required bytes pongData = 2;
 }
 
-service PingPongService {
+service PingService {
     rpc ping(Ping) returns (Pong);
-    rpc fail(Ping) returns (Pong);
 }
 
+service PongService {
+    rpc pong(Pong) returns (Ping);
+}

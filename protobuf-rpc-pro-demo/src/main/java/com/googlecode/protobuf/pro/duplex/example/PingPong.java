@@ -35,22 +35,15 @@ public final class PingPong {
       return com.googlecode.protobuf.pro.duplex.example.PingPong.internal_static_Ping_fieldAccessorTable;
     }
     
-    // required int32 processingTime = 1;
-    public static final int PROCESSINGTIME_FIELD_NUMBER = 1;
-    private boolean hasProcessingTime;
-    private int processingTime_ = 0;
-    public boolean hasProcessingTime() { return hasProcessingTime; }
-    public int getProcessingTime() { return processingTime_; }
+    // required int32 number = 1;
+    public static final int NUMBER_FIELD_NUMBER = 1;
+    private boolean hasNumber;
+    private int number_ = 0;
+    public boolean hasNumber() { return hasNumber; }
+    public int getNumber() { return number_; }
     
-    // required int32 pongDataLength = 2;
-    public static final int PONGDATALENGTH_FIELD_NUMBER = 2;
-    private boolean hasPongDataLength;
-    private int pongDataLength_ = 0;
-    public boolean hasPongDataLength() { return hasPongDataLength; }
-    public int getPongDataLength() { return pongDataLength_; }
-    
-    // required bytes pingData = 3;
-    public static final int PINGDATA_FIELD_NUMBER = 3;
+    // required bytes pingData = 2;
+    public static final int PINGDATA_FIELD_NUMBER = 2;
     private boolean hasPingData;
     private com.google.protobuf.ByteString pingData_ = com.google.protobuf.ByteString.EMPTY;
     public boolean hasPingData() { return hasPingData; }
@@ -59,8 +52,7 @@ public final class PingPong {
     private void initFields() {
     }
     public final boolean isInitialized() {
-      if (!hasProcessingTime) return false;
-      if (!hasPongDataLength) return false;
+      if (!hasNumber) return false;
       if (!hasPingData) return false;
       return true;
     }
@@ -68,14 +60,11 @@ public final class PingPong {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasProcessingTime()) {
-        output.writeInt32(1, getProcessingTime());
-      }
-      if (hasPongDataLength()) {
-        output.writeInt32(2, getPongDataLength());
+      if (hasNumber()) {
+        output.writeInt32(1, getNumber());
       }
       if (hasPingData()) {
-        output.writeBytes(3, getPingData());
+        output.writeBytes(2, getPingData());
       }
       getUnknownFields().writeTo(output);
     }
@@ -86,17 +75,13 @@ public final class PingPong {
       if (size != -1) return size;
     
       size = 0;
-      if (hasProcessingTime()) {
+      if (hasNumber()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getProcessingTime());
-      }
-      if (hasPongDataLength()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, getPongDataLength());
+          .computeInt32Size(1, getNumber());
       }
       if (hasPingData()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getPingData());
+          .computeBytesSize(2, getPingData());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -256,11 +241,8 @@ public final class PingPong {
       
       public Builder mergeFrom(com.googlecode.protobuf.pro.duplex.example.PingPong.Ping other) {
         if (other == com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.getDefaultInstance()) return this;
-        if (other.hasProcessingTime()) {
-          setProcessingTime(other.getProcessingTime());
-        }
-        if (other.hasPongDataLength()) {
-          setPongDataLength(other.getPongDataLength());
+        if (other.hasNumber()) {
+          setNumber(other.getNumber());
         }
         if (other.hasPingData()) {
           setPingData(other.getPingData());
@@ -291,14 +273,10 @@ public final class PingPong {
               break;
             }
             case 8: {
-              setProcessingTime(input.readInt32());
+              setNumber(input.readInt32());
               break;
             }
-            case 16: {
-              setPongDataLength(input.readInt32());
-              break;
-            }
-            case 26: {
+            case 18: {
               setPingData(input.readBytes());
               break;
             }
@@ -307,43 +285,25 @@ public final class PingPong {
       }
       
       
-      // required int32 processingTime = 1;
-      public boolean hasProcessingTime() {
-        return result.hasProcessingTime();
+      // required int32 number = 1;
+      public boolean hasNumber() {
+        return result.hasNumber();
       }
-      public int getProcessingTime() {
-        return result.getProcessingTime();
+      public int getNumber() {
+        return result.getNumber();
       }
-      public Builder setProcessingTime(int value) {
-        result.hasProcessingTime = true;
-        result.processingTime_ = value;
+      public Builder setNumber(int value) {
+        result.hasNumber = true;
+        result.number_ = value;
         return this;
       }
-      public Builder clearProcessingTime() {
-        result.hasProcessingTime = false;
-        result.processingTime_ = 0;
-        return this;
-      }
-      
-      // required int32 pongDataLength = 2;
-      public boolean hasPongDataLength() {
-        return result.hasPongDataLength();
-      }
-      public int getPongDataLength() {
-        return result.getPongDataLength();
-      }
-      public Builder setPongDataLength(int value) {
-        result.hasPongDataLength = true;
-        result.pongDataLength_ = value;
-        return this;
-      }
-      public Builder clearPongDataLength() {
-        result.hasPongDataLength = false;
-        result.pongDataLength_ = 0;
+      public Builder clearNumber() {
+        result.hasNumber = false;
+        result.number_ = 0;
         return this;
       }
       
-      // required bytes pingData = 3;
+      // required bytes pingData = 2;
       public boolean hasPingData() {
         return result.hasPingData();
       }
@@ -403,8 +363,15 @@ public final class PingPong {
       return com.googlecode.protobuf.pro.duplex.example.PingPong.internal_static_Pong_fieldAccessorTable;
     }
     
-    // required bytes pongData = 1;
-    public static final int PONGDATA_FIELD_NUMBER = 1;
+    // required int32 number = 1;
+    public static final int NUMBER_FIELD_NUMBER = 1;
+    private boolean hasNumber;
+    private int number_ = 0;
+    public boolean hasNumber() { return hasNumber; }
+    public int getNumber() { return number_; }
+    
+    // required bytes pongData = 2;
+    public static final int PONGDATA_FIELD_NUMBER = 2;
     private boolean hasPongData;
     private com.google.protobuf.ByteString pongData_ = com.google.protobuf.ByteString.EMPTY;
     public boolean hasPongData() { return hasPongData; }
@@ -413,6 +380,7 @@ public final class PingPong {
     private void initFields() {
     }
     public final boolean isInitialized() {
+      if (!hasNumber) return false;
       if (!hasPongData) return false;
       return true;
     }
@@ -420,8 +388,11 @@ public final class PingPong {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
+      if (hasNumber()) {
+        output.writeInt32(1, getNumber());
+      }
       if (hasPongData()) {
-        output.writeBytes(1, getPongData());
+        output.writeBytes(2, getPongData());
       }
       getUnknownFields().writeTo(output);
     }
@@ -432,9 +403,13 @@ public final class PingPong {
       if (size != -1) return size;
     
       size = 0;
+      if (hasNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, getNumber());
+      }
       if (hasPongData()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getPongData());
+          .computeBytesSize(2, getPongData());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -594,6 +569,9 @@ public final class PingPong {
       
       public Builder mergeFrom(com.googlecode.protobuf.pro.duplex.example.PingPong.Pong other) {
         if (other == com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance()) return this;
+        if (other.hasNumber()) {
+          setNumber(other.getNumber());
+        }
         if (other.hasPongData()) {
           setPongData(other.getPongData());
         }
@@ -622,7 +600,11 @@ public final class PingPong {
               }
               break;
             }
-            case 10: {
+            case 8: {
+              setNumber(input.readInt32());
+              break;
+            }
+            case 18: {
               setPongData(input.readBytes());
               break;
             }
@@ -631,7 +613,25 @@ public final class PingPong {
       }
       
       
-      // required bytes pongData = 1;
+      // required int32 number = 1;
+      public boolean hasNumber() {
+        return result.hasNumber();
+      }
+      public int getNumber() {
+        return result.getNumber();
+      }
+      public Builder setNumber(int value) {
+        result.hasNumber = true;
+        result.number_ = value;
+        return this;
+      }
+      public Builder clearNumber() {
+        result.hasNumber = false;
+        result.number_ = 0;
+        return this;
+      }
+      
+      // required bytes pongData = 2;
       public boolean hasPongData() {
         return result.hasPongData();
       }
@@ -664,17 +664,12 @@ public final class PingPong {
     // @@protoc_insertion_point(class_scope:Pong)
   }
   
-  public static abstract class PingPongService
+  public static abstract class PingService
       implements com.google.protobuf.Service {
-    protected PingPongService() {}
+    protected PingService() {}
     
     public interface Interface {
       public abstract void ping(
-          com.google.protobuf.RpcController controller,
-          com.googlecode.protobuf.pro.duplex.example.PingPong.Ping request,
-          com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Pong> done);
-      
-      public abstract void fail(
           com.google.protobuf.RpcController controller,
           com.googlecode.protobuf.pro.duplex.example.PingPong.Ping request,
           com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Pong> done);
@@ -683,21 +678,13 @@ public final class PingPong {
     
     public static com.google.protobuf.Service newReflectiveService(
         final Interface impl) {
-      return new PingPongService() {
+      return new PingService() {
         @Override
         public  void ping(
             com.google.protobuf.RpcController controller,
             com.googlecode.protobuf.pro.duplex.example.PingPong.Ping request,
             com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Pong> done) {
           impl.ping(controller, request, done);
-        }
-        
-        @Override
-        public  void fail(
-            com.google.protobuf.RpcController controller,
-            com.googlecode.protobuf.pro.duplex.example.PingPong.Ping request,
-            com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Pong> done) {
-          impl.fail(controller, request, done);
         }
         
       };
@@ -724,8 +711,6 @@ public final class PingPong {
           switch(method.getIndex()) {
             case 0:
               return impl.ping(controller, (com.googlecode.protobuf.pro.duplex.example.PingPong.Ping)request);
-            case 1:
-              return impl.fail(controller, (com.googlecode.protobuf.pro.duplex.example.PingPong.Ping)request);
             default:
               throw new java.lang.AssertionError("Can't get here.");
           }
@@ -741,8 +726,6 @@ public final class PingPong {
           }
           switch(method.getIndex()) {
             case 0:
-              return com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.getDefaultInstance();
-            case 1:
               return com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.getDefaultInstance();
             default:
               throw new java.lang.AssertionError("Can't get here.");
@@ -760,8 +743,6 @@ public final class PingPong {
           switch(method.getIndex()) {
             case 0:
               return com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance();
-            case 1:
-              return com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance();
             default:
               throw new java.lang.AssertionError("Can't get here.");
           }
@@ -771,11 +752,6 @@ public final class PingPong {
     }
     
     public abstract void ping(
-        com.google.protobuf.RpcController controller,
-        com.googlecode.protobuf.pro.duplex.example.PingPong.Ping request,
-        com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Pong> done);
-    
-    public abstract void fail(
         com.google.protobuf.RpcController controller,
         com.googlecode.protobuf.pro.duplex.example.PingPong.Ping request,
         com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Pong> done);
@@ -807,11 +783,6 @@ public final class PingPong {
             com.google.protobuf.RpcUtil.<com.googlecode.protobuf.pro.duplex.example.PingPong.Pong>specializeCallback(
               done));
           return;
-        case 1:
-          this.fail(controller, (com.googlecode.protobuf.pro.duplex.example.PingPong.Ping)request,
-            com.google.protobuf.RpcUtil.<com.googlecode.protobuf.pro.duplex.example.PingPong.Pong>specializeCallback(
-              done));
-          return;
         default:
           throw new java.lang.AssertionError("Can't get here.");
       }
@@ -827,8 +798,6 @@ public final class PingPong {
       }
       switch(method.getIndex()) {
         case 0:
-          return com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.getDefaultInstance();
-        case 1:
           return com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.getDefaultInstance();
         default:
           throw new java.lang.AssertionError("Can't get here.");
@@ -846,8 +815,6 @@ public final class PingPong {
       switch(method.getIndex()) {
         case 0:
           return com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance();
-        case 1:
-          return com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance();
         default:
           throw new java.lang.AssertionError("Can't get here.");
       }
@@ -858,7 +825,7 @@ public final class PingPong {
       return new Stub(channel);
     }
     
-    public static final class Stub extends com.googlecode.protobuf.pro.duplex.example.PingPong.PingPongService implements Interface {
+    public static final class Stub extends com.googlecode.protobuf.pro.duplex.example.PingPong.PingService implements Interface {
       private Stub(com.google.protobuf.RpcChannel channel) {
         this.channel = channel;
       }
@@ -883,21 +850,6 @@ public final class PingPong {
             com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.class,
             com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance()));
       }
-      
-      public  void fail(
-          com.google.protobuf.RpcController controller,
-          com.googlecode.protobuf.pro.duplex.example.PingPong.Ping request,
-          com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Pong> done) {
-        channel.callMethod(
-          getDescriptor().getMethods().get(1),
-          controller,
-          request,
-          com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance(),
-          com.google.protobuf.RpcUtil.generalizeCallback(
-            done,
-            com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.class,
-            com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance()));
-      }
     }
     
     public static BlockingInterface newBlockingStub(
@@ -907,11 +859,6 @@ public final class PingPong {
     
     public interface BlockingInterface {
       public com.googlecode.protobuf.pro.duplex.example.PingPong.Pong ping(
-          com.google.protobuf.RpcController controller,
-          com.googlecode.protobuf.pro.duplex.example.PingPong.Ping request)
-          throws com.google.protobuf.ServiceException;
-      
-      public com.googlecode.protobuf.pro.duplex.example.PingPong.Pong fail(
           com.google.protobuf.RpcController controller,
           com.googlecode.protobuf.pro.duplex.example.PingPong.Ping request)
           throws com.google.protobuf.ServiceException;
@@ -935,16 +882,225 @@ public final class PingPong {
           com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance());
       }
       
-      
-      public com.googlecode.protobuf.pro.duplex.example.PingPong.Pong fail(
+    }
+  }
+  
+  public static abstract class PongService
+      implements com.google.protobuf.Service {
+    protected PongService() {}
+    
+    public interface Interface {
+      public abstract void pong(
           com.google.protobuf.RpcController controller,
-          com.googlecode.protobuf.pro.duplex.example.PingPong.Ping request)
-          throws com.google.protobuf.ServiceException {
-        return (com.googlecode.protobuf.pro.duplex.example.PingPong.Pong) channel.callBlockingMethod(
-          getDescriptor().getMethods().get(1),
+          com.googlecode.protobuf.pro.duplex.example.PingPong.Pong request,
+          com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Ping> done);
+      
+    }
+    
+    public static com.google.protobuf.Service newReflectiveService(
+        final Interface impl) {
+      return new PongService() {
+        @Override
+        public  void pong(
+            com.google.protobuf.RpcController controller,
+            com.googlecode.protobuf.pro.duplex.example.PingPong.Pong request,
+            com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Ping> done) {
+          impl.pong(controller, request, done);
+        }
+        
+      };
+    }
+    
+    public static com.google.protobuf.BlockingService
+        newReflectiveBlockingService(final BlockingInterface impl) {
+      return new com.google.protobuf.BlockingService() {
+        public final com.google.protobuf.Descriptors.ServiceDescriptor
+            getDescriptorForType() {
+          return getDescriptor();
+        }
+        
+        public final com.google.protobuf.Message callBlockingMethod(
+            com.google.protobuf.Descriptors.MethodDescriptor method,
+            com.google.protobuf.RpcController controller,
+            com.google.protobuf.Message request)
+            throws com.google.protobuf.ServiceException {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.callBlockingMethod() given method descriptor for " +
+              "wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return impl.pong(controller, (com.googlecode.protobuf.pro.duplex.example.PingPong.Pong)request);
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+        public final com.google.protobuf.Message
+            getRequestPrototype(
+            com.google.protobuf.Descriptors.MethodDescriptor method) {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.getRequestPrototype() given method " +
+              "descriptor for wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance();
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+        public final com.google.protobuf.Message
+            getResponsePrototype(
+            com.google.protobuf.Descriptors.MethodDescriptor method) {
+          if (method.getService() != getDescriptor()) {
+            throw new java.lang.IllegalArgumentException(
+              "Service.getResponsePrototype() given method " +
+              "descriptor for wrong service type.");
+          }
+          switch(method.getIndex()) {
+            case 0:
+              return com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.getDefaultInstance();
+            default:
+              throw new java.lang.AssertionError("Can't get here.");
+          }
+        }
+        
+      };
+    }
+    
+    public abstract void pong(
+        com.google.protobuf.RpcController controller,
+        com.googlecode.protobuf.pro.duplex.example.PingPong.Pong request,
+        com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Ping> done);
+    
+    public static final
+        com.google.protobuf.Descriptors.ServiceDescriptor
+        getDescriptor() {
+      return com.googlecode.protobuf.pro.duplex.example.PingPong.getDescriptor().getServices().get(1);
+    }
+    public final com.google.protobuf.Descriptors.ServiceDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    
+    public final void callMethod(
+        com.google.protobuf.Descriptors.MethodDescriptor method,
+        com.google.protobuf.RpcController controller,
+        com.google.protobuf.Message request,
+        com.google.protobuf.RpcCallback<
+          com.google.protobuf.Message> done) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.callMethod() given method descriptor for wrong " +
+          "service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          this.pong(controller, (com.googlecode.protobuf.pro.duplex.example.PingPong.Pong)request,
+            com.google.protobuf.RpcUtil.<com.googlecode.protobuf.pro.duplex.example.PingPong.Ping>specializeCallback(
+              done));
+          return;
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public final com.google.protobuf.Message
+        getRequestPrototype(
+        com.google.protobuf.Descriptors.MethodDescriptor method) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.getRequestPrototype() given method " +
+          "descriptor for wrong service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          return com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance();
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public final com.google.protobuf.Message
+        getResponsePrototype(
+        com.google.protobuf.Descriptors.MethodDescriptor method) {
+      if (method.getService() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "Service.getResponsePrototype() given method " +
+          "descriptor for wrong service type.");
+      }
+      switch(method.getIndex()) {
+        case 0:
+          return com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.getDefaultInstance();
+        default:
+          throw new java.lang.AssertionError("Can't get here.");
+      }
+    }
+    
+    public static Stub newStub(
+        com.google.protobuf.RpcChannel channel) {
+      return new Stub(channel);
+    }
+    
+    public static final class Stub extends com.googlecode.protobuf.pro.duplex.example.PingPong.PongService implements Interface {
+      private Stub(com.google.protobuf.RpcChannel channel) {
+        this.channel = channel;
+      }
+      
+      private final com.google.protobuf.RpcChannel channel;
+      
+      public com.google.protobuf.RpcChannel getChannel() {
+        return channel;
+      }
+      
+      public  void pong(
+          com.google.protobuf.RpcController controller,
+          com.googlecode.protobuf.pro.duplex.example.PingPong.Pong request,
+          com.google.protobuf.RpcCallback<com.googlecode.protobuf.pro.duplex.example.PingPong.Ping> done) {
+        channel.callMethod(
+          getDescriptor().getMethods().get(0),
           controller,
           request,
-          com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.getDefaultInstance());
+          com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.getDefaultInstance(),
+          com.google.protobuf.RpcUtil.generalizeCallback(
+            done,
+            com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.class,
+            com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.getDefaultInstance()));
+      }
+    }
+    
+    public static BlockingInterface newBlockingStub(
+        com.google.protobuf.BlockingRpcChannel channel) {
+      return new BlockingStub(channel);
+    }
+    
+    public interface BlockingInterface {
+      public com.googlecode.protobuf.pro.duplex.example.PingPong.Ping pong(
+          com.google.protobuf.RpcController controller,
+          com.googlecode.protobuf.pro.duplex.example.PingPong.Pong request)
+          throws com.google.protobuf.ServiceException;
+    }
+    
+    private static final class BlockingStub implements BlockingInterface {
+      private BlockingStub(com.google.protobuf.BlockingRpcChannel channel) {
+        this.channel = channel;
+      }
+      
+      private final com.google.protobuf.BlockingRpcChannel channel;
+      
+      public com.googlecode.protobuf.pro.duplex.example.PingPong.Ping pong(
+          com.google.protobuf.RpcController controller,
+          com.googlecode.protobuf.pro.duplex.example.PingPong.Pong request)
+          throws com.google.protobuf.ServiceException {
+        return (com.googlecode.protobuf.pro.duplex.example.PingPong.Ping) channel.callBlockingMethod(
+          getDescriptor().getMethods().get(0),
+          controller,
+          request,
+          com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.getDefaultInstance());
       }
       
     }
@@ -969,12 +1125,12 @@ public final class PingPong {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\016pingpong.proto\"H\n\004Ping\022\026\n\016processingTi" +
-      "me\030\001 \002(\005\022\026\n\016pongDataLength\030\002 \002(\005\022\020\n\010ping" +
-      "Data\030\003 \002(\014\"\030\n\004Pong\022\020\n\010pongData\030\001 \002(\0142=\n\017" +
-      "PingPongService\022\024\n\004ping\022\005.Ping\032\005.Pong\022\024\n" +
-      "\004fail\022\005.Ping\032\005.PongB6\n*com.googlecode.pr" +
-      "otobuf.pro.duplex.exampleB\010PingPong"
+      "\n\016pingpong.proto\"(\n\004Ping\022\016\n\006number\030\001 \002(\005" +
+      "\022\020\n\010pingData\030\002 \002(\014\"(\n\004Pong\022\016\n\006number\030\001 \002" +
+      "(\005\022\020\n\010pongData\030\002 \002(\0142#\n\013PingService\022\024\n\004p" +
+      "ing\022\005.Ping\032\005.Pong2#\n\013PongService\022\024\n\004pong" +
+      "\022\005.Pong\032\005.PingB6\n*com.googlecode.protobu" +
+      "f.pro.duplex.exampleB\010PingPong"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -986,7 +1142,7 @@ public final class PingPong {
           internal_static_Ping_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Ping_descriptor,
-              new java.lang.String[] { "ProcessingTime", "PongDataLength", "PingData", },
+              new java.lang.String[] { "Number", "PingData", },
               com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.class,
               com.googlecode.protobuf.pro.duplex.example.PingPong.Ping.Builder.class);
           internal_static_Pong_descriptor =
@@ -994,7 +1150,7 @@ public final class PingPong {
           internal_static_Pong_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Pong_descriptor,
-              new java.lang.String[] { "PongData", },
+              new java.lang.String[] { "Number", "PongData", },
               com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.class,
               com.googlecode.protobuf.pro.duplex.example.PingPong.Pong.Builder.class);
           return null;

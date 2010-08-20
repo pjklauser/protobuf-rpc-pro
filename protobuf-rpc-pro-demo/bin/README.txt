@@ -1,4 +1,4 @@
-PingPongServer
+PingServer
 usage: <serverHostname> <serverPort>
   runs a RPC server on port 9001
 
@@ -7,7 +7,7 @@ $ ./RunExample.cmd PingPongServer localhost 9001
 
 
 PingClient
-usage: <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <upSizeBytes> <downSizeBytes>
+usage: <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <payloadBytes>
   runs an RPC client which does blocking calls to the RPC server.
 
 $ ./RunExample.cmd PingClient localhost 9001 localhost 9002 100 0 100 100

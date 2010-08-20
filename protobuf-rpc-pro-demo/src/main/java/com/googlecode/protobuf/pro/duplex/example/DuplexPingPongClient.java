@@ -9,15 +9,18 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
+import com.google.protobuf.Service;
 import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
+import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.client.RpcServerConnectionRegistry;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.Ping;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.PingPongService;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.PingPongService.BlockingInterface;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService.BlockingInterface;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.Pong;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.PongService;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 
@@ -26,19 +29,22 @@ public class DuplexPingPongClient {
 	private static Log log = LogFactory.getLog(RpcClient.class);
 	
     public static void main(String[] args) throws Exception {
-		if ( args.length != 4 ) {
-			System.err.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort>");
+		if ( args.length != 7 ) {
+			System.err.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <payloadBytes>");
 			System.exit(-1);
 		}
 		String serverHostname = args[0];
 		int serverPort = Integer.parseInt(args[1]);
 		String clientHostname = args[2];
 		int clientPort = Integer.parseInt(args[3]);
+
+		int numCalls = Integer.parseInt(args[4]);
+		int procTime = Integer.parseInt(args[5]);
+		int payloadSize = Integer.parseInt(args[6]);
 		
 		PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
     	
-//    	SameThreadExecutor executor = new SameThreadExecutor();
 		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 10);
 		
     	DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(
@@ -50,7 +56,8 @@ public class DuplexPingPongClient {
         
         // Configure the client.
 
-    	bootstrap.getRpcServiceRegistry().registerService(new PingPongServiceImpl());
+    	Service pongService = PongService.newReflectiveService(new DefaultPingPongServiceImpl());
+    	bootstrap.getRpcServiceRegistry().registerService(pongService);
     	
         // Set up the event pipeline factory.
     	bootstrap.setOption("connectTimeoutMillis",10000);
@@ -61,54 +68,40 @@ public class DuplexPingPongClient {
     	RpcServerConnectionRegistry eventLogger = new RpcServerConnectionRegistry();
     	bootstrap.registerConnectionEventListener(eventLogger);
         
-        RpcClient rpcClient = bootstrap.peerWith(server);
-        
-        
-		BlockingInterface myService = PingPongService.newBlockingStub(rpcClient);
-		
-		RpcController[] controllerList = null;
-		Pong[] responseList = null;
-		String[] errorList = null;
-		
-		// Non blocking - success
-		controllerList = new RpcController[2000];
-		responseList = new Pong[2000];
-		errorList = new String[2000];
-		
-		for( int i = 0; i < 2000; i++ ) {
-			RpcController controller = rpcClient.newRpcController();
-			controllerList[i] = controller;
-			Ping request = Ping.newBuilder().setPingData(ByteString.copyFromUtf8("PingClient")).setProcessingTime(10).setPongDataLength(100).build();
-			try {
-				responseList[i] = myService.ping(controller, request);
-				System.out.println("Send method1 completed with " + responseList[i].getPongData().size());
-			} catch ( ServiceException e ) {
-				errorList[i] = e.getMessage();
-			}
-		}
-        
-        Thread.sleep(10000);
-        rpcClient.close();
-        
-        // Shut down all thread pools to exit.
-        bootstrap.releaseExternalResources();
-    }
-
-	static class PingPongServiceImpl extends PingPongService {
-
-		@Override
-		public void ping(RpcController controller, Ping request,
-				RpcCallback<Pong> done) {
-			Pong response = Pong.newBuilder().setPongData(ByteString.copyFromUtf8("Client Result")).build();
-			done.run(response);
-		}
-
-		@Override
-		public void fail(RpcController controller, Ping request,
-				RpcCallback<Pong> done) {
+    	RpcClientChannel channel = null;
+		try {
+	    	channel = bootstrap.peerWith(server);
+			BlockingInterface myService = PingService.newBlockingStub(channel);
 			
-			controller.setFailed("Failed.");
-			done.run(null);
+	    	long startTS = 0;
+	    	long endTS = 0;
+	    	
+			startTS = System.currentTimeMillis();
+
+			for( int i = 0; i < numCalls; i++ ) {
+				if ( i % 100 == 1 ) {
+					System.out.println(i);
+				}
+				RpcController controller = channel.newRpcController();
+				
+				ByteString requestData = ByteString.copyFrom(new byte[payloadSize]);
+				Ping ping = Ping.newBuilder().setNumber(procTime).setPingData(requestData).build();
+				Pong pong = myService.ping(controller, ping);
+				if ( pong.getPongData().size() != payloadSize ) {
+					throw new Exception("Reply payload mismatch.");
+				}
+				if ( pong.getNumber() != ping.getNumber() ) {
+					throw new Exception("Reply number mismatch.");
+				}
+			}
+			endTS = System.currentTimeMillis();
+			log.info("BlockingCalls " + numCalls + " in " + (endTS-startTS)/1000 + "s");
+			
+		} finally {
+			if ( channel != null ) {
+				channel.close();
+			}
+			bootstrap.releaseExternalResources(); // check if this closes.
 		}
-	}
+    }
 }
