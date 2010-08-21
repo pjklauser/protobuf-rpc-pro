@@ -34,6 +34,7 @@ import org.jboss.netty.channel.ChannelPipelineException;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
+import org.jboss.netty.util.internal.ConversionUtil;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
@@ -152,7 +153,7 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 		}
         long connectResponseTimeoutMillis = ClientConnectResponseHandler.DEFAULT_CONNECT_RESPONSE_TIMEOUT_MS;
         if ( getOption("connectResponseTimeoutMillis") != null ) {
-        	connectResponseTimeoutMillis = (Long)getOption("connectResponseTimeoutMillis");
+        	connectResponseTimeoutMillis = ConversionUtil.toInt(getOption("connectResponseTimeoutMillis"));
         }
         
 		ConnectResponse connectResponse = connectResponseHandler.getConnectResponse(connectResponseTimeoutMillis);
