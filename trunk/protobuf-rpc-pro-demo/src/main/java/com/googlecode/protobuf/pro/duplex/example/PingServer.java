@@ -28,8 +28,6 @@ public class PingServer {
 		
     	PeerInfo serverInfo = new PeerInfo(serverHostname, serverPort);
     	
-		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
-
         // Configure the server.
         DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(
         		serverInfo,
@@ -38,6 +36,7 @@ public class PingServer {
                         Executors.newCachedThreadPool()),
                         new ThreadPoolCallExecutor(10, 10));
 
+		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
         shutdownHandler.addResource(bootstrap);
         
     	RpcClientConnectionRegistry clientRegistry = new RpcClientConnectionRegistry();
