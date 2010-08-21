@@ -100,10 +100,7 @@ public class DuplexPingPongClient {
 			log.info("BlockingCalls " + numCalls + " in " + (endTS-startTS)/1000 + "s");
 			
 		} finally {
-			if ( channel != null ) {
-				channel.close();
-			}
-			bootstrap.releaseExternalResources(); // check if this closes.
+			System.exit(0);
 		}
     }
 }
