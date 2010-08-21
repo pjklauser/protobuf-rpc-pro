@@ -39,6 +39,20 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
+/**
+ * The RpcClient allows clients to send RpcRequests to an RpcServer
+ * over the IO-Layer. The RpcClient will handle incoming RpcResponse
+ * and RpcErrors coming back from the server, giving back to the
+ * client callback.
+ * 
+ * The RpcClient allows the client to cancel an ongoing RpcRequest
+ * before the RpcResponse or RpcError has been received. The RpcCancel
+ * is sent over the IO-Layer to the server. The ongoing client call
+ * is immediately failed.
+ * 
+ * @author Peter Klauser
+ *
+ */
 public class RpcClient implements RpcClientChannel {
 
 	private static Log log = LogFactory.getLog(RpcClient.class);
@@ -48,6 +62,7 @@ public class RpcClient implements RpcClientChannel {
 	private final Map<Integer, PendingClientCallState> pendingRequestMap = new ConcurrentHashMap<Integer, PendingClientCallState>();
 	
 	private final Channel channel;
+	
 	private final PeerInfo clientInfo;
 	private final PeerInfo serverInfo;
 	

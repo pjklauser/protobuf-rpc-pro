@@ -26,6 +26,9 @@ import com.googlecode.protobuf.pro.duplex.RpcClient;
 /**
  * An RpcClientRegistry keeps an account of all connected RpcClients of an RpcServer.
  * 
+ * Note: on the server side, an RpcClient's clientInfo is the server itself, and the
+ * serverInfo represents the client.
+ * 
  * @author Peter Klauser
  *
  */
@@ -46,13 +49,13 @@ public class RpcClientRegistry {
 	 * @return true if registration is successful, false if already connected.
 	 */
 	public boolean registerRpcClient( RpcClient rpcClient ) {
-		RpcClient existingClient = clientNameMap.get(rpcClient.getClientInfo().getName());
+		RpcClient existingClient = clientNameMap.get(rpcClient.getServerInfo().getName());
 		if ( existingClient == null ) {
-			clientNameMap.put(rpcClient.getClientInfo().getName(), rpcClient);
+			clientNameMap.put(rpcClient.getServerInfo().getName(), rpcClient);
 			return true;
 		}
 		if ( log.isDebugEnabled() ) {
-			log.debug("RpcClient " + rpcClient.getClientInfo() + " is already registered with " + existingClient.getClientInfo());
+			log.debug("RpcClient " + rpcClient.getServerInfo() + " is already registered with " + existingClient.getServerInfo());
 		}
 		return false;
 	}
@@ -63,6 +66,6 @@ public class RpcClientRegistry {
 	 * @param rpcClient
 	 */
 	public void removeRpcClient( RpcClient rpcClient ) {
-		clientNameMap.remove(rpcClient.getClientInfo().getName());
+		clientNameMap.remove(rpcClient.getServerInfo().getName());
 	}
 }

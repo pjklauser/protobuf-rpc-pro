@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
@@ -37,10 +40,18 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
 /**
+ * An RpcServer handles incoming RpcRequests from the IO-Layer
+ * by looking up the Service implementation in the RpcServiceRegistry 
+ * and using the RpcServerCallExecutor to perform the service call.
+ * The final RpcResponse is then sent back to the client over the
+ * IO-Layer.
+ *  
  * @author Peter Klauser
  * 
  */
 public class RpcServer implements RpcServerExecutorCallback {
+
+	private static Log log = LogFactory.getLog(RpcServer.class);
 
 	private final Map<Integer, PendingServerCallState> pendingServerCallMap = new ConcurrentHashMap<Integer, PendingServerCallState>();
 
@@ -60,6 +71,10 @@ public class RpcServer implements RpcServerExecutorCallback {
 		long startTS = System.currentTimeMillis();
 		int correlationId = rpcRequest.getCorrelationId();
 
+		if ( log.isDebugEnabled() ) {
+			log.debug("Received ["+rpcRequest.getCorrelationId()+"]RpcRequest.");
+		}
+
 		if (callExecutor == null) {
 			String errorMessage = "No Executor";
 			RpcError rpcError = RpcError.newBuilder()
@@ -67,11 +82,16 @@ public class RpcServer implements RpcServerExecutorCallback {
 					.setErrorMessage(errorMessage).build();
 			WirePayload payload = WirePayload.newBuilder()
 					.setRpcError(rpcError).build();
+
+			if ( log.isDebugEnabled() ) {
+				log.debug("Sending ["+rpcError.getCorrelationId()+"]RpcError.");
+			}
 			rpcClient.getChannel().write(payload);
 
-			doLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
+			doErrorLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
 			return;
 		}
+		
 		if (pendingServerCallMap.containsKey(correlationId)) {
 			throw new IllegalStateException("correlationId " + correlationId
 					+ " already registered as PendingServerCall.");
@@ -86,9 +106,13 @@ public class RpcServer implements RpcServerExecutorCallback {
 					.setErrorMessage(errorMessage).build();
 			WirePayload payload = WirePayload.newBuilder()
 					.setRpcError(rpcError).build();
+
+			if ( log.isDebugEnabled() ) {
+				log.debug("Sending ["+rpcError.getCorrelationId()+"]RpcError.");
+			}
 			rpcClient.getChannel().write(payload);
 
-			doLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
+			doErrorLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
 			return;
 		}
 		MethodDescriptor methodDesc = service.getDescriptorForType()
@@ -100,9 +124,13 @@ public class RpcServer implements RpcServerExecutorCallback {
 					.setErrorMessage(errorMessage).build();
 			WirePayload payload = WirePayload.newBuilder()
 					.setRpcError(rpcError).build();
+
+			if ( log.isDebugEnabled() ) {
+				log.debug("Sending ["+rpcError.getCorrelationId()+"]RpcError.");
+			}
 			rpcClient.getChannel().write(payload);
 
-			doLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
+			doErrorLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
 			return;
 		}
 		Message requestPrototype = service.getRequestPrototype(methodDesc);
@@ -120,9 +148,13 @@ public class RpcServer implements RpcServerExecutorCallback {
 					.setErrorMessage(errorMessage).build();
 			WirePayload payload = WirePayload.newBuilder()
 					.setRpcError(rpcError).build();
+
+			if ( log.isDebugEnabled() ) {
+				log.debug("Sending ["+rpcError.getCorrelationId()+"]RpcError.");
+			}
 			rpcClient.getChannel().write(payload);
 
-			doLog(correlationId, methodDesc.getFullName(), rpcRequest, rpcError, errorMessage);
+			doErrorLog(correlationId, methodDesc.getFullName(), rpcRequest, rpcError, errorMessage);
 			return;
 		}
 		ServerRpcController controller = new ServerRpcController(rpcClient,
@@ -153,6 +185,9 @@ public class RpcServer implements RpcServerExecutorCallback {
 			// we only issue one cancel to the Executor
 			callExecutor.cancel(state.getExecutor());
 
+			if ( log.isDebugEnabled() ) {
+				log.debug("Received ["+rpcCancel.getCorrelationId()+"]RpcCancel.");
+			}
 			doLog(state, rpcCancel, "Cancelled");
 		}
 	}
@@ -175,6 +210,10 @@ public class RpcServer implements RpcServerExecutorCallback {
 						.setResponseBytes(message.toByteString()).build();
 				WirePayload payload = WirePayload.newBuilder()
 						.setRpcResponse(rpcResponse).build();
+
+				if ( log.isDebugEnabled() ) {
+					log.debug("Sending ["+rpcResponse.getCorrelationId()+"]RpcResponse.");
+				}
 				rpcClient.getChannel().write(payload);
 
 				doLog(state, message, null);
@@ -185,12 +224,16 @@ public class RpcServer implements RpcServerExecutorCallback {
 						.setErrorMessage(errorMessage).build();
 				WirePayload payload = WirePayload.newBuilder()
 						.setRpcError(rpcError).build();
+
+				if ( log.isDebugEnabled() ) {
+					log.debug("Sending ["+rpcError.getCorrelationId()+"]RpcError.");
+				}
 				rpcClient.getChannel().write(payload);
 				
 				doLog(state, rpcError, errorMessage);
 			}
 		} else {
-			// RPC call cancelled by client - we don't respond
+			// RPC call canceled by client - we don't respond
 		}
 	}
 
@@ -208,13 +251,17 @@ public class RpcServer implements RpcServerExecutorCallback {
 					callExecutor.cancel(state.getExecutor());
 
 					RpcCancel rpcCancel = RpcCancel.newBuilder().setCorrelationId(correlationId).build();
+
+					if ( log.isDebugEnabled() ) {
+						log.debug("Cancel on close ["+rpcCancel.getCorrelationId()+"]RpcCancel.");
+					}
 					doLog(state, rpcCancel, "Cancelled on Close");
 				}
 			}
 		} while( pendingServerCallMap.size() > 0 );
 	}
 	
-	protected void doLog( int correlationId, String signature, Message request, Message response, String errorMessage ) {
+	protected void doErrorLog( int correlationId, String signature, Message request, Message response, String errorMessage ) {
 		if ( logger != null ) {
 			RpcPayloadInfo reqInfo = RpcPayloadInfo.newBuilder().setSize(request.getSerializedSize()).setTs(System.currentTimeMillis()).build();
 			RpcPayloadInfo resInfo = RpcPayloadInfo.newBuilder().setSize(response.getSerializedSize()).setTs(System.currentTimeMillis()).build();

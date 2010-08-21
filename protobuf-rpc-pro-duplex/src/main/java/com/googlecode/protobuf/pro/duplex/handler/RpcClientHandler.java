@@ -15,8 +15,6 @@
 */
 package com.googlecode.protobuf.pro.duplex.handler;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.MessageEvent;
@@ -26,9 +24,15 @@ import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
+/**
+ * Handles returning RpcResponse and RpcError messages
+ * in the IO-Layer, delegating them to the Netty
+ * Channel's RpcClient.
+ * 
+ * @author Peter Klauser
+ *
+ */
 public class RpcClientHandler extends SimpleChannelUpstreamHandler {
-
-	private static Log log = LogFactory.getLog(RpcClientHandler.class.getName());
 
     private RpcClient rpcClient;
     private TcpConnectionEventListener eventListener;

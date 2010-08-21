@@ -145,6 +145,9 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 		.setCorrelationId(correlationId.incrementAndGet()).build();
         
 		WirePayload payload = WirePayload.newBuilder().setConnectRequest(connectRequest).build();
+		if ( log.isDebugEnabled() ) {
+			log.debug("Sending ["+connectRequest.getCorrelationId()+"]ConnectRequest.");
+		}
 		channel.write(payload);
 		
 		ClientConnectResponseHandler connectResponseHandler = (ClientConnectResponseHandler)channel.getPipeline().get(Handler.CLIENT_CONNECT);
