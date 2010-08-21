@@ -12,7 +12,6 @@ import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
-import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
@@ -25,7 +24,7 @@ import com.googlecode.protobuf.pro.duplex.test.PingPong.Pong;
 
 public class DuplexPingPongServer {
 
-	private static Log log = LogFactory.getLog(RpcClient.class);
+	private static Log log = LogFactory.getLog(DuplexPingPongServer.class);
 
     public static void main(String[] args) throws Exception {
 		if ( args.length != 2 ) {
@@ -61,12 +60,7 @@ public class DuplexPingPongServer {
     	// Bind and start to accept incoming connections.
         Channel c = bootstrap.bind();
         
-        System.out.println("Bound to " + c.getLocalAddress());
-        /*
-        Thread.sleep(10000);
-        c.close();
-        bootstrap.releaseExternalResources();
-        */
+        log.info("Bound to " + c.getLocalAddress());
     }
     
 	static class PingPongServiceImpl extends PingPongService {

@@ -1,6 +1,5 @@
 package com.googlecode.protobuf.pro.duplex.example;
 
-import java.io.IOException;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.logging.Log;
@@ -27,8 +26,6 @@ public class MainTcpServer {
 		
     	PeerInfo serverInfo = new PeerInfo(serverHostname, serverPort);
     	
-		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
-    	
         // Configure the server.
         DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(
         		serverInfo,
@@ -38,6 +35,7 @@ public class MainTcpServer {
                         new ThreadPoolCallExecutor(10, 10));
 
 		// give the bootstrap to the shutdown handler so it is shutdown cleanly.
+		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
 		shutdownHandler.addResource(bootstrap);
 		
     	RpcClientConnectionRegistry clientRegistry = new RpcClientConnectionRegistry();

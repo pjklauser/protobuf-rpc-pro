@@ -31,8 +31,9 @@ import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
-import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
+import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo;
+import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest;
@@ -67,6 +68,14 @@ public class RpcClient implements RpcClientChannel {
 	private final PeerInfo serverInfo;
 	
 	private RpcLogger rpcLogger;
+	
+	/**
+	 * RpcClients created by ClientBootstrap will have the parent
+	 * link here. This is needed because the ClientBootstrap records
+	 * all channels which it created, to be able to close them on
+	 * shutdown.
+	 */
+	private DuplexTcpClientBootstrap clientBootstrap;
 	
 	public RpcClient( Channel channel, PeerInfo clientInfo, PeerInfo serverInfo ) {
 		this.channel = channel;
@@ -239,6 +248,10 @@ public class RpcClient implements RpcClientChannel {
 				}
 			}
 		} while( pendingRequestMap.size() > 0 );
+		
+		if ( getClientBootstrap() != null ) {
+			getClientBootstrap().handleClosure(this);
+		}
 	}
 	
 	protected void doLog( PendingClientCallState state, Message response, String errorMessage ) {
@@ -450,6 +463,20 @@ public class RpcClient implements RpcClientChannel {
 	 */
 	public void setCallLogger(RpcLogger callLogger) {
 		this.rpcLogger = callLogger;
+	}
+
+	/**
+	 * @return the clientBootstrap
+	 */
+	public DuplexTcpClientBootstrap getClientBootstrap() {
+		return clientBootstrap;
+	}
+
+	/**
+	 * @param clientBootstrap the clientBootstrap to set
+	 */
+	public void setClientBootstrap(DuplexTcpClientBootstrap clientBootstrap) {
+		this.clientBootstrap = clientBootstrap;
 	}
 	
 
