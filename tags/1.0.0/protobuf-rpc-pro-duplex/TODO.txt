@@ -1,0 +1,18 @@
+configurable max packet length
+
+
+ErrorMessage string enum
+
+perf comparison
+	socket-rpc std java
+	mina
+	netty
+	
+Howto - extend for SSL 
+http://download-llnw.oracle.com/javase/1.5.0/docs/guide/security/jsse/samples/sslengine/SSLEngineSimpleDemo.java
+http-client sslengine
+
+Howto - extend for compression
+
+
+log file analyzer.

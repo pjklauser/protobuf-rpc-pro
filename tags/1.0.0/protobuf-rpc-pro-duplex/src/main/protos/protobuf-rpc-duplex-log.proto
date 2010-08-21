@@ -1,0 +1,24 @@
+// Copyright (c) 2010 Peter Klauser
+
+option java_package = "com.googlecode.protobuf.pro.duplex.logging";
+option java_outer_classname = "RpcLogEntry";
+
+// This is default, but it's nice to be explicit
+option optimize_for = SPEED;
+
+message RpcPayloadInfo {
+	required int64 ts = 1; 
+	optional int32 size = 2;
+}
+
+message RpcCall {
+	required int32 duration = 1; // milliseconds
+	required string server = 2;
+	required string signature = 3;
+	required string client = 4;
+	required int32 corId = 5;
+	optional string error = 6;
+	optional RpcPayloadInfo request = 7;
+	optional RpcPayloadInfo response = 8;
+}
+
