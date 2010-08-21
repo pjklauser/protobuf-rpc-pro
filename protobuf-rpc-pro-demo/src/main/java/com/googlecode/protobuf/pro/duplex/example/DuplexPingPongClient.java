@@ -7,10 +7,8 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import com.google.protobuf.ByteString;
-import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
-import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
@@ -23,6 +21,7 @@ import com.googlecode.protobuf.pro.duplex.example.PingPong.Pong;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.PongService;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
+import com.googlecode.protobuf.pro.duplex.util.CleanShutdownHandler;
 
 public class DuplexPingPongClient {
 
@@ -65,6 +64,9 @@ public class DuplexPingPongClient {
         bootstrap.setOption("receiveBufferSize", 1048576);
         bootstrap.setOption("tcpNoDelay", false);
 
+		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
+        shutdownHandler.addResource(bootstrap);
+        
     	RpcServerConnectionRegistry eventLogger = new RpcServerConnectionRegistry();
     	bootstrap.registerConnectionEventListener(eventLogger);
         
