@@ -9,7 +9,6 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
-import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
@@ -20,6 +19,7 @@ import com.googlecode.protobuf.pro.duplex.test.PingPong.Ping;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService.BlockingInterface;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.Pong;
+import com.googlecode.protobuf.pro.duplex.util.CleanShutdownHandler;
 
 public class DuplexPingPongClient {
 
@@ -38,7 +38,6 @@ public class DuplexPingPongClient {
 		PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
     	
-//    	SameThreadExecutor executor = new SameThreadExecutor();
 		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 10);
 		
     	DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(
@@ -48,8 +47,9 @@ public class DuplexPingPongClient {
                 Executors.newCachedThreadPool()),
                 executor);
         
-        // Configure the client.
-
+		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
+		shutdownHandler.addResource(bootstrap);
+		
     	bootstrap.getRpcServiceRegistry().registerService(new PingPongServiceImpl());
     	
         // Set up the event pipeline factory.
@@ -61,47 +61,19 @@ public class DuplexPingPongClient {
     	RpcServerConnectionRegistry eventLogger = new RpcServerConnectionRegistry();
     	bootstrap.registerConnectionEventListener(eventLogger);
         
-        RpcClient rpcClient = bootstrap.peerWith(server);
-        
-        
-		BlockingInterface myService = PingPongService.newBlockingStub(rpcClient);
-		
-		RpcController[] controllerList = null;
-		Pong[] responseList = null;
-		String[] errorList = null;
-		
-		// Non blocking - success
-		controllerList = new RpcController[2000];
-		responseList = new Pong[2000];
-		errorList = new String[2000];
-		
-		for( int i = 0; i < 2000; i++ ) {
+    	try {
+	        RpcClient rpcClient = bootstrap.peerWith(server);
+	        
+			BlockingInterface myService = PingPongService.newBlockingStub(rpcClient);
+			
 			RpcController controller = rpcClient.newRpcController();
-			controllerList[i] = controller;
 			Ping request = Ping.newBuilder().setPingData(ByteString.copyFromUtf8("PingClient")).setProcessingTime(10).setPongDataLength(100).build();
-			try {
-				responseList[i] = myService.ping(controller, request);
-				System.out.println("Send method1 completed with " + responseList[i].getPongData().size());
-			} catch ( ServiceException e ) {
-				errorList[i] = e.getMessage();
-			}
-		}
-		Thread.sleep(10000);
-		/*
-		for( int i = 0; i < controllerList.length; i++ ) {
-			RpcController ctr = controllerList[i];
-			if ( ctr.failed() ) {
-				throw new Exception("One controller failed.");
-			}
-		}
-        */
-        
-        
-        Thread.sleep(10000);
-        rpcClient.close();
-        
-        // Shut down all thread pools to exit.
-        bootstrap.releaseExternalResources();
+			Pong response = myService.ping(controller, request);
+			
+			log.info("Response received " + response.toString());
+    	} finally {
+    		System.exit(0);
+    	}
     }
 
 	static class PingPongServiceImpl extends PingPongService {

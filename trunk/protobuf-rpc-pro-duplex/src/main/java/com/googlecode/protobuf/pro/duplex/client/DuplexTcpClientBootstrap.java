@@ -54,8 +54,6 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
 public class DuplexTcpClientBootstrap extends ClientBootstrap {
 
-	//TODO toString
-	
 	private static Log log = LogFactory.getLog(DuplexTcpClientBootstrap.class);
 	
 	private PeerInfo clientInfo;
@@ -179,23 +177,29 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 		String serverPID = connectResponse.hasServerPID() ? connectResponse.getServerPID() : "<NONE>";
 		PeerInfo serverInfo = new PeerInfo(remoteAddress.getHostName(), remoteAddress.getPort(), serverPID );
 		
-		RpcClient rpcClient = new RpcClient(channel, clientInfo,serverInfo);
+		RpcClient rpcClient = new RpcClient(channel, clientInfo, serverInfo);
+		rpcClient.setClientBootstrap(this);
 		rpcClient.setCallLogger(getRpcLogger());
 		
 		RpcClientHandler rpcClientHandler = completePipeline(rpcClient);
 		rpcClientHandler.notifyOpened();
+		
+		allChannels.add(channel);
         return rpcClient;
     }
     
 	/**
-	 * Unbind and close a Channel previously opened by this Bootstrap.
+	 * Handled the closure of the RPC client.
 	 * 
-	 * @param channel
+	 * Only called internally. Use {@link RpcClientChannel#close()}
+	 * to close a RPC Channel.
+	 * 
+	 * @param client
 	 */
-	public void close( Channel channel ) {
+	public void handleClosure( RpcClient client ) {
+		Channel channel = client.getChannel();
 		if ( allChannels.remove(channel) ) {
 			log.info("Closing IO Channel " + channel);
-			channel.close();
 		} else {
 			log.warn("IO Channel " + channel + " not know by this Bootstrap.");
 		}
