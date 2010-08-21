@@ -1,14 +1,5 @@
 // Copyright (c) 2010 Peter Klauser
 
-//
-// TcpClient->TcpServer : ConnectRequest
-// TcpServer->TcpClient : ConnectResponse
-// 
-// RpcClient->RpcServer : RpcRequest, RpcCancel
-// RpcServer->RpcClient : RpcResponse, RpcError
-//  remember TcpClient can be both RpcClient or RpcServer
-//  and a TcpServer can be both RpcClient or RpcServer
-
 option java_package = "com.googlecode.protobuf.pro.duplex.logging";
 option java_outer_classname = "RpcLogEntry";
 

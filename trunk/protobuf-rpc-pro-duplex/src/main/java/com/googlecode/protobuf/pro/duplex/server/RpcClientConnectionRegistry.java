@@ -59,13 +59,13 @@ public class RpcClientConnectionRegistry implements
 	@Override
 	public void connectionClosed(RpcClient client) {
 		if ( log.isDebugEnabled() ) {
-			log.debug("connectionClosed from " + client.getClientInfo());
+			log.debug("connectionClosed from " + client.getServerInfo());
 		}
 		RpcConnectionEventListener l = getEventListener();
 		if ( l != null ) {
 			l.connectionLost(client);
 		}
-		clientNameMap.put(client.getClientInfo().getName(), new RpcClient(null,client.getClientInfo(),null)); 
+		clientNameMap.put(client.getServerInfo().getName(), new RpcClient(null,null,client.getServerInfo()));
 	}
 
 	/* (non-Javadoc)
@@ -74,27 +74,27 @@ public class RpcClientConnectionRegistry implements
 	@Override
 	public void connectionOpened(RpcClient client) {
 		RpcConnectionEventListener l = getEventListener();
-		PeerInfo clientInfo = client.getClientInfo();
-		RpcClient existingClient = clientNameMap.get(clientInfo.getName());
+		PeerInfo peerInfo = client.getServerInfo();
+		RpcClient existingClient = clientNameMap.get(peerInfo.getName());
 		if ( existingClient == null ) {
 			if ( log.isDebugEnabled() ) {
-				log.debug("connectionOpened from " + clientInfo);
+				log.debug("connectionOpened from " + peerInfo);
 			}
 			if ( l != null ) {
 				l.connectionOpened(client);
 			}
 		} else {
-			PeerInfo existingClientInfo = existingClient.getClientInfo();
-			if ( !existingClientInfo.getPid().equals(client.getClientInfo().getPid())) {
+			PeerInfo existingPeerInfo = existingClient.getServerInfo();
+			if ( !existingPeerInfo.getPid().equals(client.getServerInfo().getPid())) {
 				if ( log.isDebugEnabled() ) {
-					log.debug("connectionChanged from " + existingClientInfo + " to " + clientInfo);
+					log.debug("connectionChanged from " + existingPeerInfo + " to " + peerInfo);
 				}
 				if ( l != null ) {
 					l.connectionChanged(client);
 				}
 			} else {
 				if ( log.isDebugEnabled() ) {
-					log.debug("connectionReestablished from " + clientInfo);
+					log.debug("connectionReestablished from " + peerInfo);
 				}
 				if ( l != null ) {
 					l.connectionReestablished(client);

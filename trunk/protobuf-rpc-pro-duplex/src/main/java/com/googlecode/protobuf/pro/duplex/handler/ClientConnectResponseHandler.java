@@ -32,7 +32,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
 public class ClientConnectResponseHandler extends SimpleChannelUpstreamHandler {
 
-	private static Log log = LogFactory.getLog(ClientConnectResponseHandler.class.getName());
+	private static Log log = LogFactory.getLog(ClientConnectResponseHandler.class);
 
     public static final long DEFAULT_CONNECT_RESPONSE_TIMEOUT_MS = 10000;
     
@@ -56,6 +56,9 @@ public class ClientConnectResponseHandler extends SimpleChannelUpstreamHandler {
         if ( e.getMessage() instanceof WirePayload) {
         	ConnectResponse connectResponse = ((WirePayload)e.getMessage()).getConnectResponse();
         	if ( connectResponse != null ) {
+        		if ( log.isDebugEnabled() ) {
+        			log.debug("Received ["+connectResponse.getCorrelationId()+"]ConnectResponse.");
+        		}
         		answerQueue.put(connectResponse);
         		return;
         	}

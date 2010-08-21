@@ -29,10 +29,10 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
 public class RpcServerHandler extends SimpleChannelUpstreamHandler {
 
-	private static Log log = LogFactory.getLog(RpcServerHandler.class.getName());
+	private static Log log = LogFactory.getLog(RpcServerHandler.class);
 
     private RpcServer rpcServer;
-    private RpcClientRegistry rpcClientRegistry; // only used on serverSide
+    private RpcClientRegistry rpcClientRegistry; // only used on server side
     
     public RpcServerHandler(RpcServer rpcServer) {
     	if ( rpcServer == null ) {

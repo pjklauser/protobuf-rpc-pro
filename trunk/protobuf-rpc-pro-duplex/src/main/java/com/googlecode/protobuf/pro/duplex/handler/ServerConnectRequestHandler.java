@@ -36,7 +36,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 @Sharable
 public class ServerConnectRequestHandler extends SimpleChannelUpstreamHandler {
 
-	private static Log log = LogFactory.getLog(ServerConnectRequestHandler.class.getName());
+	private static Log log = LogFactory.getLog(ServerConnectRequestHandler.class);
 
     private final PeerInfo serverInfo;
     private final RpcClientRegistry rpcClientRegistry;
@@ -54,15 +54,22 @@ public class ServerConnectRequestHandler extends SimpleChannelUpstreamHandler {
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
         if ( e.getMessage() instanceof WirePayload) {
         	ConnectRequest connectRequest = ((WirePayload)e.getMessage()).getConnectRequest();
+    		if ( log.isDebugEnabled() ) {
+    			log.debug("Received ["+connectRequest.getCorrelationId()+"]ConnectRequest.");
+    		}
         	if ( connectRequest != null ) {
         		PeerInfo connectingClientInfo = new PeerInfo(connectRequest.getClientHostName(), connectRequest.getClientPort(), connectRequest.getClientPID());
         		ConnectResponse connectResponse = null;
         		
-        		RpcClient rpcClient = new RpcClient(ctx.getChannel(), connectingClientInfo, serverInfo );
+        		RpcClient rpcClient = new RpcClient(ctx.getChannel(), serverInfo, connectingClientInfo );
         		rpcClient.setCallLogger(logger);
         		if ( rpcClientRegistry.registerRpcClient(rpcClient) ) {
         			connectResponse = ConnectResponse.newBuilder().setCorrelationId(connectRequest.getCorrelationId()).setServerPID(serverInfo.getPid()).build();
             		WirePayload payload = WirePayload.newBuilder().setConnectResponse(connectResponse).build();
+            		
+            		if ( log.isDebugEnabled() ) {
+            			log.debug("Sending ["+connectResponse.getCorrelationId()+"]ConnectResponse.");
+            		}
             		ctx.getChannel().write(payload);
             		
             		// now we swap this Handler out of the pipeline and complete the server side pipeline.
@@ -71,7 +78,12 @@ public class ServerConnectRequestHandler extends SimpleChannelUpstreamHandler {
         		} else {
         			connectResponse = ConnectResponse.newBuilder().setCorrelationId(connectRequest.getCorrelationId()).setErrorCode(ConnectErrorCode.ALREADY_CONNECTED).build();
             		WirePayload payload = WirePayload.newBuilder().setConnectResponse(connectResponse).build();
+            		
+            		if ( log.isDebugEnabled() ) {
+            			log.debug("Sending ["+connectResponse.getCorrelationId()+"]ConnectResponse. Already Connected.");
+            		}
             		ctx.getChannel().write(payload);
+            		
             		ctx.getChannel().close();
         		}
         		return;
