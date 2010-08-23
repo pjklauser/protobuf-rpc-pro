@@ -10,6 +10,7 @@ import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
 import com.google.protobuf.ServiceException;
+import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.Ping;
@@ -22,7 +23,6 @@ import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 import com.googlecode.protobuf.pro.duplex.server.RpcClientConnectionRegistry;
-import com.googlecode.protobuf.pro.duplex.util.CleanShutdownHandler;
 
 public class DuplexPingPongServer {
 
