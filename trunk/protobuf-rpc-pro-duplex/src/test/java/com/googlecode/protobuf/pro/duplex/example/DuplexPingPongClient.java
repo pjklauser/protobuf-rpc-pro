@@ -9,6 +9,7 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
+import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
@@ -19,7 +20,6 @@ import com.googlecode.protobuf.pro.duplex.test.PingPong.Ping;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService.BlockingInterface;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.Pong;
-import com.googlecode.protobuf.pro.duplex.util.CleanShutdownHandler;
 
 public class DuplexPingPongClient {
 

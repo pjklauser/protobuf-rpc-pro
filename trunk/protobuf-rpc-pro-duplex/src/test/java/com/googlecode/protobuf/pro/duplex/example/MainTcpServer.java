@@ -6,11 +6,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
+import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 import com.googlecode.protobuf.pro.duplex.server.RpcClientConnectionRegistry;
-import com.googlecode.protobuf.pro.duplex.util.CleanShutdownHandler;
 
 public class MainTcpServer {
 	

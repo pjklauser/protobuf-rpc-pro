@@ -15,7 +15,7 @@
 */
 package com.googlecode.protobuf.pro.duplex.listener;
 
-import com.googlecode.protobuf.pro.duplex.RpcClient;
+import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 
 
 /**
@@ -24,11 +24,11 @@ import com.googlecode.protobuf.pro.duplex.RpcClient;
  */
 public interface RpcConnectionEventListener {
 
-	public void connectionLost( RpcClient client );
+	public void connectionLost( RpcClientChannel clientChannel );
 	
-	public void connectionOpened( RpcClient client );
+	public void connectionOpened( RpcClientChannel clientChannel );
 	
-	public void connectionReestablished( RpcClient client );
+	public void connectionReestablished( RpcClientChannel clientChannel );
 
-	public void connectionChanged( RpcClient client );
+	public void connectionChanged( RpcClientChannel clientChannel );
 }
