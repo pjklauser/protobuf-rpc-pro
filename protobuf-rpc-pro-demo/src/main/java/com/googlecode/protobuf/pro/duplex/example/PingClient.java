@@ -8,6 +8,7 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcController;
+import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
@@ -17,7 +18,6 @@ import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService.BlockingInterface;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.Pong;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
-import com.googlecode.protobuf.pro.duplex.util.CleanShutdownHandler;
 
 public class PingClient {
 
