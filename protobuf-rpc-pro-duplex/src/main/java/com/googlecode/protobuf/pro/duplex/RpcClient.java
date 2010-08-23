@@ -84,6 +84,15 @@ public class RpcClient implements RpcClientChannel {
 	}
 	
 	/* (non-Javadoc)
+	 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#getPeerInfo()
+	 */
+	@Override
+	public PeerInfo getPeerInfo() {
+		return this.serverInfo;
+	}
+	
+
+	/* (non-Javadoc)
 	 * @see com.google.protobuf.RpcChannel#callMethod(com.google.protobuf.Descriptors.MethodDescriptor, com.google.protobuf.RpcController, com.google.protobuf.Message, com.google.protobuf.Message, com.google.protobuf.RpcCallback)
 	 */
 	@Override
@@ -478,6 +487,5 @@ public class RpcClient implements RpcClientChannel {
 	public void setClientBootstrap(DuplexTcpClientBootstrap clientBootstrap) {
 		this.clientBootstrap = clientBootstrap;
 	}
-	
 
 }

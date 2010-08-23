@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
 */
-package com.googlecode.protobuf.pro.duplex.util;
+package com.googlecode.protobuf.pro.duplex.client;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
-import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
+import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 
 /**
@@ -70,10 +70,10 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 	
 	private static class RetryState {
 		long lastRetryTime = 0;
-		RpcClient rpcClient = null;
+		RpcClientChannel rpcClientChannel = null;
 		
-		public RetryState( RpcClient client ) {
-			rpcClient = client;
+		public RetryState( RpcClientChannel clientChannel ) {
+			rpcClientChannel = clientChannel;
 		}
 		
 	}
@@ -168,9 +168,9 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 		}
 		
 		void doRetry(RetryState state) {
-			RpcClient disconnectedClient = state.rpcClient;
+			RpcClientChannel disconnectedClient = state.rpcClientChannel;
 			
-			PeerInfo serverInfo = disconnectedClient.getServerInfo();
+			PeerInfo serverInfo = disconnectedClient.getPeerInfo();
 			
 			state.lastRetryTime = System.currentTimeMillis();
 			try {
@@ -186,21 +186,21 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 	}
 	
 	@Override
-	public void connectionLost(RpcClient client) {
-		addRetryState(new RetryState(client));
+	public void connectionLost(RpcClientChannel clientChannel) {
+		addRetryState(new RetryState(clientChannel));
 		trigger();
 	}
 
 	@Override
-	public void connectionOpened(RpcClient client) {
+	public void connectionOpened(RpcClientChannel clientChannel) {
 	}
 
 	@Override
-	public void connectionReestablished(RpcClient client) {
+	public void connectionReestablished(RpcClientChannel clientChannel) {
 	}
 
 	@Override
-	public void connectionChanged(RpcClient client) {
+	public void connectionChanged(RpcClientChannel clientChannel) {
 	}
 
 	/**

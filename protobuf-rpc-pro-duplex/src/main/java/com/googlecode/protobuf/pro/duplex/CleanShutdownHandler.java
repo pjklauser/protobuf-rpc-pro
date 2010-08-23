@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
 */
-package com.googlecode.protobuf.pro.duplex.util;
+package com.googlecode.protobuf.pro.duplex;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,10 +21,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.bootstrap.Bootstrap;
-
-import com.googlecode.protobuf.pro.duplex.RpcClient;
-import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
-import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 
 /**
  * Registers a JVM shutdown hook to cleanly shutdown any
