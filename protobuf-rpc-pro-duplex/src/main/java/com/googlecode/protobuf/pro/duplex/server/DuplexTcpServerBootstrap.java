@@ -30,7 +30,7 @@ import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
-import com.googlecode.protobuf.pro.duplex.RpcClient;
+import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
@@ -71,13 +71,13 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 		this.rpcServerCallExecutor = executor;
 		TcpConnectionEventListener informer = new TcpConnectionEventListener(){
 			@Override
-			public void connectionClosed(RpcClient client) {
+			public void connectionClosed(RpcClientChannel client) {
 				for( TcpConnectionEventListener listener : getListenersCopy() ) {
 					listener.connectionClosed(client);
 				}
 			}
 			@Override
-			public void connectionOpened(RpcClient client) {
+			public void connectionOpened(RpcClientChannel client) {
 				for( TcpConnectionEventListener listener : getListenersCopy() ) {
 					listener.connectionOpened(client);
 				}
