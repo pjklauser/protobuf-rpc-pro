@@ -11,9 +11,10 @@ import com.google.protobuf.RpcController;
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
+import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
-import com.googlecode.protobuf.pro.duplex.client.RpcServerConnectionRegistry;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
+import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.Ping;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService.BlockingInterface;
@@ -47,9 +48,31 @@ public class MainTcpClient {
 			// give the bootstrap to the shutdown handler so it is shutdown cleanly.
 			shutdownHandler.addResource(bootstrap);
 
-			// Set up the event pipeline factory.
-			RpcServerConnectionRegistry eventLogger = new RpcServerConnectionRegistry();
-			bootstrap.registerConnectionEventListener(eventLogger);
+	        // setup a RPC event listener - it just logs what happens
+	        RpcConnectionEventNotifier rpcEventNotifier = new RpcConnectionEventNotifier();
+	        RpcConnectionEventListener listener = new RpcConnectionEventListener() {
+				
+				@Override
+				public void connectionReestablished(RpcClientChannel clientChannel) {
+					log.info("connectionReestablished " + clientChannel);
+				}
+				
+				@Override
+				public void connectionOpened(RpcClientChannel clientChannel) {
+					log.info("connectionOpened " + clientChannel);
+				}
+				
+				@Override
+				public void connectionLost(RpcClientChannel clientChannel) {
+					log.info("connectionLost " + clientChannel);
+				}
+				
+				@Override
+				public void connectionChanged(RpcClientChannel clientChannel) {
+					log.info("connectionChanged " + clientChannel);
+				}
+			};
+			rpcEventNotifier.setEventListener(listener);
 
 			// open the connection with the server.
 			RpcClientChannel channel = bootstrap.peerWith(server);

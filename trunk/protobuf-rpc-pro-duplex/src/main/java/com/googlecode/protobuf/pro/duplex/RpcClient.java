@@ -154,6 +154,11 @@ public class RpcClient implements RpcClientChannel {
 		return new ClientRpcController(this);
 	}
 	
+	@Override
+	public String toString() {
+		return "RpcClientChannel->" + getPeerInfo();
+	}
+	
 	public void error(RpcError rpcError) {
 		if ( log.isDebugEnabled() ) {
 			log.debug("Received ["+rpcError.getCorrelationId()+"]RpcError. ErrorMessage=" + rpcError.getErrorMessage());

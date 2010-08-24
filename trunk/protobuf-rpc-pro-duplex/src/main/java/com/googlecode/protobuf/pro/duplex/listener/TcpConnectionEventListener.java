@@ -15,17 +15,37 @@
 */
 package com.googlecode.protobuf.pro.duplex.listener;
 
-import com.googlecode.protobuf.pro.duplex.RpcClient;
+import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 
 
 /**
+ * TcpConnectionEventListener is informed when TCP
+ * connections are opened and closed to a remote peer.
+ * 
  * @author Peter Klauser
  *
  */
 public interface TcpConnectionEventListener {
 
-	public void connectionClosed( RpcClient client );
+	/**
+	 * Notification that a RpcClientChannel has closed. This
+	 * happens when a remote peer closes an open RpcClientChannel
+	 * or when the TCP connection on which the RpcClientChannel
+	 * is built up on breaks - due to JVM crash / kill or network
+	 * problem. The underlying reason for RpcClientChannel closure is not
+	 * discernible.
+	 * 
+	 * @param client
+	 */
+	public void connectionClosed( RpcClientChannel clientChannel );
 	
-	public void connectionOpened( RpcClient client );
+	/**
+	 * Notification that a RpcClientChannel has been opened. This
+	 * happens once a TCP connection is opened and the RPC handshake
+	 * is successfully completed.
+	 * 
+	 * @param clientChannel
+	 */
+	public void connectionOpened( RpcClientChannel clientChannel );
 	
 }

@@ -38,6 +38,7 @@ import org.jboss.netty.util.internal.ConversionUtil;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
+import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcServer;
 import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
@@ -208,13 +209,13 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
     protected RpcClientHandler completePipeline(RpcClient rpcClient) {
 		TcpConnectionEventListener informer = new TcpConnectionEventListener(){
 			@Override
-			public void connectionClosed(RpcClient client) {
+			public void connectionClosed(RpcClientChannel client) {
 				for( TcpConnectionEventListener listener : getListenersCopy() ) {
 					listener.connectionClosed(client);
 				}
 			}
 			@Override
-			public void connectionOpened(RpcClient client) {
+			public void connectionOpened(RpcClientChannel client) {
 				for( TcpConnectionEventListener listener : getListenersCopy() ) {
 					listener.connectionOpened(client);
 				}

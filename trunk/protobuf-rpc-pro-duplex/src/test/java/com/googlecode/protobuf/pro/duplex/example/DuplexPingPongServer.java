@@ -13,11 +13,11 @@ import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
+import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
-import com.googlecode.protobuf.pro.duplex.server.RpcClientConnectionRegistry;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.Ping;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService;
 import com.googlecode.protobuf.pro.duplex.test.PingPong.Pong;
@@ -52,7 +52,7 @@ public class DuplexPingPongServer {
         bootstrap.setOption("child.sendBufferSize", 1048576);
         bootstrap.setOption("tcpNoDelay", false);
         
-    	RpcClientConnectionRegistry eventLogger = new RpcClientConnectionRegistry();
+    	RpcConnectionEventNotifier eventLogger = new RpcConnectionEventNotifier();
     	bootstrap.registerConnectionEventListener(eventLogger);
 
     	bootstrap.getRpcServiceRegistry().registerService(new PingPongServiceImpl());

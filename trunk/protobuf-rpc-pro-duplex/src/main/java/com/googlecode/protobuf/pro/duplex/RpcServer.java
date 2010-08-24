@@ -192,6 +192,11 @@ public class RpcServer implements RpcServerExecutorCallback {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "RpcServer[" + getRcpClient()+"]";
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
