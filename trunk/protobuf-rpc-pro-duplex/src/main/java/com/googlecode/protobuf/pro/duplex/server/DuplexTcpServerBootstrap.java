@@ -32,6 +32,7 @@ import org.jboss.netty.channel.group.DefaultChannelGroup;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
+import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
@@ -194,6 +195,20 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 	 */
 	public PeerInfo getServerInfo() {
 		return serverInfo;
+	}
+
+	/**
+	 * @return the sslContext
+	 */
+	public RpcSSLContext getSslContext() {
+		return ((DuplexTcpServerPipelineFactory)getPipelineFactory()).getSslContext();
+	}
+
+	/**
+	 * @param sslContext the sslContext to set
+	 */
+	public void setSslContext(RpcSSLContext sslContext) {
+		((DuplexTcpServerPipelineFactory)getPipelineFactory()).setSslContext(sslContext);
 	}
 
 }

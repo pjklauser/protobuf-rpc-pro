@@ -23,7 +23,9 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import org.jboss.netty.handler.ssl.SslHandler;
 
+import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.handler.ClientConnectResponseHandler;
 import com.googlecode.protobuf.pro.duplex.handler.Handler;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol;
@@ -31,11 +33,18 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol;
 public class DuplexTcpClientPipelineFactory implements
         ChannelPipelineFactory {
 
+	private RpcSSLContext sslContext;
+	
     public DuplexTcpClientPipelineFactory() {
     }
 
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
+        
+        if ( getSslContext() != null ) {
+        	p.addLast(Handler.SSL, new SslHandler(getSslContext().createClientEngine()) );
+        }
+        
         p.addLast(Handler.FRAME_DECODER, new ProtobufVarint32FrameDecoder());
         p.addLast(Handler.PROTOBUF_DECODER, new ProtobufDecoder(DuplexProtocol.WirePayload.getDefaultInstance()));
 
@@ -45,9 +54,22 @@ public class DuplexTcpClientPipelineFactory implements
         // the connectResponseHandler is swapped after the client connection
         // handshake with the RpcClient for the Channel
         p.addLast(Handler.CLIENT_CONNECT, new ClientConnectResponseHandler());
-        
 
         return p;
     }
+
+	/**
+	 * @return the sslContext
+	 */
+	public RpcSSLContext getSslContext() {
+		return sslContext;
+	}
+
+	/**
+	 * @param sslContext the sslContext to set
+	 */
+	public void setSslContext(RpcSSLContext sslContext) {
+		this.sslContext = sslContext;
+	}
     
 }

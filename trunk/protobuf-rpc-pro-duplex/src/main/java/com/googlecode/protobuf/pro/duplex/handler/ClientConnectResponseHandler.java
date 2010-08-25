@@ -26,6 +26,7 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
+import org.jboss.netty.handler.ssl.SslHandler;
 
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
@@ -65,7 +66,19 @@ public class ClientConnectResponseHandler extends SimpleChannelUpstreamHandler {
         }
         ctx.sendUpstream(e);
     }
-
+/*
+    @Override
+    public void channelConnected(
+            ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+        // Get the SslHandler from the pipeline
+        // which were added in SecureChatPipelineFactory.
+        SslHandler sslHandler = ctx.getPipeline().get(SslHandler.class);
+        if ( sslHandler != null ) {
+            // Begin handshake.
+            sslHandler.handshake();
+        }
+    }
+*/
     @Override
     public void channelClosed(
             ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
