@@ -41,6 +41,7 @@ import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcServer;
 import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
+import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.handler.ClientConnectResponseHandler;
 import com.googlecode.protobuf.pro.duplex.handler.Handler;
@@ -135,6 +136,7 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
         if ( !connectFuture.isSuccess() ) {
     		throw new IOException("Failed to connect to " + remoteAddress, connectFuture.getCause());
         }
+        
         Channel channel = connectFuture.getChannel();
         
 		ConnectRequest connectRequest = ConnectRequest.newBuilder()
@@ -179,33 +181,24 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 		PeerInfo serverInfo = new PeerInfo(remoteAddress.getHostName(), remoteAddress.getPort(), serverPID );
 		
 		RpcClient rpcClient = new RpcClient(channel, clientInfo, serverInfo);
-		rpcClient.setClientBootstrap(this);
 		rpcClient.setCallLogger(getRpcLogger());
 		
 		RpcClientHandler rpcClientHandler = completePipeline(rpcClient);
 		rpcClientHandler.notifyOpened();
 		
 		allChannels.add(channel);
+		// channels remove themselves when closed.
         return rpcClient;
     }
     
 	/**
-	 * Handled the closure of the RPC client.
+	 * After RPC handshake has taken place, remove the RPC handshake
+	 * {@link ClientConnectResponseHandler} and add a {@link RpcClientHandler}
+	 * and {@link RpcServerHandler} to complete the Netty client side Pipeline.
 	 * 
-	 * Only called internally. Use {@link RpcClientChannel#close()}
-	 * to close a RPC Channel.
-	 * 
-	 * @param client
+	 * @param rpcClient
+	 * @return
 	 */
-	public void handleClosure( RpcClient client ) {
-		Channel channel = client.getChannel();
-		if ( allChannels.remove(channel) ) {
-			log.info("Closing IO Channel " + channel);
-		} else {
-			log.warn("IO Channel " + channel + " not know by this Bootstrap.");
-		}
-	}
-	
     protected RpcClientHandler completePipeline(RpcClient rpcClient) {
 		TcpConnectionEventListener informer = new TcpConnectionEventListener(){
 			@Override
@@ -353,4 +346,17 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 		this.logger = rpcLogger;
 	}
 
+	/**
+	 * @return the sslContext
+	 */
+	public RpcSSLContext getSslContext() {
+		return ((DuplexTcpClientPipelineFactory)getPipelineFactory()).getSslContext();
+	}
+
+	/**
+	 * @param sslContext the sslContext to set
+	 */
+	public void setSslContext(RpcSSLContext sslContext) {
+		((DuplexTcpClientPipelineFactory)getPipelineFactory()).setSslContext(sslContext);
+	}
 }

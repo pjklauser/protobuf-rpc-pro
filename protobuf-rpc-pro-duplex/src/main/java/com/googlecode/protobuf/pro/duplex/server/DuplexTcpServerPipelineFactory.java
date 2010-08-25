@@ -23,11 +23,13 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import org.jboss.netty.handler.ssl.SslHandler;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcServer;
 import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
+import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.handler.Handler;
 import com.googlecode.protobuf.pro.duplex.handler.RpcClientHandler;
@@ -47,6 +49,8 @@ public class DuplexTcpServerPipelineFactory implements
 	private final TcpConnectionEventListener eventListener;
 	private final ServerConnectRequestHandler connectRequestHandler;
 	private final RpcLogger logger;
+	
+	private RpcSSLContext sslContext;
 	
 	public DuplexTcpServerPipelineFactory( PeerInfo serverInfo, RpcServiceRegistry rpcServiceRegistry, RpcClientRegistry rpcClientRegistry, RpcServerCallExecutor rpcServerCallExecutor, TcpConnectionEventListener eventListener, RpcLogger logger ) {
 		if ( serverInfo == null ) {
@@ -76,6 +80,10 @@ public class DuplexTcpServerPipelineFactory implements
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
 
+        if ( getSslContext() != null ) {
+        	p.addLast(Handler.SSL, new SslHandler(getSslContext().createServerEngine()) );
+        }
+        
         p.addLast(Handler.FRAME_DECODER, new ProtobufVarint32FrameDecoder());
         p.addLast(Handler.PROTOBUF_DECODER, new ProtobufDecoder(DuplexProtocol.WirePayload.getDefaultInstance()));
 
@@ -125,5 +133,19 @@ public class DuplexTcpServerPipelineFactory implements
 	 */
 	public RpcServerCallExecutor getRpcServerCallExecutor() {
 		return rpcServerCallExecutor;
+	}
+
+	/**
+	 * @return the sslContext
+	 */
+	public RpcSSLContext getSslContext() {
+		return sslContext;
+	}
+
+	/**
+	 * @param sslContext the sslContext to set
+	 */
+	public void setSslContext(RpcSSLContext sslContext) {
+		this.sslContext = sslContext;
 	}
 }
