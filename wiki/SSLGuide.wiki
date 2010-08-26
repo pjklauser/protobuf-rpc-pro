@@ -64,29 +64,19 @@ In summary the setup is as follows
 
 In order to generate and sign certificates, OpenSSL should be installed and usable. ( On windows, you can use Cygwin's openssl ). We also generate and use a self-signed root Certificate-Authority which we use as the root truster of the certificates which we generate. You can create such a certificate by following these steps
 {{{
+1] generate a 2048 bit RSA key which is encrypted using Triple-DES and stored in a 
+PEM format so that it is readable as ASCII text.
+
 $ openssl genrsa -des3 -out certificateauthority.key 2048
-providing a passphrase ( changeme ) creats your RSA Private Key. 
-This key is a 2048 bit RSA key which is encrypted using Triple-DES and stored in a 
-PEM format so that it is readable as ASCII text. 
+providing a passphrase ( changeme )
+
+2] self sign it with a long validity
 
 $ openssl req -new -x509 -days 1000 -key certificateauthority.key -out certificateauthority.crt
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
-What you are about to enter is what is called a Distinguished Name or a DN.
-There are quite a few fields but you can leave some blank
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
------
-Country Name (2 letter code) [AU]:CH
-State or Province Name (full name) [Some-State]:Zug
-Locality Name (eg, city) []:Zug
-Organization Name (eg, company) [Internet Widgits Pty Ltd]:IT
-Organizational Unit Name (eg, section) []:IT
-Common Name (eg, YOUR name) []:ca
+...Common Name (eg, YOUR name) []:ca
 Email Address []:ca@trustworthy-inc.com
 
-
-Remove passhprase from private key
+3] remove passhprase from private key
 
 $ cp certificateauthority.key certificateauthority.key.original
 $ openssl rsa -in certificateauthority.key.original -out certificateauthority.key
