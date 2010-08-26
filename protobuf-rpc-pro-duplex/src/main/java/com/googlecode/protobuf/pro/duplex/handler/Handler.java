@@ -16,6 +16,8 @@
 package com.googlecode.protobuf.pro.duplex.handler;
 
 /**
+ * A listing of all used Handler's by name.
+ * 
  * @author Peter Klauser
  *
  */

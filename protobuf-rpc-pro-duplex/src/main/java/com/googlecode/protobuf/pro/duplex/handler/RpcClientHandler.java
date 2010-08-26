@@ -27,7 +27,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 /**
  * Handles returning RpcResponse and RpcError messages
  * in the IO-Layer, delegating them to the Netty
- * Channel's RpcClient.
+ * Channel's {@link RpcClient}.
  * 
  * @author Peter Klauser
  *

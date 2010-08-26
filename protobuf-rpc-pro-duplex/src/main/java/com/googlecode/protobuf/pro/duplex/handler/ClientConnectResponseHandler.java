@@ -26,11 +26,24 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
-import org.jboss.netty.handler.ssl.SslHandler;
 
+import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
+/**
+ * The ClientConnectResponseHandler waits for a ConnectResponse
+ * from the server's {@link ServerConnectRequestHandler} and
+ * supplies this to the {@link DuplexTcpClientBootstrap} who
+ * calls the {@link #getConnectResponse(long)}.
+ * 
+ * Once the server's ConnectResponse has been made, this handler
+ * is removed from the Channel pipeline and replaced with the
+ * {@link RpcClientHandler} and {@link RpcServerHandler}.
+ * 
+ * @author Peter Klauser
+ *
+ */
 public class ClientConnectResponseHandler extends SimpleChannelUpstreamHandler {
 
 	private static Log log = LogFactory.getLog(ClientConnectResponseHandler.class);
