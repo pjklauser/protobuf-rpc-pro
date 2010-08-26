@@ -1,6 +1,6 @@
 echo off
 
-set CLASSPATH=..\lib\commons-logging-1.1.1.jar;..\lib\log4j-1.2.15.jar;..\lib\netty-3.2.1.Final.jar;..\lib\protobuf-java-2.3.0.jar;..\lib\protobuf-rpc-pro-demo-1.0.0.jar;..\lib\protobuf-rpc-pro-duplex-1.1.0.jar
+set CLASSPATH=..\lib\commons-logging-1.1.1.jar;..\lib\log4j-1.2.15.jar;..\lib\netty-3.2.1.Final.jar;..\lib\protobuf-java-2.3.0.jar;..\lib\protobuf-rpc-pro-demo-1.1.0.jar;..\lib\protobuf-rpc-pro-duplex-1.1.0.jar
 
 set EXAMPLE_CLASS=com.googlecode.protobuf.pro.duplex.example.%1
 
