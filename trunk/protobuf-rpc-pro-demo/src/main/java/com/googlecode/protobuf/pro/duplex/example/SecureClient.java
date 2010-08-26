@@ -1,4 +1,4 @@
-package com.googlecode.protobuf.pro.duplex.example.ssl;
+package com.googlecode.protobuf.pro.duplex.example;
 
 import java.util.concurrent.Executors;
 
@@ -14,12 +14,12 @@ import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.Ping;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService.BlockingInterface;
+import com.googlecode.protobuf.pro.duplex.example.PingPong.Pong;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
-import com.googlecode.protobuf.pro.duplex.test.PingPong.Ping;
-import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService;
-import com.googlecode.protobuf.pro.duplex.test.PingPong.PingPongService.BlockingInterface;
-import com.googlecode.protobuf.pro.duplex.test.PingPong.Pong;
 
 public class SecureClient {
 
@@ -40,9 +40,9 @@ public class SecureClient {
 
     	RpcSSLContext sslCtx = new RpcSSLContext();
     	sslCtx.setKeystorePassword("changeme");
-    	sslCtx.setKeystorePath("ssl/client.keystore");
+    	sslCtx.setKeystorePath("../lib/client.keystore");
     	sslCtx.setTruststorePassword("changeme");
-    	sslCtx.setTruststorePath("ssl/truststore");
+    	sslCtx.setTruststorePath("../lib/truststore");
     	sslCtx.init();
     	
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
@@ -111,10 +111,11 @@ public class SecureClient {
 		}
 	}
 
+
 	private static void blockingCalls(int numCalls, int processingTime,
 			int payloadSize, int replyPayloadSize, RpcClientChannel channel)
 			throws Exception {
-		BlockingInterface myService = PingPongService.newBlockingStub(channel);
+		BlockingInterface myService = PingService.newBlockingStub(channel);
 
 		for (int i = 0; i < numCalls; i++) {
 			if (i % 100 == 1) {
@@ -123,9 +124,8 @@ public class SecureClient {
 			RpcController controller = channel.newRpcController();
 
 			ByteString requestData = ByteString.copyFrom(new byte[payloadSize]);
-			Ping request = Ping.newBuilder().setProcessingTime(processingTime)
-					.setPingData(requestData)
-					.setPongDataLength(replyPayloadSize).build();
+			Ping request = Ping.newBuilder().setNumber(processingTime)
+					.setPingData(requestData).build();
 			Pong pong = myService.ping(controller, request);
 			if (pong.getPongData().size() != replyPayloadSize) {
 				throw new Exception("Reply payload mismatch.");
