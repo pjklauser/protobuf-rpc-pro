@@ -10,10 +10,10 @@ public class RpcSSLContextTest extends TestCase {
 	public void testLoad() throws Exception {
 		RpcSSLContext ctx = new RpcSSLContext();
 		
-		ctx.setKeystorePath("com/googlecode/protobuf/pro/duplex/test/ssl/keystore");
-		ctx.setKeystorePassword("pwd");
+		ctx.setKeystorePath("ssl/client.keystore");
+		ctx.setKeystorePassword("changeme");
 		
-		ctx.setTruststorePath("com/googlecode/protobuf/pro/duplex/test/ssl/truststore");
+		ctx.setTruststorePath("ssl/truststore");
 		ctx.setTruststorePassword("changeme");
 		
 		ctx.init();
