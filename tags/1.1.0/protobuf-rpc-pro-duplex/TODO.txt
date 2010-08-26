@@ -1,0 +1,11 @@
+ErrorMessage string enum
+
+perf comparison
+	socket-rpc std java
+	mina
+	netty
+	
+Howto - extend for compression
+
+
+log file analyzer.
