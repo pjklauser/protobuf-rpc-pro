@@ -4,7 +4,7 @@
 	<groupId>com.googlecode.protobuf.pro</groupId>
 	<artifactId>protobuf-rpc-pro-demo</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<name>Protobuf RPC Pro Implementation</name>
 	<build>
 		<plugins>
@@ -64,10 +64,10 @@
 		<dependency>
 			<groupId>com.googlecode.protobuf.pro</groupId>
 			<artifactId>protobuf-rpc-pro-duplex</artifactId>
-			<version>1.0.0</version>
+			<version>1.1.0</version>
 			<type>jar</type>
 			<scope>system</scope>
-			<systemPath>D:\Development\Workspace\protobuf-rpc-pro\protobuf-rpc-pro-demo\lib\protobuf-rpc-pro-duplex-1.0.0.jar</systemPath>
+			<systemPath>D:\Development\Workspace\protobuf-rpc-pro\protobuf-rpc-pro-demo\lib\protobuf-rpc-pro-duplex-1.1.0.jar</systemPath>
 		</dependency>
 	</dependencies>
 	<repositories>

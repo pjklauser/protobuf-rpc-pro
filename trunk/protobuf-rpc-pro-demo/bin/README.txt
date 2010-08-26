@@ -31,3 +31,22 @@ RunExample.cmd|.sh DuplexPingPongClient <serverHostname> <serverPort> <clientHos
   <processingTimeMs> milliseconds sleep for each call and the payload of each call is <payloadBytes> bytes long.
 example
 $ ./RunExample.cmd DuplexPingPongClient localhost 9001 localhost 9002 100 0 100 100
+
+
+--------------------------------------------------------------------
+SSL client->server
+--------------------------------------------------------------------
+
+RunExample.cmd|.sh SecureServer <serverHostname> <serverPort>
+  runs a secure RPC server on port 9001 
+  at runtime the server needs the server.keystore and the truststore files in /lib
+example
+$ ./RunExample.cmd SecureServer localhost 9001
+
+
+RunExample.cmd|.sh SecureClient <serverHostname> <serverPort> <clientHostname> <clientPort>
+  runs a secure RPC client which calls pings the server a few times. 
+  at runtime, the client needs the client.keystore and the truststore files in /lib
+example
+$ ./RunExample.cmd SecureClient localhost 9001 localhost 9002
+
