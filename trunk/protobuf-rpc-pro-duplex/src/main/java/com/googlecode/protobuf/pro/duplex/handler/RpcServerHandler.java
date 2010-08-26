@@ -27,6 +27,13 @@ import com.googlecode.protobuf.pro.duplex.RpcServer;
 import com.googlecode.protobuf.pro.duplex.server.RpcClientRegistry;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
+/**
+ * A pipeline handler which handles incoming RpcRequest and
+ * RpcCancel payloads towards a {@link RpcServer}.
+ * 
+ * @author Peter Klauser
+ *
+ */
 public class RpcServerHandler extends SimpleChannelUpstreamHandler {
 
 	private static Log log = LogFactory.getLog(RpcServerHandler.class);

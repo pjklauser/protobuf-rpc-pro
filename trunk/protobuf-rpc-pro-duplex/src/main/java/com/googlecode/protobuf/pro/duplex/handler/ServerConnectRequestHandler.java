@@ -33,6 +33,21 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
+/**
+ * The ServerConnectRequestHandler handles the receipt of ConnectRequest
+ * client requests, and uses the {@link RpcClientRegistry} to try to
+ * register new clients. If the RpcClientRegistry allows the connection,
+ * this handler sends back a ConnectResponse to the client.
+ * 
+ * Once a successful client handshake has been performed, this Handler
+ * uses the {@link DuplexTcpServerPipelineFactory} to complete the
+ * Channel's pipeline, which will remove this Handler ( since it's job is
+ * done ) and place a {@link RpcClientHandler} and {@link RpcServerHandler}
+ * into the pipeline.
+ * 
+ * @author Peter Klauser
+ *
+ */
 @Sharable
 public class ServerConnectRequestHandler extends SimpleChannelUpstreamHandler {
 
