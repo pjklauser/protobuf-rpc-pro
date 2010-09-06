@@ -1,0 +1,5 @@
+Howto - extend for compression
+
+XFer OUT total bytes written
+
+demo - print xfer times as Bit/s
