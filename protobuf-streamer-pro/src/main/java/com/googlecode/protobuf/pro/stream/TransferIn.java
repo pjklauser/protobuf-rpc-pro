@@ -30,7 +30,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.channel.Channel;
 
 import com.google.protobuf.ByteString;
-import com.googlecode.protobuf.pro.stream.server.PushHandler;
 import com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification;
 import com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload;
 
@@ -189,32 +188,19 @@ public class TransferIn implements ReadableByteChannel {
 		}
 	}
 	
-	/**
-	 * Alternative server side push handling with {@link PushHandler}
-	 * 
-	 * @param chunkData
-	 */
-	void setData( ByteString chunkData ) {
-		currentChunkData = chunkData.asReadOnlyByteBuffer();
-	}
-	
 	void handleClosure() {
 		try {
 			// receiving the CLOSE message will cause the reading thread
 			// to close the transfer.
 			if ( !handoffQueue.offer(CLOSE, 600, TimeUnit.SECONDS) ) {
 				// if after 5 minutes, no reader has taken the message, force close.
-				setClosed();
+				open = false;
 			}
 		} catch ( InterruptedException e ) {
 			Thread.currentThread().interrupt();
 		}
 	}
 
-	void setClosed() {
-		open = false;
-	}
-	
 	/**
 	 * @return the currentChunkData
 	 */
