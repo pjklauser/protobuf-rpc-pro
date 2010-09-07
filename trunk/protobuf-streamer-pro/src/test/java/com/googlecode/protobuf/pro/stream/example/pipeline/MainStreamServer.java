@@ -1,3 +1,18 @@
+/**
+ *   Copyright 2010 Peter Klauser
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+*/
 package com.googlecode.protobuf.pro.stream.example.pipeline;
 
 import java.io.File;
@@ -10,7 +25,7 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import com.googlecode.protobuf.pro.stream.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.stream.PeerInfo;
-import com.googlecode.protobuf.pro.stream.TransferIn;
+import com.googlecode.protobuf.pro.stream.PushIn;
 import com.googlecode.protobuf.pro.stream.TransferOut;
 import com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get;
 import com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post;
@@ -61,30 +76,8 @@ public class MainStreamServer {
 
 		};
 
-		PushHandler<Post> pushHandler = new PushHandler<Post>() {
-
-			@Override
-			public Post getPrototype() {
-				return Post.getDefaultInstance();
-			}
-
-			@Override
-			public void init(Post message, TransferIn transferIn) {
-				log.info("Push init " + message);
-			}
-
-			@Override
-			public void data(Post message, TransferIn transferIn) {
-				log.info("Push data " + message);
-			}
-
-			@Override
-			public void end(Post message, TransferIn transferIn) {
-				log.info("Push end " + message);
-			}
-
-		};
-
+		PushHandler<Post> pushHandler = new PipelinePushHandler();
+		
 		// Configure the server.
 		StreamingServerBootstrap<Get, Post> bootstrap = new StreamingServerBootstrap<Get, Post>(
 				serverInfo, pullHandler, pushHandler,

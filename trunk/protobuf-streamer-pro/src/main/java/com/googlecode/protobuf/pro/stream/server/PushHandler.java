@@ -16,6 +16,7 @@
 package com.googlecode.protobuf.pro.stream.server;
 
 import com.google.protobuf.Message;
+import com.googlecode.protobuf.pro.stream.PushIn;
 import com.googlecode.protobuf.pro.stream.TransferIn;
 
 /**
@@ -36,7 +37,7 @@ public interface PushHandler<E extends Message> {
 	 * 
 	 * @param message
 	 */
-	public void init( E message, TransferIn transferIn );
+	public void init( E message, PushIn transferIn );
 	
 	/**
 	 * New chunk data is available in TransferIn.
@@ -49,18 +50,19 @@ public interface PushHandler<E extends Message> {
 	 * @param message
 	 * @param transferIn
 	 */
-	public void data( E message, TransferIn transferIn );
+	public void data( E message, PushIn transferIn );
 	
 	/**
-	 * Cleanup and perform tranfer end processing once transfer has ended.
+	 * Cleanup and perform transfer end processing once transfer has ended.
 	 * 
 	 * The success or failure of the transfer is not considered here
 	 * this must be determined by data integrity information transferred
 	 * with the TODO tranferIn properties
 	 *  
-	 * The transferIn will be closed.
+	 * The transferIn will be closed on entry.
+	 * 
 	 * @param message
 	 * @param transferIn
 	 */
-	public void end( E message, TransferIn transferIn );
+	public void end( E message, PushIn transferIn );
 }
