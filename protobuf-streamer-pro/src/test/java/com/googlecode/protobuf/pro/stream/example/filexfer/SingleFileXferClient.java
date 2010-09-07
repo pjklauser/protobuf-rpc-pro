@@ -1,6 +1,22 @@
+/**
+ *   Copyright 2010 Peter Klauser
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+*/
 package com.googlecode.protobuf.pro.stream.example.filexfer;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.Random;
 import java.util.concurrent.Executors;
 
@@ -54,20 +70,30 @@ public class SingleFileXferClient {
 
 			// give the bootstrap to the shutdown handler so it is shutdown cleanly.
 			shutdownHandler.addResource(bootstrap);
+			
+			for ( int i = 0; i < 10; i++ ) {
+				String filenameAtServer = filename + "." + rnd.nextInt();
+				Post post = Post.newBuilder().setFilename(filenameAtServer).build();
+				TransferOut out = bootstrap.push(server, post);
+				FileTransferUtils.sendFile(file, out, true);
+				log.info("Sent " + file + " to server as " + filenameAtServer);
 
-			/*
-			String filenameAtServer = filename + "." + rnd.nextInt();
-			Post post = Post.newBuilder().setFilename(filenameAtServer).build();
-			TransferOut out = bootstrap.push(server, post);
-			FileTransferUtils.sendFile(file, out, true);
-			log.info("Sent " + file + " to server as " + filenameAtServer);
-			*/
-			Get get = Get.newBuilder().setFilename(filename).build();
-			String localFilename = filename +".local";
-			TransferIn in = bootstrap.pull(server, get);
-			FileTransferUtils.atomicSaveToFile(localFilename, in, true, true);
-			log.info("Received " + filename + " from server as " + localFilename);
-
+				Get get = Get.newBuilder().setFilename(filenameAtServer).build();
+				String localFilename = filenameAtServer +".local";
+				TransferIn in = bootstrap.pull(server, get);
+				FileTransferUtils.atomicSaveToFile(localFilename, in, true, true);
+				log.info("Received " + filename + " from server as " + localFilename);
+			}
+						
+			{
+				String filenameAtServer = filename + ".cutoff." + rnd.nextInt();
+				Post closedPost = Post.newBuilder().setFilename(filenameAtServer).build();
+				TransferOut out = bootstrap.push(server, closedPost);
+				out.write(ByteBuffer.wrap(new byte[100000]));
+				bootstrap.releaseExternalResources();
+				log.info("Sent " + file + " to server as " + filenameAtServer + " was closed half way...");
+			}
+			
 		} catch ( Exception e ) {
 			System.err.println("Exception " + e );
 		} finally {

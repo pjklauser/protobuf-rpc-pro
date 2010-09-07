@@ -48,7 +48,7 @@ public class StreamingServer<E extends Message, F extends Message> {
 
 	private static Log log = LogFactory.getLog(StreamingServer.class);
 
-	private final Map<Integer, TransferState<E,F>> pendingTransferMap = new ConcurrentHashMap<Integer, TransferState<E,F>>();
+	private final Map<Integer, TransferState> pendingTransferMap = new ConcurrentHashMap<Integer, TransferState>();
 
 	private final PeerInfo serverInfo;
 	private final PullHandler<E> pullHandler;
@@ -109,8 +109,8 @@ public class StreamingServer<E extends Message, F extends Message> {
 			return;
 		}
 		
-		TransferIn transferIn =  new TransferIn(correlationId,channel);
-		TransferState<E,F> pendingTransfer = new TransferState<E,F>(startTS, null, request, transferIn, null);
+		PushIn transferIn =  new PushIn(correlationId,channel);
+		TransferState pendingTransfer = new TransferState(startTS, request, transferIn);
 		registerPendingRequest(correlationId, pendingTransfer);
 		pushHandler.init(request, transferIn);
 	}
@@ -145,7 +145,7 @@ public class StreamingServer<E extends Message, F extends Message> {
 		}
 		
 		TransferOut transferOut =  new TransferOut(correlationId,chunkSize,channel);
-		TransferState<E,F> pendingTransfer = new TransferState<E,F>(startTS, request, null, null, transferOut);
+		TransferState pendingTransfer = new TransferState(startTS, request, transferOut);
 		registerPendingRequest(correlationId, pendingTransfer);
 
 		PullWorker worker = new PullWorker(pendingTransfer);
@@ -153,7 +153,7 @@ public class StreamingServer<E extends Message, F extends Message> {
 	}
 
 	void handlePullComplete(int correlationId) {
-		TransferState<E,F> state = removePendingTransfer(correlationId);
+		TransferState state = removePendingTransfer(correlationId);
 		if (state != null) {
 			if ( log.isDebugEnabled() ) {
 				log.debug("Pull Transfer complete.");
@@ -169,9 +169,9 @@ public class StreamingServer<E extends Message, F extends Message> {
 			log.debug("Received ["+chunk.getCorrelationId()+":"+chunk.getSeqNo()+"]PushChunk. " + chunk.getChunkType());
 		}
 
-		TransferState<E,F> state = lookupPendingTransfer(correlationId);
+		TransferState state = lookupPendingTransfer(correlationId);
 		if ( state != null ) {
-			TransferIn transferIn = state.getPullStream();
+			PushIn transferIn = state.getPushIn();
 			if ( transferIn == null ) {
 				throw new IllegalStateException("TransferState missing transferIn");
 			}
@@ -184,8 +184,9 @@ public class StreamingServer<E extends Message, F extends Message> {
 			pushHandler.data(state.getPushRequest(), transferIn);
 			if ( ChunkTypeCode.END == chunk.getChunkType() ) {
 				removePendingTransfer(correlationId);
-				transferIn.setClosed();
-				pushHandler.end(state.getPushRequest(), transferIn);
+				if ( transferIn.setClosed() ) {
+					pushHandler.end(state.getPushRequest(), transferIn);
+				}
 			}
 		} else {
 			// this can happen only under race conditions with close
@@ -206,13 +207,13 @@ public class StreamingServer<E extends Message, F extends Message> {
 	public void closeNotification(CloseNotification closeNotification) {
 		int correlationId = closeNotification.getCorrelationId();
 
-		TransferState<E,F> state = removePendingTransfer(correlationId);
+		TransferState state = removePendingTransfer(correlationId);
 		if (state != null) {
 			// we only issue one cancel to the Executor
 			if ( log.isDebugEnabled() ) {
 				log.debug("Received ["+closeNotification.getCorrelationId()+"]CloseNotification.");
 			}
-			TransferOut transferOut = state.getPushStream();
+			TransferOut transferOut = state.getPullOut();
 			if ( transferOut == null ) {
 				throw new IllegalStateException("TransferState missing transferOut");
 			}
@@ -240,17 +241,19 @@ public class StreamingServer<E extends Message, F extends Message> {
 		pendingTransferIds.addAll(pendingTransferMap.keySet());
 		do {
 			for( Integer correlationId : pendingTransferIds ) {
-				TransferState<E,F> state = pendingTransferMap.remove(correlationId);
+				TransferState state = pendingTransferMap.remove(correlationId);
 				if (state != null) {
 					// we only issue one cancel to the Executor
 					if ( log.isDebugEnabled() ) {
 						log.debug("Force closure ["+correlationId+"].");
 					}
-					TransferIn transferIn = state.getPullStream();
+					PushIn transferIn = state.getPushIn();
 					if ( transferIn != null ) {
-						transferIn.setClosed();
+						if ( transferIn.setClosed() ) {
+							pushHandler.end(state.getPushRequest(), transferIn);
+						}
 					}
-					TransferOut transferOut = state.getPushStream();
+					TransferOut transferOut = state.getPullOut();
 					if ( transferOut != null ) {
 						transferOut.handleClosure();
 					}
@@ -262,32 +265,32 @@ public class StreamingServer<E extends Message, F extends Message> {
 		pullExecutorService.shutdownNow();
 	}
 	
-	protected void doLog( PeerInfo clientInfo, TransferState<E,F> state, Message request, String errorMessage, Map<String,String> parameters ) {
+	protected void doLog( PeerInfo clientInfo, TransferState state, Message request, String errorMessage, Map<String,String> parameters ) {
 		if ( streamLogger != null ) {
 			streamLogger.logTransfer( clientInfo, serverInfo, request, errorMessage, state.getCorrelationId(), parameters, state.getStartTimestamp(), System.currentTimeMillis());
 		}
 	}
 	
-	private void registerPendingRequest(int seqId, TransferState<E,F> state) {
+	private void registerPendingRequest(int seqId, TransferState state) {
 		if (pendingTransferMap.containsKey(seqId)) {
 			throw new IllegalArgumentException("State already registered");
 		}
 		pendingTransferMap.put(seqId, state);
 	}
 
-	private TransferState<E,F> removePendingTransfer(int seqId) {
+	private TransferState removePendingTransfer(int seqId) {
 		return pendingTransferMap.remove(seqId);
 	}
 
-	private TransferState<E,F> lookupPendingTransfer(int seqId) {
+	private TransferState lookupPendingTransfer(int seqId) {
 		return pendingTransferMap.get(seqId);
 	}
 
 	public class PullWorker implements Runnable {
 
-		private final TransferState<E,F> transfer;
+		private final TransferState transfer;
 		
-		public PullWorker( TransferState<E,F> transfer ) {
+		public PullWorker( TransferState transfer ) {
 			this.transfer = transfer;
 		}
 		
@@ -297,11 +300,81 @@ public class StreamingServer<E extends Message, F extends Message> {
 		@Override
 		public void run() {
 			try {
-				pullHandler.handlePull(transfer.getPullRequest(), transfer.getPushStream());
+				pullHandler.handlePull(transfer.getPullRequest(), transfer.getPullOut());
 			} catch ( Exception e ) {
 				log.warn("UnhandledException in handlePull", e);
 			}
 			handlePullComplete( transfer.getCorrelationId() );
 		}
+	}
+	
+	public class TransferState {
+
+		private final long startTimestamp;
+		private final E pullRequest;
+		private final F pushRequest;
+		private final TransferOut pullOut;
+		private final PushIn pushIn;
+		
+		public TransferState(long startTimestamp, E pullRequest, TransferOut pullOut) {
+			this.startTimestamp = startTimestamp;
+			this.pullRequest = pullRequest;
+			this.pullOut = pullOut;
+			this.pushRequest = null;
+			this.pushIn = null;
+		}
+
+		public TransferState(long startTimestamp, F pushRequest, PushIn pushIn) {
+			this.startTimestamp = startTimestamp;
+			this.pullRequest = null;
+			this.pullOut = null;
+			this.pushRequest = pushRequest;
+			this.pushIn = pushIn;
+		}
+
+		/**
+		 * @return the startTimestamp
+		 */
+		public long getStartTimestamp() {
+			return startTimestamp;
+		}
+
+		/**
+		 * @return the request
+		 */
+		public E getPullRequest() {
+			return pullRequest;
+		}
+
+		/**
+		 * @return the request
+		 */
+		public F getPushRequest() {
+			return pushRequest;
+		}
+
+		public int getCorrelationId() {
+			if (pullOut != null) {
+				return pullOut.getCorrelationId();
+			} else if (pushIn != null) {
+				return pushIn.getCorrelationId();
+			}
+			throw new IllegalStateException("missing transfer");
+		}
+
+		/**
+		 * @return the pullOut
+		 */
+		public TransferOut getPullOut() {
+			return pullOut;
+		}
+
+		/**
+		 * @return the pushIn
+		 */
+		public PushIn getPushIn() {
+			return pushIn;
+		}
+
 	}
 }

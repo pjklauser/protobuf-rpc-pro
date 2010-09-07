@@ -48,7 +48,7 @@ public class StreamingTcpClientBootstrap<E extends Message, F extends Message> e
 	
 	private PeerInfo clientInfo;
 	private StreamLogger streamLogger = new CategoryPerMessageTypeLogger();
-	
+	private boolean shareChannels = true;
 	private int chunkSize = 1400 * 64; // default is 64 basic IP packet ( MTU=1500 - chunk overhead )
 	
 	/**
@@ -76,7 +76,7 @@ public class StreamingTcpClientBootstrap<E extends Message, F extends Message> e
 		InetSocketAddress remoteAddress = new InetSocketAddress(serverInfo.getHostName(), serverInfo.getPort());
 		
 		StreamingClient<E,F> streamingClient = findExistingChannelTo(remoteAddress);
-		if ( streamingClient == null ) {
+		if ( streamingClient == null || !shareChannels ) {
 			streamingClient = connectWith(remoteAddress);
 		} else {
 			log.debug("Reusing open connection to " + serverInfo + " for pull.");
@@ -90,7 +90,7 @@ public class StreamingTcpClientBootstrap<E extends Message, F extends Message> e
 		InetSocketAddress remoteAddress = new InetSocketAddress(serverInfo.getHostName(), serverInfo.getPort());
 		
 		StreamingClient<E,F> streamingClient = findExistingChannelTo(remoteAddress);
-		if ( streamingClient == null ) {
+		if ( streamingClient == null || !shareChannels ) {
 			streamingClient = connectWith(remoteAddress);
 		} else {
 			log.debug("Reusing open connection to " + serverInfo + " for push." );
@@ -252,5 +252,19 @@ public class StreamingTcpClientBootstrap<E extends Message, F extends Message> e
 	 */
 	public void setChunkSize(int chunkSize) {
 		this.chunkSize = chunkSize;
+	}
+
+	/**
+	 * @return the shareChannels
+	 */
+	public boolean isShareChannels() {
+		return shareChannels;
+	}
+
+	/**
+	 * @param shareChannels the shareChannels to set
+	 */
+	public void setShareChannels(boolean shareChannels) {
+		this.shareChannels = shareChannels;
 	}
 }
