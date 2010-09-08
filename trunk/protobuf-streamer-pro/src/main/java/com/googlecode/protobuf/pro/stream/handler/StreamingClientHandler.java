@@ -15,8 +15,11 @@
 */
 package com.googlecode.protobuf.pro.stream.handler;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
+import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
@@ -37,6 +40,8 @@ public class StreamingClientHandler<E extends Message,F extends Message> extends
 
     private final StreamingClient<E,F> streamingClient;
     
+	private static Log log = LogFactory.getLog(StreamingClientHandler.class);
+
     public StreamingClientHandler(StreamingClient<E,F> streamingClient ) {
     	if ( streamingClient == null ) {
     		throw new IllegalArgumentException("streamingClient");
@@ -66,6 +71,14 @@ public class StreamingClientHandler<E extends Message,F extends Message> extends
             ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
         ctx.sendUpstream(e);
         streamingClient.handleClosure();
+    }
+
+    @Override
+    public void exceptionCaught(
+            ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+    	log.warn("Exception caught during Streaming operation.", e.getCause());
+    	ctx.getChannel().close();
+    	streamingClient.handleClosure();
     }
 
 	/**

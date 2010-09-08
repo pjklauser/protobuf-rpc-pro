@@ -46,7 +46,7 @@ public class StreamingTcpClientBootstrap<E extends Message, F extends Message> e
 
 	private static Log log = LogFactory.getLog(StreamingTcpClientBootstrap.class);
 	
-	private PeerInfo clientInfo;
+	private final PeerInfo clientInfo;
 	private StreamLogger streamLogger = new CategoryPerMessageTypeLogger();
 	private boolean shareChannels = true;
 	private int chunkSize = 1400 * 64; // default is 64 basic IP packet ( MTU=1500 - chunk overhead )
@@ -203,13 +203,6 @@ public class StreamingTcpClientBootstrap<E extends Message, F extends Message> e
 	 */
 	public PeerInfo getClientInfo() {
 		return clientInfo;
-	}
-
-	/**
-	 * @param clientInfo the clientInfo to set
-	 */
-	public void setClientInfo(PeerInfo clientInfo) {
-		this.clientInfo = clientInfo;
 	}
 
 	/**

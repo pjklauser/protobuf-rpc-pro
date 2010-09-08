@@ -16,11 +16,6 @@
 package com.googlecode.protobuf.pro.stream.example.pipeline;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.logging.Log;
@@ -29,7 +24,6 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import com.googlecode.protobuf.pro.stream.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.stream.PeerInfo;
-import com.googlecode.protobuf.pro.stream.TransferIn;
 import com.googlecode.protobuf.pro.stream.TransferOut;
 import com.googlecode.protobuf.pro.stream.client.StreamingTcpClientBootstrap;
 import com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get;
@@ -79,30 +73,24 @@ public class MainStreamClient {
 			// give the bootstrap to the shutdown handler so it is shutdown cleanly.
 			shutdownHandler.addResource(bootstrap);
 
+			Peer s0 = Peer.newBuilder().setHostname(master.getHostName()).setPort(master.getPort()).build();
 			Peer s1 = Peer.newBuilder().setHostname(slave1.getHostName()).setPort(slave1.getPort()).build();
 			Peer s2 = Peer.newBuilder().setHostname(slave2.getHostName()).setPort(slave2.getPort()).build();
 			
-			Post post = Post.newBuilder().addPeer(s1).addPeer(s2).setFilename(filename).build();
+			Post post = Post.newBuilder().addPeer(s0).addPeer(s1).addPeer(s2).setFilename(filename).build();
 			
 			TransferOut out = bootstrap.push(master, post);
-			out.close(); // empty push
-//			NioCopier.copy(file, out);
+			FileTransferUtils.sendFile(file, out, true);
 			
 			log.info("Sent " + file );
-
 			
 			Thread.sleep(1000);
-			Get get = Get.newBuilder().setFilename("3GigFile.iso").build();
-			
-			File saveFile = new File("copy3GFile.iso");
-			TransferIn in = bootstrap.pull(master, get);
-			FileTransferUtils.saveToFile(saveFile, in, 8092, true);
+
 		} catch ( Exception e ) {
-			System.err.println("Exception " + e );
+			log.warn("Unexpected Exception ", e );
 		} finally {
 			System.exit(0);
 		}
-
 	}
 
 }

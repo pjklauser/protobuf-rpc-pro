@@ -767,13 +767,6 @@ public final class StreamProtocol {
     public boolean hasCorrelationId() { return hasCorrelationId; }
     public int getCorrelationId() { return correlationId_; }
     
-    // optional string reason = 2;
-    public static final int REASON_FIELD_NUMBER = 2;
-    private boolean hasReason;
-    private java.lang.String reason_ = "";
-    public boolean hasReason() { return hasReason; }
-    public java.lang.String getReason() { return reason_; }
-    
     private void initFields() {
     }
     public final boolean isInitialized() {
@@ -787,9 +780,6 @@ public final class StreamProtocol {
       if (hasCorrelationId()) {
         output.writeInt32(1, getCorrelationId());
       }
-      if (hasReason()) {
-        output.writeString(2, getReason());
-      }
       getUnknownFields().writeTo(output);
     }
     
@@ -802,10 +792,6 @@ public final class StreamProtocol {
       if (hasCorrelationId()) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(1, getCorrelationId());
-      }
-      if (hasReason()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getReason());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -968,9 +954,6 @@ public final class StreamProtocol {
         if (other.hasCorrelationId()) {
           setCorrelationId(other.getCorrelationId());
         }
-        if (other.hasReason()) {
-          setReason(other.getReason());
-        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1000,10 +983,6 @@ public final class StreamProtocol {
               setCorrelationId(input.readInt32());
               break;
             }
-            case 18: {
-              setReason(input.readString());
-              break;
-            }
           }
         }
       }
@@ -1024,27 +1003,6 @@ public final class StreamProtocol {
       public Builder clearCorrelationId() {
         result.hasCorrelationId = false;
         result.correlationId_ = 0;
-        return this;
-      }
-      
-      // optional string reason = 2;
-      public boolean hasReason() {
-        return result.hasReason();
-      }
-      public java.lang.String getReason() {
-        return result.getReason();
-      }
-      public Builder setReason(java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasReason = true;
-        result.reason_ = value;
-        return this;
-      }
-      public Builder clearReason() {
-        result.hasReason = false;
-        result.reason_ = getDefaultInstance().getReason();
         return this;
       }
       
@@ -2452,19 +2410,18 @@ public final class StreamProtocol {
       "\n\025protobuf-stream.proto\":\n\013PullRequest\022\025" +
       "\n\rcorrelationId\030\001 \002(\005\022\024\n\014requestProto\030\002 " +
       "\002(\014\":\n\013PushRequest\022\025\n\rcorrelationId\030\001 \002(" +
-      "\005\022\024\n\014requestProto\030\002 \002(\014\":\n\021CloseNotifica" +
-      "tion\022\025\n\rcorrelationId\030\001 \002(\005\022\016\n\006reason\030\002 " +
-      "\001(\t\"(\n\tParameter\022\014\n\004name\030\001 \002(\t\022\r\n\005value\030" +
-      "\002 \002(\t\"\200\001\n\005Chunk\022\025\n\rcorrelationId\030\001 \002(\005\022!" +
-      "\n\tchunkType\030\002 \002(\0162\016.ChunkTypeCode\022\r\n\005seq" +
-      "No\030\003 \002(\005\022\035\n\tparameter\030\004 \003(\0132\n.Parameter\022" +
-      "\017\n\007payload\030\005 \001(\014\"\177\n\013WirePayload\022\025\n\005chunk",
-      "\030\001 \001(\0132\006.Chunk\022\032\n\004pull\030\002 \001(\0132\014.PullReque" +
-      "st\022\032\n\004push\030\003 \001(\0132\014.PushRequest\022!\n\005close\030" +
-      "\004 \001(\0132\022.CloseNotification*/\n\rChunkTypeCo" +
-      "de\022\t\n\005START\020\000\022\n\n\006MIDDLE\020\001\022\007\n\003END\020\002B;\n\'co" +
-      "m.googlecode.protobuf.pro.stream.wireB\016S" +
-      "treamProtocolH\001"
+      "\005\022\024\n\014requestProto\030\002 \002(\014\"*\n\021CloseNotifica" +
+      "tion\022\025\n\rcorrelationId\030\001 \002(\005\"(\n\tParameter" +
+      "\022\014\n\004name\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\"\200\001\n\005Chunk\022" +
+      "\025\n\rcorrelationId\030\001 \002(\005\022!\n\tchunkType\030\002 \002(" +
+      "\0162\016.ChunkTypeCode\022\r\n\005seqNo\030\003 \002(\005\022\035\n\tpara" +
+      "meter\030\004 \003(\0132\n.Parameter\022\017\n\007payload\030\005 \001(\014" +
+      "\"\177\n\013WirePayload\022\025\n\005chunk\030\001 \001(\0132\006.Chunk\022\032",
+      "\n\004pull\030\002 \001(\0132\014.PullRequest\022\032\n\004push\030\003 \001(\013" +
+      "2\014.PushRequest\022!\n\005close\030\004 \001(\0132\022.CloseNot" +
+      "ification*/\n\rChunkTypeCode\022\t\n\005START\020\000\022\n\n" +
+      "\006MIDDLE\020\001\022\007\n\003END\020\002B;\n\'com.googlecode.pro" +
+      "tobuf.pro.stream.wireB\016StreamProtocolH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2492,7 +2449,7 @@ public final class StreamProtocol {
           internal_static_CloseNotification_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_CloseNotification_descriptor,
-              new java.lang.String[] { "CorrelationId", "Reason", },
+              new java.lang.String[] { "CorrelationId", },
               com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.class,
               com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.Builder.class);
           internal_static_Parameter_descriptor =
