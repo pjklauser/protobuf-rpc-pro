@@ -21,12 +21,14 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.netty.channel.DefaultChannelFuture;
+import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import com.googlecode.protobuf.pro.stream.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.stream.PeerInfo;
-import com.googlecode.protobuf.pro.stream.PushIn;
 import com.googlecode.protobuf.pro.stream.TransferOut;
+import com.googlecode.protobuf.pro.stream.client.StreamingTcpClientBootstrap;
 import com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get;
 import com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post;
 import com.googlecode.protobuf.pro.stream.server.PullHandler;
@@ -39,14 +41,13 @@ public class MainStreamServer {
 	private static Log log = LogFactory.getLog(MainStreamServer.class);
 
 	public static void main(String[] args) throws Exception {
-		if (args.length != 3) {
+		if (args.length != 2) {
 			System.err
-					.println("usage: <serverHostname> <serverPort> <master|slave>");
+					.println("usage: <serverHostname> <serverPort>");
 			System.exit(-1);
 		}
 		String serverHostname = args[0];
 		int serverPort = Integer.parseInt(args[1]);
-		boolean master = "master".equalsIgnoreCase(args[2]);
 
 		PeerInfo serverInfo = new PeerInfo(serverHostname, serverPort);
 
@@ -76,7 +77,19 @@ public class MainStreamServer {
 
 		};
 
-		PushHandler<Post> pushHandler = new PipelinePushHandler();
+		StreamingTcpClientBootstrap<Get,Post> clientBootstrap = new StreamingTcpClientBootstrap<Get,Post>(
+				serverInfo, new NioClientSocketChannelFactory(
+						Executors.newCachedThreadPool(),
+						Executors.newCachedThreadPool())
+				);
+		clientBootstrap.setOption("sendBufferSize", 1048576);
+		clientBootstrap.setOption("receiveBufferSize", 1048576);
+		
+		// we need to switch off this check, because we will be using IO-Threads from the server
+		// to send and await transfer for writes to the clientBootstrap.
+		DefaultChannelFuture.setUseDeadLockChecker(false);
+		
+		PushHandler<Post> pushHandler = new PipelinePushHandler(serverInfo, clientBootstrap);
 		
 		// Configure the server.
 		StreamingServerBootstrap<Get, Post> bootstrap = new StreamingServerBootstrap<Get, Post>(
@@ -84,6 +97,10 @@ public class MainStreamServer {
 				new NioServerSocketChannelFactory(
 						Executors.newCachedThreadPool(),
 						Executors.newCachedThreadPool()));
+        bootstrap.setOption("sendBufferSize", 1048576);
+        bootstrap.setOption("receiveBufferSize", 1048576);
+        bootstrap.setOption("child.receiveBufferSize", 1048576);
+        bootstrap.setOption("child.sendBufferSize", 1048576);
 
 		// give the bootstrap to the shutdown handler so it is shutdown cleanly.
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();

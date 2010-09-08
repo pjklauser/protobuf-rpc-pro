@@ -27,7 +27,12 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.googlecode.protobuf.pro.stream.PeerInfo;
 import com.googlecode.protobuf.pro.stream.PushIn;
+import com.googlecode.protobuf.pro.stream.TransferOut;
+import com.googlecode.protobuf.pro.stream.client.StreamingTcpClientBootstrap;
+import com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get;
+import com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer;
 import com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post;
 import com.googlecode.protobuf.pro.stream.server.PushHandler;
 
@@ -35,11 +40,20 @@ public class PipelinePushHandler implements PushHandler<Post> {
 
 	private static Log log = LogFactory.getLog(PipelinePushHandler.class);
 
+	private final PeerInfo serverInfo;
+	private final StreamingTcpClientBootstrap<Get,Post> bootstrap;
 	
-	private Map<Post,FileChannel> ioMap = new HashMap<Post,FileChannel>();
+	private static class PipelineState {
+		PeerInfo nextServerInfo; // 
+		TransferOut pushOut;
+		FileChannel filechannel; // the local file being saved
+	}
 	
-	public PipelinePushHandler() {
-		
+	private Map<Post,PipelineState> ioMap = new HashMap<Post,PipelineState>();
+	
+	public PipelinePushHandler(PeerInfo serverInfo, StreamingTcpClientBootstrap<Get,Post> bootstrap) {
+		this.serverInfo = serverInfo;
+		this.bootstrap = bootstrap;
 	}
 	
 	@Override
@@ -51,10 +65,29 @@ public class PipelinePushHandler implements PushHandler<Post> {
 	public void init(Post message, PushIn transferIn) {
 		log.info("Push init " + message);
 		
-		File saveToFile = new File(message.getFilename());
+		int serverIdx = getIndexInServers(message);
+		
+		File saveToFile = new File(message.getFilename()+"."+serverIdx);
 		try {
-			FileChannel out = (new FileOutputStream(saveToFile)).getChannel();
-			ioMap.put(message, out);
+			PipelineState state = new PipelineState();
+			ioMap.put(message, state);
+			
+			state.filechannel = (new FileOutputStream(saveToFile)).getChannel();
+			
+			if ( !isLastIndexInServers(message, serverIdx)) {
+				state.nextServerInfo = getNextServerInfo(message, serverIdx);
+				try {
+					state.pushOut = bootstrap.push(state.nextServerInfo, message);
+				} catch ( IOException ioe ) {
+					log.warn("Unable to connect to next server in pipeline " + state.nextServerInfo, ioe);
+					try {
+						transferIn.close();
+					} catch ( IOException closeException ) {
+						log.warn("Unable to force close transfer " + message, closeException);
+					}
+				}
+			}
+			
 		} catch ( FileNotFoundException e ) {
 			try {
 				transferIn.close();
@@ -67,36 +100,104 @@ public class PipelinePushHandler implements PushHandler<Post> {
 	@Override
 	public void data(Post message, PushIn transferIn) {
 		log.info("Push data " + message);
-		FileChannel out = ioMap.get(message);
-		if ( out != null ) {
+		PipelineState state = ioMap.get(message);
+		if ( state != null ) {
 			try {
 				ByteBuffer buffer = transferIn.getCurrentChunkData();
-				while (buffer.hasRemaining()) {
-					out.write(buffer);
+				if ( state.pushOut != null ) { // not at end of chain
+					buffer.mark();
+					while (buffer.hasRemaining()) { // push data to next server in pipeline
+						state.pushOut.write(buffer);
+					}
+					buffer.reset();
+				}
+				if ( state.filechannel != null ) {
+					while (buffer.hasRemaining()) { // write data to local file too
+						state.filechannel.write(buffer);
+					}
 				}
 			} catch ( IOException e ) {
-				log.warn("Exception reading from " + message + " transfer data.");
+				log.warn("Exception processing transfer data for " + message, e);
+				try {
+					state.filechannel.close();
+				} catch ( IOException ioe ) {
+					log.warn("Unable to close local file transfer " + message, ioe);
+				}
+				state.filechannel = null;
+				try {
+					transferIn.close();
+				} catch ( IOException ioe ) {
+					log.warn("Unable to force close downward transfer " + message, ioe);
+				}
+				if ( state.pushOut != null ) {
+					try {
+						state.pushOut.close();
+					} catch ( IOException ioe ) {
+						log.warn("Unable to force close upward transfer " + message, ioe);
+					}
+					state.pushOut = null;
+				}
 			}
 		} else {
-			log.warn("Unable to find FileChannel for " + message + " at transfer data.");
+			log.warn("Unable to find transfer state for " + message + " at transfer data.");
+			try {
+				transferIn.close();
+			} catch ( IOException closeException ) {
+				log.warn("Unable to force close transfer " + message, closeException);
+			}
 		}
 	}
 
 	@Override
 	public void end(Post message, PushIn transferIn) {
 		log.info("Push end " + message);
-		FileChannel out = ioMap.get(message);
-		if ( out != null ) {
-			try {
-				out.close();
-			} catch ( IOException e ) {
-				log.warn("Unable to close " + message + " at end of transfer.");
+		PipelineState state = ioMap.remove(message);
+		if ( state != null ) {
+			if ( state.pushOut != null ) {
+				// end the transfer to the next server
+				try {
+					state.pushOut.close();
+				} catch ( IOException closeException ) {
+					log.warn("Unable to normally close transfer to next server" + message, closeException);
+				}
 			}
+			if ( state.filechannel != null ) {
+				// end the write to the local file
+				try {
+					state.filechannel.close();	
+				} catch ( IOException e ) {
+					log.warn("Unable to close " + message + " at end of transfer.");
+				}
+			}
+			state.filechannel = null;
+
 			//TODO do check size parameter
-			
 			//TODO if not successful delete
 		} else {
-			log.warn("Unable to find FileChannel for " + message + " at end of transfer.");
+			log.warn("Unable to find transfer state for " + message + " at end of transfer.");
 		}
 	}
+
+	private int getIndexInServers( Post message ) {
+		int idx = 0;
+		for( Peer peer : message.getPeerList()) {
+			if ( serverInfo.getHostName().equals(peer.getHostname()) && serverInfo.getPort() == peer.getPort()) {
+				return idx;
+			}
+			idx++;
+		}
+		return -1;
+	}
+
+	private boolean isLastIndexInServers( Post message, int idx ) {
+		return idx >= message.getPeerCount() - 1;
+	}
+	
+	private PeerInfo getNextServerInfo( Post message, int idx ) {
+		Peer peer = message.getPeer(idx+1);
+		PeerInfo nextServerInfo = new PeerInfo(peer.getHostname(), peer.getPort());
+		return nextServerInfo;
+	}
+	
+	
 }

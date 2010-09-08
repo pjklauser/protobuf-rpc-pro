@@ -1,5 +1,9 @@
-Howto - extend for compression
+pipeline example
 
-XFer OUT total bytes written
+logging API
+
+example SSL
+
+Howto - extend for compression
 
 demo - print xfer times as Bit/s

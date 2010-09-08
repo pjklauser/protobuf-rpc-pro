@@ -27,7 +27,6 @@ message PushRequest {
 
 message CloseNotification {
     required int32 correlationId = 1;
-    optional string reason = 2;
 }
 
 message Parameter {

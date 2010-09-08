@@ -117,7 +117,7 @@ public class StreamingClient<E extends Message, F extends Message> {
 	 */
 	public void closeNotification(CloseNotification closeNotification) {
 		if ( log.isDebugEnabled() ) {
-			log.debug("Received ["+closeNotification.getCorrelationId()+"]CloseNotification. Reason=" + closeNotification.getReason());
+			log.debug("Received ["+closeNotification.getCorrelationId()+"]CloseNotification.");
 		}
 		TransferState<E,F> state = removePendingTransfer(closeNotification.getCorrelationId());
 		if ( state != null ) {
