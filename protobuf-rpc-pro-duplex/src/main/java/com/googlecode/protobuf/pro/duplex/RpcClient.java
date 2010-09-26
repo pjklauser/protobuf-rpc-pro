@@ -235,7 +235,6 @@ public class RpcClient implements RpcClientChannel {
 	@Override
 	public void close() {
 		channel.close().awaitUninterruptibly();
-//		handleClosure();
 	}
 	
 	public void handleClosure() {

@@ -170,7 +170,7 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 			PendingServerCallState call = runner.getCall();
 			call.getController().setFailed("Server Overload");
 			call.getExecutorCallback().onFinish(call.getController().getCorrelationId(), null);
-			// if we didnt even start to run, we dont have to worry about on cancel notify because
+			// if we didn't even start to run, we don't have to worry about on cancel notify because
 			// the cancel notification callback could never have been set!
 		}
 	}
@@ -189,7 +189,7 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 		@Override
 		public void run() {
 			if ( call.getController().isCanceled() ) {
-				// cancelled before start - return immediately
+				// canceled before start - return immediately
 				return;
 			}
 			
@@ -202,10 +202,10 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 						try {
 							serviceCallback.wait();
 						} catch (InterruptedException e) {
-							// if the service offloaded running to a different thread, the currentThread
+							// if the service off-loaded running to a different thread, the currentThread
 							// could be waiting here and be interrupted when cancel comes in.
 							
-							// we "consume" the thread's current thread's interupt status and finish.
+							// we "consume" the thread's current thread's interrupt status and finish.
 							break;
 						}
 					}
@@ -213,7 +213,7 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 				// callback may or may not have finished
 			}
 			if ( Thread.interrupted() ) {
-				//log clearing interupted flag, which might have been set if we were interrupted
+				//log clearing interrupted flag, which might have been set if we were interrupted
 				//but not in a blocking wait before.
 			}
 		}
