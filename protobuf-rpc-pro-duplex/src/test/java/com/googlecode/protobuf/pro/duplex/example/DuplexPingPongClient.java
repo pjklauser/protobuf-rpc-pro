@@ -57,6 +57,7 @@ public class DuplexPingPongClient {
         // Set up the event pipeline factory.
     	bootstrap.setOption("connectTimeoutMillis",10000);
         bootstrap.setOption("connectResponseTimeoutMillis",10000);
+        bootstrap.setOption("sendBufferSize", 1048576);
         bootstrap.setOption("receiveBufferSize", 1048576);
         bootstrap.setOption("tcpNoDelay", false);
 
