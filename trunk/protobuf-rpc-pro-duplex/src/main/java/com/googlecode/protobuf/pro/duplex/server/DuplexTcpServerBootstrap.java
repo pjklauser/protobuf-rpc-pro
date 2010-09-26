@@ -117,12 +117,8 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 	 * @param channel
 	 */
 	public void close( Channel channel ) {
-		if ( allChannels.remove(channel) ) {
-			log.info("Closing IO Channel " + channel);
-			channel.close();
-		} else {
-			log.warn("IO Channel " + channel + " not know by this Bootstrap.");
-		}
+		log.info("Closing IO Channel " + channel);
+		channel.close().awaitUninterruptibly();
 	}
 	
 	/* (non-Javadoc)

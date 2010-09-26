@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.google.protobuf.Service;
 
 /**
@@ -30,6 +33,8 @@ import com.google.protobuf.Service;
  *
  */
 public class RpcServiceRegistry {
+	
+	private static Log log = LogFactory.getLog(RpcServiceRegistry.class);
 	
 	private List<Service> serviceImplementations = new ArrayList<Service>();
 	
@@ -45,10 +50,20 @@ public class RpcServiceRegistry {
 		}
 		serviceNameMap.put(serviceName, serviceImplementation);
 		serviceImplementations.add(serviceImplementation);
+		
+		log.info("Registered " + serviceName);
 	}
 
 	public Service resolveService(String serviceName) {
-		return serviceNameMap.get(serviceName);
+		Service s = serviceNameMap.get(serviceName);
+		if ( log.isDebugEnabled() ) {
+			if ( s != null ) {
+				log.debug("Resolved " + serviceName);
+			} else {
+				log.debug("Unable to resolve " + serviceName );
+			}
+		}
+		return s;
 	}
 
 }

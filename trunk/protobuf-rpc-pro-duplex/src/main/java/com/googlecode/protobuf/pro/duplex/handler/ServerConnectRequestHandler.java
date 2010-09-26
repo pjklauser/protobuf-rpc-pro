@@ -17,6 +17,8 @@ package com.googlecode.protobuf.pro.duplex.handler;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandler.Sharable;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ExceptionEvent;
@@ -97,9 +99,8 @@ public class ServerConnectRequestHandler extends SimpleChannelUpstreamHandler {
             		if ( log.isDebugEnabled() ) {
             			log.debug("Sending ["+connectResponse.getCorrelationId()+"]ConnectResponse. Already Connected.");
             		}
-            		ctx.getChannel().write(payload);
-            		
-            		ctx.getChannel().close();
+            		ChannelFuture future = ctx.getChannel().write(payload);
+            		future.addListener(ChannelFutureListener.CLOSE); // close after write response.
         		}
         		return;
         	}
