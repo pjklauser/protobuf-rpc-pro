@@ -40,36 +40,36 @@ public class CategoryPerServiceLogger implements RpcLogger {
 	 * com.googlecode.protobuf.pro.duplex.logging.RpcLogger#logCall(com.googlecode
 	 * .protobuf.pro.duplex.RpcClient,
 	 * com.google.protobuf.Descriptors.MethodDescriptor,
-	 * com.google.protobuf.Message, com.google.protobuf.Message, int,
-	 * com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo,
-	 * com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo)
+	 * com.google.protobuf.Message, com.google.protobuf.Message, int, long, long)
 	 */
 	@Override
 	public void logCall(PeerInfo client, PeerInfo server, String signature,
 			Message request, Message response, String errorMessage,
-			int correlationId, RpcPayloadInfo reqInfo, RpcPayloadInfo resInfo) {
-		int duration = (int)(resInfo.getTs() - reqInfo.getTs());
+			int correlationId, long requestTS, long responseTS) {
+		int duration = (int)(requestTS - responseTS);
 		
-		RpcCall.Builder rpcCall = RpcCall.newBuilder()
-				.setCorId(correlationId)
-				.setDuration(duration)
-				.setClient(client.toString())
-				.setServer(server.toString())
-				.setSignature(signature);
-		if (errorMessage != null) {
-			rpcCall.setError(errorMessage);
-		}
-		if (reqInfo != null) {
-			rpcCall.setRequest(reqInfo);
-		}
-		if (resInfo != null) {
-			rpcCall.setResponse(resInfo);
-		}
-
 		String summaryCategoryName = signature + ".info";
 		Log log = LogFactory.getLog(summaryCategoryName);
 		String summaryText = null;
 		if (log.isInfoEnabled()) {
+			RpcCall.Builder rpcCall = RpcCall.newBuilder()
+					.setCorId(correlationId)
+					.setDuration(duration)
+					.setClient(client.toString())
+					.setServer(server.toString())
+					.setSignature(signature);
+			if (errorMessage != null) {
+				rpcCall.setError(errorMessage);
+			}
+			if (request != null) {
+				RpcPayloadInfo reqInfo = RpcPayloadInfo.newBuilder().setTs(requestTS).setSize(request.getSerializedSize()).build();
+				rpcCall.setRequest(reqInfo);
+			}
+			if (response != null) {
+				RpcPayloadInfo resInfo  = RpcPayloadInfo.newBuilder().setTs(responseTS).setSize(response.getSerializedSize()).build();
+				rpcCall.setResponse(resInfo);
+			}
+
 			summaryText = TextFormat.printToString(rpcCall.build());
 		}
 

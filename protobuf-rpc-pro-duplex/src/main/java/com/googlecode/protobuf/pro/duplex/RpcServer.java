@@ -31,7 +31,6 @@ import com.googlecode.protobuf.pro.duplex.execute.PendingServerCallState;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerExecutorCallback;
 import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
-import com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
@@ -268,17 +267,13 @@ public class RpcServer implements RpcServerExecutorCallback {
 	
 	protected void doErrorLog( int correlationId, String signature, Message request, Message response, String errorMessage ) {
 		if ( logger != null ) {
-			RpcPayloadInfo reqInfo = RpcPayloadInfo.newBuilder().setSize(request.getSerializedSize()).setTs(System.currentTimeMillis()).build();
-			RpcPayloadInfo resInfo = RpcPayloadInfo.newBuilder().setSize(response.getSerializedSize()).setTs(System.currentTimeMillis()).build();
-			logger.logCall(rpcClient.getClientInfo(), rpcClient.getServerInfo(), signature, request, response, errorMessage, correlationId, reqInfo, resInfo);
+			logger.logCall(rpcClient.getClientInfo(), rpcClient.getServerInfo(), signature, request, response, errorMessage, correlationId, System.currentTimeMillis(), System.currentTimeMillis());
 		}
 	}
 	
 	protected void doLog( PendingServerCallState state, Message response, String errorMessage ) {
 		if ( logger != null ) {
-			RpcPayloadInfo reqInfo = RpcPayloadInfo.newBuilder().setSize(state.getRequest().getSerializedSize()).setTs(state.getStartTS()).build();
-			RpcPayloadInfo resInfo = RpcPayloadInfo.newBuilder().setSize(response.getSerializedSize()).setTs(System.currentTimeMillis()).build();
-			logger.logCall(rpcClient.getClientInfo(), rpcClient.getServerInfo(), state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), reqInfo, resInfo);
+			logger.logCall(rpcClient.getClientInfo(), rpcClient.getServerInfo(), state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), state.getStartTS(), System.currentTimeMillis());
 		}
 	}
 	

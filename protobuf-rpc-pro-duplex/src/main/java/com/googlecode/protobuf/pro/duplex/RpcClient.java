@@ -31,7 +31,6 @@ import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
-import com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
@@ -256,9 +255,7 @@ public class RpcClient implements RpcClientChannel {
 	
 	protected void doLog( PendingClientCallState state, Message response, String errorMessage ) {
 		if ( rpcLogger != null ) {
-			RpcPayloadInfo reqInfo = RpcPayloadInfo.newBuilder().setSize(state.getRequest().getSerializedSize()).setTs(state.getStartTimestamp()).build();
-			RpcPayloadInfo resInfo = RpcPayloadInfo.newBuilder().setSize(response.getSerializedSize()).setTs(System.currentTimeMillis()).build();
-			rpcLogger.logCall(clientInfo, serverInfo, state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), reqInfo, resInfo);
+			rpcLogger.logCall(clientInfo, serverInfo, state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), state.getStartTimestamp(), System.currentTimeMillis());
 		}
 	}
 	

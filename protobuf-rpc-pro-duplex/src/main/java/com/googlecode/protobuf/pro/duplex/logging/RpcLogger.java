@@ -17,7 +17,6 @@ package com.googlecode.protobuf.pro.duplex.logging;
 
 import com.google.protobuf.Message;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
-import com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo;
 
 /**
  * Interface of a Logging facility which logs each RPC call at completion time.
@@ -42,9 +41,9 @@ public interface RpcLogger {
 	 * @param response protobuf.
 	 * @param errorMessage if an error was signaled
 	 * @param correlationId the correlationId.
-	 * @param reqInfo payload information of the request.
-	 * @param resInfo payload information of the response.
+	 * @param requestTS the timestamp of request.
+	 * @param responseTS the timestamp of the response.
 	 */
-	public void logCall( PeerInfo client, PeerInfo server, String signature, Message request, Message response, String errorMessage, int correlationId, RpcPayloadInfo reqInfo, RpcPayloadInfo resInfo );
+	public void logCall( PeerInfo client, PeerInfo server, String signature, Message request, Message response, String errorMessage, int correlationId, long requestTS, long responseTS );
 	
 }
