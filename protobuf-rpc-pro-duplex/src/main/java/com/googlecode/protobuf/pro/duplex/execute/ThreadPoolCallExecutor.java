@@ -32,11 +32,16 @@ import com.google.protobuf.RpcCallback;
 
 /**
  * A ThreadPoolCallExecutor uses a pool of threads to handle the running of server side RPC calls.
+ * This executor provides a cancellation facility where a running RPC call can be interrupted before
+ * it finishes, because a RPC cancel which comes logically after the RPC call can be processed.
+ * 
+ * Thread separation between IO-Layer threads and threads calling the RPC methods is only needed if
+ * the RPC method call is going to make an RPC call back to the SAME client who the call is servicing.
+ * If other threads than the IO-Layer threads are calling the server's RPC clients, then the 
+ * {@link SameTheadExecutor} is sufficient.
+ * 
  * It is necessary to use separate threads to handle server RPC calls than the threads which serve
- * the RPC client calls, in order to avoid deadlock on the single Netty Channel. If you are not
- * performing reverse RPC calls from server to client, then you can use the {@link SameThreadExecutor}
- * to not incur the performance penalty of a thread context switch from IO-Thread to RPC call executor
- * thread.
+ * the RPC client calls, in order to avoid deadlock on the single Netty Channel.
  * 
  * You can choose bounds for number of Threads to service the calls, and the BlockingQueue size and
  * implementation through the choice of constructors. {@link java.util.concurrent.ThreadPoolExecutor}
