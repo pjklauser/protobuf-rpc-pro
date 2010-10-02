@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.protobuf.Descriptors.MethodDescriptor;
+import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.Service;
@@ -134,10 +135,19 @@ public class RpcServer implements RpcServerExecutorCallback {
 		}
 		Message requestPrototype = service.getRequestPrototype(methodDesc);
 
+		// fetch an optional ExtensionRegistry associated with the Service.
+		ExtensionRegistry extensionRegistry = rpcServiceRegistry.resolveExtensionRegistry(rpcRequest
+				.getServiceIdentifier());
+		
 		Message request = null;
 		try {
-			request = requestPrototype.newBuilderForType()
-					.mergeFrom(rpcRequest.getRequestBytes()).build();
+			if ( extensionRegistry == null ) {
+				request = requestPrototype.newBuilderForType()
+						.mergeFrom(rpcRequest.getRequestBytes()).build();
+			} else {
+				request = requestPrototype.newBuilderForType()
+				.mergeFrom(rpcRequest.getRequestBytes(),extensionRegistry).build();
+			}
 
 		} catch (InvalidProtocolBufferException e) {
 			String errorMessage = "Invalid Request Protobuf";

@@ -15,19 +15,21 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.Service;
 
 /**
  * The RpcServiceRegistry holds a reference to each RPC service 
- * implementation that can service calls.
+ * implementation that can service calls. Optionally a message
+ * ExtensionRegistry can be associated with the Service calls in
+ * order for the RPC layer to transparently handle
+ * protobuf messages with extensions. 
  * 
  * @author Peter Klauser
  *
@@ -36,22 +38,52 @@ public class RpcServiceRegistry {
 	
 	private static Log log = LogFactory.getLog(RpcServiceRegistry.class);
 	
-	private List<Service> serviceImplementations = new ArrayList<Service>();
-	
 	private Map<String, Service> serviceNameMap = new HashMap<String, Service>();
+	private Map<String, ExtensionRegistry> extensionRegistryNameMap = new HashMap<String, ExtensionRegistry>();
 	
 	public RpcServiceRegistry() {
 	}
 	
+	/**
+	 * Registers a Service implementation at an RPC server without an message
+	 * ExtensionRegistry.
+	 * 
+	 * @param serviceImplementation
+	 */
 	public void registerService(Service serviceImplementation) {
-		String serviceName = serviceImplementation.getDescriptorForType().getName();
-		if ( serviceNameMap.containsKey(serviceName) ) {
-			throw new IllegalStateException("Duplicate serviceName "+ serviceName);
-		}
-		serviceNameMap.put(serviceName, serviceImplementation);
-		serviceImplementations.add(serviceImplementation);
-		
+		String serviceName = addService(serviceImplementation);
 		log.info("Registered " + serviceName);
+	}
+
+	/**
+	 * Registers a Service implementation at an RPC server with a message
+	 * ExtensionRegistry.
+	 * 
+	 * @param serviceImplementation
+	 * @param extensionRegistry
+	 */
+	public void registerService(Service serviceImplementation, ExtensionRegistry extensionRegistry ) {
+		String serviceName = addService(serviceImplementation);
+		
+		log.info("Registered " + serviceName + " with ExtensionRegistry");
+	}
+
+	/**
+	 * Removes a Service and it's corresponding ExtensionRegistry if
+	 * one exists.
+	 * 
+	 * @param serviceImplementation
+	 */
+	public void removeService(Service serviceImplementation) {
+		String serviceName = serviceImplementation.getDescriptorForType().getName();
+		if ( serviceNameMap.remove(serviceName) != null ) {
+			
+			if ( extensionRegistryNameMap.remove(serviceName) != null ) {
+				log.info("Removed " + serviceName + " with ExtensionRegistry");
+			} else {
+				log.info("Removed " + serviceName);
+			}
+		}
 	}
 
 	public Service resolveService(String serviceName) {
@@ -64,6 +96,26 @@ public class RpcServiceRegistry {
 			}
 		}
 		return s;
+	}
+
+	public ExtensionRegistry resolveExtensionRegistry(String serviceName) {
+		ExtensionRegistry er = extensionRegistryNameMap.get(serviceName);
+		if ( log.isDebugEnabled() ) {
+			if ( er != null ) {
+				log.debug("Resolved ExtensionRegistry " + serviceName);
+			}
+		}
+		return er;
+	}
+
+	private String addService(Service serviceImplementation) {
+		String serviceName = serviceImplementation.getDescriptorForType().getName();
+		if ( serviceNameMap.containsKey(serviceName) ) {
+			throw new IllegalStateException("Duplicate serviceName "+ serviceName);
+		}
+		serviceNameMap.put(serviceName, serviceImplementation);
+		
+		return serviceName;
 	}
 
 }
