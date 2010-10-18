@@ -63,8 +63,11 @@ public class RpcServiceRegistry {
 	 * @param extensionRegistry
 	 */
 	public void registerService(Service serviceImplementation, ExtensionRegistry extensionRegistry ) {
+		if ( extensionRegistry == null ) {
+			throw new IllegalArgumentException("Missing extensionRegistry");
+		}
 		String serviceName = addService(serviceImplementation);
-		
+		extensionRegistryNameMap.put(serviceName, extensionRegistry);
 		log.info("Registered " + serviceName + " with ExtensionRegistry");
 	}
 
