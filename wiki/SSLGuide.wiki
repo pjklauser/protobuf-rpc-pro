@@ -145,7 +145,7 @@ We create now a client keypair which is signed by our server certificate. This m
 
 {{{
 
-1] generate a client's private key ( giving passphrase 'changeme' )
+1] generate a client private key ( giving passphrase 'changeme' )
 
 $ openssl genrsa -des3 -out client.key 2048
 
