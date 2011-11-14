@@ -4,7 +4,7 @@
 	<groupId>com.googlecode.protobuf.pro</groupId>
 	<artifactId>protobuf-rpc-pro-demo</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1.0</version>
+	<version>1.1.1</version>
 	<name>Protobuf RPC Pro Implementation</name>
 	<build>
 		<plugins>
@@ -34,16 +34,16 @@
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>2.3.0</version>
+			<version>2.4.1</version>
 			<scope>system</scope>
-			<systemPath>D:\Development\Workspace\protobuf-rpc-pro\protobuf-rpc-pro-demo\lib\protobuf-java-2.3.0.jar</systemPath>
+			<systemPath>${lib.dir}\protobuf-java-2.4.1.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.netty</groupId>
 			<artifactId>netty</artifactId>
-			<version>3.2.1.Final</version>
+			<version>3.2.6.Final</version>
 			<scope>system</scope>
-			<systemPath>D:\Development\Workspace\protobuf-rpc-pro\protobuf-rpc-pro-demo\lib\netty-3.2.1.Final.jar</systemPath>
+			<systemPath>${lib.dir}\netty-3.2.6.Final.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -51,23 +51,23 @@
 			<version>1.1.1</version>
 			<type>jar</type>
 			<scope>system</scope>
-			<systemPath>D:\Development\Workspace\protobuf-rpc-pro\protobuf-rpc-pro-demo\lib\commons-logging-1.1.1.jar</systemPath>
+			<systemPath>${lib.dir}\commons-logging-1.1.1.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>apache-log4j</groupId>
+			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.15</version>
+			<version>1.2.16</version>
 			<type>jar</type>
 			<scope>system</scope>
-			<systemPath>D:\Development\Workspace\protobuf-rpc-pro\protobuf-rpc-pro-demo\lib\log4j-1.2.15.jar</systemPath>
+			<systemPath>${lib.dir}\log4j-1.2.16.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.protobuf.pro</groupId>
 			<artifactId>protobuf-rpc-pro-duplex</artifactId>
-			<version>1.1.0</version>
+			<version>1.1.1</version>
 			<type>jar</type>
 			<scope>system</scope>
-			<systemPath>D:\Development\Workspace\protobuf-rpc-pro\protobuf-rpc-pro-demo\lib\protobuf-rpc-pro-duplex-1.1.0.jar</systemPath>
+			<systemPath>${lib.dir}\protobuf-rpc-pro-duplex-1.1.1.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -101,4 +101,7 @@
 			</snapshots>
 		</repository>
 	</repositories>
+  <properties>
+    <lib.dir>F:\opensource\protobuf-rpc-pro\protobuf-rpc-pro-demo\lib</lib.dir>
+  </properties>
 </project>

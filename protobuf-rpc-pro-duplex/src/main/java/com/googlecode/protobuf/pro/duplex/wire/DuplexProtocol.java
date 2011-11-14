@@ -13,6 +13,8 @@ public final class DuplexProtocol {
     ALREADY_CONNECTED(0, 0),
     ;
     
+    public static final int ALREADY_CONNECTED_VALUE = 0;
+    
     
     public final int getNumber() { return value; }
     
@@ -31,8 +33,8 @@ public final class DuplexProtocol {
         internalValueMap =
           new com.google.protobuf.Internal.EnumLiteMap<ConnectErrorCode>() {
             public ConnectErrorCode findValueByNumber(int number) {
-              return ConnectErrorCode.valueOf(number)
-    ;        }
+              return ConnectErrorCode.valueOf(number);
+            }
           };
     
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
@@ -51,6 +53,7 @@ public final class DuplexProtocol {
     private static final ConnectErrorCode[] VALUES = {
       ALREADY_CONNECTED, 
     };
+    
     public static ConnectErrorCode valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
@@ -59,25 +62,43 @@ public final class DuplexProtocol {
       }
       return VALUES[desc.getIndex()];
     }
+    
     private final int index;
     private final int value;
+    
     private ConnectErrorCode(int index, int value) {
       this.index = index;
       this.value = value;
     }
     
-    static {
-      com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.getDescriptor();
-    }
-    
     // @@protoc_insertion_point(enum_scope:ConnectErrorCode)
   }
   
+  public interface ConnectRequestOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+    
+    // required string clientHostName = 2;
+    boolean hasClientHostName();
+    String getClientHostName();
+    
+    // required int32 clientPort = 3;
+    boolean hasClientPort();
+    int getClientPort();
+    
+    // required string clientPID = 4;
+    boolean hasClientPID();
+    String getClientPID();
+  }
   public static final class ConnectRequest extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements ConnectRequestOrBuilder {
     // Use ConnectRequest.newBuilder() to construct.
-    private ConnectRequest() {
-      initFields();
+    private ConnectRequest(Builder builder) {
+      super(builder);
     }
     private ConnectRequest(boolean noInit) {}
     
@@ -100,58 +121,136 @@ public final class DuplexProtocol {
       return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_ConnectRequest_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
-    private boolean hasCorrelationId;
-    private int correlationId_ = 0;
-    public boolean hasCorrelationId() { return hasCorrelationId; }
-    public int getCorrelationId() { return correlationId_; }
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
     
     // required string clientHostName = 2;
     public static final int CLIENTHOSTNAME_FIELD_NUMBER = 2;
-    private boolean hasClientHostName;
-    private java.lang.String clientHostName_ = "";
-    public boolean hasClientHostName() { return hasClientHostName; }
-    public java.lang.String getClientHostName() { return clientHostName_; }
+    private java.lang.Object clientHostName_;
+    public boolean hasClientHostName() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getClientHostName() {
+      java.lang.Object ref = clientHostName_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          clientHostName_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getClientHostNameBytes() {
+      java.lang.Object ref = clientHostName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        clientHostName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required int32 clientPort = 3;
     public static final int CLIENTPORT_FIELD_NUMBER = 3;
-    private boolean hasClientPort;
-    private int clientPort_ = 0;
-    public boolean hasClientPort() { return hasClientPort; }
-    public int getClientPort() { return clientPort_; }
+    private int clientPort_;
+    public boolean hasClientPort() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public int getClientPort() {
+      return clientPort_;
+    }
     
     // required string clientPID = 4;
     public static final int CLIENTPID_FIELD_NUMBER = 4;
-    private boolean hasClientPID;
-    private java.lang.String clientPID_ = "";
-    public boolean hasClientPID() { return hasClientPID; }
-    public java.lang.String getClientPID() { return clientPID_; }
+    private java.lang.Object clientPID_;
+    public boolean hasClientPID() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public String getClientPID() {
+      java.lang.Object ref = clientPID_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          clientPID_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getClientPIDBytes() {
+      java.lang.Object ref = clientPID_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        clientPID_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     private void initFields() {
+      correlationId_ = 0;
+      clientHostName_ = "";
+      clientPort_ = 0;
+      clientPID_ = "";
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasCorrelationId) return false;
-      if (!hasClientHostName) return false;
-      if (!hasClientPort) return false;
-      if (!hasClientPID) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasClientHostName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasClientPort()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasClientPID()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasCorrelationId()) {
-        output.writeInt32(1, getCorrelationId());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
       }
-      if (hasClientHostName()) {
-        output.writeString(2, getClientHostName());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getClientHostNameBytes());
       }
-      if (hasClientPort()) {
-        output.writeInt32(3, getClientPort());
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, clientPort_);
       }
-      if (hasClientPID()) {
-        output.writeString(4, getClientPID());
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getClientPIDBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -162,25 +261,32 @@ public final class DuplexProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasCorrelationId()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getCorrelationId());
+          .computeInt32Size(1, correlationId_);
       }
-      if (hasClientHostName()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getClientHostName());
+          .computeBytesSize(2, getClientHostNameBytes());
       }
-      if (hasClientPort()) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, getClientPort());
+          .computeInt32Size(3, clientPort_);
       }
-      if (hasClientPID()) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(4, getClientPID());
+          .computeBytesSize(4, getClientPIDBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest parseFrom(
@@ -257,34 +363,57 @@ public final class DuplexProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest result;
-      
-      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_ConnectRequest_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_ConnectRequest_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest();
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        clientHostName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        clientPort_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        clientPID_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -296,33 +425,47 @@ public final class DuplexProtocol {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest returnMe = result;
-        result = null;
-        return returnMe;
+        result.correlationId_ = correlationId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.clientHostName_ = clientHostName_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.clientPort_ = clientPort_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.clientPID_ = clientPID_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -352,6 +495,26 @@ public final class DuplexProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        if (!hasClientHostName()) {
+          
+          return false;
+        }
+        if (!hasClientPort()) {
+          
+          return false;
+        }
+        if (!hasClientPID()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -364,112 +527,155 @@ public final class DuplexProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setCorrelationId(input.readInt32());
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
               break;
             }
             case 18: {
-              setClientHostName(input.readString());
+              bitField0_ |= 0x00000002;
+              clientHostName_ = input.readBytes();
               break;
             }
             case 24: {
-              setClientPort(input.readInt32());
+              bitField0_ |= 0x00000004;
+              clientPort_ = input.readInt32();
               break;
             }
             case 34: {
-              setClientPID(input.readString());
+              bitField0_ |= 0x00000008;
+              clientPID_ = input.readBytes();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required int32 correlationId = 1;
+      private int correlationId_ ;
       public boolean hasCorrelationId() {
-        return result.hasCorrelationId();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getCorrelationId() {
-        return result.getCorrelationId();
+        return correlationId_;
       }
       public Builder setCorrelationId(int value) {
-        result.hasCorrelationId = true;
-        result.correlationId_ = value;
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorrelationId() {
-        result.hasCorrelationId = false;
-        result.correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
         return this;
       }
       
       // required string clientHostName = 2;
+      private java.lang.Object clientHostName_ = "";
       public boolean hasClientHostName() {
-        return result.hasClientHostName();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public java.lang.String getClientHostName() {
-        return result.getClientHostName();
+      public String getClientHostName() {
+        java.lang.Object ref = clientHostName_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          clientHostName_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setClientHostName(java.lang.String value) {
+      public Builder setClientHostName(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasClientHostName = true;
-        result.clientHostName_ = value;
+  bitField0_ |= 0x00000002;
+        clientHostName_ = value;
+        onChanged();
         return this;
       }
       public Builder clearClientHostName() {
-        result.hasClientHostName = false;
-        result.clientHostName_ = getDefaultInstance().getClientHostName();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        clientHostName_ = getDefaultInstance().getClientHostName();
+        onChanged();
         return this;
+      }
+      void setClientHostName(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        clientHostName_ = value;
+        onChanged();
       }
       
       // required int32 clientPort = 3;
+      private int clientPort_ ;
       public boolean hasClientPort() {
-        return result.hasClientPort();
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       public int getClientPort() {
-        return result.getClientPort();
+        return clientPort_;
       }
       public Builder setClientPort(int value) {
-        result.hasClientPort = true;
-        result.clientPort_ = value;
+        bitField0_ |= 0x00000004;
+        clientPort_ = value;
+        onChanged();
         return this;
       }
       public Builder clearClientPort() {
-        result.hasClientPort = false;
-        result.clientPort_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        clientPort_ = 0;
+        onChanged();
         return this;
       }
       
       // required string clientPID = 4;
+      private java.lang.Object clientPID_ = "";
       public boolean hasClientPID() {
-        return result.hasClientPID();
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public java.lang.String getClientPID() {
-        return result.getClientPID();
+      public String getClientPID() {
+        java.lang.Object ref = clientPID_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          clientPID_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setClientPID(java.lang.String value) {
+      public Builder setClientPID(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasClientPID = true;
-        result.clientPID_ = value;
+  bitField0_ |= 0x00000008;
+        clientPID_ = value;
+        onChanged();
         return this;
       }
       public Builder clearClientPID() {
-        result.hasClientPID = false;
-        result.clientPID_ = getDefaultInstance().getClientPID();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        clientPID_ = getDefaultInstance().getClientPID();
+        onChanged();
         return this;
+      }
+      void setClientPID(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000008;
+        clientPID_ = value;
+        onChanged();
       }
       
       // @@protoc_insertion_point(builder_scope:ConnectRequest)
@@ -477,18 +683,33 @@ public final class DuplexProtocol {
     
     static {
       defaultInstance = new ConnectRequest(true);
-      com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:ConnectRequest)
   }
   
+  public interface ConnectResponseOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+    
+    // optional string serverPID = 2;
+    boolean hasServerPID();
+    String getServerPID();
+    
+    // optional .ConnectErrorCode errorCode = 3;
+    boolean hasErrorCode();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode getErrorCode();
+  }
   public static final class ConnectResponse extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements ConnectResponseOrBuilder {
     // Use ConnectResponse.newBuilder() to construct.
-    private ConnectResponse() {
-      initFields();
+    private ConnectResponse(Builder builder) {
+      super(builder);
     }
     private ConnectResponse(boolean noInit) {}
     
@@ -511,46 +732,88 @@ public final class DuplexProtocol {
       return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_ConnectResponse_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
-    private boolean hasCorrelationId;
-    private int correlationId_ = 0;
-    public boolean hasCorrelationId() { return hasCorrelationId; }
-    public int getCorrelationId() { return correlationId_; }
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
     
     // optional string serverPID = 2;
     public static final int SERVERPID_FIELD_NUMBER = 2;
-    private boolean hasServerPID;
-    private java.lang.String serverPID_ = "";
-    public boolean hasServerPID() { return hasServerPID; }
-    public java.lang.String getServerPID() { return serverPID_; }
+    private java.lang.Object serverPID_;
+    public boolean hasServerPID() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getServerPID() {
+      java.lang.Object ref = serverPID_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          serverPID_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getServerPIDBytes() {
+      java.lang.Object ref = serverPID_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        serverPID_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // optional .ConnectErrorCode errorCode = 3;
     public static final int ERRORCODE_FIELD_NUMBER = 3;
-    private boolean hasErrorCode;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode errorCode_;
-    public boolean hasErrorCode() { return hasErrorCode; }
-    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode getErrorCode() { return errorCode_; }
+    public boolean hasErrorCode() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode getErrorCode() {
+      return errorCode_;
+    }
     
     private void initFields() {
+      correlationId_ = 0;
+      serverPID_ = "";
       errorCode_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode.ALREADY_CONNECTED;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasCorrelationId) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasCorrelationId()) {
-        output.writeInt32(1, getCorrelationId());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
       }
-      if (hasServerPID()) {
-        output.writeString(2, getServerPID());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getServerPIDBytes());
       }
-      if (hasErrorCode()) {
-        output.writeEnum(3, getErrorCode().getNumber());
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeEnum(3, errorCode_.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -561,21 +824,28 @@ public final class DuplexProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasCorrelationId()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getCorrelationId());
+          .computeInt32Size(1, correlationId_);
       }
-      if (hasServerPID()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getServerPID());
+          .computeBytesSize(2, getServerPIDBytes());
       }
-      if (hasErrorCode()) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(3, getErrorCode().getNumber());
+          .computeEnumSize(3, errorCode_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse parseFrom(
@@ -652,34 +922,55 @@ public final class DuplexProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse result;
-      
-      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_ConnectResponse_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_ConnectResponse_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse();
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        serverPID_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        errorCode_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode.ALREADY_CONNECTED;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -691,33 +982,43 @@ public final class DuplexProtocol {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse returnMe = result;
-        result = null;
-        return returnMe;
+        result.correlationId_ = correlationId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.serverPID_ = serverPID_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.errorCode_ = errorCode_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -744,6 +1045,14 @@ public final class DuplexProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -756,21 +1065,25 @@ public final class DuplexProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setCorrelationId(input.readInt32());
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
               break;
             }
             case 18: {
-              setServerPID(input.readString());
+              bitField0_ |= 0x00000002;
+              serverPID_ = input.readBytes();
               break;
             }
             case 24: {
@@ -779,7 +1092,8 @@ public final class DuplexProtocol {
               if (value == null) {
                 unknownFields.mergeVarintField(3, rawValue);
               } else {
-                setErrorCode(value);
+                bitField0_ |= 0x00000004;
+                errorCode_ = value;
               }
               break;
             }
@@ -787,64 +1101,86 @@ public final class DuplexProtocol {
         }
       }
       
+      private int bitField0_;
       
       // required int32 correlationId = 1;
+      private int correlationId_ ;
       public boolean hasCorrelationId() {
-        return result.hasCorrelationId();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getCorrelationId() {
-        return result.getCorrelationId();
+        return correlationId_;
       }
       public Builder setCorrelationId(int value) {
-        result.hasCorrelationId = true;
-        result.correlationId_ = value;
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorrelationId() {
-        result.hasCorrelationId = false;
-        result.correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
         return this;
       }
       
       // optional string serverPID = 2;
+      private java.lang.Object serverPID_ = "";
       public boolean hasServerPID() {
-        return result.hasServerPID();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public java.lang.String getServerPID() {
-        return result.getServerPID();
+      public String getServerPID() {
+        java.lang.Object ref = serverPID_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          serverPID_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setServerPID(java.lang.String value) {
+      public Builder setServerPID(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasServerPID = true;
-        result.serverPID_ = value;
+  bitField0_ |= 0x00000002;
+        serverPID_ = value;
+        onChanged();
         return this;
       }
       public Builder clearServerPID() {
-        result.hasServerPID = false;
-        result.serverPID_ = getDefaultInstance().getServerPID();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        serverPID_ = getDefaultInstance().getServerPID();
+        onChanged();
         return this;
+      }
+      void setServerPID(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        serverPID_ = value;
+        onChanged();
       }
       
       // optional .ConnectErrorCode errorCode = 3;
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode errorCode_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode.ALREADY_CONNECTED;
       public boolean hasErrorCode() {
-        return result.hasErrorCode();
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode getErrorCode() {
-        return result.getErrorCode();
+        return errorCode_;
       }
       public Builder setErrorCode(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode value) {
         if (value == null) {
           throw new NullPointerException();
         }
-        result.hasErrorCode = true;
-        result.errorCode_ = value;
+        bitField0_ |= 0x00000004;
+        errorCode_ = value;
+        onChanged();
         return this;
       }
       public Builder clearErrorCode() {
-        result.hasErrorCode = false;
-        result.errorCode_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode.ALREADY_CONNECTED;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        errorCode_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode.ALREADY_CONNECTED;
+        onChanged();
         return this;
       }
       
@@ -853,18 +1189,37 @@ public final class DuplexProtocol {
     
     static {
       defaultInstance = new ConnectResponse(true);
-      com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:ConnectResponse)
   }
   
+  public interface RpcRequestOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+    
+    // required string serviceIdentifier = 2;
+    boolean hasServiceIdentifier();
+    String getServiceIdentifier();
+    
+    // required string methodIdentifier = 3;
+    boolean hasMethodIdentifier();
+    String getMethodIdentifier();
+    
+    // required bytes requestBytes = 4;
+    boolean hasRequestBytes();
+    com.google.protobuf.ByteString getRequestBytes();
+  }
   public static final class RpcRequest extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements RpcRequestOrBuilder {
     // Use RpcRequest.newBuilder() to construct.
-    private RpcRequest() {
-      initFields();
+    private RpcRequest(Builder builder) {
+      super(builder);
     }
     private RpcRequest(boolean noInit) {}
     
@@ -887,58 +1242,136 @@ public final class DuplexProtocol {
       return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcRequest_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
-    private boolean hasCorrelationId;
-    private int correlationId_ = 0;
-    public boolean hasCorrelationId() { return hasCorrelationId; }
-    public int getCorrelationId() { return correlationId_; }
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
     
     // required string serviceIdentifier = 2;
     public static final int SERVICEIDENTIFIER_FIELD_NUMBER = 2;
-    private boolean hasServiceIdentifier;
-    private java.lang.String serviceIdentifier_ = "";
-    public boolean hasServiceIdentifier() { return hasServiceIdentifier; }
-    public java.lang.String getServiceIdentifier() { return serviceIdentifier_; }
+    private java.lang.Object serviceIdentifier_;
+    public boolean hasServiceIdentifier() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getServiceIdentifier() {
+      java.lang.Object ref = serviceIdentifier_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          serviceIdentifier_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getServiceIdentifierBytes() {
+      java.lang.Object ref = serviceIdentifier_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        serviceIdentifier_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required string methodIdentifier = 3;
     public static final int METHODIDENTIFIER_FIELD_NUMBER = 3;
-    private boolean hasMethodIdentifier;
-    private java.lang.String methodIdentifier_ = "";
-    public boolean hasMethodIdentifier() { return hasMethodIdentifier; }
-    public java.lang.String getMethodIdentifier() { return methodIdentifier_; }
+    private java.lang.Object methodIdentifier_;
+    public boolean hasMethodIdentifier() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public String getMethodIdentifier() {
+      java.lang.Object ref = methodIdentifier_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          methodIdentifier_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getMethodIdentifierBytes() {
+      java.lang.Object ref = methodIdentifier_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        methodIdentifier_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required bytes requestBytes = 4;
     public static final int REQUESTBYTES_FIELD_NUMBER = 4;
-    private boolean hasRequestBytes;
-    private com.google.protobuf.ByteString requestBytes_ = com.google.protobuf.ByteString.EMPTY;
-    public boolean hasRequestBytes() { return hasRequestBytes; }
-    public com.google.protobuf.ByteString getRequestBytes() { return requestBytes_; }
+    private com.google.protobuf.ByteString requestBytes_;
+    public boolean hasRequestBytes() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public com.google.protobuf.ByteString getRequestBytes() {
+      return requestBytes_;
+    }
     
     private void initFields() {
+      correlationId_ = 0;
+      serviceIdentifier_ = "";
+      methodIdentifier_ = "";
+      requestBytes_ = com.google.protobuf.ByteString.EMPTY;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasCorrelationId) return false;
-      if (!hasServiceIdentifier) return false;
-      if (!hasMethodIdentifier) return false;
-      if (!hasRequestBytes) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasServiceIdentifier()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasMethodIdentifier()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasRequestBytes()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasCorrelationId()) {
-        output.writeInt32(1, getCorrelationId());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
       }
-      if (hasServiceIdentifier()) {
-        output.writeString(2, getServiceIdentifier());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getServiceIdentifierBytes());
       }
-      if (hasMethodIdentifier()) {
-        output.writeString(3, getMethodIdentifier());
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getMethodIdentifierBytes());
       }
-      if (hasRequestBytes()) {
-        output.writeBytes(4, getRequestBytes());
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, requestBytes_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -949,25 +1382,32 @@ public final class DuplexProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasCorrelationId()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getCorrelationId());
+          .computeInt32Size(1, correlationId_);
       }
-      if (hasServiceIdentifier()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getServiceIdentifier());
+          .computeBytesSize(2, getServiceIdentifierBytes());
       }
-      if (hasMethodIdentifier()) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(3, getMethodIdentifier());
+          .computeBytesSize(3, getMethodIdentifierBytes());
       }
-      if (hasRequestBytes()) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getRequestBytes());
+          .computeBytesSize(4, requestBytes_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest parseFrom(
@@ -1044,34 +1484,57 @@ public final class DuplexProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest result;
-      
-      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcRequest_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcRequest_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest();
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        serviceIdentifier_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        methodIdentifier_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        requestBytes_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -1083,33 +1546,47 @@ public final class DuplexProtocol {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest returnMe = result;
-        result = null;
-        return returnMe;
+        result.correlationId_ = correlationId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.serviceIdentifier_ = serviceIdentifier_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.methodIdentifier_ = methodIdentifier_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.requestBytes_ = requestBytes_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1139,6 +1616,26 @@ public final class DuplexProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        if (!hasServiceIdentifier()) {
+          
+          return false;
+        }
+        if (!hasMethodIdentifier()) {
+          
+          return false;
+        }
+        if (!hasRequestBytes()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1151,114 +1648,157 @@ public final class DuplexProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setCorrelationId(input.readInt32());
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
               break;
             }
             case 18: {
-              setServiceIdentifier(input.readString());
+              bitField0_ |= 0x00000002;
+              serviceIdentifier_ = input.readBytes();
               break;
             }
             case 26: {
-              setMethodIdentifier(input.readString());
+              bitField0_ |= 0x00000004;
+              methodIdentifier_ = input.readBytes();
               break;
             }
             case 34: {
-              setRequestBytes(input.readBytes());
+              bitField0_ |= 0x00000008;
+              requestBytes_ = input.readBytes();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required int32 correlationId = 1;
+      private int correlationId_ ;
       public boolean hasCorrelationId() {
-        return result.hasCorrelationId();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getCorrelationId() {
-        return result.getCorrelationId();
+        return correlationId_;
       }
       public Builder setCorrelationId(int value) {
-        result.hasCorrelationId = true;
-        result.correlationId_ = value;
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorrelationId() {
-        result.hasCorrelationId = false;
-        result.correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
         return this;
       }
       
       // required string serviceIdentifier = 2;
+      private java.lang.Object serviceIdentifier_ = "";
       public boolean hasServiceIdentifier() {
-        return result.hasServiceIdentifier();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public java.lang.String getServiceIdentifier() {
-        return result.getServiceIdentifier();
+      public String getServiceIdentifier() {
+        java.lang.Object ref = serviceIdentifier_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          serviceIdentifier_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setServiceIdentifier(java.lang.String value) {
+      public Builder setServiceIdentifier(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasServiceIdentifier = true;
-        result.serviceIdentifier_ = value;
+  bitField0_ |= 0x00000002;
+        serviceIdentifier_ = value;
+        onChanged();
         return this;
       }
       public Builder clearServiceIdentifier() {
-        result.hasServiceIdentifier = false;
-        result.serviceIdentifier_ = getDefaultInstance().getServiceIdentifier();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        serviceIdentifier_ = getDefaultInstance().getServiceIdentifier();
+        onChanged();
         return this;
+      }
+      void setServiceIdentifier(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        serviceIdentifier_ = value;
+        onChanged();
       }
       
       // required string methodIdentifier = 3;
+      private java.lang.Object methodIdentifier_ = "";
       public boolean hasMethodIdentifier() {
-        return result.hasMethodIdentifier();
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public java.lang.String getMethodIdentifier() {
-        return result.getMethodIdentifier();
+      public String getMethodIdentifier() {
+        java.lang.Object ref = methodIdentifier_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          methodIdentifier_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setMethodIdentifier(java.lang.String value) {
+      public Builder setMethodIdentifier(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasMethodIdentifier = true;
-        result.methodIdentifier_ = value;
+  bitField0_ |= 0x00000004;
+        methodIdentifier_ = value;
+        onChanged();
         return this;
       }
       public Builder clearMethodIdentifier() {
-        result.hasMethodIdentifier = false;
-        result.methodIdentifier_ = getDefaultInstance().getMethodIdentifier();
+        bitField0_ = (bitField0_ & ~0x00000004);
+        methodIdentifier_ = getDefaultInstance().getMethodIdentifier();
+        onChanged();
         return this;
+      }
+      void setMethodIdentifier(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000004;
+        methodIdentifier_ = value;
+        onChanged();
       }
       
       // required bytes requestBytes = 4;
+      private com.google.protobuf.ByteString requestBytes_ = com.google.protobuf.ByteString.EMPTY;
       public boolean hasRequestBytes() {
-        return result.hasRequestBytes();
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       public com.google.protobuf.ByteString getRequestBytes() {
-        return result.getRequestBytes();
+        return requestBytes_;
       }
       public Builder setRequestBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasRequestBytes = true;
-        result.requestBytes_ = value;
+  bitField0_ |= 0x00000008;
+        requestBytes_ = value;
+        onChanged();
         return this;
       }
       public Builder clearRequestBytes() {
-        result.hasRequestBytes = false;
-        result.requestBytes_ = getDefaultInstance().getRequestBytes();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        requestBytes_ = getDefaultInstance().getRequestBytes();
+        onChanged();
         return this;
       }
       
@@ -1267,18 +1807,29 @@ public final class DuplexProtocol {
     
     static {
       defaultInstance = new RpcRequest(true);
-      com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:RpcRequest)
   }
   
+  public interface RpcResponseOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+    
+    // required bytes responseBytes = 2;
+    boolean hasResponseBytes();
+    com.google.protobuf.ByteString getResponseBytes();
+  }
   public static final class RpcResponse extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements RpcResponseOrBuilder {
     // Use RpcResponse.newBuilder() to construct.
-    private RpcResponse() {
-      initFields();
+    private RpcResponse(Builder builder) {
+      super(builder);
     }
     private RpcResponse(boolean noInit) {}
     
@@ -1301,36 +1852,56 @@ public final class DuplexProtocol {
       return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcResponse_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
-    private boolean hasCorrelationId;
-    private int correlationId_ = 0;
-    public boolean hasCorrelationId() { return hasCorrelationId; }
-    public int getCorrelationId() { return correlationId_; }
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
     
     // required bytes responseBytes = 2;
     public static final int RESPONSEBYTES_FIELD_NUMBER = 2;
-    private boolean hasResponseBytes;
-    private com.google.protobuf.ByteString responseBytes_ = com.google.protobuf.ByteString.EMPTY;
-    public boolean hasResponseBytes() { return hasResponseBytes; }
-    public com.google.protobuf.ByteString getResponseBytes() { return responseBytes_; }
+    private com.google.protobuf.ByteString responseBytes_;
+    public boolean hasResponseBytes() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public com.google.protobuf.ByteString getResponseBytes() {
+      return responseBytes_;
+    }
     
     private void initFields() {
+      correlationId_ = 0;
+      responseBytes_ = com.google.protobuf.ByteString.EMPTY;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasCorrelationId) return false;
-      if (!hasResponseBytes) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasResponseBytes()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasCorrelationId()) {
-        output.writeInt32(1, getCorrelationId());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
       }
-      if (hasResponseBytes()) {
-        output.writeBytes(2, getResponseBytes());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, responseBytes_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1341,17 +1912,24 @@ public final class DuplexProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasCorrelationId()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getCorrelationId());
+          .computeInt32Size(1, correlationId_);
       }
-      if (hasResponseBytes()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getResponseBytes());
+          .computeBytesSize(2, responseBytes_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse parseFrom(
@@ -1428,34 +2006,53 @@ public final class DuplexProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse result;
-      
-      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcResponse_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcResponse_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse();
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        responseBytes_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -1467,33 +2064,39 @@ public final class DuplexProtocol {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse returnMe = result;
-        result = null;
-        return returnMe;
+        result.correlationId_ = correlationId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.responseBytes_ = responseBytes_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1517,6 +2120,18 @@ public final class DuplexProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        if (!hasResponseBytes()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1529,64 +2144,75 @@ public final class DuplexProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setCorrelationId(input.readInt32());
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
               break;
             }
             case 18: {
-              setResponseBytes(input.readBytes());
+              bitField0_ |= 0x00000002;
+              responseBytes_ = input.readBytes();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required int32 correlationId = 1;
+      private int correlationId_ ;
       public boolean hasCorrelationId() {
-        return result.hasCorrelationId();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getCorrelationId() {
-        return result.getCorrelationId();
+        return correlationId_;
       }
       public Builder setCorrelationId(int value) {
-        result.hasCorrelationId = true;
-        result.correlationId_ = value;
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorrelationId() {
-        result.hasCorrelationId = false;
-        result.correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
         return this;
       }
       
       // required bytes responseBytes = 2;
+      private com.google.protobuf.ByteString responseBytes_ = com.google.protobuf.ByteString.EMPTY;
       public boolean hasResponseBytes() {
-        return result.hasResponseBytes();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       public com.google.protobuf.ByteString getResponseBytes() {
-        return result.getResponseBytes();
+        return responseBytes_;
       }
       public Builder setResponseBytes(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasResponseBytes = true;
-        result.responseBytes_ = value;
+  bitField0_ |= 0x00000002;
+        responseBytes_ = value;
+        onChanged();
         return this;
       }
       public Builder clearResponseBytes() {
-        result.hasResponseBytes = false;
-        result.responseBytes_ = getDefaultInstance().getResponseBytes();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        responseBytes_ = getDefaultInstance().getResponseBytes();
+        onChanged();
         return this;
       }
       
@@ -1595,18 +2221,29 @@ public final class DuplexProtocol {
     
     static {
       defaultInstance = new RpcResponse(true);
-      com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:RpcResponse)
   }
   
+  public interface RpcErrorOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+    
+    // required string errorMessage = 2;
+    boolean hasErrorMessage();
+    String getErrorMessage();
+  }
   public static final class RpcError extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements RpcErrorOrBuilder {
     // Use RpcError.newBuilder() to construct.
-    private RpcError() {
-      initFields();
+    private RpcError(Builder builder) {
+      super(builder);
     }
     private RpcError(boolean noInit) {}
     
@@ -1629,36 +2266,78 @@ public final class DuplexProtocol {
       return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcError_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
-    private boolean hasCorrelationId;
-    private int correlationId_ = 0;
-    public boolean hasCorrelationId() { return hasCorrelationId; }
-    public int getCorrelationId() { return correlationId_; }
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
     
     // required string errorMessage = 2;
     public static final int ERRORMESSAGE_FIELD_NUMBER = 2;
-    private boolean hasErrorMessage;
-    private java.lang.String errorMessage_ = "";
-    public boolean hasErrorMessage() { return hasErrorMessage; }
-    public java.lang.String getErrorMessage() { return errorMessage_; }
+    private java.lang.Object errorMessage_;
+    public boolean hasErrorMessage() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getErrorMessage() {
+      java.lang.Object ref = errorMessage_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          errorMessage_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getErrorMessageBytes() {
+      java.lang.Object ref = errorMessage_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        errorMessage_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     private void initFields() {
+      correlationId_ = 0;
+      errorMessage_ = "";
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasCorrelationId) return false;
-      if (!hasErrorMessage) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasErrorMessage()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasCorrelationId()) {
-        output.writeInt32(1, getCorrelationId());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
       }
-      if (hasErrorMessage()) {
-        output.writeString(2, getErrorMessage());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getErrorMessageBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -1669,17 +2348,24 @@ public final class DuplexProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasCorrelationId()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getCorrelationId());
+          .computeInt32Size(1, correlationId_);
       }
-      if (hasErrorMessage()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getErrorMessage());
+          .computeBytesSize(2, getErrorMessageBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError parseFrom(
@@ -1756,34 +2442,53 @@ public final class DuplexProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError result;
-      
-      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcError_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcError_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError();
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        errorMessage_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -1795,33 +2500,39 @@ public final class DuplexProtocol {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError returnMe = result;
-        result = null;
-        return returnMe;
+        result.correlationId_ = correlationId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.errorMessage_ = errorMessage_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1845,6 +2556,18 @@ public final class DuplexProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        if (!hasErrorMessage()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1857,65 +2580,88 @@ public final class DuplexProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setCorrelationId(input.readInt32());
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
               break;
             }
             case 18: {
-              setErrorMessage(input.readString());
+              bitField0_ |= 0x00000002;
+              errorMessage_ = input.readBytes();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required int32 correlationId = 1;
+      private int correlationId_ ;
       public boolean hasCorrelationId() {
-        return result.hasCorrelationId();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getCorrelationId() {
-        return result.getCorrelationId();
+        return correlationId_;
       }
       public Builder setCorrelationId(int value) {
-        result.hasCorrelationId = true;
-        result.correlationId_ = value;
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorrelationId() {
-        result.hasCorrelationId = false;
-        result.correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
         return this;
       }
       
       // required string errorMessage = 2;
+      private java.lang.Object errorMessage_ = "";
       public boolean hasErrorMessage() {
-        return result.hasErrorMessage();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public java.lang.String getErrorMessage() {
-        return result.getErrorMessage();
+      public String getErrorMessage() {
+        java.lang.Object ref = errorMessage_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          errorMessage_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setErrorMessage(java.lang.String value) {
+      public Builder setErrorMessage(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasErrorMessage = true;
-        result.errorMessage_ = value;
+  bitField0_ |= 0x00000002;
+        errorMessage_ = value;
+        onChanged();
         return this;
       }
       public Builder clearErrorMessage() {
-        result.hasErrorMessage = false;
-        result.errorMessage_ = getDefaultInstance().getErrorMessage();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        errorMessage_ = getDefaultInstance().getErrorMessage();
+        onChanged();
         return this;
+      }
+      void setErrorMessage(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        errorMessage_ = value;
+        onChanged();
       }
       
       // @@protoc_insertion_point(builder_scope:RpcError)
@@ -1923,18 +2669,25 @@ public final class DuplexProtocol {
     
     static {
       defaultInstance = new RpcError(true);
-      com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:RpcError)
   }
   
+  public interface RpcCancelOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+  }
   public static final class RpcCancel extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements RpcCancelOrBuilder {
     // Use RpcCancel.newBuilder() to construct.
-    private RpcCancel() {
-      initFields();
+    private RpcCancel(Builder builder) {
+      super(builder);
     }
     private RpcCancel(boolean noInit) {}
     
@@ -1957,25 +2710,38 @@ public final class DuplexProtocol {
       return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcCancel_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
-    private boolean hasCorrelationId;
-    private int correlationId_ = 0;
-    public boolean hasCorrelationId() { return hasCorrelationId; }
-    public int getCorrelationId() { return correlationId_; }
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
     
     private void initFields() {
+      correlationId_ = 0;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasCorrelationId) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasCorrelationId()) {
-        output.writeInt32(1, getCorrelationId());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1986,13 +2752,20 @@ public final class DuplexProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasCorrelationId()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getCorrelationId());
+          .computeInt32Size(1, correlationId_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel parseFrom(
@@ -2069,34 +2842,51 @@ public final class DuplexProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel result;
-      
-      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcCancel_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcCancel_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel();
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -2108,33 +2898,35 @@ public final class DuplexProtocol {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel returnMe = result;
-        result = null;
-        return returnMe;
+        result.correlationId_ = correlationId_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -2155,6 +2947,14 @@ public final class DuplexProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2167,39 +2967,46 @@ public final class DuplexProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setCorrelationId(input.readInt32());
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required int32 correlationId = 1;
+      private int correlationId_ ;
       public boolean hasCorrelationId() {
-        return result.hasCorrelationId();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getCorrelationId() {
-        return result.getCorrelationId();
+        return correlationId_;
       }
       public Builder setCorrelationId(int value) {
-        result.hasCorrelationId = true;
-        result.correlationId_ = value;
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorrelationId() {
-        result.hasCorrelationId = false;
-        result.correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
         return this;
       }
       
@@ -2208,18 +3015,51 @@ public final class DuplexProtocol {
     
     static {
       defaultInstance = new RpcCancel(true);
-      com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:RpcCancel)
   }
   
+  public interface WirePayloadOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // optional .ConnectRequest connectRequest = 1;
+    boolean hasConnectRequest();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest getConnectRequest();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder getConnectRequestOrBuilder();
+    
+    // optional .ConnectResponse connectResponse = 2;
+    boolean hasConnectResponse();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse getConnectResponse();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder getConnectResponseOrBuilder();
+    
+    // optional .RpcRequest rpcRequest = 3;
+    boolean hasRpcRequest();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest getRpcRequest();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder getRpcRequestOrBuilder();
+    
+    // optional .RpcResponse rpcResponse = 4;
+    boolean hasRpcResponse();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse getRpcResponse();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder getRpcResponseOrBuilder();
+    
+    // optional .RpcError rpcError = 5;
+    boolean hasRpcError();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError getRpcError();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder getRpcErrorOrBuilder();
+    
+    // optional .RpcCancel rpcCancel = 6;
+    boolean hasRpcCancel();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel getRpcCancel();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder getRpcCancelOrBuilder();
+  }
   public static final class WirePayload extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements WirePayloadOrBuilder {
     // Use WirePayload.newBuilder() to construct.
-    private WirePayload() {
-      initFields();
+    private WirePayload(Builder builder) {
+      super(builder);
     }
     private WirePayload(boolean noInit) {}
     
@@ -2242,47 +3082,84 @@ public final class DuplexProtocol {
       return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_WirePayload_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // optional .ConnectRequest connectRequest = 1;
     public static final int CONNECTREQUEST_FIELD_NUMBER = 1;
-    private boolean hasConnectRequest;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest connectRequest_;
-    public boolean hasConnectRequest() { return hasConnectRequest; }
-    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest getConnectRequest() { return connectRequest_; }
+    public boolean hasConnectRequest() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest getConnectRequest() {
+      return connectRequest_;
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder getConnectRequestOrBuilder() {
+      return connectRequest_;
+    }
     
     // optional .ConnectResponse connectResponse = 2;
     public static final int CONNECTRESPONSE_FIELD_NUMBER = 2;
-    private boolean hasConnectResponse;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse connectResponse_;
-    public boolean hasConnectResponse() { return hasConnectResponse; }
-    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse getConnectResponse() { return connectResponse_; }
+    public boolean hasConnectResponse() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse getConnectResponse() {
+      return connectResponse_;
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder getConnectResponseOrBuilder() {
+      return connectResponse_;
+    }
     
     // optional .RpcRequest rpcRequest = 3;
     public static final int RPCREQUEST_FIELD_NUMBER = 3;
-    private boolean hasRpcRequest;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest rpcRequest_;
-    public boolean hasRpcRequest() { return hasRpcRequest; }
-    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest getRpcRequest() { return rpcRequest_; }
+    public boolean hasRpcRequest() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest getRpcRequest() {
+      return rpcRequest_;
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder getRpcRequestOrBuilder() {
+      return rpcRequest_;
+    }
     
     // optional .RpcResponse rpcResponse = 4;
     public static final int RPCRESPONSE_FIELD_NUMBER = 4;
-    private boolean hasRpcResponse;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse rpcResponse_;
-    public boolean hasRpcResponse() { return hasRpcResponse; }
-    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse getRpcResponse() { return rpcResponse_; }
+    public boolean hasRpcResponse() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse getRpcResponse() {
+      return rpcResponse_;
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder getRpcResponseOrBuilder() {
+      return rpcResponse_;
+    }
     
     // optional .RpcError rpcError = 5;
     public static final int RPCERROR_FIELD_NUMBER = 5;
-    private boolean hasRpcError;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError rpcError_;
-    public boolean hasRpcError() { return hasRpcError; }
-    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError getRpcError() { return rpcError_; }
+    public boolean hasRpcError() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError getRpcError() {
+      return rpcError_;
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder getRpcErrorOrBuilder() {
+      return rpcError_;
+    }
     
     // optional .RpcCancel rpcCancel = 6;
     public static final int RPCCANCEL_FIELD_NUMBER = 6;
-    private boolean hasRpcCancel;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel rpcCancel_;
-    public boolean hasRpcCancel() { return hasRpcCancel; }
-    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel getRpcCancel() { return rpcCancel_; }
+    public boolean hasRpcCancel() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel getRpcCancel() {
+      return rpcCancel_;
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder getRpcCancelOrBuilder() {
+      return rpcCancel_;
+    }
     
     private void initFields() {
       connectRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.getDefaultInstance();
@@ -2292,48 +3169,71 @@ public final class DuplexProtocol {
       rpcError_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.getDefaultInstance();
       rpcCancel_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.getDefaultInstance();
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
       if (hasConnectRequest()) {
-        if (!getConnectRequest().isInitialized()) return false;
+        if (!getConnectRequest().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasConnectResponse()) {
-        if (!getConnectResponse().isInitialized()) return false;
+        if (!getConnectResponse().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasRpcRequest()) {
-        if (!getRpcRequest().isInitialized()) return false;
+        if (!getRpcRequest().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasRpcResponse()) {
-        if (!getRpcResponse().isInitialized()) return false;
+        if (!getRpcResponse().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasRpcError()) {
-        if (!getRpcError().isInitialized()) return false;
+        if (!getRpcError().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasRpcCancel()) {
-        if (!getRpcCancel().isInitialized()) return false;
+        if (!getRpcCancel().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasConnectRequest()) {
-        output.writeMessage(1, getConnectRequest());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeMessage(1, connectRequest_);
       }
-      if (hasConnectResponse()) {
-        output.writeMessage(2, getConnectResponse());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(2, connectResponse_);
       }
-      if (hasRpcRequest()) {
-        output.writeMessage(3, getRpcRequest());
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, rpcRequest_);
       }
-      if (hasRpcResponse()) {
-        output.writeMessage(4, getRpcResponse());
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, rpcResponse_);
       }
-      if (hasRpcError()) {
-        output.writeMessage(5, getRpcError());
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(5, rpcError_);
       }
-      if (hasRpcCancel()) {
-        output.writeMessage(6, getRpcCancel());
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeMessage(6, rpcCancel_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2344,33 +3244,40 @@ public final class DuplexProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasConnectRequest()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getConnectRequest());
+          .computeMessageSize(1, connectRequest_);
       }
-      if (hasConnectResponse()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getConnectResponse());
+          .computeMessageSize(2, connectResponse_);
       }
-      if (hasRpcRequest()) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getRpcRequest());
+          .computeMessageSize(3, rpcRequest_);
       }
-      if (hasRpcResponse()) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getRpcResponse());
+          .computeMessageSize(4, rpcResponse_);
       }
-      if (hasRpcError()) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, getRpcError());
+          .computeMessageSize(5, rpcError_);
       }
-      if (hasRpcCancel()) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(6, getRpcCancel());
+          .computeMessageSize(6, rpcCancel_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload parseFrom(
@@ -2447,34 +3354,91 @@ public final class DuplexProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload result;
-      
-      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayloadOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_WirePayload_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_WirePayload_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getConnectRequestFieldBuilder();
+          getConnectResponseFieldBuilder();
+          getRpcRequestFieldBuilder();
+          getRpcResponseFieldBuilder();
+          getRpcErrorFieldBuilder();
+          getRpcCancelFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+        super.clear();
+        if (connectRequestBuilder_ == null) {
+          connectRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.getDefaultInstance();
+        } else {
+          connectRequestBuilder_.clear();
         }
-        result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (connectResponseBuilder_ == null) {
+          connectResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.getDefaultInstance();
+        } else {
+          connectResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (rpcRequestBuilder_ == null) {
+          rpcRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.getDefaultInstance();
+        } else {
+          rpcRequestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (rpcResponseBuilder_ == null) {
+          rpcResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.getDefaultInstance();
+        } else {
+          rpcResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        if (rpcErrorBuilder_ == null) {
+          rpcError_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.getDefaultInstance();
+        } else {
+          rpcErrorBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        if (rpcCancelBuilder_ == null) {
+          rpcCancel_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.getDefaultInstance();
+        } else {
+          rpcCancelBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -2486,33 +3450,79 @@ public final class DuplexProtocol {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload returnMe = result;
-        result = null;
-        return returnMe;
+        if (connectRequestBuilder_ == null) {
+          result.connectRequest_ = connectRequest_;
+        } else {
+          result.connectRequest_ = connectRequestBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (connectResponseBuilder_ == null) {
+          result.connectResponse_ = connectResponse_;
+        } else {
+          result.connectResponse_ = connectResponseBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (rpcRequestBuilder_ == null) {
+          result.rpcRequest_ = rpcRequest_;
+        } else {
+          result.rpcRequest_ = rpcRequestBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (rpcResponseBuilder_ == null) {
+          result.rpcResponse_ = rpcResponse_;
+        } else {
+          result.rpcResponse_ = rpcResponseBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (rpcErrorBuilder_ == null) {
+          result.rpcError_ = rpcError_;
+        } else {
+          result.rpcError_ = rpcErrorBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        if (rpcCancelBuilder_ == null) {
+          result.rpcCancel_ = rpcCancel_;
+        } else {
+          result.rpcCancel_ = rpcCancelBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -2548,6 +3558,46 @@ public final class DuplexProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (hasConnectRequest()) {
+          if (!getConnectRequest().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasConnectResponse()) {
+          if (!getConnectResponse().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasRpcRequest()) {
+          if (!getRpcRequest().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasRpcResponse()) {
+          if (!getRpcResponse().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasRpcError()) {
+          if (!getRpcError().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasRpcCancel()) {
+          if (!getRpcCancel().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2560,11 +3610,13 @@ public final class DuplexProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
@@ -2627,227 +3679,546 @@ public final class DuplexProtocol {
         }
       }
       
+      private int bitField0_;
       
       // optional .ConnectRequest connectRequest = 1;
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest connectRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder> connectRequestBuilder_;
       public boolean hasConnectRequest() {
-        return result.hasConnectRequest();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest getConnectRequest() {
-        return result.getConnectRequest();
+        if (connectRequestBuilder_ == null) {
+          return connectRequest_;
+        } else {
+          return connectRequestBuilder_.getMessage();
+        }
       }
       public Builder setConnectRequest(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (connectRequestBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          connectRequest_ = value;
+          onChanged();
+        } else {
+          connectRequestBuilder_.setMessage(value);
         }
-        result.hasConnectRequest = true;
-        result.connectRequest_ = value;
+        bitField0_ |= 0x00000001;
         return this;
       }
-      public Builder setConnectRequest(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.Builder builderForValue) {
-        result.hasConnectRequest = true;
-        result.connectRequest_ = builderForValue.build();
+      public Builder setConnectRequest(
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.Builder builderForValue) {
+        if (connectRequestBuilder_ == null) {
+          connectRequest_ = builderForValue.build();
+          onChanged();
+        } else {
+          connectRequestBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
         return this;
       }
       public Builder mergeConnectRequest(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest value) {
-        if (result.hasConnectRequest() &&
-            result.connectRequest_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.getDefaultInstance()) {
-          result.connectRequest_ =
-            com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.newBuilder(result.connectRequest_).mergeFrom(value).buildPartial();
+        if (connectRequestBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              connectRequest_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.getDefaultInstance()) {
+            connectRequest_ =
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.newBuilder(connectRequest_).mergeFrom(value).buildPartial();
+          } else {
+            connectRequest_ = value;
+          }
+          onChanged();
         } else {
-          result.connectRequest_ = value;
+          connectRequestBuilder_.mergeFrom(value);
         }
-        result.hasConnectRequest = true;
+        bitField0_ |= 0x00000001;
         return this;
       }
       public Builder clearConnectRequest() {
-        result.hasConnectRequest = false;
-        result.connectRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.getDefaultInstance();
+        if (connectRequestBuilder_ == null) {
+          connectRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.getDefaultInstance();
+          onChanged();
+        } else {
+          connectRequestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.Builder getConnectRequestBuilder() {
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return getConnectRequestFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder getConnectRequestOrBuilder() {
+        if (connectRequestBuilder_ != null) {
+          return connectRequestBuilder_.getMessageOrBuilder();
+        } else {
+          return connectRequest_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder> 
+          getConnectRequestFieldBuilder() {
+        if (connectRequestBuilder_ == null) {
+          connectRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder>(
+                  connectRequest_,
+                  getParentForChildren(),
+                  isClean());
+          connectRequest_ = null;
+        }
+        return connectRequestBuilder_;
       }
       
       // optional .ConnectResponse connectResponse = 2;
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse connectResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder> connectResponseBuilder_;
       public boolean hasConnectResponse() {
-        return result.hasConnectResponse();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse getConnectResponse() {
-        return result.getConnectResponse();
+        if (connectResponseBuilder_ == null) {
+          return connectResponse_;
+        } else {
+          return connectResponseBuilder_.getMessage();
+        }
       }
       public Builder setConnectResponse(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (connectResponseBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          connectResponse_ = value;
+          onChanged();
+        } else {
+          connectResponseBuilder_.setMessage(value);
         }
-        result.hasConnectResponse = true;
-        result.connectResponse_ = value;
+        bitField0_ |= 0x00000002;
         return this;
       }
-      public Builder setConnectResponse(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.Builder builderForValue) {
-        result.hasConnectResponse = true;
-        result.connectResponse_ = builderForValue.build();
+      public Builder setConnectResponse(
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.Builder builderForValue) {
+        if (connectResponseBuilder_ == null) {
+          connectResponse_ = builderForValue.build();
+          onChanged();
+        } else {
+          connectResponseBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000002;
         return this;
       }
       public Builder mergeConnectResponse(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse value) {
-        if (result.hasConnectResponse() &&
-            result.connectResponse_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.getDefaultInstance()) {
-          result.connectResponse_ =
-            com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.newBuilder(result.connectResponse_).mergeFrom(value).buildPartial();
+        if (connectResponseBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              connectResponse_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.getDefaultInstance()) {
+            connectResponse_ =
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.newBuilder(connectResponse_).mergeFrom(value).buildPartial();
+          } else {
+            connectResponse_ = value;
+          }
+          onChanged();
         } else {
-          result.connectResponse_ = value;
+          connectResponseBuilder_.mergeFrom(value);
         }
-        result.hasConnectResponse = true;
+        bitField0_ |= 0x00000002;
         return this;
       }
       public Builder clearConnectResponse() {
-        result.hasConnectResponse = false;
-        result.connectResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.getDefaultInstance();
+        if (connectResponseBuilder_ == null) {
+          connectResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.getDefaultInstance();
+          onChanged();
+        } else {
+          connectResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.Builder getConnectResponseBuilder() {
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return getConnectResponseFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder getConnectResponseOrBuilder() {
+        if (connectResponseBuilder_ != null) {
+          return connectResponseBuilder_.getMessageOrBuilder();
+        } else {
+          return connectResponse_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder> 
+          getConnectResponseFieldBuilder() {
+        if (connectResponseBuilder_ == null) {
+          connectResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder>(
+                  connectResponse_,
+                  getParentForChildren(),
+                  isClean());
+          connectResponse_ = null;
+        }
+        return connectResponseBuilder_;
       }
       
       // optional .RpcRequest rpcRequest = 3;
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest rpcRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder> rpcRequestBuilder_;
       public boolean hasRpcRequest() {
-        return result.hasRpcRequest();
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest getRpcRequest() {
-        return result.getRpcRequest();
+        if (rpcRequestBuilder_ == null) {
+          return rpcRequest_;
+        } else {
+          return rpcRequestBuilder_.getMessage();
+        }
       }
       public Builder setRpcRequest(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (rpcRequestBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          rpcRequest_ = value;
+          onChanged();
+        } else {
+          rpcRequestBuilder_.setMessage(value);
         }
-        result.hasRpcRequest = true;
-        result.rpcRequest_ = value;
+        bitField0_ |= 0x00000004;
         return this;
       }
-      public Builder setRpcRequest(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.Builder builderForValue) {
-        result.hasRpcRequest = true;
-        result.rpcRequest_ = builderForValue.build();
+      public Builder setRpcRequest(
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.Builder builderForValue) {
+        if (rpcRequestBuilder_ == null) {
+          rpcRequest_ = builderForValue.build();
+          onChanged();
+        } else {
+          rpcRequestBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
         return this;
       }
       public Builder mergeRpcRequest(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest value) {
-        if (result.hasRpcRequest() &&
-            result.rpcRequest_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.getDefaultInstance()) {
-          result.rpcRequest_ =
-            com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.newBuilder(result.rpcRequest_).mergeFrom(value).buildPartial();
+        if (rpcRequestBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              rpcRequest_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.getDefaultInstance()) {
+            rpcRequest_ =
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.newBuilder(rpcRequest_).mergeFrom(value).buildPartial();
+          } else {
+            rpcRequest_ = value;
+          }
+          onChanged();
         } else {
-          result.rpcRequest_ = value;
+          rpcRequestBuilder_.mergeFrom(value);
         }
-        result.hasRpcRequest = true;
+        bitField0_ |= 0x00000004;
         return this;
       }
       public Builder clearRpcRequest() {
-        result.hasRpcRequest = false;
-        result.rpcRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.getDefaultInstance();
+        if (rpcRequestBuilder_ == null) {
+          rpcRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.getDefaultInstance();
+          onChanged();
+        } else {
+          rpcRequestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.Builder getRpcRequestBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getRpcRequestFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder getRpcRequestOrBuilder() {
+        if (rpcRequestBuilder_ != null) {
+          return rpcRequestBuilder_.getMessageOrBuilder();
+        } else {
+          return rpcRequest_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder> 
+          getRpcRequestFieldBuilder() {
+        if (rpcRequestBuilder_ == null) {
+          rpcRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder>(
+                  rpcRequest_,
+                  getParentForChildren(),
+                  isClean());
+          rpcRequest_ = null;
+        }
+        return rpcRequestBuilder_;
       }
       
       // optional .RpcResponse rpcResponse = 4;
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse rpcResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder> rpcResponseBuilder_;
       public boolean hasRpcResponse() {
-        return result.hasRpcResponse();
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse getRpcResponse() {
-        return result.getRpcResponse();
+        if (rpcResponseBuilder_ == null) {
+          return rpcResponse_;
+        } else {
+          return rpcResponseBuilder_.getMessage();
+        }
       }
       public Builder setRpcResponse(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (rpcResponseBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          rpcResponse_ = value;
+          onChanged();
+        } else {
+          rpcResponseBuilder_.setMessage(value);
         }
-        result.hasRpcResponse = true;
-        result.rpcResponse_ = value;
+        bitField0_ |= 0x00000008;
         return this;
       }
-      public Builder setRpcResponse(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.Builder builderForValue) {
-        result.hasRpcResponse = true;
-        result.rpcResponse_ = builderForValue.build();
+      public Builder setRpcResponse(
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.Builder builderForValue) {
+        if (rpcResponseBuilder_ == null) {
+          rpcResponse_ = builderForValue.build();
+          onChanged();
+        } else {
+          rpcResponseBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
         return this;
       }
       public Builder mergeRpcResponse(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse value) {
-        if (result.hasRpcResponse() &&
-            result.rpcResponse_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.getDefaultInstance()) {
-          result.rpcResponse_ =
-            com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.newBuilder(result.rpcResponse_).mergeFrom(value).buildPartial();
+        if (rpcResponseBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              rpcResponse_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.getDefaultInstance()) {
+            rpcResponse_ =
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.newBuilder(rpcResponse_).mergeFrom(value).buildPartial();
+          } else {
+            rpcResponse_ = value;
+          }
+          onChanged();
         } else {
-          result.rpcResponse_ = value;
+          rpcResponseBuilder_.mergeFrom(value);
         }
-        result.hasRpcResponse = true;
+        bitField0_ |= 0x00000008;
         return this;
       }
       public Builder clearRpcResponse() {
-        result.hasRpcResponse = false;
-        result.rpcResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.getDefaultInstance();
+        if (rpcResponseBuilder_ == null) {
+          rpcResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.getDefaultInstance();
+          onChanged();
+        } else {
+          rpcResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.Builder getRpcResponseBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getRpcResponseFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder getRpcResponseOrBuilder() {
+        if (rpcResponseBuilder_ != null) {
+          return rpcResponseBuilder_.getMessageOrBuilder();
+        } else {
+          return rpcResponse_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder> 
+          getRpcResponseFieldBuilder() {
+        if (rpcResponseBuilder_ == null) {
+          rpcResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder>(
+                  rpcResponse_,
+                  getParentForChildren(),
+                  isClean());
+          rpcResponse_ = null;
+        }
+        return rpcResponseBuilder_;
       }
       
       // optional .RpcError rpcError = 5;
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError rpcError_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder> rpcErrorBuilder_;
       public boolean hasRpcError() {
-        return result.hasRpcError();
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError getRpcError() {
-        return result.getRpcError();
+        if (rpcErrorBuilder_ == null) {
+          return rpcError_;
+        } else {
+          return rpcErrorBuilder_.getMessage();
+        }
       }
       public Builder setRpcError(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (rpcErrorBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          rpcError_ = value;
+          onChanged();
+        } else {
+          rpcErrorBuilder_.setMessage(value);
         }
-        result.hasRpcError = true;
-        result.rpcError_ = value;
+        bitField0_ |= 0x00000010;
         return this;
       }
-      public Builder setRpcError(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.Builder builderForValue) {
-        result.hasRpcError = true;
-        result.rpcError_ = builderForValue.build();
+      public Builder setRpcError(
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.Builder builderForValue) {
+        if (rpcErrorBuilder_ == null) {
+          rpcError_ = builderForValue.build();
+          onChanged();
+        } else {
+          rpcErrorBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
         return this;
       }
       public Builder mergeRpcError(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError value) {
-        if (result.hasRpcError() &&
-            result.rpcError_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.getDefaultInstance()) {
-          result.rpcError_ =
-            com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.newBuilder(result.rpcError_).mergeFrom(value).buildPartial();
+        if (rpcErrorBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              rpcError_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.getDefaultInstance()) {
+            rpcError_ =
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.newBuilder(rpcError_).mergeFrom(value).buildPartial();
+          } else {
+            rpcError_ = value;
+          }
+          onChanged();
         } else {
-          result.rpcError_ = value;
+          rpcErrorBuilder_.mergeFrom(value);
         }
-        result.hasRpcError = true;
+        bitField0_ |= 0x00000010;
         return this;
       }
       public Builder clearRpcError() {
-        result.hasRpcError = false;
-        result.rpcError_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.getDefaultInstance();
+        if (rpcErrorBuilder_ == null) {
+          rpcError_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.getDefaultInstance();
+          onChanged();
+        } else {
+          rpcErrorBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.Builder getRpcErrorBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getRpcErrorFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder getRpcErrorOrBuilder() {
+        if (rpcErrorBuilder_ != null) {
+          return rpcErrorBuilder_.getMessageOrBuilder();
+        } else {
+          return rpcError_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder> 
+          getRpcErrorFieldBuilder() {
+        if (rpcErrorBuilder_ == null) {
+          rpcErrorBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder>(
+                  rpcError_,
+                  getParentForChildren(),
+                  isClean());
+          rpcError_ = null;
+        }
+        return rpcErrorBuilder_;
       }
       
       // optional .RpcCancel rpcCancel = 6;
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel rpcCancel_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder> rpcCancelBuilder_;
       public boolean hasRpcCancel() {
-        return result.hasRpcCancel();
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel getRpcCancel() {
-        return result.getRpcCancel();
+        if (rpcCancelBuilder_ == null) {
+          return rpcCancel_;
+        } else {
+          return rpcCancelBuilder_.getMessage();
+        }
       }
       public Builder setRpcCancel(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (rpcCancelBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          rpcCancel_ = value;
+          onChanged();
+        } else {
+          rpcCancelBuilder_.setMessage(value);
         }
-        result.hasRpcCancel = true;
-        result.rpcCancel_ = value;
+        bitField0_ |= 0x00000020;
         return this;
       }
-      public Builder setRpcCancel(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.Builder builderForValue) {
-        result.hasRpcCancel = true;
-        result.rpcCancel_ = builderForValue.build();
+      public Builder setRpcCancel(
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.Builder builderForValue) {
+        if (rpcCancelBuilder_ == null) {
+          rpcCancel_ = builderForValue.build();
+          onChanged();
+        } else {
+          rpcCancelBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000020;
         return this;
       }
       public Builder mergeRpcCancel(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel value) {
-        if (result.hasRpcCancel() &&
-            result.rpcCancel_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.getDefaultInstance()) {
-          result.rpcCancel_ =
-            com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.newBuilder(result.rpcCancel_).mergeFrom(value).buildPartial();
+        if (rpcCancelBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020) &&
+              rpcCancel_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.getDefaultInstance()) {
+            rpcCancel_ =
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.newBuilder(rpcCancel_).mergeFrom(value).buildPartial();
+          } else {
+            rpcCancel_ = value;
+          }
+          onChanged();
         } else {
-          result.rpcCancel_ = value;
+          rpcCancelBuilder_.mergeFrom(value);
         }
-        result.hasRpcCancel = true;
+        bitField0_ |= 0x00000020;
         return this;
       }
       public Builder clearRpcCancel() {
-        result.hasRpcCancel = false;
-        result.rpcCancel_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.getDefaultInstance();
+        if (rpcCancelBuilder_ == null) {
+          rpcCancel_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.getDefaultInstance();
+          onChanged();
+        } else {
+          rpcCancelBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.Builder getRpcCancelBuilder() {
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return getRpcCancelFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder getRpcCancelOrBuilder() {
+        if (rpcCancelBuilder_ != null) {
+          return rpcCancelBuilder_.getMessageOrBuilder();
+        } else {
+          return rpcCancel_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder> 
+          getRpcCancelFieldBuilder() {
+        if (rpcCancelBuilder_ == null) {
+          rpcCancelBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder>(
+                  rpcCancel_,
+                  getParentForChildren(),
+                  isClean());
+          rpcCancel_ = null;
+        }
+        return rpcCancelBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:WirePayload)
@@ -2855,7 +4226,6 @@ public final class DuplexProtocol {
     
     static {
       defaultInstance = new WirePayload(true);
-      com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
@@ -2997,8 +4367,6 @@ public final class DuplexProtocol {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
-  
-  public static void internalForceInit() {}
   
   // @@protoc_insertion_point(outer_class_scope)
 }

@@ -1,5 +1,6 @@
 // Copyright (c) 2010 Peter Klauser
 
+option java_generic_services = true;
 option java_package = "com.googlecode.protobuf.pro.duplex.example";
 option java_outer_classname = "PingPong";
 

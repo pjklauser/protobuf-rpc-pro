@@ -8,11 +8,23 @@ public final class RpcLogEntry {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+  public interface RpcPayloadInfoOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int64 ts = 1;
+    boolean hasTs();
+    long getTs();
+    
+    // optional int32 size = 2;
+    boolean hasSize();
+    int getSize();
+  }
   public static final class RpcPayloadInfo extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements RpcPayloadInfoOrBuilder {
     // Use RpcPayloadInfo.newBuilder() to construct.
-    private RpcPayloadInfo() {
-      initFields();
+    private RpcPayloadInfo(Builder builder) {
+      super(builder);
     }
     private RpcPayloadInfo(boolean noInit) {}
     
@@ -35,35 +47,52 @@ public final class RpcLogEntry {
       return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_RpcPayloadInfo_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int64 ts = 1;
     public static final int TS_FIELD_NUMBER = 1;
-    private boolean hasTs;
-    private long ts_ = 0L;
-    public boolean hasTs() { return hasTs; }
-    public long getTs() { return ts_; }
+    private long ts_;
+    public boolean hasTs() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public long getTs() {
+      return ts_;
+    }
     
     // optional int32 size = 2;
     public static final int SIZE_FIELD_NUMBER = 2;
-    private boolean hasSize;
-    private int size_ = 0;
-    public boolean hasSize() { return hasSize; }
-    public int getSize() { return size_; }
+    private int size_;
+    public boolean hasSize() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public int getSize() {
+      return size_;
+    }
     
     private void initFields() {
+      ts_ = 0L;
+      size_ = 0;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasTs) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasTs()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasTs()) {
-        output.writeInt64(1, getTs());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt64(1, ts_);
       }
-      if (hasSize()) {
-        output.writeInt32(2, getSize());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, size_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -74,17 +103,24 @@ public final class RpcLogEntry {
       if (size != -1) return size;
     
       size = 0;
-      if (hasTs()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, getTs());
+          .computeInt64Size(1, ts_);
       }
-      if (hasSize()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, getSize());
+          .computeInt32Size(2, size_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo parseFrom(
@@ -161,34 +197,53 @@ public final class RpcLogEntry {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo result;
-      
-      // Construct using com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_RpcPayloadInfo_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_RpcPayloadInfo_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo();
+        super.clear();
+        ts_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        size_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -200,33 +255,39 @@ public final class RpcLogEntry {
         return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo result = new com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo returnMe = result;
-        result = null;
-        return returnMe;
+        result.ts_ = ts_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.size_ = size_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -250,6 +311,14 @@ public final class RpcLogEntry {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasTs()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -262,61 +331,72 @@ public final class RpcLogEntry {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setTs(input.readInt64());
+              bitField0_ |= 0x00000001;
+              ts_ = input.readInt64();
               break;
             }
             case 16: {
-              setSize(input.readInt32());
+              bitField0_ |= 0x00000002;
+              size_ = input.readInt32();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required int64 ts = 1;
+      private long ts_ ;
       public boolean hasTs() {
-        return result.hasTs();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public long getTs() {
-        return result.getTs();
+        return ts_;
       }
       public Builder setTs(long value) {
-        result.hasTs = true;
-        result.ts_ = value;
+        bitField0_ |= 0x00000001;
+        ts_ = value;
+        onChanged();
         return this;
       }
       public Builder clearTs() {
-        result.hasTs = false;
-        result.ts_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        ts_ = 0L;
+        onChanged();
         return this;
       }
       
       // optional int32 size = 2;
+      private int size_ ;
       public boolean hasSize() {
-        return result.hasSize();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       public int getSize() {
-        return result.getSize();
+        return size_;
       }
       public Builder setSize(int value) {
-        result.hasSize = true;
-        result.size_ = value;
+        bitField0_ |= 0x00000002;
+        size_ = value;
+        onChanged();
         return this;
       }
       public Builder clearSize() {
-        result.hasSize = false;
-        result.size_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        size_ = 0;
+        onChanged();
         return this;
       }
       
@@ -325,18 +405,55 @@ public final class RpcLogEntry {
     
     static {
       defaultInstance = new RpcPayloadInfo(true);
-      com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:RpcPayloadInfo)
   }
   
+  public interface RpcCallOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 duration = 1;
+    boolean hasDuration();
+    int getDuration();
+    
+    // required string server = 2;
+    boolean hasServer();
+    String getServer();
+    
+    // required string signature = 3;
+    boolean hasSignature();
+    String getSignature();
+    
+    // required string client = 4;
+    boolean hasClient();
+    String getClient();
+    
+    // required int32 corId = 5;
+    boolean hasCorId();
+    int getCorId();
+    
+    // optional string error = 6;
+    boolean hasError();
+    String getError();
+    
+    // optional .RpcPayloadInfo request = 7;
+    boolean hasRequest();
+    com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getRequest();
+    com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getRequestOrBuilder();
+    
+    // optional .RpcPayloadInfo response = 8;
+    boolean hasResponse();
+    com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getResponse();
+    com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getResponseOrBuilder();
+  }
   public static final class RpcCall extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements RpcCallOrBuilder {
     // Use RpcCall.newBuilder() to construct.
-    private RpcCall() {
-      initFields();
+    private RpcCall(Builder builder) {
+      super(builder);
     }
     private RpcCall(boolean noInit) {}
     
@@ -359,107 +476,258 @@ public final class RpcLogEntry {
       return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_RpcCall_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 duration = 1;
     public static final int DURATION_FIELD_NUMBER = 1;
-    private boolean hasDuration;
-    private int duration_ = 0;
-    public boolean hasDuration() { return hasDuration; }
-    public int getDuration() { return duration_; }
+    private int duration_;
+    public boolean hasDuration() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getDuration() {
+      return duration_;
+    }
     
     // required string server = 2;
     public static final int SERVER_FIELD_NUMBER = 2;
-    private boolean hasServer;
-    private java.lang.String server_ = "";
-    public boolean hasServer() { return hasServer; }
-    public java.lang.String getServer() { return server_; }
+    private java.lang.Object server_;
+    public boolean hasServer() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getServer() {
+      java.lang.Object ref = server_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          server_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getServerBytes() {
+      java.lang.Object ref = server_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        server_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required string signature = 3;
     public static final int SIGNATURE_FIELD_NUMBER = 3;
-    private boolean hasSignature;
-    private java.lang.String signature_ = "";
-    public boolean hasSignature() { return hasSignature; }
-    public java.lang.String getSignature() { return signature_; }
+    private java.lang.Object signature_;
+    public boolean hasSignature() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public String getSignature() {
+      java.lang.Object ref = signature_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          signature_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getSignatureBytes() {
+      java.lang.Object ref = signature_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        signature_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required string client = 4;
     public static final int CLIENT_FIELD_NUMBER = 4;
-    private boolean hasClient;
-    private java.lang.String client_ = "";
-    public boolean hasClient() { return hasClient; }
-    public java.lang.String getClient() { return client_; }
+    private java.lang.Object client_;
+    public boolean hasClient() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public String getClient() {
+      java.lang.Object ref = client_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          client_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getClientBytes() {
+      java.lang.Object ref = client_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        client_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required int32 corId = 5;
     public static final int CORID_FIELD_NUMBER = 5;
-    private boolean hasCorId;
-    private int corId_ = 0;
-    public boolean hasCorId() { return hasCorId; }
-    public int getCorId() { return corId_; }
+    private int corId_;
+    public boolean hasCorId() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public int getCorId() {
+      return corId_;
+    }
     
     // optional string error = 6;
     public static final int ERROR_FIELD_NUMBER = 6;
-    private boolean hasError;
-    private java.lang.String error_ = "";
-    public boolean hasError() { return hasError; }
-    public java.lang.String getError() { return error_; }
+    private java.lang.Object error_;
+    public boolean hasError() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public String getError() {
+      java.lang.Object ref = error_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          error_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getErrorBytes() {
+      java.lang.Object ref = error_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        error_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // optional .RpcPayloadInfo request = 7;
     public static final int REQUEST_FIELD_NUMBER = 7;
-    private boolean hasRequest;
     private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo request_;
-    public boolean hasRequest() { return hasRequest; }
-    public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getRequest() { return request_; }
+    public boolean hasRequest() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getRequest() {
+      return request_;
+    }
+    public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getRequestOrBuilder() {
+      return request_;
+    }
     
     // optional .RpcPayloadInfo response = 8;
     public static final int RESPONSE_FIELD_NUMBER = 8;
-    private boolean hasResponse;
     private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo response_;
-    public boolean hasResponse() { return hasResponse; }
-    public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getResponse() { return response_; }
+    public boolean hasResponse() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getResponse() {
+      return response_;
+    }
+    public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getResponseOrBuilder() {
+      return response_;
+    }
     
     private void initFields() {
+      duration_ = 0;
+      server_ = "";
+      signature_ = "";
+      client_ = "";
+      corId_ = 0;
+      error_ = "";
       request_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
       response_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasDuration) return false;
-      if (!hasServer) return false;
-      if (!hasSignature) return false;
-      if (!hasClient) return false;
-      if (!hasCorId) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasDuration()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasServer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasSignature()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasClient()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasCorId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       if (hasRequest()) {
-        if (!getRequest().isInitialized()) return false;
+        if (!getRequest().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasResponse()) {
-        if (!getResponse().isInitialized()) return false;
+        if (!getResponse().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasDuration()) {
-        output.writeInt32(1, getDuration());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, duration_);
       }
-      if (hasServer()) {
-        output.writeString(2, getServer());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getServerBytes());
       }
-      if (hasSignature()) {
-        output.writeString(3, getSignature());
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getSignatureBytes());
       }
-      if (hasClient()) {
-        output.writeString(4, getClient());
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getClientBytes());
       }
-      if (hasCorId()) {
-        output.writeInt32(5, getCorId());
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(5, corId_);
       }
-      if (hasError()) {
-        output.writeString(6, getError());
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(6, getErrorBytes());
       }
-      if (hasRequest()) {
-        output.writeMessage(7, getRequest());
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeMessage(7, request_);
       }
-      if (hasResponse()) {
-        output.writeMessage(8, getResponse());
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeMessage(8, response_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -470,41 +738,48 @@ public final class RpcLogEntry {
       if (size != -1) return size;
     
       size = 0;
-      if (hasDuration()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getDuration());
+          .computeInt32Size(1, duration_);
       }
-      if (hasServer()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getServer());
+          .computeBytesSize(2, getServerBytes());
       }
-      if (hasSignature()) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(3, getSignature());
+          .computeBytesSize(3, getSignatureBytes());
       }
-      if (hasClient()) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(4, getClient());
+          .computeBytesSize(4, getClientBytes());
       }
-      if (hasCorId()) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, getCorId());
+          .computeInt32Size(5, corId_);
       }
-      if (hasError()) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(6, getError());
+          .computeBytesSize(6, getErrorBytes());
       }
-      if (hasRequest()) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, getRequest());
+          .computeMessageSize(7, request_);
       }
-      if (hasResponse()) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(8, getResponse());
+          .computeMessageSize(8, response_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall parseFrom(
@@ -581,34 +856,75 @@ public final class RpcLogEntry {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall result;
-      
-      // Construct using com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCallOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_RpcCall_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_RpcCall_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getRequestFieldBuilder();
+          getResponseFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+        super.clear();
+        duration_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        server_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        signature_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        client_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        corId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        error_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
+        if (requestBuilder_ == null) {
+          request_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+        } else {
+          requestBuilder_.clear();
         }
-        result = new com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall();
+        bitField0_ = (bitField0_ & ~0x00000040);
+        if (responseBuilder_ == null) {
+          response_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+        } else {
+          responseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -620,33 +936,71 @@ public final class RpcLogEntry {
         return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall result = new com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall returnMe = result;
-        result = null;
-        return returnMe;
+        result.duration_ = duration_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.server_ = server_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.signature_ = signature_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.client_ = client_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.corId_ = corId_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.error_ = error_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        if (requestBuilder_ == null) {
+          result.request_ = request_;
+        } else {
+          result.request_ = requestBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        if (responseBuilder_ == null) {
+          result.response_ = response_;
+        } else {
+          result.response_ = responseBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -688,6 +1042,42 @@ public final class RpcLogEntry {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasDuration()) {
+          
+          return false;
+        }
+        if (!hasServer()) {
+          
+          return false;
+        }
+        if (!hasSignature()) {
+          
+          return false;
+        }
+        if (!hasClient()) {
+          
+          return false;
+        }
+        if (!hasCorId()) {
+          
+          return false;
+        }
+        if (hasRequest()) {
+          if (!getRequest().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasResponse()) {
+          if (!getResponse().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -700,37 +1090,45 @@ public final class RpcLogEntry {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setDuration(input.readInt32());
+              bitField0_ |= 0x00000001;
+              duration_ = input.readInt32();
               break;
             }
             case 18: {
-              setServer(input.readString());
+              bitField0_ |= 0x00000002;
+              server_ = input.readBytes();
               break;
             }
             case 26: {
-              setSignature(input.readString());
+              bitField0_ |= 0x00000004;
+              signature_ = input.readBytes();
               break;
             }
             case 34: {
-              setClient(input.readString());
+              bitField0_ |= 0x00000008;
+              client_ = input.readBytes();
               break;
             }
             case 40: {
-              setCorId(input.readInt32());
+              bitField0_ |= 0x00000010;
+              corId_ = input.readInt32();
               break;
             }
             case 50: {
-              setError(input.readString());
+              bitField0_ |= 0x00000020;
+              error_ = input.readBytes();
               break;
             }
             case 58: {
@@ -755,199 +1153,372 @@ public final class RpcLogEntry {
         }
       }
       
+      private int bitField0_;
       
       // required int32 duration = 1;
+      private int duration_ ;
       public boolean hasDuration() {
-        return result.hasDuration();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getDuration() {
-        return result.getDuration();
+        return duration_;
       }
       public Builder setDuration(int value) {
-        result.hasDuration = true;
-        result.duration_ = value;
+        bitField0_ |= 0x00000001;
+        duration_ = value;
+        onChanged();
         return this;
       }
       public Builder clearDuration() {
-        result.hasDuration = false;
-        result.duration_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        duration_ = 0;
+        onChanged();
         return this;
       }
       
       // required string server = 2;
+      private java.lang.Object server_ = "";
       public boolean hasServer() {
-        return result.hasServer();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public java.lang.String getServer() {
-        return result.getServer();
+      public String getServer() {
+        java.lang.Object ref = server_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          server_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setServer(java.lang.String value) {
+      public Builder setServer(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasServer = true;
-        result.server_ = value;
+  bitField0_ |= 0x00000002;
+        server_ = value;
+        onChanged();
         return this;
       }
       public Builder clearServer() {
-        result.hasServer = false;
-        result.server_ = getDefaultInstance().getServer();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        server_ = getDefaultInstance().getServer();
+        onChanged();
         return this;
+      }
+      void setServer(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        server_ = value;
+        onChanged();
       }
       
       // required string signature = 3;
+      private java.lang.Object signature_ = "";
       public boolean hasSignature() {
-        return result.hasSignature();
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public java.lang.String getSignature() {
-        return result.getSignature();
+      public String getSignature() {
+        java.lang.Object ref = signature_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          signature_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setSignature(java.lang.String value) {
+      public Builder setSignature(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasSignature = true;
-        result.signature_ = value;
+  bitField0_ |= 0x00000004;
+        signature_ = value;
+        onChanged();
         return this;
       }
       public Builder clearSignature() {
-        result.hasSignature = false;
-        result.signature_ = getDefaultInstance().getSignature();
+        bitField0_ = (bitField0_ & ~0x00000004);
+        signature_ = getDefaultInstance().getSignature();
+        onChanged();
         return this;
+      }
+      void setSignature(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000004;
+        signature_ = value;
+        onChanged();
       }
       
       // required string client = 4;
+      private java.lang.Object client_ = "";
       public boolean hasClient() {
-        return result.hasClient();
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public java.lang.String getClient() {
-        return result.getClient();
+      public String getClient() {
+        java.lang.Object ref = client_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          client_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setClient(java.lang.String value) {
+      public Builder setClient(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasClient = true;
-        result.client_ = value;
+  bitField0_ |= 0x00000008;
+        client_ = value;
+        onChanged();
         return this;
       }
       public Builder clearClient() {
-        result.hasClient = false;
-        result.client_ = getDefaultInstance().getClient();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        client_ = getDefaultInstance().getClient();
+        onChanged();
         return this;
+      }
+      void setClient(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000008;
+        client_ = value;
+        onChanged();
       }
       
       // required int32 corId = 5;
+      private int corId_ ;
       public boolean hasCorId() {
-        return result.hasCorId();
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       public int getCorId() {
-        return result.getCorId();
+        return corId_;
       }
       public Builder setCorId(int value) {
-        result.hasCorId = true;
-        result.corId_ = value;
+        bitField0_ |= 0x00000010;
+        corId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorId() {
-        result.hasCorId = false;
-        result.corId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        corId_ = 0;
+        onChanged();
         return this;
       }
       
       // optional string error = 6;
+      private java.lang.Object error_ = "";
       public boolean hasError() {
-        return result.hasError();
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
-      public java.lang.String getError() {
-        return result.getError();
+      public String getError() {
+        java.lang.Object ref = error_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          error_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setError(java.lang.String value) {
+      public Builder setError(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasError = true;
-        result.error_ = value;
+  bitField0_ |= 0x00000020;
+        error_ = value;
+        onChanged();
         return this;
       }
       public Builder clearError() {
-        result.hasError = false;
-        result.error_ = getDefaultInstance().getError();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        error_ = getDefaultInstance().getError();
+        onChanged();
         return this;
+      }
+      void setError(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000020;
+        error_ = value;
+        onChanged();
       }
       
       // optional .RpcPayloadInfo request = 7;
+      private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo request_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> requestBuilder_;
       public boolean hasRequest() {
-        return result.hasRequest();
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getRequest() {
-        return result.getRequest();
+        if (requestBuilder_ == null) {
+          return request_;
+        } else {
+          return requestBuilder_.getMessage();
+        }
       }
       public Builder setRequest(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (requestBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          request_ = value;
+          onChanged();
+        } else {
+          requestBuilder_.setMessage(value);
         }
-        result.hasRequest = true;
-        result.request_ = value;
+        bitField0_ |= 0x00000040;
         return this;
       }
-      public Builder setRequest(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder builderForValue) {
-        result.hasRequest = true;
-        result.request_ = builderForValue.build();
+      public Builder setRequest(
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder builderForValue) {
+        if (requestBuilder_ == null) {
+          request_ = builderForValue.build();
+          onChanged();
+        } else {
+          requestBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000040;
         return this;
       }
       public Builder mergeRequest(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo value) {
-        if (result.hasRequest() &&
-            result.request_ != com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance()) {
-          result.request_ =
-            com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.newBuilder(result.request_).mergeFrom(value).buildPartial();
+        if (requestBuilder_ == null) {
+          if (((bitField0_ & 0x00000040) == 0x00000040) &&
+              request_ != com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance()) {
+            request_ =
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.newBuilder(request_).mergeFrom(value).buildPartial();
+          } else {
+            request_ = value;
+          }
+          onChanged();
         } else {
-          result.request_ = value;
+          requestBuilder_.mergeFrom(value);
         }
-        result.hasRequest = true;
+        bitField0_ |= 0x00000040;
         return this;
       }
       public Builder clearRequest() {
-        result.hasRequest = false;
-        result.request_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+        if (requestBuilder_ == null) {
+          request_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          requestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder getRequestBuilder() {
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return getRequestFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getRequestOrBuilder() {
+        if (requestBuilder_ != null) {
+          return requestBuilder_.getMessageOrBuilder();
+        } else {
+          return request_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> 
+          getRequestFieldBuilder() {
+        if (requestBuilder_ == null) {
+          requestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder>(
+                  request_,
+                  getParentForChildren(),
+                  isClean());
+          request_ = null;
+        }
+        return requestBuilder_;
       }
       
       // optional .RpcPayloadInfo response = 8;
+      private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo response_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> responseBuilder_;
       public boolean hasResponse() {
-        return result.hasResponse();
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getResponse() {
-        return result.getResponse();
+        if (responseBuilder_ == null) {
+          return response_;
+        } else {
+          return responseBuilder_.getMessage();
+        }
       }
       public Builder setResponse(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (responseBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          response_ = value;
+          onChanged();
+        } else {
+          responseBuilder_.setMessage(value);
         }
-        result.hasResponse = true;
-        result.response_ = value;
+        bitField0_ |= 0x00000080;
         return this;
       }
-      public Builder setResponse(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder builderForValue) {
-        result.hasResponse = true;
-        result.response_ = builderForValue.build();
+      public Builder setResponse(
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder builderForValue) {
+        if (responseBuilder_ == null) {
+          response_ = builderForValue.build();
+          onChanged();
+        } else {
+          responseBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000080;
         return this;
       }
       public Builder mergeResponse(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo value) {
-        if (result.hasResponse() &&
-            result.response_ != com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance()) {
-          result.response_ =
-            com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.newBuilder(result.response_).mergeFrom(value).buildPartial();
+        if (responseBuilder_ == null) {
+          if (((bitField0_ & 0x00000080) == 0x00000080) &&
+              response_ != com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance()) {
+            response_ =
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.newBuilder(response_).mergeFrom(value).buildPartial();
+          } else {
+            response_ = value;
+          }
+          onChanged();
         } else {
-          result.response_ = value;
+          responseBuilder_.mergeFrom(value);
         }
-        result.hasResponse = true;
+        bitField0_ |= 0x00000080;
         return this;
       }
       public Builder clearResponse() {
-        result.hasResponse = false;
-        result.response_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+        if (responseBuilder_ == null) {
+          response_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          responseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder getResponseBuilder() {
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return getResponseFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getResponseOrBuilder() {
+        if (responseBuilder_ != null) {
+          return responseBuilder_.getMessageOrBuilder();
+        } else {
+          return response_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> 
+          getResponseFieldBuilder() {
+        if (responseBuilder_ == null) {
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder>(
+                  response_,
+                  getParentForChildren(),
+                  isClean());
+          response_ = null;
+        }
+        return responseBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:RpcCall)
@@ -955,7 +1526,6 @@ public final class RpcLogEntry {
     
     static {
       defaultInstance = new RpcCall(true);
-      com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internalForceInit();
       defaultInstance.initFields();
     }
     
@@ -1019,8 +1589,6 @@ public final class RpcLogEntry {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
-  
-  public static void internalForceInit() {}
   
   // @@protoc_insertion_point(outer_class_scope)
 }
