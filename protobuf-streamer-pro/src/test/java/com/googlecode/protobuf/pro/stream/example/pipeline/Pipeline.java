@@ -8,11 +8,23 @@ public final class Pipeline {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+  public interface PeerOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string hostname = 1;
+    boolean hasHostname();
+    String getHostname();
+    
+    // required int32 port = 2;
+    boolean hasPort();
+    int getPort();
+  }
   public static final class Peer extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements PeerOrBuilder {
     // Use Peer.newBuilder() to construct.
-    private Peer() {
-      initFields();
+    private Peer(Builder builder) {
+      super(builder);
     }
     private Peer(boolean noInit) {}
     
@@ -35,36 +47,78 @@ public final class Pipeline {
       return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internal_static_Peer_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required string hostname = 1;
     public static final int HOSTNAME_FIELD_NUMBER = 1;
-    private boolean hasHostname;
-    private java.lang.String hostname_ = "";
-    public boolean hasHostname() { return hasHostname; }
-    public java.lang.String getHostname() { return hostname_; }
+    private java.lang.Object hostname_;
+    public boolean hasHostname() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getHostname() {
+      java.lang.Object ref = hostname_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          hostname_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getHostnameBytes() {
+      java.lang.Object ref = hostname_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        hostname_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required int32 port = 2;
     public static final int PORT_FIELD_NUMBER = 2;
-    private boolean hasPort;
-    private int port_ = 0;
-    public boolean hasPort() { return hasPort; }
-    public int getPort() { return port_; }
+    private int port_;
+    public boolean hasPort() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public int getPort() {
+      return port_;
+    }
     
     private void initFields() {
+      hostname_ = "";
+      port_ = 0;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasHostname) return false;
-      if (!hasPort) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasHostname()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPort()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasHostname()) {
-        output.writeString(1, getHostname());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getHostnameBytes());
       }
-      if (hasPort()) {
-        output.writeInt32(2, getPort());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, port_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -75,17 +129,24 @@ public final class Pipeline {
       if (size != -1) return size;
     
       size = 0;
-      if (hasHostname()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getHostname());
+          .computeBytesSize(1, getHostnameBytes());
       }
-      if (hasPort()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, getPort());
+          .computeInt32Size(2, port_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer parseFrom(
@@ -162,34 +223,53 @@ public final class Pipeline {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PeerOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internal_static_Peer_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internal_static_Peer_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer();
+        super.clear();
+        hostname_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        port_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -201,33 +281,39 @@ public final class Pipeline {
         return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer result = new com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer returnMe = result;
-        result = null;
-        return returnMe;
+        result.hostname_ = hostname_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.port_ = port_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -251,6 +337,18 @@ public final class Pipeline {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasHostname()) {
+          
+          return false;
+        }
+        if (!hasPort()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -263,64 +361,87 @@ public final class Pipeline {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 10: {
-              setHostname(input.readString());
+              bitField0_ |= 0x00000001;
+              hostname_ = input.readBytes();
               break;
             }
             case 16: {
-              setPort(input.readInt32());
+              bitField0_ |= 0x00000002;
+              port_ = input.readInt32();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required string hostname = 1;
+      private java.lang.Object hostname_ = "";
       public boolean hasHostname() {
-        return result.hasHostname();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public java.lang.String getHostname() {
-        return result.getHostname();
+      public String getHostname() {
+        java.lang.Object ref = hostname_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          hostname_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setHostname(java.lang.String value) {
+      public Builder setHostname(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasHostname = true;
-        result.hostname_ = value;
+  bitField0_ |= 0x00000001;
+        hostname_ = value;
+        onChanged();
         return this;
       }
       public Builder clearHostname() {
-        result.hasHostname = false;
-        result.hostname_ = getDefaultInstance().getHostname();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        hostname_ = getDefaultInstance().getHostname();
+        onChanged();
         return this;
+      }
+      void setHostname(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        hostname_ = value;
+        onChanged();
       }
       
       // required int32 port = 2;
+      private int port_ ;
       public boolean hasPort() {
-        return result.hasPort();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       public int getPort() {
-        return result.getPort();
+        return port_;
       }
       public Builder setPort(int value) {
-        result.hasPort = true;
-        result.port_ = value;
+        bitField0_ |= 0x00000002;
+        port_ = value;
+        onChanged();
         return this;
       }
       public Builder clearPort() {
-        result.hasPort = false;
-        result.port_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        port_ = 0;
+        onChanged();
         return this;
       }
       
@@ -329,18 +450,35 @@ public final class Pipeline {
     
     static {
       defaultInstance = new Peer(true);
-      com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:Peer)
   }
   
+  public interface PostOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string filename = 1;
+    boolean hasFilename();
+    String getFilename();
+    
+    // repeated .Peer peer = 2;
+    java.util.List<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer> 
+        getPeerList();
+    com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer getPeer(int index);
+    int getPeerCount();
+    java.util.List<? extends com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PeerOrBuilder> 
+        getPeerOrBuilderList();
+    com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PeerOrBuilder getPeerOrBuilder(
+        int index);
+  }
   public static final class Post extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements PostOrBuilder {
     // Use Post.newBuilder() to construct.
-    private Post() {
-      initFields();
+    private Post(Builder builder) {
+      super(builder);
     }
     private Post(boolean noInit) {}
     
@@ -363,43 +501,91 @@ public final class Pipeline {
       return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internal_static_Post_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required string filename = 1;
     public static final int FILENAME_FIELD_NUMBER = 1;
-    private boolean hasFilename;
-    private java.lang.String filename_ = "";
-    public boolean hasFilename() { return hasFilename; }
-    public java.lang.String getFilename() { return filename_; }
+    private java.lang.Object filename_;
+    public boolean hasFilename() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getFilename() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          filename_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getFilenameBytes() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        filename_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // repeated .Peer peer = 2;
     public static final int PEER_FIELD_NUMBER = 2;
-    private java.util.List<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer> peer_ =
-      java.util.Collections.emptyList();
+    private java.util.List<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer> peer_;
     public java.util.List<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer> getPeerList() {
       return peer_;
     }
-    public int getPeerCount() { return peer_.size(); }
+    public java.util.List<? extends com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PeerOrBuilder> 
+        getPeerOrBuilderList() {
+      return peer_;
+    }
+    public int getPeerCount() {
+      return peer_.size();
+    }
     public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer getPeer(int index) {
+      return peer_.get(index);
+    }
+    public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PeerOrBuilder getPeerOrBuilder(
+        int index) {
       return peer_.get(index);
     }
     
     private void initFields() {
+      filename_ = "";
+      peer_ = java.util.Collections.emptyList();
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasFilename) return false;
-      for (com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer element : getPeerList()) {
-        if (!element.isInitialized()) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasFilename()) {
+        memoizedIsInitialized = 0;
+        return false;
       }
+      for (int i = 0; i < getPeerCount(); i++) {
+        if (!getPeer(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasFilename()) {
-        output.writeString(1, getFilename());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getFilenameBytes());
       }
-      for (com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer element : getPeerList()) {
-        output.writeMessage(2, element);
+      for (int i = 0; i < peer_.size(); i++) {
+        output.writeMessage(2, peer_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -410,17 +596,24 @@ public final class Pipeline {
       if (size != -1) return size;
     
       size = 0;
-      if (hasFilename()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getFilename());
+          .computeBytesSize(1, getFilenameBytes());
       }
-      for (com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer element : getPeerList()) {
+      for (int i = 0; i < peer_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, element);
+          .computeMessageSize(2, peer_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post parseFrom(
@@ -497,34 +690,58 @@ public final class Pipeline {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PostOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internal_static_Post_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internal_static_Post_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getPeerFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+        super.clear();
+        filename_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (peerBuilder_ == null) {
+          peer_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          peerBuilder_.clear();
         }
-        result = new com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post();
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -536,37 +753,44 @@ public final class Pipeline {
         return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post result = new com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        if (result.peer_ != java.util.Collections.EMPTY_LIST) {
-          result.peer_ =
-            java.util.Collections.unmodifiableList(result.peer_);
+        result.filename_ = filename_;
+        if (peerBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            peer_ = java.util.Collections.unmodifiableList(peer_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.peer_ = peer_;
+        } else {
+          result.peer_ = peerBuilder_.build();
         }
-        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Post returnMe = result;
-        result = null;
-        return returnMe;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -583,14 +807,48 @@ public final class Pipeline {
         if (other.hasFilename()) {
           setFilename(other.getFilename());
         }
-        if (!other.peer_.isEmpty()) {
-          if (result.peer_.isEmpty()) {
-            result.peer_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer>();
+        if (peerBuilder_ == null) {
+          if (!other.peer_.isEmpty()) {
+            if (peer_.isEmpty()) {
+              peer_ = other.peer_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensurePeerIsMutable();
+              peer_.addAll(other.peer_);
+            }
+            onChanged();
           }
-          result.peer_.addAll(other.peer_);
+        } else {
+          if (!other.peer_.isEmpty()) {
+            if (peerBuilder_.isEmpty()) {
+              peerBuilder_.dispose();
+              peerBuilder_ = null;
+              peer_ = other.peer_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              peerBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getPeerFieldBuilder() : null;
+            } else {
+              peerBuilder_.addAllMessages(other.peer_);
+            }
+          }
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasFilename()) {
+          
+          return false;
+        }
+        for (int i = 0; i < getPeerCount(); i++) {
+          if (!getPeer(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
       }
       
       public Builder mergeFrom(
@@ -605,17 +863,20 @@ public final class Pipeline {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 10: {
-              setFilename(input.readString());
+              bitField0_ |= 0x00000001;
+              filename_ = input.readBytes();
               break;
             }
             case 18: {
@@ -628,77 +889,228 @@ public final class Pipeline {
         }
       }
       
+      private int bitField0_;
       
       // required string filename = 1;
+      private java.lang.Object filename_ = "";
       public boolean hasFilename() {
-        return result.hasFilename();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public java.lang.String getFilename() {
-        return result.getFilename();
+      public String getFilename() {
+        java.lang.Object ref = filename_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          filename_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setFilename(java.lang.String value) {
+      public Builder setFilename(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasFilename = true;
-        result.filename_ = value;
+  bitField0_ |= 0x00000001;
+        filename_ = value;
+        onChanged();
         return this;
       }
       public Builder clearFilename() {
-        result.hasFilename = false;
-        result.filename_ = getDefaultInstance().getFilename();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        filename_ = getDefaultInstance().getFilename();
+        onChanged();
         return this;
+      }
+      void setFilename(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        filename_ = value;
+        onChanged();
       }
       
       // repeated .Peer peer = 2;
+      private java.util.List<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer> peer_ =
+        java.util.Collections.emptyList();
+      private void ensurePeerIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          peer_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer>(peer_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PeerOrBuilder> peerBuilder_;
+      
       public java.util.List<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer> getPeerList() {
-        return java.util.Collections.unmodifiableList(result.peer_);
+        if (peerBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(peer_);
+        } else {
+          return peerBuilder_.getMessageList();
+        }
       }
       public int getPeerCount() {
-        return result.getPeerCount();
+        if (peerBuilder_ == null) {
+          return peer_.size();
+        } else {
+          return peerBuilder_.getCount();
+        }
       }
       public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer getPeer(int index) {
-        return result.getPeer(index);
-      }
-      public Builder setPeer(int index, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (peerBuilder_ == null) {
+          return peer_.get(index);
+        } else {
+          return peerBuilder_.getMessage(index);
         }
-        result.peer_.set(index, value);
+      }
+      public Builder setPeer(
+          int index, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer value) {
+        if (peerBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensurePeerIsMutable();
+          peer_.set(index, value);
+          onChanged();
+        } else {
+          peerBuilder_.setMessage(index, value);
+        }
         return this;
       }
-      public Builder setPeer(int index, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder builderForValue) {
-        result.peer_.set(index, builderForValue.build());
+      public Builder setPeer(
+          int index, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder builderForValue) {
+        if (peerBuilder_ == null) {
+          ensurePeerIsMutable();
+          peer_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          peerBuilder_.setMessage(index, builderForValue.build());
+        }
         return this;
       }
       public Builder addPeer(com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (peerBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensurePeerIsMutable();
+          peer_.add(value);
+          onChanged();
+        } else {
+          peerBuilder_.addMessage(value);
         }
-        if (result.peer_.isEmpty()) {
-          result.peer_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer>();
-        }
-        result.peer_.add(value);
         return this;
       }
-      public Builder addPeer(com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder builderForValue) {
-        if (result.peer_.isEmpty()) {
-          result.peer_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer>();
+      public Builder addPeer(
+          int index, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer value) {
+        if (peerBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensurePeerIsMutable();
+          peer_.add(index, value);
+          onChanged();
+        } else {
+          peerBuilder_.addMessage(index, value);
         }
-        result.peer_.add(builderForValue.build());
+        return this;
+      }
+      public Builder addPeer(
+          com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder builderForValue) {
+        if (peerBuilder_ == null) {
+          ensurePeerIsMutable();
+          peer_.add(builderForValue.build());
+          onChanged();
+        } else {
+          peerBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addPeer(
+          int index, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder builderForValue) {
+        if (peerBuilder_ == null) {
+          ensurePeerIsMutable();
+          peer_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          peerBuilder_.addMessage(index, builderForValue.build());
+        }
         return this;
       }
       public Builder addAllPeer(
           java.lang.Iterable<? extends com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer> values) {
-        if (result.peer_.isEmpty()) {
-          result.peer_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer>();
+        if (peerBuilder_ == null) {
+          ensurePeerIsMutable();
+          super.addAll(values, peer_);
+          onChanged();
+        } else {
+          peerBuilder_.addAllMessages(values);
         }
-        super.addAll(values, result.peer_);
         return this;
       }
       public Builder clearPeer() {
-        result.peer_ = java.util.Collections.emptyList();
+        if (peerBuilder_ == null) {
+          peer_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          peerBuilder_.clear();
+        }
         return this;
+      }
+      public Builder removePeer(int index) {
+        if (peerBuilder_ == null) {
+          ensurePeerIsMutable();
+          peer_.remove(index);
+          onChanged();
+        } else {
+          peerBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder getPeerBuilder(
+          int index) {
+        return getPeerFieldBuilder().getBuilder(index);
+      }
+      public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PeerOrBuilder getPeerOrBuilder(
+          int index) {
+        if (peerBuilder_ == null) {
+          return peer_.get(index);  } else {
+          return peerBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PeerOrBuilder> 
+           getPeerOrBuilderList() {
+        if (peerBuilder_ != null) {
+          return peerBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(peer_);
+        }
+      }
+      public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder addPeerBuilder() {
+        return getPeerFieldBuilder().addBuilder(
+            com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.getDefaultInstance());
+      }
+      public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder addPeerBuilder(
+          int index) {
+        return getPeerFieldBuilder().addBuilder(
+            index, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.getDefaultInstance());
+      }
+      public java.util.List<com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder> 
+           getPeerBuilderList() {
+        return getPeerFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PeerOrBuilder> 
+          getPeerFieldBuilder() {
+        if (peerBuilder_ == null) {
+          peerBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Peer.Builder, com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.PeerOrBuilder>(
+                  peer_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getParentForChildren(),
+                  isClean());
+          peer_ = null;
+        }
+        return peerBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:Post)
@@ -706,18 +1118,25 @@ public final class Pipeline {
     
     static {
       defaultInstance = new Post(true);
-      com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:Post)
   }
   
+  public interface GetOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string filename = 1;
+    boolean hasFilename();
+    String getFilename();
+  }
   public static final class Get extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements GetOrBuilder {
     // Use Get.newBuilder() to construct.
-    private Get() {
-      initFields();
+    private Get(Builder builder) {
+      super(builder);
     }
     private Get(boolean noInit) {}
     
@@ -740,25 +1159,60 @@ public final class Pipeline {
       return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internal_static_Get_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required string filename = 1;
     public static final int FILENAME_FIELD_NUMBER = 1;
-    private boolean hasFilename;
-    private java.lang.String filename_ = "";
-    public boolean hasFilename() { return hasFilename; }
-    public java.lang.String getFilename() { return filename_; }
+    private java.lang.Object filename_;
+    public boolean hasFilename() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getFilename() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          filename_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getFilenameBytes() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        filename_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     private void initFields() {
+      filename_ = "";
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasFilename) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasFilename()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasFilename()) {
-        output.writeString(1, getFilename());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getFilenameBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -769,13 +1223,20 @@ public final class Pipeline {
       if (size != -1) return size;
     
       size = 0;
-      if (hasFilename()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getFilename());
+          .computeBytesSize(1, getFilenameBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get parseFrom(
@@ -852,34 +1313,51 @@ public final class Pipeline {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.GetOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internal_static_Get_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internal_static_Get_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get();
+        super.clear();
+        filename_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -891,33 +1369,35 @@ public final class Pipeline {
         return com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get result = new com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.Get returnMe = result;
-        result = null;
-        return returnMe;
+        result.filename_ = filename_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -938,6 +1418,14 @@ public final class Pipeline {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasFilename()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -950,43 +1438,62 @@ public final class Pipeline {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 10: {
-              setFilename(input.readString());
+              bitField0_ |= 0x00000001;
+              filename_ = input.readBytes();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required string filename = 1;
+      private java.lang.Object filename_ = "";
       public boolean hasFilename() {
-        return result.hasFilename();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public java.lang.String getFilename() {
-        return result.getFilename();
+      public String getFilename() {
+        java.lang.Object ref = filename_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          filename_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setFilename(java.lang.String value) {
+      public Builder setFilename(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasFilename = true;
-        result.filename_ = value;
+  bitField0_ |= 0x00000001;
+        filename_ = value;
+        onChanged();
         return this;
       }
       public Builder clearFilename() {
-        result.hasFilename = false;
-        result.filename_ = getDefaultInstance().getFilename();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        filename_ = getDefaultInstance().getFilename();
+        onChanged();
         return this;
+      }
+      void setFilename(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        filename_ = value;
+        onChanged();
       }
       
       // @@protoc_insertion_point(builder_scope:Get)
@@ -994,7 +1501,6 @@ public final class Pipeline {
     
     static {
       defaultInstance = new Get(true);
-      com.googlecode.protobuf.pro.stream.example.pipeline.Pipeline.internalForceInit();
       defaultInstance.initFields();
     }
     
@@ -1068,8 +1574,6 @@ public final class Pipeline {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
-  
-  public static void internalForceInit() {}
   
   // @@protoc_insertion_point(outer_class_scope)
 }

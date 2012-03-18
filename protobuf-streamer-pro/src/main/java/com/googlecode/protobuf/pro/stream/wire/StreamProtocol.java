@@ -15,6 +15,10 @@ public final class StreamProtocol {
     END(2, 2),
     ;
     
+    public static final int START_VALUE = 0;
+    public static final int MIDDLE_VALUE = 1;
+    public static final int END_VALUE = 2;
+    
     
     public final int getNumber() { return value; }
     
@@ -35,8 +39,8 @@ public final class StreamProtocol {
         internalValueMap =
           new com.google.protobuf.Internal.EnumLiteMap<ChunkTypeCode>() {
             public ChunkTypeCode findValueByNumber(int number) {
-              return ChunkTypeCode.valueOf(number)
-    ;        }
+              return ChunkTypeCode.valueOf(number);
+            }
           };
     
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
@@ -55,6 +59,7 @@ public final class StreamProtocol {
     private static final ChunkTypeCode[] VALUES = {
       START, MIDDLE, END, 
     };
+    
     public static ChunkTypeCode valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
@@ -63,25 +68,35 @@ public final class StreamProtocol {
       }
       return VALUES[desc.getIndex()];
     }
+    
     private final int index;
     private final int value;
+    
     private ChunkTypeCode(int index, int value) {
       this.index = index;
       this.value = value;
     }
     
-    static {
-      com.googlecode.protobuf.pro.stream.wire.StreamProtocol.getDescriptor();
-    }
-    
     // @@protoc_insertion_point(enum_scope:ChunkTypeCode)
   }
   
+  public interface PullRequestOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+    
+    // required bytes requestProto = 2;
+    boolean hasRequestProto();
+    com.google.protobuf.ByteString getRequestProto();
+  }
   public static final class PullRequest extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements PullRequestOrBuilder {
     // Use PullRequest.newBuilder() to construct.
-    private PullRequest() {
-      initFields();
+    private PullRequest(Builder builder) {
+      super(builder);
     }
     private PullRequest(boolean noInit) {}
     
@@ -104,36 +119,56 @@ public final class StreamProtocol {
       return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_PullRequest_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
-    private boolean hasCorrelationId;
-    private int correlationId_ = 0;
-    public boolean hasCorrelationId() { return hasCorrelationId; }
-    public int getCorrelationId() { return correlationId_; }
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
     
     // required bytes requestProto = 2;
     public static final int REQUESTPROTO_FIELD_NUMBER = 2;
-    private boolean hasRequestProto;
-    private com.google.protobuf.ByteString requestProto_ = com.google.protobuf.ByteString.EMPTY;
-    public boolean hasRequestProto() { return hasRequestProto; }
-    public com.google.protobuf.ByteString getRequestProto() { return requestProto_; }
+    private com.google.protobuf.ByteString requestProto_;
+    public boolean hasRequestProto() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public com.google.protobuf.ByteString getRequestProto() {
+      return requestProto_;
+    }
     
     private void initFields() {
+      correlationId_ = 0;
+      requestProto_ = com.google.protobuf.ByteString.EMPTY;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasCorrelationId) return false;
-      if (!hasRequestProto) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasRequestProto()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasCorrelationId()) {
-        output.writeInt32(1, getCorrelationId());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
       }
-      if (hasRequestProto()) {
-        output.writeBytes(2, getRequestProto());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, requestProto_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -144,17 +179,24 @@ public final class StreamProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasCorrelationId()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getCorrelationId());
+          .computeInt32Size(1, correlationId_);
       }
-      if (hasRequestProto()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getRequestProto());
+          .computeBytesSize(2, requestProto_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest parseFrom(
@@ -231,34 +273,53 @@ public final class StreamProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_PullRequest_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_PullRequest_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest();
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        requestProto_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -270,33 +331,39 @@ public final class StreamProtocol {
         return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest returnMe = result;
-        result = null;
-        return returnMe;
+        result.correlationId_ = correlationId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.requestProto_ = requestProto_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -320,6 +387,18 @@ public final class StreamProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        if (!hasRequestProto()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -332,64 +411,75 @@ public final class StreamProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setCorrelationId(input.readInt32());
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
               break;
             }
             case 18: {
-              setRequestProto(input.readBytes());
+              bitField0_ |= 0x00000002;
+              requestProto_ = input.readBytes();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required int32 correlationId = 1;
+      private int correlationId_ ;
       public boolean hasCorrelationId() {
-        return result.hasCorrelationId();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getCorrelationId() {
-        return result.getCorrelationId();
+        return correlationId_;
       }
       public Builder setCorrelationId(int value) {
-        result.hasCorrelationId = true;
-        result.correlationId_ = value;
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorrelationId() {
-        result.hasCorrelationId = false;
-        result.correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
         return this;
       }
       
       // required bytes requestProto = 2;
+      private com.google.protobuf.ByteString requestProto_ = com.google.protobuf.ByteString.EMPTY;
       public boolean hasRequestProto() {
-        return result.hasRequestProto();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       public com.google.protobuf.ByteString getRequestProto() {
-        return result.getRequestProto();
+        return requestProto_;
       }
       public Builder setRequestProto(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasRequestProto = true;
-        result.requestProto_ = value;
+  bitField0_ |= 0x00000002;
+        requestProto_ = value;
+        onChanged();
         return this;
       }
       public Builder clearRequestProto() {
-        result.hasRequestProto = false;
-        result.requestProto_ = getDefaultInstance().getRequestProto();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        requestProto_ = getDefaultInstance().getRequestProto();
+        onChanged();
         return this;
       }
       
@@ -398,18 +488,29 @@ public final class StreamProtocol {
     
     static {
       defaultInstance = new PullRequest(true);
-      com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:PullRequest)
   }
   
+  public interface PushRequestOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+    
+    // required bytes requestProto = 2;
+    boolean hasRequestProto();
+    com.google.protobuf.ByteString getRequestProto();
+  }
   public static final class PushRequest extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements PushRequestOrBuilder {
     // Use PushRequest.newBuilder() to construct.
-    private PushRequest() {
-      initFields();
+    private PushRequest(Builder builder) {
+      super(builder);
     }
     private PushRequest(boolean noInit) {}
     
@@ -432,36 +533,56 @@ public final class StreamProtocol {
       return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_PushRequest_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
-    private boolean hasCorrelationId;
-    private int correlationId_ = 0;
-    public boolean hasCorrelationId() { return hasCorrelationId; }
-    public int getCorrelationId() { return correlationId_; }
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
     
     // required bytes requestProto = 2;
     public static final int REQUESTPROTO_FIELD_NUMBER = 2;
-    private boolean hasRequestProto;
-    private com.google.protobuf.ByteString requestProto_ = com.google.protobuf.ByteString.EMPTY;
-    public boolean hasRequestProto() { return hasRequestProto; }
-    public com.google.protobuf.ByteString getRequestProto() { return requestProto_; }
+    private com.google.protobuf.ByteString requestProto_;
+    public boolean hasRequestProto() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public com.google.protobuf.ByteString getRequestProto() {
+      return requestProto_;
+    }
     
     private void initFields() {
+      correlationId_ = 0;
+      requestProto_ = com.google.protobuf.ByteString.EMPTY;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasCorrelationId) return false;
-      if (!hasRequestProto) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasRequestProto()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasCorrelationId()) {
-        output.writeInt32(1, getCorrelationId());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
       }
-      if (hasRequestProto()) {
-        output.writeBytes(2, getRequestProto());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, requestProto_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -472,17 +593,24 @@ public final class StreamProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasCorrelationId()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getCorrelationId());
+          .computeInt32Size(1, correlationId_);
       }
-      if (hasRequestProto()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getRequestProto());
+          .computeBytesSize(2, requestProto_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest parseFrom(
@@ -559,34 +687,53 @@ public final class StreamProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_PushRequest_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_PushRequest_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest();
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        requestProto_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -598,33 +745,39 @@ public final class StreamProtocol {
         return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest returnMe = result;
-        result = null;
-        return returnMe;
+        result.correlationId_ = correlationId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.requestProto_ = requestProto_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -648,6 +801,18 @@ public final class StreamProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        if (!hasRequestProto()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -660,64 +825,75 @@ public final class StreamProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setCorrelationId(input.readInt32());
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
               break;
             }
             case 18: {
-              setRequestProto(input.readBytes());
+              bitField0_ |= 0x00000002;
+              requestProto_ = input.readBytes();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required int32 correlationId = 1;
+      private int correlationId_ ;
       public boolean hasCorrelationId() {
-        return result.hasCorrelationId();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getCorrelationId() {
-        return result.getCorrelationId();
+        return correlationId_;
       }
       public Builder setCorrelationId(int value) {
-        result.hasCorrelationId = true;
-        result.correlationId_ = value;
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorrelationId() {
-        result.hasCorrelationId = false;
-        result.correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
         return this;
       }
       
       // required bytes requestProto = 2;
+      private com.google.protobuf.ByteString requestProto_ = com.google.protobuf.ByteString.EMPTY;
       public boolean hasRequestProto() {
-        return result.hasRequestProto();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       public com.google.protobuf.ByteString getRequestProto() {
-        return result.getRequestProto();
+        return requestProto_;
       }
       public Builder setRequestProto(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasRequestProto = true;
-        result.requestProto_ = value;
+  bitField0_ |= 0x00000002;
+        requestProto_ = value;
+        onChanged();
         return this;
       }
       public Builder clearRequestProto() {
-        result.hasRequestProto = false;
-        result.requestProto_ = getDefaultInstance().getRequestProto();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        requestProto_ = getDefaultInstance().getRequestProto();
+        onChanged();
         return this;
       }
       
@@ -726,18 +902,25 @@ public final class StreamProtocol {
     
     static {
       defaultInstance = new PushRequest(true);
-      com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:PushRequest)
   }
   
+  public interface CloseNotificationOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+  }
   public static final class CloseNotification extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements CloseNotificationOrBuilder {
     // Use CloseNotification.newBuilder() to construct.
-    private CloseNotification() {
-      initFields();
+    private CloseNotification(Builder builder) {
+      super(builder);
     }
     private CloseNotification(boolean noInit) {}
     
@@ -760,25 +943,38 @@ public final class StreamProtocol {
       return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_CloseNotification_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
-    private boolean hasCorrelationId;
-    private int correlationId_ = 0;
-    public boolean hasCorrelationId() { return hasCorrelationId; }
-    public int getCorrelationId() { return correlationId_; }
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
     
     private void initFields() {
+      correlationId_ = 0;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasCorrelationId) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasCorrelationId()) {
-        output.writeInt32(1, getCorrelationId());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -789,13 +985,20 @@ public final class StreamProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasCorrelationId()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getCorrelationId());
+          .computeInt32Size(1, correlationId_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification parseFrom(
@@ -872,34 +1075,51 @@ public final class StreamProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotificationOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_CloseNotification_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_CloseNotification_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification();
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -911,33 +1131,35 @@ public final class StreamProtocol {
         return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification returnMe = result;
-        result = null;
-        return returnMe;
+        result.correlationId_ = correlationId_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -958,6 +1180,14 @@ public final class StreamProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -970,39 +1200,46 @@ public final class StreamProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setCorrelationId(input.readInt32());
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required int32 correlationId = 1;
+      private int correlationId_ ;
       public boolean hasCorrelationId() {
-        return result.hasCorrelationId();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getCorrelationId() {
-        return result.getCorrelationId();
+        return correlationId_;
       }
       public Builder setCorrelationId(int value) {
-        result.hasCorrelationId = true;
-        result.correlationId_ = value;
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorrelationId() {
-        result.hasCorrelationId = false;
-        result.correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
         return this;
       }
       
@@ -1011,18 +1248,29 @@ public final class StreamProtocol {
     
     static {
       defaultInstance = new CloseNotification(true);
-      com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:CloseNotification)
   }
   
+  public interface ParameterOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string name = 1;
+    boolean hasName();
+    String getName();
+    
+    // required string value = 2;
+    boolean hasValue();
+    String getValue();
+  }
   public static final class Parameter extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements ParameterOrBuilder {
     // Use Parameter.newBuilder() to construct.
-    private Parameter() {
-      initFields();
+    private Parameter(Builder builder) {
+      super(builder);
     }
     private Parameter(boolean noInit) {}
     
@@ -1045,36 +1293,100 @@ public final class StreamProtocol {
       return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_Parameter_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
-    private boolean hasName;
-    private java.lang.String name_ = "";
-    public boolean hasName() { return hasName; }
-    public java.lang.String getName() { return name_; }
+    private java.lang.Object name_;
+    public boolean hasName() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          name_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required string value = 2;
     public static final int VALUE_FIELD_NUMBER = 2;
-    private boolean hasValue;
-    private java.lang.String value_ = "";
-    public boolean hasValue() { return hasValue; }
-    public java.lang.String getValue() { return value_; }
+    private java.lang.Object value_;
+    public boolean hasValue() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getValue() {
+      java.lang.Object ref = value_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          value_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getValueBytes() {
+      java.lang.Object ref = value_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        value_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     private void initFields() {
+      name_ = "";
+      value_ = "";
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasName) return false;
-      if (!hasValue) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasValue()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasName()) {
-        output.writeString(1, getName());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getNameBytes());
       }
-      if (hasValue()) {
-        output.writeString(2, getValue());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getValueBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -1085,17 +1397,24 @@ public final class StreamProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasName()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getName());
+          .computeBytesSize(1, getNameBytes());
       }
-      if (hasValue()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getValue());
+          .computeBytesSize(2, getValueBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter parseFrom(
@@ -1172,34 +1491,53 @@ public final class StreamProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ParameterOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_Parameter_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_Parameter_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter();
+        super.clear();
+        name_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        value_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -1211,33 +1549,39 @@ public final class StreamProtocol {
         return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter returnMe = result;
-        result = null;
-        return returnMe;
+        result.name_ = name_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.value_ = value_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1261,6 +1605,18 @@ public final class StreamProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasName()) {
+          
+          return false;
+        }
+        if (!hasValue()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1273,68 +1629,103 @@ public final class StreamProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 10: {
-              setName(input.readString());
+              bitField0_ |= 0x00000001;
+              name_ = input.readBytes();
               break;
             }
             case 18: {
-              setValue(input.readString());
+              bitField0_ |= 0x00000002;
+              value_ = input.readBytes();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required string name = 1;
+      private java.lang.Object name_ = "";
       public boolean hasName() {
-        return result.hasName();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public java.lang.String getName() {
-        return result.getName();
+      public String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          name_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setName(java.lang.String value) {
+      public Builder setName(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasName = true;
-        result.name_ = value;
+  bitField0_ |= 0x00000001;
+        name_ = value;
+        onChanged();
         return this;
       }
       public Builder clearName() {
-        result.hasName = false;
-        result.name_ = getDefaultInstance().getName();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        name_ = getDefaultInstance().getName();
+        onChanged();
         return this;
+      }
+      void setName(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        name_ = value;
+        onChanged();
       }
       
       // required string value = 2;
+      private java.lang.Object value_ = "";
       public boolean hasValue() {
-        return result.hasValue();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public java.lang.String getValue() {
-        return result.getValue();
+      public String getValue() {
+        java.lang.Object ref = value_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          value_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setValue(java.lang.String value) {
+      public Builder setValue(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasValue = true;
-        result.value_ = value;
+  bitField0_ |= 0x00000002;
+        value_ = value;
+        onChanged();
         return this;
       }
       public Builder clearValue() {
-        result.hasValue = false;
-        result.value_ = getDefaultInstance().getValue();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        value_ = getDefaultInstance().getValue();
+        onChanged();
         return this;
+      }
+      void setValue(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        value_ = value;
+        onChanged();
       }
       
       // @@protoc_insertion_point(builder_scope:Parameter)
@@ -1342,18 +1733,47 @@ public final class StreamProtocol {
     
     static {
       defaultInstance = new Parameter(true);
-      com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:Parameter)
   }
   
+  public interface ChunkOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+    
+    // required .ChunkTypeCode chunkType = 2;
+    boolean hasChunkType();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode getChunkType();
+    
+    // required int32 seqNo = 3;
+    boolean hasSeqNo();
+    int getSeqNo();
+    
+    // repeated .Parameter parameter = 4;
+    java.util.List<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter> 
+        getParameterList();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter getParameter(int index);
+    int getParameterCount();
+    java.util.List<? extends com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ParameterOrBuilder> 
+        getParameterOrBuilderList();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ParameterOrBuilder getParameterOrBuilder(
+        int index);
+    
+    // optional bytes payload = 5;
+    boolean hasPayload();
+    com.google.protobuf.ByteString getPayload();
+  }
   public static final class Chunk extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements ChunkOrBuilder {
     // Use Chunk.newBuilder() to construct.
-    private Chunk() {
-      initFields();
+    private Chunk(Builder builder) {
+      super(builder);
     }
     private Chunk(boolean noInit) {}
     
@@ -1376,76 +1796,119 @@ public final class StreamProtocol {
       return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_Chunk_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
-    private boolean hasCorrelationId;
-    private int correlationId_ = 0;
-    public boolean hasCorrelationId() { return hasCorrelationId; }
-    public int getCorrelationId() { return correlationId_; }
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
     
     // required .ChunkTypeCode chunkType = 2;
     public static final int CHUNKTYPE_FIELD_NUMBER = 2;
-    private boolean hasChunkType;
     private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode chunkType_;
-    public boolean hasChunkType() { return hasChunkType; }
-    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode getChunkType() { return chunkType_; }
+    public boolean hasChunkType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode getChunkType() {
+      return chunkType_;
+    }
     
     // required int32 seqNo = 3;
     public static final int SEQNO_FIELD_NUMBER = 3;
-    private boolean hasSeqNo;
-    private int seqNo_ = 0;
-    public boolean hasSeqNo() { return hasSeqNo; }
-    public int getSeqNo() { return seqNo_; }
+    private int seqNo_;
+    public boolean hasSeqNo() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public int getSeqNo() {
+      return seqNo_;
+    }
     
     // repeated .Parameter parameter = 4;
     public static final int PARAMETER_FIELD_NUMBER = 4;
-    private java.util.List<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter> parameter_ =
-      java.util.Collections.emptyList();
+    private java.util.List<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter> parameter_;
     public java.util.List<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter> getParameterList() {
       return parameter_;
     }
-    public int getParameterCount() { return parameter_.size(); }
+    public java.util.List<? extends com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ParameterOrBuilder> 
+        getParameterOrBuilderList() {
+      return parameter_;
+    }
+    public int getParameterCount() {
+      return parameter_.size();
+    }
     public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter getParameter(int index) {
+      return parameter_.get(index);
+    }
+    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ParameterOrBuilder getParameterOrBuilder(
+        int index) {
       return parameter_.get(index);
     }
     
     // optional bytes payload = 5;
     public static final int PAYLOAD_FIELD_NUMBER = 5;
-    private boolean hasPayload;
-    private com.google.protobuf.ByteString payload_ = com.google.protobuf.ByteString.EMPTY;
-    public boolean hasPayload() { return hasPayload; }
-    public com.google.protobuf.ByteString getPayload() { return payload_; }
+    private com.google.protobuf.ByteString payload_;
+    public boolean hasPayload() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public com.google.protobuf.ByteString getPayload() {
+      return payload_;
+    }
     
     private void initFields() {
+      correlationId_ = 0;
       chunkType_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode.START;
+      seqNo_ = 0;
+      parameter_ = java.util.Collections.emptyList();
+      payload_ = com.google.protobuf.ByteString.EMPTY;
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasCorrelationId) return false;
-      if (!hasChunkType) return false;
-      if (!hasSeqNo) return false;
-      for (com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter element : getParameterList()) {
-        if (!element.isInitialized()) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
       }
+      if (!hasChunkType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasSeqNo()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      for (int i = 0; i < getParameterCount(); i++) {
+        if (!getParameter(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasCorrelationId()) {
-        output.writeInt32(1, getCorrelationId());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
       }
-      if (hasChunkType()) {
-        output.writeEnum(2, getChunkType().getNumber());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, chunkType_.getNumber());
       }
-      if (hasSeqNo()) {
-        output.writeInt32(3, getSeqNo());
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, seqNo_);
       }
-      for (com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter element : getParameterList()) {
-        output.writeMessage(4, element);
+      for (int i = 0; i < parameter_.size(); i++) {
+        output.writeMessage(4, parameter_.get(i));
       }
-      if (hasPayload()) {
-        output.writeBytes(5, getPayload());
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(5, payload_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1456,29 +1919,36 @@ public final class StreamProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasCorrelationId()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, getCorrelationId());
+          .computeInt32Size(1, correlationId_);
       }
-      if (hasChunkType()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, getChunkType().getNumber());
+          .computeEnumSize(2, chunkType_.getNumber());
       }
-      if (hasSeqNo()) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, getSeqNo());
+          .computeInt32Size(3, seqNo_);
       }
-      for (com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter element : getParameterList()) {
+      for (int i = 0; i < parameter_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, element);
+          .computeMessageSize(4, parameter_.get(i));
       }
-      if (hasPayload()) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getPayload());
+          .computeBytesSize(5, payload_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk parseFrom(
@@ -1555,34 +2025,64 @@ public final class StreamProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_Chunk_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_Chunk_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getParameterFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        chunkType_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode.START;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        seqNo_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (parameterBuilder_ == null) {
+          parameter_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          parameterBuilder_.clear();
         }
-        result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk();
+        payload_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -1594,37 +2094,56 @@ public final class StreamProtocol {
         return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        if (result.parameter_ != java.util.Collections.EMPTY_LIST) {
-          result.parameter_ =
-            java.util.Collections.unmodifiableList(result.parameter_);
+        result.correlationId_ = correlationId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
         }
-        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk returnMe = result;
-        result = null;
-        return returnMe;
+        result.chunkType_ = chunkType_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.seqNo_ = seqNo_;
+        if (parameterBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            parameter_ = java.util.Collections.unmodifiableList(parameter_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.parameter_ = parameter_;
+        } else {
+          result.parameter_ = parameterBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.payload_ = payload_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1647,17 +2166,59 @@ public final class StreamProtocol {
         if (other.hasSeqNo()) {
           setSeqNo(other.getSeqNo());
         }
-        if (!other.parameter_.isEmpty()) {
-          if (result.parameter_.isEmpty()) {
-            result.parameter_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter>();
+        if (parameterBuilder_ == null) {
+          if (!other.parameter_.isEmpty()) {
+            if (parameter_.isEmpty()) {
+              parameter_ = other.parameter_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureParameterIsMutable();
+              parameter_.addAll(other.parameter_);
+            }
+            onChanged();
           }
-          result.parameter_.addAll(other.parameter_);
+        } else {
+          if (!other.parameter_.isEmpty()) {
+            if (parameterBuilder_.isEmpty()) {
+              parameterBuilder_.dispose();
+              parameterBuilder_ = null;
+              parameter_ = other.parameter_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+              parameterBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getParameterFieldBuilder() : null;
+            } else {
+              parameterBuilder_.addAllMessages(other.parameter_);
+            }
+          }
         }
         if (other.hasPayload()) {
           setPayload(other.getPayload());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        if (!hasChunkType()) {
+          
+          return false;
+        }
+        if (!hasSeqNo()) {
+          
+          return false;
+        }
+        for (int i = 0; i < getParameterCount(); i++) {
+          if (!getParameter(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
       }
       
       public Builder mergeFrom(
@@ -1672,17 +2233,20 @@ public final class StreamProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 8: {
-              setCorrelationId(input.readInt32());
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
               break;
             }
             case 16: {
@@ -1691,12 +2255,14 @@ public final class StreamProtocol {
               if (value == null) {
                 unknownFields.mergeVarintField(2, rawValue);
               } else {
-                setChunkType(value);
+                bitField0_ |= 0x00000002;
+                chunkType_ = value;
               }
               break;
             }
             case 24: {
-              setSeqNo(input.readInt32());
+              bitField0_ |= 0x00000004;
+              seqNo_ = input.readInt32();
               break;
             }
             case 34: {
@@ -1706,140 +2272,289 @@ public final class StreamProtocol {
               break;
             }
             case 42: {
-              setPayload(input.readBytes());
+              bitField0_ |= 0x00000010;
+              payload_ = input.readBytes();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required int32 correlationId = 1;
+      private int correlationId_ ;
       public boolean hasCorrelationId() {
-        return result.hasCorrelationId();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public int getCorrelationId() {
-        return result.getCorrelationId();
+        return correlationId_;
       }
       public Builder setCorrelationId(int value) {
-        result.hasCorrelationId = true;
-        result.correlationId_ = value;
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorrelationId() {
-        result.hasCorrelationId = false;
-        result.correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
         return this;
       }
       
       // required .ChunkTypeCode chunkType = 2;
+      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode chunkType_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode.START;
       public boolean hasChunkType() {
-        return result.hasChunkType();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode getChunkType() {
-        return result.getChunkType();
+        return chunkType_;
       }
       public Builder setChunkType(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode value) {
         if (value == null) {
           throw new NullPointerException();
         }
-        result.hasChunkType = true;
-        result.chunkType_ = value;
+        bitField0_ |= 0x00000002;
+        chunkType_ = value;
+        onChanged();
         return this;
       }
       public Builder clearChunkType() {
-        result.hasChunkType = false;
-        result.chunkType_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode.START;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        chunkType_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkTypeCode.START;
+        onChanged();
         return this;
       }
       
       // required int32 seqNo = 3;
+      private int seqNo_ ;
       public boolean hasSeqNo() {
-        return result.hasSeqNo();
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       public int getSeqNo() {
-        return result.getSeqNo();
+        return seqNo_;
       }
       public Builder setSeqNo(int value) {
-        result.hasSeqNo = true;
-        result.seqNo_ = value;
+        bitField0_ |= 0x00000004;
+        seqNo_ = value;
+        onChanged();
         return this;
       }
       public Builder clearSeqNo() {
-        result.hasSeqNo = false;
-        result.seqNo_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        seqNo_ = 0;
+        onChanged();
         return this;
       }
       
       // repeated .Parameter parameter = 4;
+      private java.util.List<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter> parameter_ =
+        java.util.Collections.emptyList();
+      private void ensureParameterIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          parameter_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter>(parameter_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ParameterOrBuilder> parameterBuilder_;
+      
       public java.util.List<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter> getParameterList() {
-        return java.util.Collections.unmodifiableList(result.parameter_);
+        if (parameterBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(parameter_);
+        } else {
+          return parameterBuilder_.getMessageList();
+        }
       }
       public int getParameterCount() {
-        return result.getParameterCount();
+        if (parameterBuilder_ == null) {
+          return parameter_.size();
+        } else {
+          return parameterBuilder_.getCount();
+        }
       }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter getParameter(int index) {
-        return result.getParameter(index);
-      }
-      public Builder setParameter(int index, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (parameterBuilder_ == null) {
+          return parameter_.get(index);
+        } else {
+          return parameterBuilder_.getMessage(index);
         }
-        result.parameter_.set(index, value);
+      }
+      public Builder setParameter(
+          int index, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter value) {
+        if (parameterBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureParameterIsMutable();
+          parameter_.set(index, value);
+          onChanged();
+        } else {
+          parameterBuilder_.setMessage(index, value);
+        }
         return this;
       }
-      public Builder setParameter(int index, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder builderForValue) {
-        result.parameter_.set(index, builderForValue.build());
+      public Builder setParameter(
+          int index, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder builderForValue) {
+        if (parameterBuilder_ == null) {
+          ensureParameterIsMutable();
+          parameter_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          parameterBuilder_.setMessage(index, builderForValue.build());
+        }
         return this;
       }
       public Builder addParameter(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (parameterBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureParameterIsMutable();
+          parameter_.add(value);
+          onChanged();
+        } else {
+          parameterBuilder_.addMessage(value);
         }
-        if (result.parameter_.isEmpty()) {
-          result.parameter_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter>();
-        }
-        result.parameter_.add(value);
         return this;
       }
-      public Builder addParameter(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder builderForValue) {
-        if (result.parameter_.isEmpty()) {
-          result.parameter_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter>();
+      public Builder addParameter(
+          int index, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter value) {
+        if (parameterBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureParameterIsMutable();
+          parameter_.add(index, value);
+          onChanged();
+        } else {
+          parameterBuilder_.addMessage(index, value);
         }
-        result.parameter_.add(builderForValue.build());
+        return this;
+      }
+      public Builder addParameter(
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder builderForValue) {
+        if (parameterBuilder_ == null) {
+          ensureParameterIsMutable();
+          parameter_.add(builderForValue.build());
+          onChanged();
+        } else {
+          parameterBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addParameter(
+          int index, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder builderForValue) {
+        if (parameterBuilder_ == null) {
+          ensureParameterIsMutable();
+          parameter_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          parameterBuilder_.addMessage(index, builderForValue.build());
+        }
         return this;
       }
       public Builder addAllParameter(
           java.lang.Iterable<? extends com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter> values) {
-        if (result.parameter_.isEmpty()) {
-          result.parameter_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter>();
+        if (parameterBuilder_ == null) {
+          ensureParameterIsMutable();
+          super.addAll(values, parameter_);
+          onChanged();
+        } else {
+          parameterBuilder_.addAllMessages(values);
         }
-        super.addAll(values, result.parameter_);
         return this;
       }
       public Builder clearParameter() {
-        result.parameter_ = java.util.Collections.emptyList();
+        if (parameterBuilder_ == null) {
+          parameter_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          parameterBuilder_.clear();
+        }
         return this;
+      }
+      public Builder removeParameter(int index) {
+        if (parameterBuilder_ == null) {
+          ensureParameterIsMutable();
+          parameter_.remove(index);
+          onChanged();
+        } else {
+          parameterBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder getParameterBuilder(
+          int index) {
+        return getParameterFieldBuilder().getBuilder(index);
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ParameterOrBuilder getParameterOrBuilder(
+          int index) {
+        if (parameterBuilder_ == null) {
+          return parameter_.get(index);  } else {
+          return parameterBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ParameterOrBuilder> 
+           getParameterOrBuilderList() {
+        if (parameterBuilder_ != null) {
+          return parameterBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(parameter_);
+        }
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder addParameterBuilder() {
+        return getParameterFieldBuilder().addBuilder(
+            com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.getDefaultInstance());
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder addParameterBuilder(
+          int index) {
+        return getParameterFieldBuilder().addBuilder(
+            index, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.getDefaultInstance());
+      }
+      public java.util.List<com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder> 
+           getParameterBuilderList() {
+        return getParameterFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ParameterOrBuilder> 
+          getParameterFieldBuilder() {
+        if (parameterBuilder_ == null) {
+          parameterBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Parameter.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ParameterOrBuilder>(
+                  parameter_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          parameter_ = null;
+        }
+        return parameterBuilder_;
       }
       
       // optional bytes payload = 5;
+      private com.google.protobuf.ByteString payload_ = com.google.protobuf.ByteString.EMPTY;
       public boolean hasPayload() {
-        return result.hasPayload();
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       public com.google.protobuf.ByteString getPayload() {
-        return result.getPayload();
+        return payload_;
       }
       public Builder setPayload(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasPayload = true;
-        result.payload_ = value;
+  bitField0_ |= 0x00000010;
+        payload_ = value;
+        onChanged();
         return this;
       }
       public Builder clearPayload() {
-        result.hasPayload = false;
-        result.payload_ = getDefaultInstance().getPayload();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        payload_ = getDefaultInstance().getPayload();
+        onChanged();
         return this;
       }
       
@@ -1848,18 +2563,41 @@ public final class StreamProtocol {
     
     static {
       defaultInstance = new Chunk(true);
-      com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:Chunk)
   }
   
+  public interface WirePayloadOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // optional .Chunk chunk = 1;
+    boolean hasChunk();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk getChunk();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkOrBuilder getChunkOrBuilder();
+    
+    // optional .PullRequest pull = 2;
+    boolean hasPull();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest getPull();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequestOrBuilder getPullOrBuilder();
+    
+    // optional .PushRequest push = 3;
+    boolean hasPush();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest getPush();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequestOrBuilder getPushOrBuilder();
+    
+    // optional .CloseNotification close = 4;
+    boolean hasClose();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification getClose();
+    com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotificationOrBuilder getCloseOrBuilder();
+  }
   public static final class WirePayload extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements WirePayloadOrBuilder {
     // Use WirePayload.newBuilder() to construct.
-    private WirePayload() {
-      initFields();
+    private WirePayload(Builder builder) {
+      super(builder);
     }
     private WirePayload(boolean noInit) {}
     
@@ -1882,33 +2620,58 @@ public final class StreamProtocol {
       return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_WirePayload_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // optional .Chunk chunk = 1;
     public static final int CHUNK_FIELD_NUMBER = 1;
-    private boolean hasChunk;
     private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk chunk_;
-    public boolean hasChunk() { return hasChunk; }
-    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk getChunk() { return chunk_; }
+    public boolean hasChunk() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk getChunk() {
+      return chunk_;
+    }
+    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkOrBuilder getChunkOrBuilder() {
+      return chunk_;
+    }
     
     // optional .PullRequest pull = 2;
     public static final int PULL_FIELD_NUMBER = 2;
-    private boolean hasPull;
     private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest pull_;
-    public boolean hasPull() { return hasPull; }
-    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest getPull() { return pull_; }
+    public boolean hasPull() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest getPull() {
+      return pull_;
+    }
+    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequestOrBuilder getPullOrBuilder() {
+      return pull_;
+    }
     
     // optional .PushRequest push = 3;
     public static final int PUSH_FIELD_NUMBER = 3;
-    private boolean hasPush;
     private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest push_;
-    public boolean hasPush() { return hasPush; }
-    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest getPush() { return push_; }
+    public boolean hasPush() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest getPush() {
+      return push_;
+    }
+    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequestOrBuilder getPushOrBuilder() {
+      return push_;
+    }
     
     // optional .CloseNotification close = 4;
     public static final int CLOSE_FIELD_NUMBER = 4;
-    private boolean hasClose;
     private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification close_;
-    public boolean hasClose() { return hasClose; }
-    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification getClose() { return close_; }
+    public boolean hasClose() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification getClose() {
+      return close_;
+    }
+    public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotificationOrBuilder getCloseOrBuilder() {
+      return close_;
+    }
     
     private void initFields() {
       chunk_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.getDefaultInstance();
@@ -1916,36 +2679,53 @@ public final class StreamProtocol {
       push_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.getDefaultInstance();
       close_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.getDefaultInstance();
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
       if (hasChunk()) {
-        if (!getChunk().isInitialized()) return false;
+        if (!getChunk().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasPull()) {
-        if (!getPull().isInitialized()) return false;
+        if (!getPull().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasPush()) {
-        if (!getPush().isInitialized()) return false;
+        if (!getPush().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasClose()) {
-        if (!getClose().isInitialized()) return false;
+        if (!getClose().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasChunk()) {
-        output.writeMessage(1, getChunk());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeMessage(1, chunk_);
       }
-      if (hasPull()) {
-        output.writeMessage(2, getPull());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(2, pull_);
       }
-      if (hasPush()) {
-        output.writeMessage(3, getPush());
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, push_);
       }
-      if (hasClose()) {
-        output.writeMessage(4, getClose());
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, close_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1956,25 +2736,32 @@ public final class StreamProtocol {
       if (size != -1) return size;
     
       size = 0;
-      if (hasChunk()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getChunk());
+          .computeMessageSize(1, chunk_);
       }
-      if (hasPull()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getPull());
+          .computeMessageSize(2, pull_);
       }
-      if (hasPush()) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getPush());
+          .computeMessageSize(3, push_);
       }
-      if (hasClose()) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getClose());
+          .computeMessageSize(4, close_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload parseFrom(
@@ -2051,34 +2838,77 @@ public final class StreamProtocol {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayloadOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_WirePayload_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internal_static_WirePayload_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getChunkFieldBuilder();
+          getPullFieldBuilder();
+          getPushFieldBuilder();
+          getCloseFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+        super.clear();
+        if (chunkBuilder_ == null) {
+          chunk_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.getDefaultInstance();
+        } else {
+          chunkBuilder_.clear();
         }
-        result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (pullBuilder_ == null) {
+          pull_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.getDefaultInstance();
+        } else {
+          pullBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (pushBuilder_ == null) {
+          push_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.getDefaultInstance();
+        } else {
+          pushBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        if (closeBuilder_ == null) {
+          close_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.getDefaultInstance();
+        } else {
+          closeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -2090,33 +2920,63 @@ public final class StreamProtocol {
         return com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload result = new com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.stream.wire.StreamProtocol.WirePayload returnMe = result;
-        result = null;
-        return returnMe;
+        if (chunkBuilder_ == null) {
+          result.chunk_ = chunk_;
+        } else {
+          result.chunk_ = chunkBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (pullBuilder_ == null) {
+          result.pull_ = pull_;
+        } else {
+          result.pull_ = pullBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (pushBuilder_ == null) {
+          result.push_ = push_;
+        } else {
+          result.push_ = pushBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (closeBuilder_ == null) {
+          result.close_ = close_;
+        } else {
+          result.close_ = closeBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -2146,6 +3006,34 @@ public final class StreamProtocol {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (hasChunk()) {
+          if (!getChunk().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasPull()) {
+          if (!getPull().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasPush()) {
+          if (!getPush().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasClose()) {
+          if (!getClose().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2158,11 +3046,13 @@ public final class StreamProtocol {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
@@ -2207,153 +3097,366 @@ public final class StreamProtocol {
         }
       }
       
+      private int bitField0_;
       
       // optional .Chunk chunk = 1;
+      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk chunk_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkOrBuilder> chunkBuilder_;
       public boolean hasChunk() {
-        return result.hasChunk();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk getChunk() {
-        return result.getChunk();
+        if (chunkBuilder_ == null) {
+          return chunk_;
+        } else {
+          return chunkBuilder_.getMessage();
+        }
       }
       public Builder setChunk(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (chunkBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          chunk_ = value;
+          onChanged();
+        } else {
+          chunkBuilder_.setMessage(value);
         }
-        result.hasChunk = true;
-        result.chunk_ = value;
+        bitField0_ |= 0x00000001;
         return this;
       }
-      public Builder setChunk(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.Builder builderForValue) {
-        result.hasChunk = true;
-        result.chunk_ = builderForValue.build();
+      public Builder setChunk(
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.Builder builderForValue) {
+        if (chunkBuilder_ == null) {
+          chunk_ = builderForValue.build();
+          onChanged();
+        } else {
+          chunkBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
         return this;
       }
       public Builder mergeChunk(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk value) {
-        if (result.hasChunk() &&
-            result.chunk_ != com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.getDefaultInstance()) {
-          result.chunk_ =
-            com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.newBuilder(result.chunk_).mergeFrom(value).buildPartial();
+        if (chunkBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              chunk_ != com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.getDefaultInstance()) {
+            chunk_ =
+              com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.newBuilder(chunk_).mergeFrom(value).buildPartial();
+          } else {
+            chunk_ = value;
+          }
+          onChanged();
         } else {
-          result.chunk_ = value;
+          chunkBuilder_.mergeFrom(value);
         }
-        result.hasChunk = true;
+        bitField0_ |= 0x00000001;
         return this;
       }
       public Builder clearChunk() {
-        result.hasChunk = false;
-        result.chunk_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.getDefaultInstance();
+        if (chunkBuilder_ == null) {
+          chunk_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.getDefaultInstance();
+          onChanged();
+        } else {
+          chunkBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.Builder getChunkBuilder() {
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return getChunkFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkOrBuilder getChunkOrBuilder() {
+        if (chunkBuilder_ != null) {
+          return chunkBuilder_.getMessageOrBuilder();
+        } else {
+          return chunk_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkOrBuilder> 
+          getChunkFieldBuilder() {
+        if (chunkBuilder_ == null) {
+          chunkBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.Chunk.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.ChunkOrBuilder>(
+                  chunk_,
+                  getParentForChildren(),
+                  isClean());
+          chunk_ = null;
+        }
+        return chunkBuilder_;
       }
       
       // optional .PullRequest pull = 2;
+      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest pull_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequestOrBuilder> pullBuilder_;
       public boolean hasPull() {
-        return result.hasPull();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest getPull() {
-        return result.getPull();
+        if (pullBuilder_ == null) {
+          return pull_;
+        } else {
+          return pullBuilder_.getMessage();
+        }
       }
       public Builder setPull(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (pullBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          pull_ = value;
+          onChanged();
+        } else {
+          pullBuilder_.setMessage(value);
         }
-        result.hasPull = true;
-        result.pull_ = value;
+        bitField0_ |= 0x00000002;
         return this;
       }
-      public Builder setPull(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.Builder builderForValue) {
-        result.hasPull = true;
-        result.pull_ = builderForValue.build();
+      public Builder setPull(
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.Builder builderForValue) {
+        if (pullBuilder_ == null) {
+          pull_ = builderForValue.build();
+          onChanged();
+        } else {
+          pullBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000002;
         return this;
       }
       public Builder mergePull(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest value) {
-        if (result.hasPull() &&
-            result.pull_ != com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.getDefaultInstance()) {
-          result.pull_ =
-            com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.newBuilder(result.pull_).mergeFrom(value).buildPartial();
+        if (pullBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              pull_ != com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.getDefaultInstance()) {
+            pull_ =
+              com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.newBuilder(pull_).mergeFrom(value).buildPartial();
+          } else {
+            pull_ = value;
+          }
+          onChanged();
         } else {
-          result.pull_ = value;
+          pullBuilder_.mergeFrom(value);
         }
-        result.hasPull = true;
+        bitField0_ |= 0x00000002;
         return this;
       }
       public Builder clearPull() {
-        result.hasPull = false;
-        result.pull_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.getDefaultInstance();
+        if (pullBuilder_ == null) {
+          pull_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.getDefaultInstance();
+          onChanged();
+        } else {
+          pullBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.Builder getPullBuilder() {
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return getPullFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequestOrBuilder getPullOrBuilder() {
+        if (pullBuilder_ != null) {
+          return pullBuilder_.getMessageOrBuilder();
+        } else {
+          return pull_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequestOrBuilder> 
+          getPullFieldBuilder() {
+        if (pullBuilder_ == null) {
+          pullBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequest.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PullRequestOrBuilder>(
+                  pull_,
+                  getParentForChildren(),
+                  isClean());
+          pull_ = null;
+        }
+        return pullBuilder_;
       }
       
       // optional .PushRequest push = 3;
+      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest push_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequestOrBuilder> pushBuilder_;
       public boolean hasPush() {
-        return result.hasPush();
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest getPush() {
-        return result.getPush();
+        if (pushBuilder_ == null) {
+          return push_;
+        } else {
+          return pushBuilder_.getMessage();
+        }
       }
       public Builder setPush(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (pushBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          push_ = value;
+          onChanged();
+        } else {
+          pushBuilder_.setMessage(value);
         }
-        result.hasPush = true;
-        result.push_ = value;
+        bitField0_ |= 0x00000004;
         return this;
       }
-      public Builder setPush(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.Builder builderForValue) {
-        result.hasPush = true;
-        result.push_ = builderForValue.build();
+      public Builder setPush(
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.Builder builderForValue) {
+        if (pushBuilder_ == null) {
+          push_ = builderForValue.build();
+          onChanged();
+        } else {
+          pushBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
         return this;
       }
       public Builder mergePush(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest value) {
-        if (result.hasPush() &&
-            result.push_ != com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.getDefaultInstance()) {
-          result.push_ =
-            com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.newBuilder(result.push_).mergeFrom(value).buildPartial();
+        if (pushBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              push_ != com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.getDefaultInstance()) {
+            push_ =
+              com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.newBuilder(push_).mergeFrom(value).buildPartial();
+          } else {
+            push_ = value;
+          }
+          onChanged();
         } else {
-          result.push_ = value;
+          pushBuilder_.mergeFrom(value);
         }
-        result.hasPush = true;
+        bitField0_ |= 0x00000004;
         return this;
       }
       public Builder clearPush() {
-        result.hasPush = false;
-        result.push_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.getDefaultInstance();
+        if (pushBuilder_ == null) {
+          push_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.getDefaultInstance();
+          onChanged();
+        } else {
+          pushBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.Builder getPushBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getPushFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequestOrBuilder getPushOrBuilder() {
+        if (pushBuilder_ != null) {
+          return pushBuilder_.getMessageOrBuilder();
+        } else {
+          return push_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequestOrBuilder> 
+          getPushFieldBuilder() {
+        if (pushBuilder_ == null) {
+          pushBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequest.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.PushRequestOrBuilder>(
+                  push_,
+                  getParentForChildren(),
+                  isClean());
+          push_ = null;
+        }
+        return pushBuilder_;
       }
       
       // optional .CloseNotification close = 4;
+      private com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification close_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotificationOrBuilder> closeBuilder_;
       public boolean hasClose() {
-        return result.hasClose();
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification getClose() {
-        return result.getClose();
+        if (closeBuilder_ == null) {
+          return close_;
+        } else {
+          return closeBuilder_.getMessage();
+        }
       }
       public Builder setClose(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (closeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          close_ = value;
+          onChanged();
+        } else {
+          closeBuilder_.setMessage(value);
         }
-        result.hasClose = true;
-        result.close_ = value;
+        bitField0_ |= 0x00000008;
         return this;
       }
-      public Builder setClose(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.Builder builderForValue) {
-        result.hasClose = true;
-        result.close_ = builderForValue.build();
+      public Builder setClose(
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.Builder builderForValue) {
+        if (closeBuilder_ == null) {
+          close_ = builderForValue.build();
+          onChanged();
+        } else {
+          closeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
         return this;
       }
       public Builder mergeClose(com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification value) {
-        if (result.hasClose() &&
-            result.close_ != com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.getDefaultInstance()) {
-          result.close_ =
-            com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.newBuilder(result.close_).mergeFrom(value).buildPartial();
+        if (closeBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              close_ != com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.getDefaultInstance()) {
+            close_ =
+              com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.newBuilder(close_).mergeFrom(value).buildPartial();
+          } else {
+            close_ = value;
+          }
+          onChanged();
         } else {
-          result.close_ = value;
+          closeBuilder_.mergeFrom(value);
         }
-        result.hasClose = true;
+        bitField0_ |= 0x00000008;
         return this;
       }
       public Builder clearClose() {
-        result.hasClose = false;
-        result.close_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.getDefaultInstance();
+        if (closeBuilder_ == null) {
+          close_ = com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.getDefaultInstance();
+          onChanged();
+        } else {
+          closeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.Builder getCloseBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getCloseFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotificationOrBuilder getCloseOrBuilder() {
+        if (closeBuilder_ != null) {
+          return closeBuilder_.getMessageOrBuilder();
+        } else {
+          return close_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotificationOrBuilder> 
+          getCloseFieldBuilder() {
+        if (closeBuilder_ == null) {
+          closeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotification.Builder, com.googlecode.protobuf.pro.stream.wire.StreamProtocol.CloseNotificationOrBuilder>(
+                  close_,
+                  getParentForChildren(),
+                  isClean());
+          close_ = null;
+        }
+        return closeBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:WirePayload)
@@ -2361,7 +3464,6 @@ public final class StreamProtocol {
     
     static {
       defaultInstance = new WirePayload(true);
-      com.googlecode.protobuf.pro.stream.wire.StreamProtocol.internalForceInit();
       defaultInstance.initFields();
     }
     
@@ -2484,8 +3586,6 @@ public final class StreamProtocol {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
-  
-  public static void internalForceInit() {}
   
   // @@protoc_insertion_point(outer_class_scope)
 }
