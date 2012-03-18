@@ -4,13 +4,14 @@
 	<groupId>com.googlecode.protobuf.pro</groupId>
 	<artifactId>protobuf-streamer-pro</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.1</version>
+	<version>SNAPSHOT-1.1.1</version>
 	<name>Protobuf Streamer Pro Implementation</name>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -19,6 +20,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -34,7 +36,7 @@
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>2.3.0</version>
+			<version>2.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.netty</groupId>

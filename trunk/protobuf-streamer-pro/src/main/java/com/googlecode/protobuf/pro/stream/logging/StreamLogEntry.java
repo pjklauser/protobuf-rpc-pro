@@ -14,6 +14,9 @@ public final class StreamLogEntry {
     PULL(1, 2),
     ;
     
+    public static final int PUSH_VALUE = 1;
+    public static final int PULL_VALUE = 2;
+    
     
     public final int getNumber() { return value; }
     
@@ -33,8 +36,8 @@ public final class StreamLogEntry {
         internalValueMap =
           new com.google.protobuf.Internal.EnumLiteMap<TransferType>() {
             public TransferType findValueByNumber(int number) {
-              return TransferType.valueOf(number)
-    ;        }
+              return TransferType.valueOf(number);
+            }
           };
     
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
@@ -53,6 +56,7 @@ public final class StreamLogEntry {
     private static final TransferType[] VALUES = {
       PUSH, PULL, 
     };
+    
     public static TransferType valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
@@ -61,25 +65,35 @@ public final class StreamLogEntry {
       }
       return VALUES[desc.getIndex()];
     }
+    
     private final int index;
     private final int value;
+    
     private TransferType(int index, int value) {
       this.index = index;
       this.value = value;
     }
     
-    static {
-      com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.getDescriptor();
-    }
-    
     // @@protoc_insertion_point(enum_scope:TransferType)
   }
   
+  public interface ParameterOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string name = 1;
+    boolean hasName();
+    String getName();
+    
+    // required string value = 2;
+    boolean hasValue();
+    String getValue();
+  }
   public static final class Parameter extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements ParameterOrBuilder {
     // Use Parameter.newBuilder() to construct.
-    private Parameter() {
-      initFields();
+    private Parameter(Builder builder) {
+      super(builder);
     }
     private Parameter(boolean noInit) {}
     
@@ -102,36 +116,100 @@ public final class StreamLogEntry {
       return com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.internal_static_Parameter_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
-    private boolean hasName;
-    private java.lang.String name_ = "";
-    public boolean hasName() { return hasName; }
-    public java.lang.String getName() { return name_; }
+    private java.lang.Object name_;
+    public boolean hasName() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          name_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required string value = 2;
     public static final int VALUE_FIELD_NUMBER = 2;
-    private boolean hasValue;
-    private java.lang.String value_ = "";
-    public boolean hasValue() { return hasValue; }
-    public java.lang.String getValue() { return value_; }
+    private java.lang.Object value_;
+    public boolean hasValue() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getValue() {
+      java.lang.Object ref = value_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          value_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getValueBytes() {
+      java.lang.Object ref = value_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        value_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     private void initFields() {
+      name_ = "";
+      value_ = "";
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasName) return false;
-      if (!hasValue) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasValue()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasName()) {
-        output.writeString(1, getName());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getNameBytes());
       }
-      if (hasValue()) {
-        output.writeString(2, getValue());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getValueBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -142,17 +220,24 @@ public final class StreamLogEntry {
       if (size != -1) return size;
     
       size = 0;
-      if (hasName()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getName());
+          .computeBytesSize(1, getNameBytes());
       }
-      if (hasValue()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getValue());
+          .computeBytesSize(2, getValueBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter parseFrom(
@@ -229,34 +314,53 @@ public final class StreamLogEntry {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.ParameterOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.internal_static_Parameter_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.internal_static_Parameter_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter();
+        super.clear();
+        name_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        value_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -268,33 +372,39 @@ public final class StreamLogEntry {
         return com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter result = new com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter returnMe = result;
-        result = null;
-        return returnMe;
+        result.name_ = name_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.value_ = value_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -318,6 +428,18 @@ public final class StreamLogEntry {
         return this;
       }
       
+      public final boolean isInitialized() {
+        if (!hasName()) {
+          
+          return false;
+        }
+        if (!hasValue()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -330,68 +452,103 @@ public final class StreamLogEntry {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
             }
             case 10: {
-              setName(input.readString());
+              bitField0_ |= 0x00000001;
+              name_ = input.readBytes();
               break;
             }
             case 18: {
-              setValue(input.readString());
+              bitField0_ |= 0x00000002;
+              value_ = input.readBytes();
               break;
             }
           }
         }
       }
       
+      private int bitField0_;
       
       // required string name = 1;
+      private java.lang.Object name_ = "";
       public boolean hasName() {
-        return result.hasName();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public java.lang.String getName() {
-        return result.getName();
+      public String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          name_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setName(java.lang.String value) {
+      public Builder setName(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasName = true;
-        result.name_ = value;
+  bitField0_ |= 0x00000001;
+        name_ = value;
+        onChanged();
         return this;
       }
       public Builder clearName() {
-        result.hasName = false;
-        result.name_ = getDefaultInstance().getName();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        name_ = getDefaultInstance().getName();
+        onChanged();
         return this;
+      }
+      void setName(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        name_ = value;
+        onChanged();
       }
       
       // required string value = 2;
+      private java.lang.Object value_ = "";
       public boolean hasValue() {
-        return result.hasValue();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public java.lang.String getValue() {
-        return result.getValue();
+      public String getValue() {
+        java.lang.Object ref = value_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          value_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setValue(java.lang.String value) {
+      public Builder setValue(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasValue = true;
-        result.value_ = value;
+  bitField0_ |= 0x00000002;
+        value_ = value;
+        onChanged();
         return this;
       }
       public Builder clearValue() {
-        result.hasValue = false;
-        result.value_ = getDefaultInstance().getValue();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        value_ = getDefaultInstance().getValue();
+        onChanged();
         return this;
+      }
+      void setValue(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        value_ = value;
+        onChanged();
       }
       
       // @@protoc_insertion_point(builder_scope:Parameter)
@@ -399,18 +556,67 @@ public final class StreamLogEntry {
     
     static {
       defaultInstance = new Parameter(true);
-      com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:Parameter)
   }
   
+  public interface StreamTransferOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required .TransferType transferType = 1;
+    boolean hasTransferType();
+    com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType getTransferType();
+    
+    // required string requestType = 2;
+    boolean hasRequestType();
+    String getRequestType();
+    
+    // required int32 duration = 3;
+    boolean hasDuration();
+    int getDuration();
+    
+    // required string server = 4;
+    boolean hasServer();
+    String getServer();
+    
+    // required string client = 5;
+    boolean hasClient();
+    String getClient();
+    
+    // required int32 corId = 6;
+    boolean hasCorId();
+    int getCorId();
+    
+    // optional string error = 7;
+    boolean hasError();
+    String getError();
+    
+    // required int64 startTS = 8;
+    boolean hasStartTS();
+    long getStartTS();
+    
+    // optional int32 sizeBytes = 9;
+    boolean hasSizeBytes();
+    int getSizeBytes();
+    
+    // repeated .Parameter parameter = 10;
+    java.util.List<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter> 
+        getParameterList();
+    com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter getParameter(int index);
+    int getParameterCount();
+    java.util.List<? extends com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.ParameterOrBuilder> 
+        getParameterOrBuilderList();
+    com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.ParameterOrBuilder getParameterOrBuilder(
+        int index);
+  }
   public static final class StreamTransfer extends
-      com.google.protobuf.GeneratedMessage {
+      com.google.protobuf.GeneratedMessage
+      implements StreamTransferOrBuilder {
     // Use StreamTransfer.newBuilder() to construct.
-    private StreamTransfer() {
-      initFields();
+    private StreamTransfer(Builder builder) {
+      super(builder);
     }
     private StreamTransfer(boolean noInit) {}
     
@@ -433,130 +639,293 @@ public final class StreamLogEntry {
       return com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.internal_static_StreamTransfer_fieldAccessorTable;
     }
     
+    private int bitField0_;
     // required .TransferType transferType = 1;
     public static final int TRANSFERTYPE_FIELD_NUMBER = 1;
-    private boolean hasTransferType;
     private com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType transferType_;
-    public boolean hasTransferType() { return hasTransferType; }
-    public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType getTransferType() { return transferType_; }
+    public boolean hasTransferType() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType getTransferType() {
+      return transferType_;
+    }
     
     // required string requestType = 2;
     public static final int REQUESTTYPE_FIELD_NUMBER = 2;
-    private boolean hasRequestType;
-    private java.lang.String requestType_ = "";
-    public boolean hasRequestType() { return hasRequestType; }
-    public java.lang.String getRequestType() { return requestType_; }
+    private java.lang.Object requestType_;
+    public boolean hasRequestType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getRequestType() {
+      java.lang.Object ref = requestType_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          requestType_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getRequestTypeBytes() {
+      java.lang.Object ref = requestType_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        requestType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required int32 duration = 3;
     public static final int DURATION_FIELD_NUMBER = 3;
-    private boolean hasDuration;
-    private int duration_ = 0;
-    public boolean hasDuration() { return hasDuration; }
-    public int getDuration() { return duration_; }
+    private int duration_;
+    public boolean hasDuration() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public int getDuration() {
+      return duration_;
+    }
     
     // required string server = 4;
     public static final int SERVER_FIELD_NUMBER = 4;
-    private boolean hasServer;
-    private java.lang.String server_ = "";
-    public boolean hasServer() { return hasServer; }
-    public java.lang.String getServer() { return server_; }
+    private java.lang.Object server_;
+    public boolean hasServer() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public String getServer() {
+      java.lang.Object ref = server_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          server_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getServerBytes() {
+      java.lang.Object ref = server_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        server_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required string client = 5;
     public static final int CLIENT_FIELD_NUMBER = 5;
-    private boolean hasClient;
-    private java.lang.String client_ = "";
-    public boolean hasClient() { return hasClient; }
-    public java.lang.String getClient() { return client_; }
+    private java.lang.Object client_;
+    public boolean hasClient() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public String getClient() {
+      java.lang.Object ref = client_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          client_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getClientBytes() {
+      java.lang.Object ref = client_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        client_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required int32 corId = 6;
     public static final int CORID_FIELD_NUMBER = 6;
-    private boolean hasCorId;
-    private int corId_ = 0;
-    public boolean hasCorId() { return hasCorId; }
-    public int getCorId() { return corId_; }
+    private int corId_;
+    public boolean hasCorId() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public int getCorId() {
+      return corId_;
+    }
     
     // optional string error = 7;
     public static final int ERROR_FIELD_NUMBER = 7;
-    private boolean hasError;
-    private java.lang.String error_ = "";
-    public boolean hasError() { return hasError; }
-    public java.lang.String getError() { return error_; }
+    private java.lang.Object error_;
+    public boolean hasError() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    public String getError() {
+      java.lang.Object ref = error_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          error_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getErrorBytes() {
+      java.lang.Object ref = error_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        error_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
     
     // required int64 startTS = 8;
     public static final int STARTTS_FIELD_NUMBER = 8;
-    private boolean hasStartTS;
-    private long startTS_ = 0L;
-    public boolean hasStartTS() { return hasStartTS; }
-    public long getStartTS() { return startTS_; }
+    private long startTS_;
+    public boolean hasStartTS() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    public long getStartTS() {
+      return startTS_;
+    }
     
     // optional int32 sizeBytes = 9;
     public static final int SIZEBYTES_FIELD_NUMBER = 9;
-    private boolean hasSizeBytes;
-    private int sizeBytes_ = 0;
-    public boolean hasSizeBytes() { return hasSizeBytes; }
-    public int getSizeBytes() { return sizeBytes_; }
+    private int sizeBytes_;
+    public boolean hasSizeBytes() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    public int getSizeBytes() {
+      return sizeBytes_;
+    }
     
     // repeated .Parameter parameter = 10;
     public static final int PARAMETER_FIELD_NUMBER = 10;
-    private java.util.List<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter> parameter_ =
-      java.util.Collections.emptyList();
+    private java.util.List<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter> parameter_;
     public java.util.List<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter> getParameterList() {
       return parameter_;
     }
-    public int getParameterCount() { return parameter_.size(); }
+    public java.util.List<? extends com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.ParameterOrBuilder> 
+        getParameterOrBuilderList() {
+      return parameter_;
+    }
+    public int getParameterCount() {
+      return parameter_.size();
+    }
     public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter getParameter(int index) {
+      return parameter_.get(index);
+    }
+    public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.ParameterOrBuilder getParameterOrBuilder(
+        int index) {
       return parameter_.get(index);
     }
     
     private void initFields() {
       transferType_ = com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType.PUSH;
+      requestType_ = "";
+      duration_ = 0;
+      server_ = "";
+      client_ = "";
+      corId_ = 0;
+      error_ = "";
+      startTS_ = 0L;
+      sizeBytes_ = 0;
+      parameter_ = java.util.Collections.emptyList();
     }
+    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      if (!hasTransferType) return false;
-      if (!hasRequestType) return false;
-      if (!hasDuration) return false;
-      if (!hasServer) return false;
-      if (!hasClient) return false;
-      if (!hasCorId) return false;
-      if (!hasStartTS) return false;
-      for (com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter element : getParameterList()) {
-        if (!element.isInitialized()) return false;
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasTransferType()) {
+        memoizedIsInitialized = 0;
+        return false;
       }
+      if (!hasRequestType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasDuration()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasServer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasClient()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasCorId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasStartTS()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      for (int i = 0; i < getParameterCount(); i++) {
+        if (!getParameter(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (hasTransferType()) {
-        output.writeEnum(1, getTransferType().getNumber());
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, transferType_.getNumber());
       }
-      if (hasRequestType()) {
-        output.writeString(2, getRequestType());
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getRequestTypeBytes());
       }
-      if (hasDuration()) {
-        output.writeInt32(3, getDuration());
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, duration_);
       }
-      if (hasServer()) {
-        output.writeString(4, getServer());
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getServerBytes());
       }
-      if (hasClient()) {
-        output.writeString(5, getClient());
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(5, getClientBytes());
       }
-      if (hasCorId()) {
-        output.writeInt32(6, getCorId());
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(6, corId_);
       }
-      if (hasError()) {
-        output.writeString(7, getError());
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeBytes(7, getErrorBytes());
       }
-      if (hasStartTS()) {
-        output.writeInt64(8, getStartTS());
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeInt64(8, startTS_);
       }
-      if (hasSizeBytes()) {
-        output.writeInt32(9, getSizeBytes());
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeInt32(9, sizeBytes_);
       }
-      for (com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter element : getParameterList()) {
-        output.writeMessage(10, element);
+      for (int i = 0; i < parameter_.size(); i++) {
+        output.writeMessage(10, parameter_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -567,49 +936,56 @@ public final class StreamLogEntry {
       if (size != -1) return size;
     
       size = 0;
-      if (hasTransferType()) {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, getTransferType().getNumber());
+          .computeEnumSize(1, transferType_.getNumber());
       }
-      if (hasRequestType()) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getRequestType());
+          .computeBytesSize(2, getRequestTypeBytes());
       }
-      if (hasDuration()) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, getDuration());
+          .computeInt32Size(3, duration_);
       }
-      if (hasServer()) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(4, getServer());
+          .computeBytesSize(4, getServerBytes());
       }
-      if (hasClient()) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(5, getClient());
+          .computeBytesSize(5, getClientBytes());
       }
-      if (hasCorId()) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, getCorId());
+          .computeInt32Size(6, corId_);
       }
-      if (hasError()) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(7, getError());
+          .computeBytesSize(7, getErrorBytes());
       }
-      if (hasStartTS()) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(8, getStartTS());
+          .computeInt64Size(8, startTS_);
       }
-      if (hasSizeBytes()) {
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(9, getSizeBytes());
+          .computeInt32Size(9, sizeBytes_);
       }
-      for (com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter element : getParameterList()) {
+      for (int i = 0; i < parameter_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(10, element);
+          .computeMessageSize(10, parameter_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
     }
     
     public static com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer parseFrom(
@@ -686,34 +1062,74 @@ public final class StreamLogEntry {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer result;
-      
-      // Construct using com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer();
-        return builder;
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransferOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.internal_static_StreamTransfer_descriptor;
       }
       
-      protected com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer internalGetResult() {
-        return result;
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.internal_static_StreamTransfer_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getParameterFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
       }
       
       public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+        super.clear();
+        transferType_ = com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType.PUSH;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        requestType_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        duration_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        server_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        client_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
+        corId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        error_ = "";
+        bitField0_ = (bitField0_ & ~0x00000040);
+        startTS_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        sizeBytes_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        if (parameterBuilder_ == null) {
+          parameter_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000200);
+        } else {
+          parameterBuilder_.clear();
         }
-        result = new com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer();
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(result);
+        return create().mergeFrom(buildPartial());
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -725,37 +1141,76 @@ public final class StreamLogEntry {
         return com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer.getDefaultInstance();
       }
       
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
       public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer build() {
-        if (result != null && !isInitialized()) {
+        com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return buildPartial();
+        return result;
       }
       
       private com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
+        com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer result = buildPartial();
+        if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return buildPartial();
+        return result;
       }
       
       public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+        com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer result = new com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
-        if (result.parameter_ != java.util.Collections.EMPTY_LIST) {
-          result.parameter_ =
-            java.util.Collections.unmodifiableList(result.parameter_);
+        result.transferType_ = transferType_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
         }
-        com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.StreamTransfer returnMe = result;
-        result = null;
-        return returnMe;
+        result.requestType_ = requestType_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.duration_ = duration_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.server_ = server_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.client_ = client_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.corId_ = corId_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.error_ = error_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.startTS_ = startTS_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.sizeBytes_ = sizeBytes_;
+        if (parameterBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) == 0x00000200)) {
+            parameter_ = java.util.Collections.unmodifiableList(parameter_);
+            bitField0_ = (bitField0_ & ~0x00000200);
+          }
+          result.parameter_ = parameter_;
+        } else {
+          result.parameter_ = parameterBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -796,14 +1251,72 @@ public final class StreamLogEntry {
         if (other.hasSizeBytes()) {
           setSizeBytes(other.getSizeBytes());
         }
-        if (!other.parameter_.isEmpty()) {
-          if (result.parameter_.isEmpty()) {
-            result.parameter_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter>();
+        if (parameterBuilder_ == null) {
+          if (!other.parameter_.isEmpty()) {
+            if (parameter_.isEmpty()) {
+              parameter_ = other.parameter_;
+              bitField0_ = (bitField0_ & ~0x00000200);
+            } else {
+              ensureParameterIsMutable();
+              parameter_.addAll(other.parameter_);
+            }
+            onChanged();
           }
-          result.parameter_.addAll(other.parameter_);
+        } else {
+          if (!other.parameter_.isEmpty()) {
+            if (parameterBuilder_.isEmpty()) {
+              parameterBuilder_.dispose();
+              parameterBuilder_ = null;
+              parameter_ = other.parameter_;
+              bitField0_ = (bitField0_ & ~0x00000200);
+              parameterBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getParameterFieldBuilder() : null;
+            } else {
+              parameterBuilder_.addAllMessages(other.parameter_);
+            }
+          }
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasTransferType()) {
+          
+          return false;
+        }
+        if (!hasRequestType()) {
+          
+          return false;
+        }
+        if (!hasDuration()) {
+          
+          return false;
+        }
+        if (!hasServer()) {
+          
+          return false;
+        }
+        if (!hasClient()) {
+          
+          return false;
+        }
+        if (!hasCorId()) {
+          
+          return false;
+        }
+        if (!hasStartTS()) {
+          
+          return false;
+        }
+        for (int i = 0; i < getParameterCount(); i++) {
+          if (!getParameter(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
       }
       
       public Builder mergeFrom(
@@ -818,11 +1331,13 @@ public final class StreamLogEntry {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
+              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
+                onChanged();
                 return this;
               }
               break;
@@ -833,40 +1348,49 @@ public final class StreamLogEntry {
               if (value == null) {
                 unknownFields.mergeVarintField(1, rawValue);
               } else {
-                setTransferType(value);
+                bitField0_ |= 0x00000001;
+                transferType_ = value;
               }
               break;
             }
             case 18: {
-              setRequestType(input.readString());
+              bitField0_ |= 0x00000002;
+              requestType_ = input.readBytes();
               break;
             }
             case 24: {
-              setDuration(input.readInt32());
+              bitField0_ |= 0x00000004;
+              duration_ = input.readInt32();
               break;
             }
             case 34: {
-              setServer(input.readString());
+              bitField0_ |= 0x00000008;
+              server_ = input.readBytes();
               break;
             }
             case 42: {
-              setClient(input.readString());
+              bitField0_ |= 0x00000010;
+              client_ = input.readBytes();
               break;
             }
             case 48: {
-              setCorId(input.readInt32());
+              bitField0_ |= 0x00000020;
+              corId_ = input.readInt32();
               break;
             }
             case 58: {
-              setError(input.readString());
+              bitField0_ |= 0x00000040;
+              error_ = input.readBytes();
               break;
             }
             case 64: {
-              setStartTS(input.readInt64());
+              bitField0_ |= 0x00000080;
+              startTS_ = input.readInt64();
               break;
             }
             case 72: {
-              setSizeBytes(input.readInt32());
+              bitField0_ |= 0x00000100;
+              sizeBytes_ = input.readInt32();
               break;
             }
             case 82: {
@@ -879,233 +1403,444 @@ public final class StreamLogEntry {
         }
       }
       
+      private int bitField0_;
       
       // required .TransferType transferType = 1;
+      private com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType transferType_ = com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType.PUSH;
       public boolean hasTransferType() {
-        return result.hasTransferType();
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType getTransferType() {
-        return result.getTransferType();
+        return transferType_;
       }
       public Builder setTransferType(com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType value) {
         if (value == null) {
           throw new NullPointerException();
         }
-        result.hasTransferType = true;
-        result.transferType_ = value;
+        bitField0_ |= 0x00000001;
+        transferType_ = value;
+        onChanged();
         return this;
       }
       public Builder clearTransferType() {
-        result.hasTransferType = false;
-        result.transferType_ = com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType.PUSH;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        transferType_ = com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.TransferType.PUSH;
+        onChanged();
         return this;
       }
       
       // required string requestType = 2;
+      private java.lang.Object requestType_ = "";
       public boolean hasRequestType() {
-        return result.hasRequestType();
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public java.lang.String getRequestType() {
-        return result.getRequestType();
+      public String getRequestType() {
+        java.lang.Object ref = requestType_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          requestType_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setRequestType(java.lang.String value) {
+      public Builder setRequestType(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasRequestType = true;
-        result.requestType_ = value;
+  bitField0_ |= 0x00000002;
+        requestType_ = value;
+        onChanged();
         return this;
       }
       public Builder clearRequestType() {
-        result.hasRequestType = false;
-        result.requestType_ = getDefaultInstance().getRequestType();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        requestType_ = getDefaultInstance().getRequestType();
+        onChanged();
         return this;
+      }
+      void setRequestType(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        requestType_ = value;
+        onChanged();
       }
       
       // required int32 duration = 3;
+      private int duration_ ;
       public boolean hasDuration() {
-        return result.hasDuration();
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       public int getDuration() {
-        return result.getDuration();
+        return duration_;
       }
       public Builder setDuration(int value) {
-        result.hasDuration = true;
-        result.duration_ = value;
+        bitField0_ |= 0x00000004;
+        duration_ = value;
+        onChanged();
         return this;
       }
       public Builder clearDuration() {
-        result.hasDuration = false;
-        result.duration_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        duration_ = 0;
+        onChanged();
         return this;
       }
       
       // required string server = 4;
+      private java.lang.Object server_ = "";
       public boolean hasServer() {
-        return result.hasServer();
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public java.lang.String getServer() {
-        return result.getServer();
+      public String getServer() {
+        java.lang.Object ref = server_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          server_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setServer(java.lang.String value) {
+      public Builder setServer(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasServer = true;
-        result.server_ = value;
+  bitField0_ |= 0x00000008;
+        server_ = value;
+        onChanged();
         return this;
       }
       public Builder clearServer() {
-        result.hasServer = false;
-        result.server_ = getDefaultInstance().getServer();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        server_ = getDefaultInstance().getServer();
+        onChanged();
         return this;
+      }
+      void setServer(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000008;
+        server_ = value;
+        onChanged();
       }
       
       // required string client = 5;
+      private java.lang.Object client_ = "";
       public boolean hasClient() {
-        return result.hasClient();
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
-      public java.lang.String getClient() {
-        return result.getClient();
+      public String getClient() {
+        java.lang.Object ref = client_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          client_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setClient(java.lang.String value) {
+      public Builder setClient(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasClient = true;
-        result.client_ = value;
+  bitField0_ |= 0x00000010;
+        client_ = value;
+        onChanged();
         return this;
       }
       public Builder clearClient() {
-        result.hasClient = false;
-        result.client_ = getDefaultInstance().getClient();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        client_ = getDefaultInstance().getClient();
+        onChanged();
         return this;
+      }
+      void setClient(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000010;
+        client_ = value;
+        onChanged();
       }
       
       // required int32 corId = 6;
+      private int corId_ ;
       public boolean hasCorId() {
-        return result.hasCorId();
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       public int getCorId() {
-        return result.getCorId();
+        return corId_;
       }
       public Builder setCorId(int value) {
-        result.hasCorId = true;
-        result.corId_ = value;
+        bitField0_ |= 0x00000020;
+        corId_ = value;
+        onChanged();
         return this;
       }
       public Builder clearCorId() {
-        result.hasCorId = false;
-        result.corId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        corId_ = 0;
+        onChanged();
         return this;
       }
       
       // optional string error = 7;
+      private java.lang.Object error_ = "";
       public boolean hasError() {
-        return result.hasError();
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
-      public java.lang.String getError() {
-        return result.getError();
+      public String getError() {
+        java.lang.Object ref = error_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          error_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setError(java.lang.String value) {
+      public Builder setError(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasError = true;
-        result.error_ = value;
+  bitField0_ |= 0x00000040;
+        error_ = value;
+        onChanged();
         return this;
       }
       public Builder clearError() {
-        result.hasError = false;
-        result.error_ = getDefaultInstance().getError();
+        bitField0_ = (bitField0_ & ~0x00000040);
+        error_ = getDefaultInstance().getError();
+        onChanged();
         return this;
+      }
+      void setError(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000040;
+        error_ = value;
+        onChanged();
       }
       
       // required int64 startTS = 8;
+      private long startTS_ ;
       public boolean hasStartTS() {
-        return result.hasStartTS();
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       public long getStartTS() {
-        return result.getStartTS();
+        return startTS_;
       }
       public Builder setStartTS(long value) {
-        result.hasStartTS = true;
-        result.startTS_ = value;
+        bitField0_ |= 0x00000080;
+        startTS_ = value;
+        onChanged();
         return this;
       }
       public Builder clearStartTS() {
-        result.hasStartTS = false;
-        result.startTS_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        startTS_ = 0L;
+        onChanged();
         return this;
       }
       
       // optional int32 sizeBytes = 9;
+      private int sizeBytes_ ;
       public boolean hasSizeBytes() {
-        return result.hasSizeBytes();
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       public int getSizeBytes() {
-        return result.getSizeBytes();
+        return sizeBytes_;
       }
       public Builder setSizeBytes(int value) {
-        result.hasSizeBytes = true;
-        result.sizeBytes_ = value;
+        bitField0_ |= 0x00000100;
+        sizeBytes_ = value;
+        onChanged();
         return this;
       }
       public Builder clearSizeBytes() {
-        result.hasSizeBytes = false;
-        result.sizeBytes_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        sizeBytes_ = 0;
+        onChanged();
         return this;
       }
       
       // repeated .Parameter parameter = 10;
+      private java.util.List<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter> parameter_ =
+        java.util.Collections.emptyList();
+      private void ensureParameterIsMutable() {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+          parameter_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter>(parameter_);
+          bitField0_ |= 0x00000200;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.ParameterOrBuilder> parameterBuilder_;
+      
       public java.util.List<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter> getParameterList() {
-        return java.util.Collections.unmodifiableList(result.parameter_);
+        if (parameterBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(parameter_);
+        } else {
+          return parameterBuilder_.getMessageList();
+        }
       }
       public int getParameterCount() {
-        return result.getParameterCount();
+        if (parameterBuilder_ == null) {
+          return parameter_.size();
+        } else {
+          return parameterBuilder_.getCount();
+        }
       }
       public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter getParameter(int index) {
-        return result.getParameter(index);
-      }
-      public Builder setParameter(int index, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (parameterBuilder_ == null) {
+          return parameter_.get(index);
+        } else {
+          return parameterBuilder_.getMessage(index);
         }
-        result.parameter_.set(index, value);
+      }
+      public Builder setParameter(
+          int index, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter value) {
+        if (parameterBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureParameterIsMutable();
+          parameter_.set(index, value);
+          onChanged();
+        } else {
+          parameterBuilder_.setMessage(index, value);
+        }
         return this;
       }
-      public Builder setParameter(int index, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder builderForValue) {
-        result.parameter_.set(index, builderForValue.build());
+      public Builder setParameter(
+          int index, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder builderForValue) {
+        if (parameterBuilder_ == null) {
+          ensureParameterIsMutable();
+          parameter_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          parameterBuilder_.setMessage(index, builderForValue.build());
+        }
         return this;
       }
       public Builder addParameter(com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter value) {
-        if (value == null) {
-          throw new NullPointerException();
+        if (parameterBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureParameterIsMutable();
+          parameter_.add(value);
+          onChanged();
+        } else {
+          parameterBuilder_.addMessage(value);
         }
-        if (result.parameter_.isEmpty()) {
-          result.parameter_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter>();
-        }
-        result.parameter_.add(value);
         return this;
       }
-      public Builder addParameter(com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder builderForValue) {
-        if (result.parameter_.isEmpty()) {
-          result.parameter_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter>();
+      public Builder addParameter(
+          int index, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter value) {
+        if (parameterBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureParameterIsMutable();
+          parameter_.add(index, value);
+          onChanged();
+        } else {
+          parameterBuilder_.addMessage(index, value);
         }
-        result.parameter_.add(builderForValue.build());
+        return this;
+      }
+      public Builder addParameter(
+          com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder builderForValue) {
+        if (parameterBuilder_ == null) {
+          ensureParameterIsMutable();
+          parameter_.add(builderForValue.build());
+          onChanged();
+        } else {
+          parameterBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addParameter(
+          int index, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder builderForValue) {
+        if (parameterBuilder_ == null) {
+          ensureParameterIsMutable();
+          parameter_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          parameterBuilder_.addMessage(index, builderForValue.build());
+        }
         return this;
       }
       public Builder addAllParameter(
           java.lang.Iterable<? extends com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter> values) {
-        if (result.parameter_.isEmpty()) {
-          result.parameter_ = new java.util.ArrayList<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter>();
+        if (parameterBuilder_ == null) {
+          ensureParameterIsMutable();
+          super.addAll(values, parameter_);
+          onChanged();
+        } else {
+          parameterBuilder_.addAllMessages(values);
         }
-        super.addAll(values, result.parameter_);
         return this;
       }
       public Builder clearParameter() {
-        result.parameter_ = java.util.Collections.emptyList();
+        if (parameterBuilder_ == null) {
+          parameter_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000200);
+          onChanged();
+        } else {
+          parameterBuilder_.clear();
+        }
         return this;
+      }
+      public Builder removeParameter(int index) {
+        if (parameterBuilder_ == null) {
+          ensureParameterIsMutable();
+          parameter_.remove(index);
+          onChanged();
+        } else {
+          parameterBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder getParameterBuilder(
+          int index) {
+        return getParameterFieldBuilder().getBuilder(index);
+      }
+      public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.ParameterOrBuilder getParameterOrBuilder(
+          int index) {
+        if (parameterBuilder_ == null) {
+          return parameter_.get(index);  } else {
+          return parameterBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.ParameterOrBuilder> 
+           getParameterOrBuilderList() {
+        if (parameterBuilder_ != null) {
+          return parameterBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(parameter_);
+        }
+      }
+      public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder addParameterBuilder() {
+        return getParameterFieldBuilder().addBuilder(
+            com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.getDefaultInstance());
+      }
+      public com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder addParameterBuilder(
+          int index) {
+        return getParameterFieldBuilder().addBuilder(
+            index, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.getDefaultInstance());
+      }
+      public java.util.List<com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder> 
+           getParameterBuilderList() {
+        return getParameterFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.ParameterOrBuilder> 
+          getParameterFieldBuilder() {
+        if (parameterBuilder_ == null) {
+          parameterBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.Parameter.Builder, com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.ParameterOrBuilder>(
+                  parameter_,
+                  ((bitField0_ & 0x00000200) == 0x00000200),
+                  getParentForChildren(),
+                  isClean());
+          parameter_ = null;
+        }
+        return parameterBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:StreamTransfer)
@@ -1113,7 +1848,6 @@ public final class StreamLogEntry {
     
     static {
       defaultInstance = new StreamTransfer(true);
-      com.googlecode.protobuf.pro.stream.logging.StreamLogEntry.internalForceInit();
       defaultInstance.initFields();
     }
     
@@ -1179,8 +1913,6 @@ public final class StreamLogEntry {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
-  
-  public static void internalForceInit() {}
   
   // @@protoc_insertion_point(outer_class_scope)
 }
