@@ -1,13 +1,53 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.googlecode.protobuf.pro</groupId>
+	<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 	<artifactId>protobuf-streamer-pro</artifactId>
 	<packaging>jar</packaging>
-	<version>SNAPSHOT-1.1.1</version>
+	<version>1.1.1</version>
 	<name>Protobuf Streamer Pro Implementation</name>
+	<description>Protobuf Streamer Pro is a java protocol buffers is a google protocol buffers transport for large streamed messages featuring multiplexed sending over reused TCP connections.</description>
+	<url>http://code.google.com/p/protobuf-rpc-pro/</url>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+	<!-- clean javadoc:jar deploy -->
+	<scm>
+		<url>http://protobuf-rpc-pro.googlecode.com/svn/trunk/</url>
+		<connection>scm:svn:http://protobuf-rpc-pro.googlecode.com/svn/trunk/</connection>
+		<developerConnection>scm:svn:https://protobuf-rpc-pro.googlecode.com/svn/trunk/</developerConnection>
+	</scm>
+	<developers>
+		<developer>
+		<id>klp</id>
+		<name>Peter Klauser</name>
+		<email>pjklauser@gmail.com</email>
+		</developer>
+	</developers>
+	<licenses>
+	    <license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+	    </license>
+  	</licenses>
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
