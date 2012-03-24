@@ -77,7 +77,7 @@
 			<type>jar</type>
 		</dependency>
 		<dependency>
-			<groupId>com.googlecode.protobuf.pro</groupId>
+			<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 			<artifactId>protobuf-rpc-pro-duplex</artifactId>
 			<version>1.1.1</version>
 			<type>jar</type>
