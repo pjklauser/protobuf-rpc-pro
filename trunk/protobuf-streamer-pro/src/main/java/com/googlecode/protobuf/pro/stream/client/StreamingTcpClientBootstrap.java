@@ -50,7 +50,7 @@ public class StreamingTcpClientBootstrap<E extends Message, F extends Message> e
 	private StreamLogger streamLogger = new CategoryPerMessageTypeLogger();
 	private boolean shareChannels = true;
 	private int chunkSize = 1400 * 64; // default is 64 basic IP packet ( MTU=1500 - chunk overhead )
-	
+
 	/**
 	 * All Netty Channels created and bound by this StreamingTcpClientBootstrap.
 	 * 
@@ -259,5 +259,19 @@ public class StreamingTcpClientBootstrap<E extends Message, F extends Message> e
 	 */
 	public void setShareChannels(boolean shareChannels) {
 		this.shareChannels = shareChannels;
+	}
+
+	/**
+	 * @return the compress
+	 */
+	public boolean isCompress() {
+		return ((StreamingTcpClientPipelineFactory)getPipelineFactory()).isCompress();
+	}
+
+	/**
+	 * @param compress the compress to set
+	 */
+	public void setCompress(boolean compress) {
+		((StreamingTcpClientPipelineFactory)getPipelineFactory()).setCompress(compress);
 	}
 }

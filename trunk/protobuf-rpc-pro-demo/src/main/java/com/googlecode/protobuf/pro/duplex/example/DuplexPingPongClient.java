@@ -29,8 +29,8 @@ public class DuplexPingPongClient {
 	private static Log log = LogFactory.getLog(RpcClient.class);
 	
     public static void main(String[] args) throws Exception {
-		if ( args.length != 7 ) {
-			System.err.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <payloadBytes>");
+		if ( args.length != 8 ) {
+			System.err.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <payloadBytes> <compress Y/N>");
 			System.exit(-1);
 		}
 		String serverHostname = args[0];
@@ -41,6 +41,7 @@ public class DuplexPingPongClient {
 		int numCalls = Integer.parseInt(args[4]);
 		int procTime = Integer.parseInt(args[5]);
 		int payloadSize = Integer.parseInt(args[6]);
+		boolean compress = "Y".equals(args[7]);
 		
 		PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
@@ -53,6 +54,7 @@ public class DuplexPingPongClient {
                 Executors.newCachedThreadPool(),
                 Executors.newCachedThreadPool()),
                 executor);
+        bootstrap.setCompression(compress);
         
         // Configure the client.
 

@@ -92,6 +92,10 @@ public final class DuplexProtocol {
     // required string clientPID = 4;
     boolean hasClientPID();
     String getClientPID();
+    
+    // optional bool compress = 5;
+    boolean hasCompress();
+    boolean getCompress();
   }
   public static final class ConnectRequest extends
       com.google.protobuf.GeneratedMessage
@@ -206,11 +210,22 @@ public final class DuplexProtocol {
       }
     }
     
+    // optional bool compress = 5;
+    public static final int COMPRESS_FIELD_NUMBER = 5;
+    private boolean compress_;
+    public boolean hasCompress() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public boolean getCompress() {
+      return compress_;
+    }
+    
     private void initFields() {
       correlationId_ = 0;
       clientHostName_ = "";
       clientPort_ = 0;
       clientPID_ = "";
+      compress_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -252,6 +267,9 @@ public final class DuplexProtocol {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBytes(4, getClientPIDBytes());
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBool(5, compress_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -276,6 +294,10 @@ public final class DuplexProtocol {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(4, getClientPIDBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, compress_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -409,6 +431,8 @@ public final class DuplexProtocol {
         bitField0_ = (bitField0_ & ~0x00000004);
         clientPID_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
+        compress_ = false;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -463,6 +487,10 @@ public final class DuplexProtocol {
           to_bitField0_ |= 0x00000008;
         }
         result.clientPID_ = clientPID_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.compress_ = compress_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -490,6 +518,9 @@ public final class DuplexProtocol {
         }
         if (other.hasClientPID()) {
           setClientPID(other.getClientPID());
+        }
+        if (other.hasCompress()) {
+          setCompress(other.getCompress());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -556,6 +587,11 @@ public final class DuplexProtocol {
             case 34: {
               bitField0_ |= 0x00000008;
               clientPID_ = input.readBytes();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              compress_ = input.readBool();
               break;
             }
           }
@@ -678,6 +714,27 @@ public final class DuplexProtocol {
         onChanged();
       }
       
+      // optional bool compress = 5;
+      private boolean compress_ ;
+      public boolean hasCompress() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public boolean getCompress() {
+        return compress_;
+      }
+      public Builder setCompress(boolean value) {
+        bitField0_ |= 0x00000010;
+        compress_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearCompress() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        compress_ = false;
+        onChanged();
+        return this;
+      }
+      
       // @@protoc_insertion_point(builder_scope:ConnectRequest)
     }
     
@@ -703,6 +760,10 @@ public final class DuplexProtocol {
     // optional .ConnectErrorCode errorCode = 3;
     boolean hasErrorCode();
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode getErrorCode();
+    
+    // optional bool compress = 4;
+    boolean hasCompress();
+    boolean getCompress();
   }
   public static final class ConnectResponse extends
       com.google.protobuf.GeneratedMessage
@@ -785,10 +846,21 @@ public final class DuplexProtocol {
       return errorCode_;
     }
     
+    // optional bool compress = 4;
+    public static final int COMPRESS_FIELD_NUMBER = 4;
+    private boolean compress_;
+    public boolean hasCompress() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public boolean getCompress() {
+      return compress_;
+    }
+    
     private void initFields() {
       correlationId_ = 0;
       serverPID_ = "";
       errorCode_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode.ALREADY_CONNECTED;
+      compress_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -815,6 +887,9 @@ public final class DuplexProtocol {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeEnum(3, errorCode_.getNumber());
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBool(4, compress_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -835,6 +910,10 @@ public final class DuplexProtocol {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(3, errorCode_.getNumber());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(4, compress_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -966,6 +1045,8 @@ public final class DuplexProtocol {
         bitField0_ = (bitField0_ & ~0x00000002);
         errorCode_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode.ALREADY_CONNECTED;
         bitField0_ = (bitField0_ & ~0x00000004);
+        compress_ = false;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       
@@ -1016,6 +1097,10 @@ public final class DuplexProtocol {
           to_bitField0_ |= 0x00000004;
         }
         result.errorCode_ = errorCode_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.compress_ = compress_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1040,6 +1125,9 @@ public final class DuplexProtocol {
         }
         if (other.hasErrorCode()) {
           setErrorCode(other.getErrorCode());
+        }
+        if (other.hasCompress()) {
+          setCompress(other.getCompress());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1095,6 +1183,11 @@ public final class DuplexProtocol {
                 bitField0_ |= 0x00000004;
                 errorCode_ = value;
               }
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              compress_ = input.readBool();
               break;
             }
           }
@@ -1180,6 +1273,27 @@ public final class DuplexProtocol {
       public Builder clearErrorCode() {
         bitField0_ = (bitField0_ & ~0x00000004);
         errorCode_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode.ALREADY_CONNECTED;
+        onChanged();
+        return this;
+      }
+      
+      // optional bool compress = 4;
+      private boolean compress_ ;
+      public boolean hasCompress() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public boolean getCompress() {
+        return compress_;
+      }
+      public Builder setCompress(boolean value) {
+        bitField0_ |= 0x00000008;
+        compress_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearCompress() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        compress_ = false;
         onChanged();
         return this;
       }
@@ -4276,27 +4390,28 @@ public final class DuplexProtocol {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\031protobuf-rpc-duplex.proto\"f\n\016ConnectRe" +
+      "\n\031protobuf-rpc-duplex.proto\"x\n\016ConnectRe" +
       "quest\022\025\n\rcorrelationId\030\001 \002(\005\022\026\n\016clientHo" +
       "stName\030\002 \002(\t\022\022\n\nclientPort\030\003 \002(\005\022\021\n\tclie" +
-      "ntPID\030\004 \002(\t\"a\n\017ConnectResponse\022\025\n\rcorrel" +
-      "ationId\030\001 \002(\005\022\021\n\tserverPID\030\002 \001(\t\022$\n\terro" +
-      "rCode\030\003 \001(\0162\021.ConnectErrorCode\"n\n\nRpcReq" +
-      "uest\022\025\n\rcorrelationId\030\001 \002(\005\022\031\n\021serviceId" +
-      "entifier\030\002 \002(\t\022\030\n\020methodIdentifier\030\003 \002(\t" +
-      "\022\024\n\014requestBytes\030\004 \002(\014\";\n\013RpcResponse\022\025\n" +
-      "\rcorrelationId\030\001 \002(\005\022\025\n\rresponseBytes\030\002 ",
-      "\002(\014\"7\n\010RpcError\022\025\n\rcorrelationId\030\001 \002(\005\022\024" +
-      "\n\014errorMessage\030\002 \002(\t\"\"\n\tRpcCancel\022\025\n\rcor" +
-      "relationId\030\001 \002(\005\"\341\001\n\013WirePayload\022\'\n\016conn" +
-      "ectRequest\030\001 \001(\0132\017.ConnectRequest\022)\n\017con" +
-      "nectResponse\030\002 \001(\0132\020.ConnectResponse\022\037\n\n" +
-      "rpcRequest\030\003 \001(\0132\013.RpcRequest\022!\n\013rpcResp" +
-      "onse\030\004 \001(\0132\014.RpcResponse\022\033\n\010rpcError\030\005 \001" +
-      "(\0132\t.RpcError\022\035\n\trpcCancel\030\006 \001(\0132\n.RpcCa" +
-      "ncel*)\n\020ConnectErrorCode\022\025\n\021ALREADY_CONN" +
-      "ECTED\020\000B;\n\'com.googlecode.protobuf.pro.d",
-      "uplex.wireB\016DuplexProtocolH\001"
+      "ntPID\030\004 \002(\t\022\020\n\010compress\030\005 \001(\010\"s\n\017Connect" +
+      "Response\022\025\n\rcorrelationId\030\001 \002(\005\022\021\n\tserve" +
+      "rPID\030\002 \001(\t\022$\n\terrorCode\030\003 \001(\0162\021.ConnectE" +
+      "rrorCode\022\020\n\010compress\030\004 \001(\010\"n\n\nRpcRequest" +
+      "\022\025\n\rcorrelationId\030\001 \002(\005\022\031\n\021serviceIdenti" +
+      "fier\030\002 \002(\t\022\030\n\020methodIdentifier\030\003 \002(\t\022\024\n\014" +
+      "requestBytes\030\004 \002(\014\";\n\013RpcResponse\022\025\n\rcor",
+      "relationId\030\001 \002(\005\022\025\n\rresponseBytes\030\002 \002(\014\"" +
+      "7\n\010RpcError\022\025\n\rcorrelationId\030\001 \002(\005\022\024\n\014er" +
+      "rorMessage\030\002 \002(\t\"\"\n\tRpcCancel\022\025\n\rcorrela" +
+      "tionId\030\001 \002(\005\"\341\001\n\013WirePayload\022\'\n\016connectR" +
+      "equest\030\001 \001(\0132\017.ConnectRequest\022)\n\017connect" +
+      "Response\030\002 \001(\0132\020.ConnectResponse\022\037\n\nrpcR" +
+      "equest\030\003 \001(\0132\013.RpcRequest\022!\n\013rpcResponse" +
+      "\030\004 \001(\0132\014.RpcResponse\022\033\n\010rpcError\030\005 \001(\0132\t" +
+      ".RpcError\022\035\n\trpcCancel\030\006 \001(\0132\n.RpcCancel" +
+      "*)\n\020ConnectErrorCode\022\025\n\021ALREADY_CONNECTE",
+      "D\020\000B;\n\'com.googlecode.protobuf.pro.duple" +
+      "x.wireB\016DuplexProtocolH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4308,7 +4423,7 @@ public final class DuplexProtocol {
           internal_static_ConnectRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ConnectRequest_descriptor,
-              new java.lang.String[] { "CorrelationId", "ClientHostName", "ClientPort", "ClientPID", },
+              new java.lang.String[] { "CorrelationId", "ClientHostName", "ClientPort", "ClientPID", "Compress", },
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.class,
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.Builder.class);
           internal_static_ConnectResponse_descriptor =
@@ -4316,7 +4431,7 @@ public final class DuplexProtocol {
           internal_static_ConnectResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ConnectResponse_descriptor,
-              new java.lang.String[] { "CorrelationId", "ServerPID", "ErrorCode", },
+              new java.lang.String[] { "CorrelationId", "ServerPID", "ErrorCode", "Compress", },
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.class,
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.Builder.class);
           internal_static_RpcRequest_descriptor =

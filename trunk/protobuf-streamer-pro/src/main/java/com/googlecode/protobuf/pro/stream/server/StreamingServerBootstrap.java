@@ -151,4 +151,20 @@ public class StreamingServerBootstrap<E extends Message, F extends Message> exte
 		((StreamingServerPipelineFactory<E,F>)getPipelineFactory()).setChunkSize(chunkSize);
 	}
 
+	/**
+	 * @return the compress
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean isCompress() {
+		return ((StreamingServerPipelineFactory<E,F>)getPipelineFactory()).isCompress();
+	}
+
+	/**
+	 * @param compress the compress to set
+	 */
+	@SuppressWarnings("unchecked")
+	public void setCompress(boolean compress) {
+		((StreamingServerPipelineFactory<E,F>)getPipelineFactory()).setCompress(compress);
+	}
+
 }

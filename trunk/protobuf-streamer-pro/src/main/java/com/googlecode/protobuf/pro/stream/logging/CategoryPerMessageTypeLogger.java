@@ -37,7 +37,7 @@ public class CategoryPerMessageTypeLogger implements StreamLogger {
 			Map<String, String> parameters, long startTS, long endTS) {
 
 		int duration = (int)(endTS - startTS);
-		/*
+		/* TODO
 		RpcCall.Builder rpcCall = RpcCall.newBuilder()
 				.setCorId(correlationId)
 				.setDuration(duration)

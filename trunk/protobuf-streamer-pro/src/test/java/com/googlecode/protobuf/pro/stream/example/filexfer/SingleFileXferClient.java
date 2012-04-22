@@ -40,13 +40,14 @@ public class SingleFileXferClient {
 	private static Random rnd = new Random();
 	
 	public static void main(String[] args) throws Exception {
-		if (args.length != 3) {
-			System.err.println("usage: <filename> <serverHostname> <serverPort>");
+		if (args.length != 4) {
+			System.err.println("usage: <serverHostname> <serverPort> <filename> <compress Y/N>");
 			System.exit(-1);
 		}
 		String serverHostname = args[0];
 		int serverPort = Integer.parseInt(args[1]);
 		String filename = args[2];
+		boolean compress = "Y".equals(args[3]);
 
 		File file = new File(filename);
 		if ( !file.exists() ) {
@@ -68,6 +69,9 @@ public class SingleFileXferClient {
 							Executors.newCachedThreadPool())
 					);
 
+			// must match server configuration. 
+			bootstrap.setCompress(compress);
+			
 			// give the bootstrap to the shutdown handler so it is shutdown cleanly.
 			shutdownHandler.addResource(bootstrap);
 			

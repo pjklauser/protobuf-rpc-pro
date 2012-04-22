@@ -26,23 +26,24 @@ public class SecureClient {
 	private static Log log = LogFactory.getLog(SecureClient.class);
 
 	public static void main(String[] args) throws Exception {
-		if (args.length != 4) {
-			System.err.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort>");
+		if (args.length != 5) {
+			System.err.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort> <compress Y/N>");
 			System.exit(-1);
 		}
 		String serverHostname = args[0];
 		int serverPort = Integer.parseInt(args[1]);
 		String clientHostname = args[2];
 		int clientPort = Integer.parseInt(args[3]);
+		boolean compress = "Y".equals(args[4]);
 
 		PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
 
     	RpcSSLContext sslCtx = new RpcSSLContext();
     	sslCtx.setKeystorePassword("changeme");
-    	sslCtx.setKeystorePath("../lib/client.keystore");
+    	sslCtx.setKeystorePath("./lib/client.keystore");
     	sslCtx.setTruststorePassword("changeme");
-    	sslCtx.setTruststorePath("../lib/truststore");
+    	sslCtx.setTruststorePath("./lib/truststore");
     	sslCtx.init();
     	
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
@@ -52,7 +53,8 @@ public class SecureClient {
 							Executors.newCachedThreadPool(),
 							Executors.newCachedThreadPool()),
 					new ThreadPoolCallExecutor(3, 10));
-
+			bootstrap.setCompression(compress);
+			
 			// secure the client bootstrap
 			bootstrap.setSslContext(sslCtx);
 			
@@ -91,11 +93,11 @@ public class SecureClient {
 				
 				long startTS = 0;
 				long endTS = 0;
-				int numCalls = 1;
+				int numCalls = 1000;
 
 				startTS = System.currentTimeMillis();
 				try {
-					blockingCalls(numCalls, 0, 1, 1, channel);
+					blockingCalls(numCalls, 0, 100, 100, channel);
 				} catch (Exception e) {
 					log.warn("BlockingCalls failed. ", e);
 				}
