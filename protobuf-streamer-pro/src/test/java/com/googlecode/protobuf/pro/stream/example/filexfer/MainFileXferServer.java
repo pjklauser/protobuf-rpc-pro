@@ -45,13 +45,14 @@ public class MainFileXferServer {
 	private static Log log = LogFactory.getLog(MainFileXferServer.class);
 
 	public static void main(String[] args) throws Exception {
-		if (args.length != 2) {
+		if (args.length != 3) {
 			System.err
-					.println("usage: <serverHostname> <serverPort>");
+					.println("usage: <serverHostname> <serverPort> <compress Y/N>");
 			System.exit(-1);
 		}
 		String serverHostname = args[0];
 		int serverPort = Integer.parseInt(args[1]);
+		boolean compress = "Y".equals(args[2]);
 		
 		PeerInfo serverInfo = new PeerInfo(serverHostname, serverPort);
 
@@ -151,7 +152,9 @@ public class MainFileXferServer {
 				new NioServerSocketChannelFactory(
 						Executors.newCachedThreadPool(),
 						Executors.newCachedThreadPool()));
-
+		// compress all or none of the data in/out - requires matching client config.
+		bootstrap.setCompress(compress);
+		
 		// give the bootstrap to the shutdown handler so it is shutdown cleanly.
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
 		shutdownHandler.addResource(bootstrap);

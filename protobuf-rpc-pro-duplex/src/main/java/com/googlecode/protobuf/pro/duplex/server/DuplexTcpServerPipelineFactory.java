@@ -19,6 +19,9 @@ import static org.jboss.netty.channel.Channels.pipeline;
 
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
+import org.jboss.netty.handler.codec.compression.ZlibDecoder;
+import org.jboss.netty.handler.codec.compression.ZlibEncoder;
+import org.jboss.netty.handler.codec.compression.ZlibWrapper;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
@@ -27,9 +30,9 @@ import org.jboss.netty.handler.ssl.SslHandler;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
+import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.RpcServer;
 import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
-import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.handler.Handler;
 import com.googlecode.protobuf.pro.duplex.handler.RpcClientHandler;
@@ -97,6 +100,11 @@ public class DuplexTcpServerPipelineFactory implements
     public RpcClientHandler completePipeline( RpcClient rpcClient ) {
     	ChannelPipeline p = rpcClient.getChannel().getPipeline();
 
+    	if ( rpcClient.isCompression() ) {
+	    	p.addBefore(Handler.FRAME_DECODER, Handler.DECOMPRESSOR, new ZlibEncoder(ZlibWrapper.GZIP));
+	    	p.addAfter(Handler.DECOMPRESSOR, Handler.COMPRESSOR,  new ZlibDecoder(ZlibWrapper.GZIP));
+    	}
+    	
     	RpcClientHandler rpcClientHandler = new RpcClientHandler(rpcClient, eventListener);
     	p.replace(Handler.SERVER_CONNECT, Handler.RPC_CLIENT, rpcClientHandler);
     	

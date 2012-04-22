@@ -34,14 +34,17 @@ import org.jboss.netty.channel.ChannelPipelineException;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
+import org.jboss.netty.handler.codec.compression.ZlibDecoder;
+import org.jboss.netty.handler.codec.compression.ZlibEncoder;
+import org.jboss.netty.handler.codec.compression.ZlibWrapper;
 import org.jboss.netty.util.internal.ConversionUtil;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
+import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.RpcServer;
 import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
-import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.handler.ClientConnectResponseHandler;
 import com.googlecode.protobuf.pro.duplex.handler.Handler;
@@ -74,7 +77,13 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 	 */
 	private ChannelGroup allChannels = new DefaultChannelGroup();
 	
-    /**
+	/**
+	 * Whether socket level communications between ALL clients peered with servers by this
+	 * Bootstrap should be compressed ( using ZLIB ).
+	 */
+	private boolean compression;
+	
+	/**
      * Creates a new instance stipulating client info.
      * 
      * @param clientInfo
@@ -143,7 +152,9 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 		.setClientHostName(clientInfo.getHostName())
 		.setClientPort(clientInfo.getPort())
 		.setClientPID(clientInfo.getPid())
-		.setCorrelationId(correlationId.incrementAndGet()).build();
+		.setCorrelationId(correlationId.incrementAndGet())
+		.setCompress(isCompression())
+		.build();
         
 		WirePayload payload = WirePayload.newBuilder().setConnectRequest(connectRequest).build();
 		if ( log.isDebugEnabled() ) {
@@ -180,7 +191,7 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 		String serverPID = connectResponse.hasServerPID() ? connectResponse.getServerPID() : "<NONE>";
 		PeerInfo serverInfo = new PeerInfo(remoteAddress.getHostName(), remoteAddress.getPort(), serverPID );
 		
-		RpcClient rpcClient = new RpcClient(channel, clientInfo, serverInfo);
+		RpcClient rpcClient = new RpcClient(channel, clientInfo, serverInfo, connectResponse.getCompress());
 		rpcClient.setCallLogger(getRpcLogger());
 		
 		RpcClientHandler rpcClientHandler = completePipeline(rpcClient);
@@ -200,6 +211,13 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 	 * @return
 	 */
     protected RpcClientHandler completePipeline(RpcClient rpcClient) {
+		ChannelPipeline p = rpcClient.getChannel().getPipeline();
+		
+		if ( rpcClient.isCompression() ) {
+	    	p.addBefore(Handler.FRAME_DECODER, Handler.DECOMPRESSOR, new ZlibEncoder(ZlibWrapper.GZIP));
+	    	p.addAfter(Handler.DECOMPRESSOR, Handler.COMPRESSOR,  new ZlibDecoder(ZlibWrapper.GZIP));
+    	}
+    	
 		TcpConnectionEventListener informer = new TcpConnectionEventListener(){
 			@Override
 			public void connectionClosed(RpcClientChannel client) {
@@ -215,11 +233,11 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 			}
 		};
 		RpcClientHandler rpcClientHandler = new RpcClientHandler(rpcClient, informer);
-		rpcClient.getChannel().getPipeline().replace(Handler.CLIENT_CONNECT, Handler.RPC_CLIENT, rpcClientHandler);
+		p.replace(Handler.CLIENT_CONNECT, Handler.RPC_CLIENT, rpcClientHandler);
 		
 		RpcServer rpcServer = new RpcServer(rpcClient, rpcServiceRegistry, rpcServerCallExecutor, logger);
 		RpcServerHandler rpcServerHandler = new RpcServerHandler(rpcServer); 
-		rpcClient.getChannel().getPipeline().addAfter(Handler.RPC_CLIENT, Handler.RPC_SERVER, rpcServerHandler);
+		p.addAfter(Handler.RPC_CLIENT, Handler.RPC_SERVER, rpcServerHandler);
 		
 		return rpcClientHandler;
     }
@@ -358,5 +376,19 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 	 */
 	public void setSslContext(RpcSSLContext sslContext) {
 		((DuplexTcpClientPipelineFactory)getPipelineFactory()).setSslContext(sslContext);
+	}
+
+	/**
+	 * @return the compression
+	 */
+	public boolean isCompression() {
+		return compression;
+	}
+
+	/**
+	 * @param compression the compression to set
+	 */
+	public void setCompression(boolean compression) {
+		this.compression = compression;
 	}
 }

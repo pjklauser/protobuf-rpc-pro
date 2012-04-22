@@ -64,13 +64,15 @@ public class RpcClient implements RpcClientChannel {
 	
 	private final PeerInfo clientInfo;
 	private final PeerInfo serverInfo;
+	private final boolean compression;
 	
 	private RpcLogger rpcLogger;
 	
-	public RpcClient( Channel channel, PeerInfo clientInfo, PeerInfo serverInfo ) {
+	public RpcClient( Channel channel, PeerInfo clientInfo, PeerInfo serverInfo, boolean compression ) {
 		this.channel = channel;
 		this.clientInfo = clientInfo;
 		this.serverInfo = serverInfo;
+		this.compression = compression;
 	}
 	
 	/* (non-Javadoc)
@@ -460,6 +462,13 @@ public class RpcClient implements RpcClientChannel {
 	 */
 	public void setCallLogger(RpcLogger callLogger) {
 		this.rpcLogger = callLogger;
+	}
+
+	/**
+	 * @return whether this client's communication is compressed.
+	 */
+	public boolean isCompression() {
+		return compression;
 	}
 
 }

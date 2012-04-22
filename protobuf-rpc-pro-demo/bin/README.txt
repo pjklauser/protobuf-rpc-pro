@@ -8,11 +8,11 @@ example
 $ ./RunExample.cmd PingServer localhost 9001
 
 
-RunExample.cmd|.sh PingClient <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <payloadBytes>
+RunExample.cmd|.sh PingClient <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <payloadBytes> <compress Y/N>
   runs an RPC client which does <numCalls> blocking calls to the RPC server, where the server takes 
   <processingTimeMs> milliseconds sleep for each call and the payload of each call is <payloadBytes> bytes long.
 example
-$ ./RunExample.cmd PingClient localhost 9001 localhost 9002 100 0 100 100
+$ ./RunExample.cmd PingClient localhost 9001 localhost 9002 100 0 100 N
 
 
 --------------------------------------------------------------------
@@ -26,11 +26,11 @@ example
 $ ./RunExample.cmd DuplexPingPongServer localhost 9001
 
 
-RunExample.cmd|.sh DuplexPingPongClient <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <payloadBytes>
+RunExample.cmd|.sh DuplexPingPongClient <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <payloadBytes> <compress Y/N>
   runs an RPC client which does <numCalls> blocking calls to the RPC server, where the server takes 
   <processingTimeMs> milliseconds sleep for each call and the payload of each call is <payloadBytes> bytes long.
 example
-$ ./RunExample.cmd DuplexPingPongClient localhost 9001 localhost 9002 100 0 100 100
+$ ./RunExample.cmd DuplexPingPongClient localhost 9001 localhost 9002 100 0 100 100 N
 
 
 --------------------------------------------------------------------
@@ -44,9 +44,9 @@ example
 $ ./RunExample.cmd SecureServer localhost 9001
 
 
-RunExample.cmd|.sh SecureClient <serverHostname> <serverPort> <clientHostname> <clientPort>
+RunExample.cmd|.sh SecureClient <serverHostname> <serverPort> <clientHostname> <clientPort> <compress Y/N>
   runs a secure RPC client which calls pings the server a few times. 
   at runtime, the client needs the client.keystore and the truststore files in /lib
 example
-$ ./RunExample.cmd SecureClient localhost 9001 localhost 9002
+$ ./RunExample.cmd SecureClient localhost 9001 localhost 9002 N
 

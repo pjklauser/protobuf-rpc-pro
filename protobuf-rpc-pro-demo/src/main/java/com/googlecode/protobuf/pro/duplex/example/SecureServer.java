@@ -33,9 +33,9 @@ public class SecureServer {
     	
     	RpcSSLContext sslCtx = new RpcSSLContext();
     	sslCtx.setKeystorePassword("changeme");
-    	sslCtx.setKeystorePath("../lib/server.keystore");
+    	sslCtx.setKeystorePath("./lib/server.keystore");
     	sslCtx.setTruststorePassword("changeme");
-    	sslCtx.setTruststorePath("../lib/truststore");
+    	sslCtx.setTruststorePath("./lib/truststore");
     	sslCtx.init();
     	
         // Configure the server.

@@ -21,12 +21,14 @@ message ConnectRequest {
     required string clientHostName = 2;
     required int32 clientPort = 3;
     required string clientPID = 4;
+    optional bool compress = 5;
 }
 
 message ConnectResponse {
     required int32 correlationId = 1;
     optional string serverPID = 2;
     optional ConnectErrorCode errorCode = 3;
+    optional bool compress = 4;
 }
 
 enum ConnectErrorCode {

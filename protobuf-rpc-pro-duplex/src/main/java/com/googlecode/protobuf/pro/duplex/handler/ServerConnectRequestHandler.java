@@ -78,10 +78,13 @@ public class ServerConnectRequestHandler extends SimpleChannelUpstreamHandler {
         		PeerInfo connectingClientInfo = new PeerInfo(connectRequest.getClientHostName(), connectRequest.getClientPort(), connectRequest.getClientPID());
         		ConnectResponse connectResponse = null;
         		
-        		RpcClient rpcClient = new RpcClient(ctx.getChannel(), serverInfo, connectingClientInfo );
+        		RpcClient rpcClient = new RpcClient(ctx.getChannel(), serverInfo, connectingClientInfo, connectRequest.getCompress() );
         		rpcClient.setCallLogger(logger);
         		if ( rpcClientRegistry.registerRpcClient(rpcClient) ) {
-        			connectResponse = ConnectResponse.newBuilder().setCorrelationId(connectRequest.getCorrelationId()).setServerPID(serverInfo.getPid()).build();
+        			connectResponse = ConnectResponse.newBuilder().setCorrelationId(connectRequest.getCorrelationId())
+        					.setServerPID(serverInfo.getPid())
+        					.setCompress(connectRequest.getCompress())
+        					.build();
             		WirePayload payload = WirePayload.newBuilder().setConnectResponse(connectResponse).build();
             		
             		if ( log.isDebugEnabled() ) {

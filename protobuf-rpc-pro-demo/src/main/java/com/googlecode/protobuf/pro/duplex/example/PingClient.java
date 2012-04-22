@@ -19,15 +19,16 @@ import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService.BlockingI
 import com.googlecode.protobuf.pro.duplex.example.PingPong.Pong;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
+import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
 
 public class PingClient {
 
 	private static Log log = LogFactory.getLog(PingClient.class);
 
 	public static void main(String[] args) throws Exception {
-		if (args.length != 7) {
+		if (args.length != 8) {
 			System.err
-					.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <payloadBytes>");
+					.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort> <numCalls> <processingTimeMs> <payloadBytes> <compressY/N>");
 			System.exit(-1);
 		}
 		String serverHostname = args[0];
@@ -38,6 +39,7 @@ public class PingClient {
 		int numCalls = Integer.parseInt(args[4]);
 		int procTime = Integer.parseInt(args[5]);
 		int payloadSize = Integer.parseInt(args[6]);
+		boolean compress = "Y".equals(args[7]);
 
 		PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
@@ -49,7 +51,14 @@ public class PingClient {
 							Executors.newCachedThreadPool(),
 							Executors.newCachedThreadPool()),
 					new ThreadPoolCallExecutor(3, 10));
-
+			bootstrap.setCompression(compress);
+			
+			// RPC payloads are uncompressed when logged - so reduce logging
+			CategoryPerServiceLogger logger = new CategoryPerServiceLogger();
+			logger.setLogRequestProto(false);
+			logger.setLogResponseProto(false);
+			bootstrap.setRpcLogger(logger);
+			
 			shutdownHandler.addResource(bootstrap);
 
 			// Set up the event pipeline factory.

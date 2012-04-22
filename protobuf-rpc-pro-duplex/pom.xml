@@ -4,7 +4,7 @@
 	<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 	<artifactId>protobuf-rpc-pro-duplex</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1.1</version>
+	<version>1.2.0</version>
 	<name>Protobuf RPC Pro Implementation</name>
 	<description>Protobuf RPC Pro is a java protocol buffers RPC implementation featuring bidirectional RPC calls and TCP socket connection re-use and the option of secure communications.</description>
 	<url>http://code.google.com/p/protobuf-rpc-pro/</url>
@@ -79,9 +79,9 @@
 			<version>2.4.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.netty</groupId>
+			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
-			<version>3.2.6.Final</version>
+			<version>3.4.1.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -110,13 +110,6 @@
 			<id>Maven2</id>
 			<name>Maven2 Central</name>
 			<url>http://repo1.maven.org/maven2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>repository.jboss.org</id>
-			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>

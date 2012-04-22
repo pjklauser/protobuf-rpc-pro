@@ -25,6 +25,9 @@ public abstract class Handler {
 
 	public static final String SSL = "ssl";
 	
+	public static final String COMPRESSOR = "deflater";
+	public static final String DECOMPRESSOR = "inflater";
+
 	public static final String FRAME_DECODER = "frameDecoder";
 	public static final String FRAME_ENCODER = "frameEncoder";
 	public static final String PROTOBUF_DECODER = "protobufDecoder";

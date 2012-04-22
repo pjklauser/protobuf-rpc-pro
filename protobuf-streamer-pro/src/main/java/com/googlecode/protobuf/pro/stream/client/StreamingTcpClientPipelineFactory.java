@@ -19,6 +19,9 @@ import static org.jboss.netty.channel.Channels.pipeline;
 
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
+import org.jboss.netty.handler.codec.compression.ZlibDecoder;
+import org.jboss.netty.handler.codec.compression.ZlibEncoder;
+import org.jboss.netty.handler.codec.compression.ZlibWrapper;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
@@ -33,6 +36,7 @@ public class StreamingTcpClientPipelineFactory implements
         ChannelPipelineFactory {
 
 	private RpcSSLContext sslContext;
+	private boolean compress;
 	
     public StreamingTcpClientPipelineFactory() {
     }
@@ -42,6 +46,12 @@ public class StreamingTcpClientPipelineFactory implements
         
         if ( getSslContext() != null ) {
         	p.addLast(Handler.SSL, new SslHandler(getSslContext().createClientEngine()) );
+        }
+        
+        // clients configure compression if the server has it configured.
+        if ( isCompress() ) {
+	    	p.addLast( Handler.DECOMPRESSOR, new ZlibEncoder(ZlibWrapper.GZIP));
+	    	p.addLast( Handler.COMPRESSOR,  new ZlibDecoder(ZlibWrapper.GZIP));
         }
         
         p.addLast(Handler.FRAME_DECODER, new ProtobufVarint32FrameDecoder());
@@ -65,6 +75,20 @@ public class StreamingTcpClientPipelineFactory implements
 	 */
 	public void setSslContext(RpcSSLContext sslContext) {
 		this.sslContext = sslContext;
+	}
+
+	/**
+	 * @return the compress
+	 */
+	public boolean isCompress() {
+		return compress;
+	}
+
+	/**
+	 * @param compress the compress to set
+	 */
+	public void setCompress(boolean compress) {
+		this.compress = compress;
 	}
     
 }

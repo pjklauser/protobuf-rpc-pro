@@ -14,6 +14,7 @@ import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
+import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 
 public class PingServer {
@@ -30,14 +31,21 @@ public class PingServer {
 		
     	PeerInfo serverInfo = new PeerInfo(serverHostname, serverPort);
     	
-        // Configure the server.
+		// RPC payloads are uncompressed when logged - so reduce logging
+		CategoryPerServiceLogger logger = new CategoryPerServiceLogger();
+		logger.setLogRequestProto(false);
+		logger.setLogResponseProto(false);
+
+		// Configure the server.
         DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(
         		serverInfo,
                 new NioServerSocketChannelFactory(
                         Executors.newCachedThreadPool(),
                         Executors.newCachedThreadPool()),
-                        new ThreadPoolCallExecutor(10, 10));
+                new ThreadPoolCallExecutor(10, 10), 
+                logger);
 
+		
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
         shutdownHandler.addResource(bootstrap);
         

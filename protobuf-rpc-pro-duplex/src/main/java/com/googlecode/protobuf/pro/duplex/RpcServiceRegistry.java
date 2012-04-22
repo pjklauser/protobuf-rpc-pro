@@ -50,7 +50,7 @@ public class RpcServiceRegistry {
 	 * 
 	 * @param serviceImplementation
 	 */
-	public void registerService(Service serviceImplementation) {
+	public void registerService(Service serviceImplementation) { //TODO consider BlockingService
 		String serviceName = addService(serviceImplementation);
 		log.info("Registered " + serviceName);
 	}

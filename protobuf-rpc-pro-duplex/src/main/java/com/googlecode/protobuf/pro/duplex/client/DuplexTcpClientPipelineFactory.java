@@ -44,7 +44,7 @@ public class DuplexTcpClientPipelineFactory implements
         if ( getSslContext() != null ) {
         	p.addLast(Handler.SSL, new SslHandler(getSslContext().createClientEngine()) );
         }
-        
+
         p.addLast(Handler.FRAME_DECODER, new ProtobufVarint32FrameDecoder());
         p.addLast(Handler.PROTOBUF_DECODER, new ProtobufDecoder(DuplexProtocol.WirePayload.getDefaultInstance()));
 
