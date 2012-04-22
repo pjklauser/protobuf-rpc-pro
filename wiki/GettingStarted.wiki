@@ -25,6 +25,10 @@ If a client is also going to be acting as a server, it is necessary to setup an 
                 Executors.newCachedThreadPool()),
                 executor);
 }}}
+In order to compress all data traffic to and from the server, you can switch on compression.
+{{{    	
+    	bootstrap.setCompress(true);
+}}}
 In order to customize TCP settings, you can use all Netty socket options and the "connectResponseTimeoutMillis" which is introduced to put an upper bound on the "peering" time. Refer to this [http://fasterdata.es.net/TCP-tuning/ tuning-guide] for buffer size tuning help. [http://en.wikipedia.org/wiki/Nagle's_algorithm Nagle's Algorithm] can be disabled by setting tcpNoDelay to true.
 {{{
     	bootstrap.setOption("connectTimeoutMillis",10000);
@@ -117,9 +121,9 @@ The external dependencies have been kept to a minimum. Netty and commons logging
 			<version>2.4.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.netty</groupId>
+			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
-			<version>3.2.6.Final</version>
+			<version>3.4.1.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
