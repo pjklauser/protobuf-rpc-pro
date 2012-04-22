@@ -46,7 +46,7 @@ public class CategoryPerServiceLogger implements RpcLogger {
 	public void logCall(PeerInfo client, PeerInfo server, String signature,
 			Message request, Message response, String errorMessage,
 			int correlationId, long requestTS, long responseTS) {
-		int duration = (int)(requestTS - responseTS);
+		int duration = (int)(responseTS - requestTS);
 		
 		String summaryCategoryName = signature + ".info";
 		Log log = LogFactory.getLog(summaryCategoryName);
