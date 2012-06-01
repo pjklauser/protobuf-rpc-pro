@@ -98,7 +98,7 @@ public class PingClient {
 
 			startTS = System.currentTimeMillis();
 			for (int i = 0; i < numCalls; i++) {
-				if (i % 100 == 1) {
+				if (i % 1000 == 1) {
 					System.out.println(i);
 				}
 				RpcController controller = channel.newRpcController();
@@ -112,7 +112,7 @@ public class PingClient {
 				}
 			}
 			endTS = System.currentTimeMillis();
-			log.info("BlockingCalls " + numCalls + " in " + (endTS - startTS)
+			log.error("BlockingCalls " + numCalls + " in " + (endTS - startTS)
 					/ 1000 + "s");
 
 		} finally {

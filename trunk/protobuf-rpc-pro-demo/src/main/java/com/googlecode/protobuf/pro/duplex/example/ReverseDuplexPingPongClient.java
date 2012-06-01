@@ -6,8 +6,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
-import com.google.protobuf.ByteString;
-import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
@@ -15,10 +13,6 @@ import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.Ping;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService.BlockingInterface;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.Pong;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.PongService;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
@@ -96,29 +90,11 @@ public class ReverseDuplexPingPongClient {
 		rpcEventNotifier.setEventListener(listener);
     	bootstrap.registerConnectionEventListener(rpcEventNotifier);
         
-    	RpcClientChannel channel = null;
+    	@SuppressWarnings("unused")
+		RpcClientChannel channel = null;
 		try {
 	    	channel = bootstrap.peerWith(server);
-			//BlockingInterface myService = PingService.newBlockingStub(channel);
-			
-			/*
-			for( int i = 0; i < numCalls; i++ ) {
-				if ( i % 100 == 1 ) {
-					System.out.println(i);
-				}
-				RpcController controller = channel.newRpcController();
-				
-				ByteString requestData = ByteString.copyFrom(new byte[payloadSize]);
-				Ping ping = Ping.newBuilder().setNumber(procTime).setPingData(requestData).build();
-				Pong pong = myService.ping(controller, ping);
-				if ( pong.getPongData().size() != payloadSize ) {
-					throw new Exception("Reply payload mismatch.");
-				}
-				if ( pong.getNumber() != ping.getNumber() ) {
-					throw new Exception("Reply number mismatch.");
-				}
-			}
-			*/
+			//we get called from the server - just wait for calls.
 			Thread.sleep(procTime);
 			
 		} finally {

@@ -60,7 +60,7 @@ public class SameThreadExecutor implements RpcServerCallExecutor {
 		BlockingRpcCallback callback = new BlockingRpcCallback();
 		call.getService().callMethod(call.getMethodDesc(), call.getController(), call.getRequest(), callback);
 		if ( !callback.isDone() ) {
-			// this is only likely to come in here if another thread executes the callback that the
+			// this is only likely to come in here if another thread executes the callback than the
 			// one calling callMethod.
 			synchronized(callback) {
 				while(!callback.isDone()) {
