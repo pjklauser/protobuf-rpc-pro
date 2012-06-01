@@ -1,7 +1,6 @@
 package com.googlecode.protobuf.pro.duplex.example;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -110,7 +109,8 @@ public class ReverseDuplexPingPongServer {
                 		try {
                 			Pong clientRequest = Pong.newBuilder().setNumber(clientProcTime).setPongData(ByteString.copyFromUtf8("hello world")).build();
 
-                			Ping clientResponse = clientService.pong(clientController, clientRequest);
+                			@SuppressWarnings("unused")
+							Ping clientResponse = clientService.pong(clientController, clientRequest);
                 		} catch ( ServiceException e ) {
                 			log.warn("Failed." , e);
                 		}

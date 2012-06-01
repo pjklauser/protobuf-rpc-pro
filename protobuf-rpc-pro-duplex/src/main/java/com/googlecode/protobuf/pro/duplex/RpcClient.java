@@ -111,7 +111,7 @@ public class RpcClient implements RpcClientChannel {
 			log.debug("Sending ["+rpcRequest.getCorrelationId()+"]RpcRequest.");
 		}
 		
-		channel.write(payload).awaitUninterruptibly();
+		channel.write(payload);
 	}
 
 	/* (non-Javadoc)
