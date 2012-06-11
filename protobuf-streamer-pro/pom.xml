@@ -4,7 +4,7 @@
 	<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 	<artifactId>protobuf-streamer-pro</artifactId>
 	<packaging>jar</packaging>
-	<version>1.2.1</version>
+	<version>1.2.2</version>
 	<name>Protobuf Streamer Pro Implementation</name>
 	<description>Protobuf Streamer Pro is a java protocol buffers is a google protocol buffers transport for large streamed messages featuring multiplexed sending over reused TCP connections.</description>
 	<url>http://code.google.com/p/protobuf-rpc-pro/</url>
