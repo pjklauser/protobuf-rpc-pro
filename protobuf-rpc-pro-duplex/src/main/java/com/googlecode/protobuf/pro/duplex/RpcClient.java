@@ -239,9 +239,10 @@ public class RpcClient implements RpcClientChannel {
 	}
 	
 	public void handleClosure() {
-		List<Integer> pendingCallIds = new ArrayList<Integer>();
-		pendingCallIds.addAll(pendingRequestMap.keySet());
 		do {
+			//Defect Nr.8 Race condition with new client request being received on closure.
+			List<Integer> pendingCallIds = new ArrayList<Integer>();
+			pendingCallIds.addAll(pendingRequestMap.keySet());
 			for( Integer correlationId : pendingCallIds ) {
 				PendingClientCallState state = removePendingRequest(correlationId);
 				if ( state != null ) {
