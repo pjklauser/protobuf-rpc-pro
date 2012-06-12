@@ -124,19 +124,30 @@ public class RpcClient implements RpcClientChannel {
 		BlockingRpcCallback callback = new BlockingRpcCallback();
 		
 		callMethod( method, controller, request, responsePrototype, callback );
-		if ( !callback.isDone() ) {
+        boolean interrupted = false;
+        if ( !callback.isDone() ) {
 			synchronized(callback) {
 				while(!callback.isDone()) {
 					try {
 						callback.wait();
 					} catch (InterruptedException e) {
-						Thread.currentThread().interrupt();
+						if ( log.isDebugEnabled() ) {
+							log.debug("Thread interrupted waiting in callBlockingMethod.", e);
+						}
+						interrupted = true;
+						break; // Server side blocking call to client must exit here
 					}
 				}
 			}
 		}
-		if (controller.failed()) {
+        if ( interrupted ) { //Defect 8. Unsafe wait/notify loop.
+			Thread.currentThread().interrupt();
+        }
+        if (controller.failed()) {
 			throw new ServiceException(controller.errorText());
+		}
+        if (interrupted && !callback.isDone()) {
+			throw new ServiceException("Blocking call interrupted.");
 		}
 		return callback.getMessage();
 	}
