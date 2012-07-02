@@ -277,13 +277,13 @@ public class RpcServer implements RpcServerExecutorCallback {
 	
 	protected void doErrorLog( int correlationId, String signature, Message request, Message response, String errorMessage ) {
 		if ( logger != null ) {
-			logger.logCall(rpcClient.getClientInfo(), rpcClient.getServerInfo(), signature, request, response, errorMessage, correlationId, System.currentTimeMillis(), System.currentTimeMillis());
+			logger.logCall(rpcClient.getServerInfo(), rpcClient.getClientInfo(), signature, request, response, errorMessage, correlationId, System.currentTimeMillis(), System.currentTimeMillis());
 		}
 	}
 	
 	protected void doLog( PendingServerCallState state, Message response, String errorMessage ) {
 		if ( logger != null ) {
-			logger.logCall(rpcClient.getClientInfo(), rpcClient.getServerInfo(), state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), state.getStartTS(), System.currentTimeMillis());
+			logger.logCall(rpcClient.getServerInfo(), rpcClient.getClientInfo(), state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), state.getStartTS(), System.currentTimeMillis());
 		}
 	}
 	
