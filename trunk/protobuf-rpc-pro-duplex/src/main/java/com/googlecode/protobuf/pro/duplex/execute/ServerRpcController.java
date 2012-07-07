@@ -17,6 +17,7 @@ package com.googlecode.protobuf.pro.duplex.execute;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
@@ -112,4 +113,12 @@ public class ServerRpcController implements com.google.protobuf.RpcController {
 		return cancelCallbackNotified.getAndSet(true);
 	}
 
+	/**
+	 * Send an out-of-band message related to this RPC call back to the client.
+	 * 
+	 * @param msg
+	 */
+	public void sendOobResponse( Message msg ) {
+		rpcClient.sendOobResponse(correlationId, msg);
+	}
 }

@@ -59,8 +59,19 @@ public class RpcClientHandler extends SimpleChannelUpstreamHandler {
         	} else if ( payload.hasRpcError() ) {
         		rpcClient.error(payload.getRpcError());
         		return;
+        	} else if ( payload.hasOobResponse() ) {
+        		rpcClient.receiveOobResponse(payload.getOobResponse());
+        		return;
+        	} else if ( payload.hasOobMessage() ) {
+        		rpcClient.receiveOobMessage(payload.getOobMessage());
+        		return;
+        	} else if ( payload.hasTransparentMessage() ) {
+        		// just so that it's not forgotten sometime...
+                ctx.sendUpstream(e);
+        		return;
         	}
-        	// rpcRequest, rpcCancel go further up to the RpcServerHandler
+        	// rpcRequest, rpcCancel, clientMessage go further up to the RpcServerHandler
+        	// transparentMessage are also sent up but not handled anywhere explicitly 
         }
         ctx.sendUpstream(e);
     }

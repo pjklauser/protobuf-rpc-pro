@@ -3135,8 +3135,772 @@ public final class DuplexProtocol {
     // @@protoc_insertion_point(class_scope:RpcCancel)
   }
   
-  public interface WirePayloadOrBuilder
+  public interface OobResponseOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 correlationId = 1;
+    boolean hasCorrelationId();
+    int getCorrelationId();
+    
+    // required bytes messageBytes = 2;
+    boolean hasMessageBytes();
+    com.google.protobuf.ByteString getMessageBytes();
+  }
+  public static final class OobResponse extends
+      com.google.protobuf.GeneratedMessage
+      implements OobResponseOrBuilder {
+    // Use OobResponse.newBuilder() to construct.
+    private OobResponse(Builder builder) {
+      super(builder);
+    }
+    private OobResponse(boolean noInit) {}
+    
+    private static final OobResponse defaultInstance;
+    public static OobResponse getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public OobResponse getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_OobResponse_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_OobResponse_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required int32 correlationId = 1;
+    public static final int CORRELATIONID_FIELD_NUMBER = 1;
+    private int correlationId_;
+    public boolean hasCorrelationId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getCorrelationId() {
+      return correlationId_;
+    }
+    
+    // required bytes messageBytes = 2;
+    public static final int MESSAGEBYTES_FIELD_NUMBER = 2;
+    private com.google.protobuf.ByteString messageBytes_;
+    public boolean hasMessageBytes() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public com.google.protobuf.ByteString getMessageBytes() {
+      return messageBytes_;
+    }
+    
+    private void initFields() {
+      correlationId_ = 0;
+      messageBytes_ = com.google.protobuf.ByteString.EMPTY;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasCorrelationId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasMessageBytes()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, correlationId_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, messageBytes_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, correlationId_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, messageBytes_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_OobResponse_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_OobResponse_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        correlationId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        messageBytes_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.getDescriptor();
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse getDefaultInstanceForType() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.getDefaultInstance();
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse build() {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse buildPartial() {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.correlationId_ = correlationId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.messageBytes_ = messageBytes_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse) {
+          return mergeFrom((com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse other) {
+        if (other == com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.getDefaultInstance()) return this;
+        if (other.hasCorrelationId()) {
+          setCorrelationId(other.getCorrelationId());
+        }
+        if (other.hasMessageBytes()) {
+          setMessageBytes(other.getMessageBytes());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasCorrelationId()) {
+          
+          return false;
+        }
+        if (!hasMessageBytes()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              correlationId_ = input.readInt32();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              messageBytes_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required int32 correlationId = 1;
+      private int correlationId_ ;
+      public boolean hasCorrelationId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public int getCorrelationId() {
+        return correlationId_;
+      }
+      public Builder setCorrelationId(int value) {
+        bitField0_ |= 0x00000001;
+        correlationId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearCorrelationId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        correlationId_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // required bytes messageBytes = 2;
+      private com.google.protobuf.ByteString messageBytes_ = com.google.protobuf.ByteString.EMPTY;
+      public boolean hasMessageBytes() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public com.google.protobuf.ByteString getMessageBytes() {
+        return messageBytes_;
+      }
+      public Builder setMessageBytes(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        messageBytes_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearMessageBytes() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        messageBytes_ = getDefaultInstance().getMessageBytes();
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:OobResponse)
+    }
+    
+    static {
+      defaultInstance = new OobResponse(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:OobResponse)
+  }
+  
+  public interface OobMessageOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required bytes messageBytes = 1;
+    boolean hasMessageBytes();
+    com.google.protobuf.ByteString getMessageBytes();
+  }
+  public static final class OobMessage extends
+      com.google.protobuf.GeneratedMessage
+      implements OobMessageOrBuilder {
+    // Use OobMessage.newBuilder() to construct.
+    private OobMessage(Builder builder) {
+      super(builder);
+    }
+    private OobMessage(boolean noInit) {}
+    
+    private static final OobMessage defaultInstance;
+    public static OobMessage getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public OobMessage getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_OobMessage_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_OobMessage_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required bytes messageBytes = 1;
+    public static final int MESSAGEBYTES_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString messageBytes_;
+    public boolean hasMessageBytes() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public com.google.protobuf.ByteString getMessageBytes() {
+      return messageBytes_;
+    }
+    
+    private void initFields() {
+      messageBytes_ = com.google.protobuf.ByteString.EMPTY;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasMessageBytes()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, messageBytes_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, messageBytes_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_OobMessage_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_OobMessage_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        messageBytes_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDescriptor();
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage getDefaultInstanceForType() {
+        return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage build() {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage buildPartial() {
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage result = new com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.messageBytes_ = messageBytes_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage) {
+          return mergeFrom((com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage other) {
+        if (other == com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance()) return this;
+        if (other.hasMessageBytes()) {
+          setMessageBytes(other.getMessageBytes());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasMessageBytes()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              messageBytes_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required bytes messageBytes = 1;
+      private com.google.protobuf.ByteString messageBytes_ = com.google.protobuf.ByteString.EMPTY;
+      public boolean hasMessageBytes() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public com.google.protobuf.ByteString getMessageBytes() {
+        return messageBytes_;
+      }
+      public Builder setMessageBytes(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        messageBytes_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearMessageBytes() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        messageBytes_ = getDefaultInstance().getMessageBytes();
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:OobMessage)
+    }
+    
+    static {
+      defaultInstance = new OobMessage(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:OobMessage)
+  }
+  
+  public interface WirePayloadOrBuilder extends
+      com.google.protobuf.GeneratedMessage.
+          ExtendableMessageOrBuilder<WirePayload> {
     
     // optional .ConnectRequest connectRequest = 1;
     boolean hasConnectRequest();
@@ -3167,10 +3931,25 @@ public final class DuplexProtocol {
     boolean hasRpcCancel();
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel getRpcCancel();
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder getRpcCancelOrBuilder();
+    
+    // optional .OobResponse oobResponse = 7;
+    boolean hasOobResponse();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse getOobResponse();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder getOobResponseOrBuilder();
+    
+    // optional .OobMessage oobMessage = 8;
+    boolean hasOobMessage();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage getOobMessage();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder getOobMessageOrBuilder();
+    
+    // optional .OobMessage transparentMessage = 100;
+    boolean hasTransparentMessage();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage getTransparentMessage();
+    com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder getTransparentMessageOrBuilder();
   }
   public static final class WirePayload extends
-      com.google.protobuf.GeneratedMessage
-      implements WirePayloadOrBuilder {
+      com.google.protobuf.GeneratedMessage.ExtendableMessage<
+        WirePayload> implements WirePayloadOrBuilder {
     // Use WirePayload.newBuilder() to construct.
     private WirePayload(Builder builder) {
       super(builder);
@@ -3275,6 +4054,45 @@ public final class DuplexProtocol {
       return rpcCancel_;
     }
     
+    // optional .OobResponse oobResponse = 7;
+    public static final int OOBRESPONSE_FIELD_NUMBER = 7;
+    private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse oobResponse_;
+    public boolean hasOobResponse() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse getOobResponse() {
+      return oobResponse_;
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder getOobResponseOrBuilder() {
+      return oobResponse_;
+    }
+    
+    // optional .OobMessage oobMessage = 8;
+    public static final int OOBMESSAGE_FIELD_NUMBER = 8;
+    private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage oobMessage_;
+    public boolean hasOobMessage() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage getOobMessage() {
+      return oobMessage_;
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder getOobMessageOrBuilder() {
+      return oobMessage_;
+    }
+    
+    // optional .OobMessage transparentMessage = 100;
+    public static final int TRANSPARENTMESSAGE_FIELD_NUMBER = 100;
+    private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage transparentMessage_;
+    public boolean hasTransparentMessage() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage getTransparentMessage() {
+      return transparentMessage_;
+    }
+    public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder getTransparentMessageOrBuilder() {
+      return transparentMessage_;
+    }
+    
     private void initFields() {
       connectRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.getDefaultInstance();
       connectResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.getDefaultInstance();
@@ -3282,6 +4100,9 @@ public final class DuplexProtocol {
       rpcResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.getDefaultInstance();
       rpcError_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.getDefaultInstance();
       rpcCancel_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.getDefaultInstance();
+      oobResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.getDefaultInstance();
+      oobMessage_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
+      transparentMessage_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3324,6 +4145,28 @@ public final class DuplexProtocol {
           return false;
         }
       }
+      if (hasOobResponse()) {
+        if (!getOobResponse().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasOobMessage()) {
+        if (!getOobMessage().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasTransparentMessage()) {
+        if (!getTransparentMessage().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (!extensionsAreInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -3331,6 +4174,9 @@ public final class DuplexProtocol {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
+      com.google.protobuf.GeneratedMessage
+        .ExtendableMessage<com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload>.ExtensionWriter extensionWriter =
+          newExtensionWriter();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeMessage(1, connectRequest_);
       }
@@ -3349,6 +4195,16 @@ public final class DuplexProtocol {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeMessage(6, rpcCancel_);
       }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeMessage(7, oobResponse_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeMessage(8, oobMessage_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeMessage(100, transparentMessage_);
+      }
+      extensionWriter.writeUntil(536870912, output);
       getUnknownFields().writeTo(output);
     }
     
@@ -3382,6 +4238,19 @@ public final class DuplexProtocol {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, rpcCancel_);
       }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(7, oobResponse_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(8, oobMessage_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(100, transparentMessage_);
+      }
+      size += extensionsSerializedSize();
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
@@ -3475,8 +4344,8 @@ public final class DuplexProtocol {
       return builder;
     }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayloadOrBuilder {
+        com.google.protobuf.GeneratedMessage.ExtendableBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload, Builder> implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayloadOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_WirePayload_descriptor;
@@ -3504,6 +4373,9 @@ public final class DuplexProtocol {
           getRpcResponseFieldBuilder();
           getRpcErrorFieldBuilder();
           getRpcCancelFieldBuilder();
+          getOobResponseFieldBuilder();
+          getOobMessageFieldBuilder();
+          getTransparentMessageFieldBuilder();
         }
       }
       private static Builder create() {
@@ -3548,6 +4420,24 @@ public final class DuplexProtocol {
           rpcCancelBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000020);
+        if (oobResponseBuilder_ == null) {
+          oobResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.getDefaultInstance();
+        } else {
+          oobResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
+        if (oobMessageBuilder_ == null) {
+          oobMessage_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
+        } else {
+          oobMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000080);
+        if (transparentMessageBuilder_ == null) {
+          transparentMessage_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
+        } else {
+          transparentMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
       
@@ -3634,6 +4524,30 @@ public final class DuplexProtocol {
         } else {
           result.rpcCancel_ = rpcCancelBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        if (oobResponseBuilder_ == null) {
+          result.oobResponse_ = oobResponse_;
+        } else {
+          result.oobResponse_ = oobResponseBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        if (oobMessageBuilder_ == null) {
+          result.oobMessage_ = oobMessage_;
+        } else {
+          result.oobMessage_ = oobMessageBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        if (transparentMessageBuilder_ == null) {
+          result.transparentMessage_ = transparentMessage_;
+        } else {
+          result.transparentMessage_ = transparentMessageBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3668,6 +4582,16 @@ public final class DuplexProtocol {
         if (other.hasRpcCancel()) {
           mergeRpcCancel(other.getRpcCancel());
         }
+        if (other.hasOobResponse()) {
+          mergeOobResponse(other.getOobResponse());
+        }
+        if (other.hasOobMessage()) {
+          mergeOobMessage(other.getOobMessage());
+        }
+        if (other.hasTransparentMessage()) {
+          mergeTransparentMessage(other.getTransparentMessage());
+        }
+        this.mergeExtensionFields(other);
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -3708,6 +4632,28 @@ public final class DuplexProtocol {
             
             return false;
           }
+        }
+        if (hasOobResponse()) {
+          if (!getOobResponse().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasOobMessage()) {
+          if (!getOobMessage().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasTransparentMessage()) {
+          if (!getTransparentMessage().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (!extensionsAreInitialized()) {
+          
+          return false;
         }
         return true;
       }
@@ -3787,6 +4733,33 @@ public final class DuplexProtocol {
               }
               input.readMessage(subBuilder, extensionRegistry);
               setRpcCancel(subBuilder.buildPartial());
+              break;
+            }
+            case 58: {
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.Builder subBuilder = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.newBuilder();
+              if (hasOobResponse()) {
+                subBuilder.mergeFrom(getOobResponse());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setOobResponse(subBuilder.buildPartial());
+              break;
+            }
+            case 66: {
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder subBuilder = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.newBuilder();
+              if (hasOobMessage()) {
+                subBuilder.mergeFrom(getOobMessage());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setOobMessage(subBuilder.buildPartial());
+              break;
+            }
+            case 802: {
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder subBuilder = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.newBuilder();
+              if (hasTransparentMessage()) {
+                subBuilder.mergeFrom(getTransparentMessage());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setTransparentMessage(subBuilder.buildPartial());
               break;
             }
           }
@@ -4335,6 +5308,276 @@ public final class DuplexProtocol {
         return rpcCancelBuilder_;
       }
       
+      // optional .OobResponse oobResponse = 7;
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse oobResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder> oobResponseBuilder_;
+      public boolean hasOobResponse() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse getOobResponse() {
+        if (oobResponseBuilder_ == null) {
+          return oobResponse_;
+        } else {
+          return oobResponseBuilder_.getMessage();
+        }
+      }
+      public Builder setOobResponse(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse value) {
+        if (oobResponseBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          oobResponse_ = value;
+          onChanged();
+        } else {
+          oobResponseBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      public Builder setOobResponse(
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.Builder builderForValue) {
+        if (oobResponseBuilder_ == null) {
+          oobResponse_ = builderForValue.build();
+          onChanged();
+        } else {
+          oobResponseBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      public Builder mergeOobResponse(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse value) {
+        if (oobResponseBuilder_ == null) {
+          if (((bitField0_ & 0x00000040) == 0x00000040) &&
+              oobResponse_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.getDefaultInstance()) {
+            oobResponse_ =
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.newBuilder(oobResponse_).mergeFrom(value).buildPartial();
+          } else {
+            oobResponse_ = value;
+          }
+          onChanged();
+        } else {
+          oobResponseBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      public Builder clearOobResponse() {
+        if (oobResponseBuilder_ == null) {
+          oobResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.getDefaultInstance();
+          onChanged();
+        } else {
+          oobResponseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
+        return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.Builder getOobResponseBuilder() {
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return getOobResponseFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder getOobResponseOrBuilder() {
+        if (oobResponseBuilder_ != null) {
+          return oobResponseBuilder_.getMessageOrBuilder();
+        } else {
+          return oobResponse_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder> 
+          getOobResponseFieldBuilder() {
+        if (oobResponseBuilder_ == null) {
+          oobResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder>(
+                  oobResponse_,
+                  getParentForChildren(),
+                  isClean());
+          oobResponse_ = null;
+        }
+        return oobResponseBuilder_;
+      }
+      
+      // optional .OobMessage oobMessage = 8;
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage oobMessage_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder> oobMessageBuilder_;
+      public boolean hasOobMessage() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage getOobMessage() {
+        if (oobMessageBuilder_ == null) {
+          return oobMessage_;
+        } else {
+          return oobMessageBuilder_.getMessage();
+        }
+      }
+      public Builder setOobMessage(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage value) {
+        if (oobMessageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          oobMessage_ = value;
+          onChanged();
+        } else {
+          oobMessageBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000080;
+        return this;
+      }
+      public Builder setOobMessage(
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder builderForValue) {
+        if (oobMessageBuilder_ == null) {
+          oobMessage_ = builderForValue.build();
+          onChanged();
+        } else {
+          oobMessageBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000080;
+        return this;
+      }
+      public Builder mergeOobMessage(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage value) {
+        if (oobMessageBuilder_ == null) {
+          if (((bitField0_ & 0x00000080) == 0x00000080) &&
+              oobMessage_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance()) {
+            oobMessage_ =
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.newBuilder(oobMessage_).mergeFrom(value).buildPartial();
+          } else {
+            oobMessage_ = value;
+          }
+          onChanged();
+        } else {
+          oobMessageBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000080;
+        return this;
+      }
+      public Builder clearOobMessage() {
+        if (oobMessageBuilder_ == null) {
+          oobMessage_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
+          onChanged();
+        } else {
+          oobMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000080);
+        return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder getOobMessageBuilder() {
+        bitField0_ |= 0x00000080;
+        onChanged();
+        return getOobMessageFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder getOobMessageOrBuilder() {
+        if (oobMessageBuilder_ != null) {
+          return oobMessageBuilder_.getMessageOrBuilder();
+        } else {
+          return oobMessage_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder> 
+          getOobMessageFieldBuilder() {
+        if (oobMessageBuilder_ == null) {
+          oobMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder>(
+                  oobMessage_,
+                  getParentForChildren(),
+                  isClean());
+          oobMessage_ = null;
+        }
+        return oobMessageBuilder_;
+      }
+      
+      // optional .OobMessage transparentMessage = 100;
+      private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage transparentMessage_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder> transparentMessageBuilder_;
+      public boolean hasTransparentMessage() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage getTransparentMessage() {
+        if (transparentMessageBuilder_ == null) {
+          return transparentMessage_;
+        } else {
+          return transparentMessageBuilder_.getMessage();
+        }
+      }
+      public Builder setTransparentMessage(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage value) {
+        if (transparentMessageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          transparentMessage_ = value;
+          onChanged();
+        } else {
+          transparentMessageBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      public Builder setTransparentMessage(
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder builderForValue) {
+        if (transparentMessageBuilder_ == null) {
+          transparentMessage_ = builderForValue.build();
+          onChanged();
+        } else {
+          transparentMessageBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      public Builder mergeTransparentMessage(com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage value) {
+        if (transparentMessageBuilder_ == null) {
+          if (((bitField0_ & 0x00000100) == 0x00000100) &&
+              transparentMessage_ != com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance()) {
+            transparentMessage_ =
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.newBuilder(transparentMessage_).mergeFrom(value).buildPartial();
+          } else {
+            transparentMessage_ = value;
+          }
+          onChanged();
+        } else {
+          transparentMessageBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      public Builder clearTransparentMessage() {
+        if (transparentMessageBuilder_ == null) {
+          transparentMessage_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
+          onChanged();
+        } else {
+          transparentMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000100);
+        return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder getTransparentMessageBuilder() {
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return getTransparentMessageFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder getTransparentMessageOrBuilder() {
+        if (transparentMessageBuilder_ != null) {
+          return transparentMessageBuilder_.getMessageOrBuilder();
+        } else {
+          return transparentMessage_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder> 
+          getTransparentMessageFieldBuilder() {
+        if (transparentMessageBuilder_ == null) {
+          transparentMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder>(
+                  transparentMessage_,
+                  getParentForChildren(),
+                  isClean());
+          transparentMessage_ = null;
+        }
+        return transparentMessageBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:WirePayload)
     }
     
@@ -4377,6 +5620,16 @@ public final class DuplexProtocol {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_RpcCancel_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_OobResponse_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_OobResponse_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_OobMessage_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_OobMessage_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_WirePayload_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -4403,15 +5656,20 @@ public final class DuplexProtocol {
       "relationId\030\001 \002(\005\022\025\n\rresponseBytes\030\002 \002(\014\"" +
       "7\n\010RpcError\022\025\n\rcorrelationId\030\001 \002(\005\022\024\n\014er" +
       "rorMessage\030\002 \002(\t\"\"\n\tRpcCancel\022\025\n\rcorrela" +
-      "tionId\030\001 \002(\005\"\341\001\n\013WirePayload\022\'\n\016connectR" +
-      "equest\030\001 \001(\0132\017.ConnectRequest\022)\n\017connect" +
-      "Response\030\002 \001(\0132\020.ConnectResponse\022\037\n\nrpcR" +
-      "equest\030\003 \001(\0132\013.RpcRequest\022!\n\013rpcResponse" +
-      "\030\004 \001(\0132\014.RpcResponse\022\033\n\010rpcError\030\005 \001(\0132\t" +
-      ".RpcError\022\035\n\trpcCancel\030\006 \001(\0132\n.RpcCancel" +
-      "*)\n\020ConnectErrorCode\022\025\n\021ALREADY_CONNECTE",
-      "D\020\000B;\n\'com.googlecode.protobuf.pro.duple" +
-      "x.wireB\016DuplexProtocolH\001"
+      "tionId\030\001 \002(\005\":\n\013OobResponse\022\025\n\rcorrelati" +
+      "onId\030\001 \002(\005\022\024\n\014messageBytes\030\002 \002(\014\"\"\n\nOobM" +
+      "essage\022\024\n\014messageBytes\030\001 \002(\014\"\331\002\n\013WirePay" +
+      "load\022\'\n\016connectRequest\030\001 \001(\0132\017.ConnectRe" +
+      "quest\022)\n\017connectResponse\030\002 \001(\0132\020.Connect" +
+      "Response\022\037\n\nrpcRequest\030\003 \001(\0132\013.RpcReques" +
+      "t\022!\n\013rpcResponse\030\004 \001(\0132\014.RpcResponse\022\033\n\010",
+      "rpcError\030\005 \001(\0132\t.RpcError\022\035\n\trpcCancel\030\006" +
+      " \001(\0132\n.RpcCancel\022!\n\013oobResponse\030\007 \001(\0132\014." +
+      "OobResponse\022\037\n\noobMessage\030\010 \001(\0132\013.OobMes" +
+      "sage\022\'\n\022transparentMessage\030d \001(\0132\013.OobMe" +
+      "ssage*\t\010\350\007\020\200\200\200\200\002*)\n\020ConnectErrorCode\022\025\n\021" +
+      "ALREADY_CONNECTED\020\000B;\n\'com.googlecode.pr" +
+      "otobuf.pro.duplex.wireB\016DuplexProtocolH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4466,12 +5724,28 @@ public final class DuplexProtocol {
               new java.lang.String[] { "CorrelationId", },
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.class,
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.Builder.class);
-          internal_static_WirePayload_descriptor =
+          internal_static_OobResponse_descriptor =
             getDescriptor().getMessageTypes().get(6);
+          internal_static_OobResponse_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_OobResponse_descriptor,
+              new java.lang.String[] { "CorrelationId", "MessageBytes", },
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.class,
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.Builder.class);
+          internal_static_OobMessage_descriptor =
+            getDescriptor().getMessageTypes().get(7);
+          internal_static_OobMessage_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_OobMessage_descriptor,
+              new java.lang.String[] { "MessageBytes", },
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.class,
+              com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder.class);
+          internal_static_WirePayload_descriptor =
+            getDescriptor().getMessageTypes().get(8);
           internal_static_WirePayload_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_WirePayload_descriptor,
-              new java.lang.String[] { "ConnectRequest", "ConnectResponse", "RpcRequest", "RpcResponse", "RpcError", "RpcCancel", },
+              new java.lang.String[] { "ConnectRequest", "ConnectResponse", "RpcRequest", "RpcResponse", "RpcError", "RpcCancel", "OobResponse", "OobMessage", "TransparentMessage", },
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload.class,
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload.Builder.class);
           return null;
