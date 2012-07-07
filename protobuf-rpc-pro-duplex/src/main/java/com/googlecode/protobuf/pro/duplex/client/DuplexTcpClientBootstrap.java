@@ -39,6 +39,7 @@ import org.jboss.netty.handler.codec.compression.ZlibEncoder;
 import org.jboss.netty.handler.codec.compression.ZlibWrapper;
 import org.jboss.netty.util.internal.ConversionUtil;
 
+import com.google.protobuf.ExtensionRegistry;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
@@ -378,6 +379,22 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 		((DuplexTcpClientPipelineFactory)getPipelineFactory()).setSslContext(sslContext);
 	}
 
+	/**
+	 * @return the registered WirelinePayload's extension registry.
+	 */
+	public ExtensionRegistry getWirelinePayloadExtensionRegistry() {
+		return ((DuplexTcpClientPipelineFactory)getPipelineFactory()).getWirepayloadExtensionRegistry();
+	}
+	
+	/**
+	 * Set the WirelinePayload's extension registry.
+	 * 
+	 * @param extensionRegistry
+	 */
+	public void setWirelinePayloadExtensionRegistry( ExtensionRegistry extensionRegistry ) {
+		((DuplexTcpClientPipelineFactory)getPipelineFactory()).setWirepayloadExtensionRegistry(extensionRegistry);
+	}
+	
 	/**
 	 * @return the compression
 	 */
