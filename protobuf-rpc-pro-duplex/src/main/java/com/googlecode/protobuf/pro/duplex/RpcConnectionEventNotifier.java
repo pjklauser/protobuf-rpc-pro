@@ -184,7 +184,7 @@ public class RpcConnectionEventNotifier implements
 		 */
 		@Override
 		public void setOobMessageCallback(Message responsePrototype,
-				RpcCallback<Message> onMessage) {
+				RpcCallback<? extends Message> onMessage) {
 			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
 		}
 
