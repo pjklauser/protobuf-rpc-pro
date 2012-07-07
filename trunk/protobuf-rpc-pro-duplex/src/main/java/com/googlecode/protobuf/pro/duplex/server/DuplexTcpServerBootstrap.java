@@ -29,10 +29,11 @@ import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 
+import com.google.protobuf.ExtensionRegistry;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
-import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
 import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
+import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
@@ -207,4 +208,20 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 		((DuplexTcpServerPipelineFactory)getPipelineFactory()).setSslContext(sslContext);
 	}
 
+	/**
+	 * @return the registered WirelinePayload's extension registry.
+	 */
+	public ExtensionRegistry getWirelinePayloadExtensionRegistry() {
+		return ((DuplexTcpServerPipelineFactory)getPipelineFactory()).getWirepayloadExtensionRegistry();
+	}
+	
+	/**
+	 * Set the WirelinePayload's extension registry.
+	 * 
+	 * @param extensionRegistry
+	 */
+	public void setWirelinePayloadExtensionRegistry( ExtensionRegistry extensionRegistry ) {
+		((DuplexTcpServerPipelineFactory)getPipelineFactory()).setWirepayloadExtensionRegistry(extensionRegistry);
+	}
+	
 }
