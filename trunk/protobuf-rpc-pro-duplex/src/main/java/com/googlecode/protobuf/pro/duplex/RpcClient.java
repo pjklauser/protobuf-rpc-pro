@@ -204,7 +204,7 @@ public class RpcClient implements RpcClientChannel {
 			}			
 		} else {
 			if ( log.isDebugEnabled() ) {
-				log.debug("No onMessageFunction registered for received NonCorrelatedMessage.");
+				log.debug("No onOobMessageFunction registered for received OobMessage.");
 			}
 		}
 	}
@@ -365,10 +365,11 @@ public class RpcClient implements RpcClientChannel {
 	/* (non-Javadoc)
 	 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#setOobMessageCallback(com.google.protobuf.Message, com.google.protobuf.RpcCallback)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setOobMessageCallback(Message responsePrototype,
-			RpcCallback<Message> onMessage) {
-		onOobMessageFunction = onMessage;
+			RpcCallback<? extends Message> onMessage) {
+		onOobMessageFunction = (RpcCallback<Message>) onMessage;
 		onOobMessagePrototype = responsePrototype;
 	}
 

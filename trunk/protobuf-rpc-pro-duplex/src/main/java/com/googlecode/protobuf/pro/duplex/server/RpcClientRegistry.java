@@ -15,6 +15,9 @@
 */
 package com.googlecode.protobuf.pro.duplex.server;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,6 +25,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.googlecode.protobuf.pro.duplex.RpcClient;
+import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
+import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 
 /**
  * An RpcClientRegistry keeps an account of all connected RpcClients of an RpcServer.
@@ -41,6 +46,20 @@ public class RpcClientRegistry {
 	public RpcClientRegistry() {
 	}
 
+	/**
+	 * A convenience method for a server to get a list of all attached RpcClients.
+	 * 
+	 * An alternative is that the server keeps its own records by using 
+	 * {@link RpcConnectionEventListener} functions.
+	 * 
+	 * @return an unmodifyable List of connected RpcClients.
+	 */
+	public List<RpcClientChannel> getAllClients() {
+		List<RpcClientChannel> result = new ArrayList<RpcClientChannel>();
+		result.addAll(clientNameMap.values());
+		return Collections.unmodifiableList(result);
+	}
+	
 	/**
 	 * Attempt to register an RpcClient which has newly connected, during
 	 * connection handshake. If the client is already connected, return false.

@@ -98,5 +98,5 @@ public interface RpcClientChannel extends com.google.protobuf.RpcChannel, com.go
 	 * @param responsePrototype the prototype of the messages which can be handled out-of-band from the server.
 	 * @param oobMessageListener a callback function when an unsolicited messages is received from the server.
 	 */
-	public void setOobMessageCallback( Message responsePrototype, RpcCallback<Message> oobMessageListener );
+	public void setOobMessageCallback( Message responsePrototype, RpcCallback<? extends Message> oobMessageListener );
 }
