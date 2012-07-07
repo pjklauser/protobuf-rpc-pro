@@ -473,9 +473,10 @@ public class RpcClient implements RpcClientChannel {
 			this.correlationId = correlationId;
 		}
 
+		@SuppressWarnings("unchecked")
 		public void setOobResponseCallback(Message responsePrototype,
-				RpcCallback<Message> onMessage) {
-			onOobResponseFunction = onMessage;
+				RpcCallback<? extends Message> onMessage) {
+			onOobResponseFunction = (RpcCallback<Message>) onMessage;
 			onOobResponsePrototype = responsePrototype;
 		}
 		
