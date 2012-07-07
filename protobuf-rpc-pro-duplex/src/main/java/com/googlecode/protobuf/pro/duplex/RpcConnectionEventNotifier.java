@@ -20,12 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.netty.channel.ChannelPipeline;
 
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
+import com.googlecode.protobuf.pro.duplex.RpcClient.ClientRpcController;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 
@@ -160,7 +162,7 @@ public class RpcConnectionEventNotifier implements
 		 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#newRpcController()
 		 */
 		@Override
-		public RpcController newRpcController() {
+		public ClientRpcController newRpcController() {
 			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
 		}
 
@@ -169,6 +171,28 @@ public class RpcConnectionEventNotifier implements
 		 */
 		@Override
 		public void close() {
+			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
+		}
+
+		@Override
+		public ChannelPipeline getPipeline() {
+			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
+		}
+
+		/* (non-Javadoc)
+		 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#setOobMessageCallback(com.google.protobuf.Message, com.google.protobuf.RpcCallback)
+		 */
+		@Override
+		public void setOobMessageCallback(Message responsePrototype,
+				RpcCallback<Message> onMessage) {
+			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
+		}
+
+		/* (non-Javadoc)
+		 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#sendUnsolicitedMessage(com.google.protobuf.Message)
+		 */
+		@Override
+		public void sendOobMessage(Message message) {
 			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
 		}
 		

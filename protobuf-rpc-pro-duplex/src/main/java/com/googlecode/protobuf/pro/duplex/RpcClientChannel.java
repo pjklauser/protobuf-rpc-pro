@@ -15,7 +15,11 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
-import com.google.protobuf.RpcController;
+import org.jboss.netty.channel.ChannelPipeline;
+
+import com.google.protobuf.Message;
+import com.google.protobuf.RpcCallback;
+import com.googlecode.protobuf.pro.duplex.RpcClient.ClientRpcController;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 
 /**
@@ -50,7 +54,7 @@ public interface RpcClientChannel extends com.google.protobuf.RpcChannel, com.go
 	 * 
 	 * @return a new RPC controller.
 	 */
-	public RpcController newRpcController();
+	public ClientRpcController newRpcController();
 	
 	/**
 	 * When the underlying channel closes, all pending calls
@@ -58,4 +62,41 @@ public interface RpcClientChannel extends com.google.protobuf.RpcChannel, com.go
 	 */
 	public void close();
 	
+	/**
+	 * Return the clients underlying Netty Pipeline.
+	 * 
+	 * On a client, the RpcClient can customize the Netty Pipeline directly after the 
+	 * {@link DuplexTcpClientBootstrap#peerWith(java.net.InetSocketAddress)} completes.
+	 * 
+	 * On a server, the use a {@link RpcConnectionEventNotifier#connectionOpened(RpcClientChannel)} 
+	 * to customize the Netty pipeline after a client connection is established. This method
+	 * also works for clients.
+	 * 
+	 * @return the low level Netty ChannelPipeline.
+	 */
+	public ChannelPipeline getPipeline();
+	
+	/**
+	 * Send a message to the remote peer asynchronously, out-of-band with
+	 * respect to any ongoing RPC calls. Will cause the onUnsolicitedMessageCallback
+	 * called on the remote peer's RpcClient assuming the {@link } is set.
+	 * 
+	 * @param message
+	 */
+	public void sendOobMessage( Message message );
+	
+	/**
+	 * Allow to register a callback for unsolicited messages from the server.
+	 * Non correlated messages are messages which are not related to any ongoing RPC
+	 * call. 
+	 * 
+	 * Only a single oobMessageListener is allowed at a time. Setting the responsePrototype 
+	 * or oobMessageListener parameter to null will "switch off" the onMessage reception within the
+	 * client. This does not prohibit servers sending uncorrelated messages to a client which
+	 * wastes bandwidth and ignores the messages.
+	 * 
+	 * @param responsePrototype the prototype of the messages which can be handled out-of-band from the server.
+	 * @param oobMessageListener a callback function when an unsolicited messages is received from the server.
+	 */
+	public void setOobMessageCallback( Message responsePrototype, RpcCallback<Message> oobMessageListener );
 }

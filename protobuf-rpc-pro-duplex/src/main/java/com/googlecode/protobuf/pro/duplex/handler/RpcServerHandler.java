@@ -55,10 +55,13 @@ public class RpcServerHandler extends SimpleChannelUpstreamHandler {
         	WirePayload payload = (WirePayload)e.getMessage();
         	if ( payload.hasRpcRequest() ) {
         		rpcServer.request(payload.getRpcRequest());
+        		return;
         	} else if ( payload.hasRpcCancel() ) {
         		rpcServer.cancel(payload.getRpcCancel());
+        		return;
         	}
-        	return; // rpcResponse, rpcError were consumed further down by RpcClientHandler.
+        	// serverMessage, unsolicitedMessage, rpcResponse, rpcError were consumed further down by RpcClientHandler.
+        	// everything else is passed through to potentially later channel handlers which are modified by using code.
         }
         ctx.sendUpstream(e);
     }

@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelPipeline;
 
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -31,7 +32,11 @@ import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
+import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
+import com.googlecode.protobuf.pro.duplex.handler.RpcClientHandler;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
+import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage;
+import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest;
@@ -65,6 +70,9 @@ public class RpcClient implements RpcClientChannel {
 	private final PeerInfo clientInfo;
 	private final PeerInfo serverInfo;
 	private final boolean compression;
+	
+	private Message onOobMessagePrototype;
+	private RpcCallback<Message> onOobMessageFunction;
 	
 	private RpcLogger rpcLogger;
 	
@@ -153,13 +161,52 @@ public class RpcClient implements RpcClientChannel {
 	}
 	
 	@Override
-	public RpcController newRpcController() {
+	public ClientRpcController newRpcController() {
 		return new ClientRpcController(this);
 	}
 	
 	@Override
 	public String toString() {
 		return "RpcClientChannel->" + getPeerInfo();
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#sendOobMessage(com.google.protobuf.Message)
+	 */
+	@Override
+	public void sendOobMessage(Message message) {
+		OobMessage msg = OobMessage.newBuilder()
+				.setMessageBytes(message.toByteString())
+				.build();
+		WirePayload payload = WirePayload.newBuilder().setOobMessage(msg).build();
+		
+		if ( log.isDebugEnabled() ) {
+			log.debug("Sending OobMessage.");
+		}
+		
+		channel.write(payload);
+	}
+
+	public void receiveOobMessage(OobMessage msg) {
+		if ( onOobMessagePrototype != null && onOobMessageFunction != null ) {
+			Message onMsg = null;
+			try {
+				onMsg = onOobMessagePrototype.newBuilderForType().mergeFrom(msg.getMessageBytes()).build();
+
+				onOobMessageFunction.run(onMsg);
+				
+			} catch ( InvalidProtocolBufferException e ) {
+				String errorMessage = "Invalid UncorrelatedMessage Protobuf.";
+				
+				//TODO doLog( state, rpcResponse, errorMessage );
+				
+				log.warn(errorMessage, e);
+			}			
+		} else {
+			if ( log.isDebugEnabled() ) {
+				log.debug("No onMessageFunction registered for received NonCorrelatedMessage.");
+			}
+		}
 	}
 	
 	public void error(RpcError rpcError) {
@@ -204,6 +251,46 @@ public class RpcClient implements RpcClientChannel {
 			// this can happen when we have cancellation and the server still responds.
 			if ( log.isDebugEnabled() ) {
 				log.debug("No PendingClientCallState found for correlationId " + rpcResponse.getCorrelationId());
+			}
+		}
+	}
+	
+	/**
+	 * For use by {@link ServerRpcController} to send a server out-of-band message
+	 * back to the client.
+	 * 
+	 * @param correlationId
+	 * @param oobMessage
+	 */
+	public void sendOobResponse( int correlationId, Message oobMessage ) {
+		OobResponse msg = OobResponse.newBuilder()
+				.setCorrelationId(correlationId)
+				.setMessageBytes(oobMessage.toByteString())
+				.build();
+		
+		WirePayload payload = WirePayload.newBuilder().setOobResponse(msg).build();
+		
+		if ( log.isDebugEnabled() ) {
+			log.debug("Sending ["+msg.getCorrelationId()+"]OobResponse.");
+		}
+		
+		channel.write(payload);
+	}
+	
+	/**
+	 * For use by {@link RpcClientHandler} to dispatch an Out-of-Band server response
+	 * message to client code.
+	 * 
+	 * @param serverMessage
+	 */
+	public void receiveOobResponse( OobResponse serverMessage ) {
+		PendingClientCallState state = getPendingRequest(serverMessage.getCorrelationId());
+		if ( state != null ) {
+			state.getController().receiveOobResponse(serverMessage);
+		} else {
+			// this can happen when we have cancellation and the server still responds.
+			if ( log.isDebugEnabled() ) {
+				log.debug("No PendingClientCallState found for correlationId " + serverMessage.getCorrelationId());
 			}
 		}
 	}
@@ -267,6 +354,24 @@ public class RpcClient implements RpcClientChannel {
 		} while( pendingRequestMap.size() > 0 );
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#getPipeline()
+	 */
+	@Override
+	public ChannelPipeline getPipeline() {
+		return getPipeline();
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#setOobMessageCallback(com.google.protobuf.Message, com.google.protobuf.RpcCallback)
+	 */
+	@Override
+	public void setOobMessageCallback(Message responsePrototype,
+			RpcCallback<Message> onMessage) {
+		onOobMessageFunction = onMessage;
+		onOobMessagePrototype = responsePrototype;
+	}
+
 	protected void doLog( PendingClientCallState state, Message response, String errorMessage ) {
 		if ( rpcLogger != null ) {
 			rpcLogger.logCall(clientInfo, serverInfo, state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), state.getStartTimestamp(), System.currentTimeMillis());
@@ -288,6 +393,10 @@ public class RpcClient implements RpcClientChannel {
 		return pendingRequestMap.remove(seqId);
 	}
 
+	private PendingClientCallState getPendingRequest(int seqId) {
+		return pendingRequestMap.get(seqId);
+	}
+
 	public static class ClientRpcController implements RpcController {
 
 		private RpcClient rpcClient;
@@ -296,37 +405,61 @@ public class RpcClient implements RpcClientChannel {
 		private String reason;
 		private boolean failed;
 		
+		/**
+		 * Register an asynchronous callback function for ServerMessages
+		 * sent from the Server back to the initiating Client during
+		 * an RPC call processing on the server.
+		 * 
+		 * Note: resetting the RPC controller will remove any registered
+		 * callback function.
+		 */
+		private RpcCallback<Message> onOobResponseFunction;
+		
+		/**
+		 * The type of Protobuf message for the ServerMessages.
+		 */
+		private Message onOobResponsePrototype;
+		
 		public ClientRpcController( RpcClient rpcClient ) {
 			this.rpcClient = rpcClient;
 		}
 		
+		@Override
 		public String errorText() {
 			return reason;
 		}
 
+		@Override
 		public boolean failed() {
 			return failed;
 		}
 
+		@Override
 		public boolean isCanceled() {
 			throw new IllegalStateException("Serverside use only.");
 		}
 
+		@Override
 		public void notifyOnCancel(RpcCallback<Object> callback) {
 			throw new IllegalStateException("Serverside use only.");
 		}
 
+		@Override
 		public void reset() {
 			reason = null;
 			failed = false;
 			correlationId = 0;
+			onOobResponseFunction = null;
+			onOobResponsePrototype = null;
 		}
 
+		@Override
 		public void setFailed(String reason) {
 			this.reason = reason;
 			this.failed = true;
 		}
 
+		@Override
 		public void startCancel() {
 			rpcClient.startCancel(correlationId);
 		}
@@ -339,6 +472,42 @@ public class RpcClient implements RpcClientChannel {
 			this.correlationId = correlationId;
 		}
 
+		public void setOobResponseCallback(Message responsePrototype,
+				RpcCallback<Message> onMessage) {
+			onOobResponseFunction = onMessage;
+			onOobResponsePrototype = responsePrototype;
+		}
+		
+		public void receiveOobResponse(OobResponse msg) {
+			if ( msg.getCorrelationId() != correlationId ) {
+				// only possible with race condition on client reset and re-use when a server message
+				// comes back
+				log.info("Correlation mismatch client " + correlationId + " OobResponse " + msg.getCorrelationId());
+				
+				return; // don't process the server message anymore in this case.
+			}
+			if ( onOobResponsePrototype != null && onOobResponseFunction != null ) {
+				Message onMsg = null;
+				try {
+					onMsg = onOobResponsePrototype.newBuilderForType().mergeFrom(msg.getMessageBytes()).build();
+
+					onOobResponseFunction.run(onMsg);
+					
+				} catch ( InvalidProtocolBufferException e ) {
+					String errorMessage = "Invalid OobResponse Protobuf for correlationId " + correlationId;
+					
+					//TODO doLog( state, rpcResponse, errorMessage );
+					
+					log.warn(errorMessage, e);
+				}			
+				
+			} else {
+				if ( log.isDebugEnabled() ) {
+					log.debug("No onOobResponseCallbackFunction registered for correlationId " + correlationId);
+				}
+			}
+		}
+		
 	}
 
 	private static class BlockingRpcCallback implements RpcCallback<Message> {
