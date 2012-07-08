@@ -1,0 +1,35 @@
+What changes are made from release to release. Check SVN history for more details.
+
+= 2.0.0 =
+
+Feature: Out-of-Band Protobuf Messaging between peers.
+
+Feature: Out-of-Band RPC server replies
+
+Feature: provide "transparent" messages through Netty pipeline
+
+Feature: provide easy access to the Netty pipeline.
+
+Feature: Provide WirePayload ( wire protocol ) extension possibility.
+
+Fix#9: reversed logging roles
+
+Discontinued: protobuf-streamer-pro is discontinued since the Out-of-Band messaging features can be used to allow pull of large files from Server to Client, making the separate library obsolete.
+
+= 1.2.2 =
+
+Fix#8: fix for hanging due to close race condition.
+
+= 1.2.1 =
+
+Fix: improve asynchronicity of reply calls.
+
+= 1.2.0 =
+
+Feature: Introduced compression
+
+Made availible on maven central repository.
+
+= 1.0.0 =
+
+Initial version.
