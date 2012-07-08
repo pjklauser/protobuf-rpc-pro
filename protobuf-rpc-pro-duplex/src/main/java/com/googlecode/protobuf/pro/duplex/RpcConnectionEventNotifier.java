@@ -15,6 +15,9 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,7 +40,7 @@ import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
  * 
  * It listens for TCP connection events and transforms them into 
  * RPC connection events which are fired towards the registered 
- * RpcConnectionEventListener.
+ * {@link RpcConnectionEventListener}s.
  * 
  * @author Peter Klauser
  *
@@ -49,13 +52,13 @@ public class RpcConnectionEventNotifier implements
 
 	private Map<String,RpcClientChannel> peerNameMap = new ConcurrentHashMap<String, RpcClientChannel>();
 	
-	private RpcConnectionEventListener eventListener;
+	private List<RpcConnectionEventListener> eventListeners = new ArrayList<RpcConnectionEventListener>();
 	
 	public RpcConnectionEventNotifier() {
 	}
 	
 	public RpcConnectionEventNotifier( RpcConnectionEventListener eventListener ) {
-		this.eventListener = eventListener;
+		this.eventListeners.add(eventListener);
 	}
 	
 	/* (non-Javadoc)
@@ -66,8 +69,8 @@ public class RpcConnectionEventNotifier implements
 		if ( log.isDebugEnabled() ) {
 			log.debug("connectionClosed from " + clientChannel.getPeerInfo());
 		}
-		RpcConnectionEventListener l = getEventListener();
-		if ( l != null ) {
+		List<RpcConnectionEventListener> ls = getEventListeners();
+		for( RpcConnectionEventListener l : ls ) {
 			l.connectionLost(clientChannel);
 		}
 		peerNameMap.put(clientChannel.getPeerInfo().getName(), new DetachedRpcClientChannel(clientChannel.getPeerInfo()));
@@ -78,14 +81,14 @@ public class RpcConnectionEventNotifier implements
 	 */
 	@Override
 	public void connectionOpened(RpcClientChannel clientChannel) {
-		RpcConnectionEventListener l = getEventListener();
+		List<RpcConnectionEventListener> ls = getEventListeners();
 		PeerInfo peerInfo = clientChannel.getPeerInfo();
 		RpcClientChannel existingClient = peerNameMap.get(peerInfo.getName());
 		if ( existingClient == null ) {
 			if ( log.isDebugEnabled() ) {
 				log.debug("connectionOpened from " + peerInfo);
 			}
-			if ( l != null ) {
+			for( RpcConnectionEventListener l : ls ) {
 				l.connectionOpened(clientChannel);
 			}
 		} else {
@@ -94,14 +97,14 @@ public class RpcConnectionEventNotifier implements
 				if ( log.isDebugEnabled() ) {
 					log.debug("connectionChanged from " + existingPeerInfo + " to " + peerInfo);
 				}
-				if ( l != null ) {
+				for( RpcConnectionEventListener l : ls ) {
 					l.connectionChanged(clientChannel);
 				}
 			} else {
 				if ( log.isDebugEnabled() ) {
 					log.debug("connectionReestablished from " + peerInfo);
 				}
-				if ( l != null ) {
+				for( RpcConnectionEventListener l : ls ) {
 					l.connectionReestablished(clientChannel);
 				}
 			}
@@ -109,19 +112,47 @@ public class RpcConnectionEventNotifier implements
 	}
 
 	/**
-	 * @return the eventListener
+	 * @return the eventListeners
 	 */
-	public RpcConnectionEventListener getEventListener() {
-		return eventListener;
+	public List<RpcConnectionEventListener> getEventListeners() {
+		List<RpcConnectionEventListener> l = new ArrayList<RpcConnectionEventListener>();
+		l.addAll(eventListeners);
+		return Collections.unmodifiableList(l);
 	}
 
 	/**
-	 * @param eventListener the eventListener to set
+	 * Set the eventListener as the ONLY event listener. 
+	 * Equivalent to {@link #clearEventListeners()} and then
+	 * {@link #addEventListener(RpcConnectionEventListener)}
+	 * 
+	 * @param eventListener the eventListener to add
 	 */
 	public void setEventListener(RpcConnectionEventListener eventListener) {
-		this.eventListener = eventListener;
+		clearEventListeners();
+		addEventListener(eventListener);
 	}
 
+	/**
+	 * @param eventListener the eventListener to add
+	 */
+	public void addEventListener(RpcConnectionEventListener eventListener) {
+		this.eventListeners.add(eventListener);
+	}
+
+	/**
+	 * @param eventListener the eventListener to remove
+	 */
+	public void removeEventListener(RpcConnectionEventListener eventListener) {
+		this.eventListeners.remove(eventListener);
+	}
+
+	/**
+	 * Clear the eventListeners.
+	 */
+	public void clearEventListeners() {
+		this.eventListeners.clear();
+	}
+	
 	private static class DetachedRpcClientChannel implements RpcClientChannel {
 
 		private PeerInfo peerInfo;
