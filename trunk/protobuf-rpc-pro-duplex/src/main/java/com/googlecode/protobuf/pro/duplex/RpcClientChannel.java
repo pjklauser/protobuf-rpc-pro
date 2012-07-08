@@ -21,6 +21,8 @@ import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.googlecode.protobuf.pro.duplex.RpcClient.ClientRpcController;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
+import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
+import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 
 /**
  * An RpcClientChannel is constructed once when a connection is established
@@ -68,9 +70,10 @@ public interface RpcClientChannel extends com.google.protobuf.RpcChannel, com.go
 	 * On a client, the RpcClient can customize the Netty Pipeline directly after the 
 	 * {@link DuplexTcpClientBootstrap#peerWith(java.net.InetSocketAddress)} completes.
 	 * 
-	 * On a server, the use a {@link RpcConnectionEventNotifier#connectionOpened(RpcClientChannel)} 
-	 * to customize the Netty pipeline after a client connection is established. This method
-	 * also works for clients.
+	 * On a server, the use registered {@link RpcConnectionEventNotifier} or {@link TcpConnectionEventListener} 
+	 * on the {@link DuplexTcpServerBootstrap} to get notified of new or reconnecting clients,
+	 * allowing to customize the Netty pipeline. This method
+	 * also works for clients {@link DuplexTcpClientBootstrap}.
 	 * 
 	 * @return the low level Netty ChannelPipeline.
 	 */

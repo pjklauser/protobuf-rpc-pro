@@ -14,6 +14,14 @@ message Pong {
     required bytes pongData = 2;
 }
 
+message PercentComplete {
+	required int32 percentageComplete = 1;
+}
+
+message Status {
+	required string message = 1;
+}
+	
 service PingService {
     rpc ping(Ping) returns (Pong);
 }
