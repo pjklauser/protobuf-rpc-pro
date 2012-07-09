@@ -22,6 +22,7 @@ import java.util.WeakHashMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 
 /**
@@ -58,24 +59,36 @@ public class SameThreadExecutor implements RpcServerCallExecutor {
 		call.setExecutor((Runnable)Thread.currentThread());
 		
 		BlockingRpcCallback callback = new BlockingRpcCallback();
-		call.getService().callMethod(call.getMethodDesc(), call.getController(), call.getRequest(), callback);
-		if ( !callback.isDone() ) {
-			// this is only likely to come in here if another thread executes the callback than the
-			// one calling callMethod.
-			synchronized(callback) {
-				while(!callback.isDone()) {
-					try {
-						callback.wait();
-					} catch (InterruptedException e) {
-						// if the service off-loaded running to a different thread, the currentThread
-						// could be waiting here and be interrupted when cancel comes in.
-						
-						// we "consume" the thread's current thread's interrupt status and finish.
-						break;
+		if ( call.getService() != null ) {
+			call.getService().callMethod(call.getMethodDesc(), call.getController(), call.getRequest(), callback);
+			if ( !callback.isDone() ) {
+				// this is only likely to come in here if another thread executes the callback than the
+				// one calling callMethod.
+				synchronized(callback) {
+					while(!callback.isDone()) {
+						try {
+							callback.wait();
+						} catch (InterruptedException e) {
+							// if the service off-loaded running to a different thread, the currentThread
+							// could be waiting here and be interrupted when cancel comes in.
+							
+							// we "consume" the thread's current thread's interrupt status and finish.
+							break;
+						}
 					}
 				}
+				// callback may or may not have finished
 			}
-			// callback may or may not have finished
+		} else {
+			// handle blocking call service
+			try {
+				Message response = call.getBlockingService().callBlockingMethod(call.getMethodDesc(), call.getController(), call.getRequest());
+				callback.run(response);
+			} catch ( com.google.protobuf.ServiceException se ) {
+				log.warn("BlockingService threw ServiceException.", se);
+				callback.run(null);
+				call.getController().setFailed("ServiceException");
+			}
 		}
 		
 		runningCalls.remove(Thread.currentThread());

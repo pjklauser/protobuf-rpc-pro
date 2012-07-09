@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 
 /**
@@ -198,24 +199,35 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 				return;
 			}
 			
-			call.getService().callMethod(call.getMethodDesc(), call.getController(), call.getRequest(), serviceCallback);
-			if ( !serviceCallback.isDone() ) {
-				// this is only likely to come in here if another thread executes the callback that the
-				// one calling callMethod.
-				synchronized(serviceCallback) {
-					while(!serviceCallback.isDone()) {
-						try {
-							serviceCallback.wait();
-						} catch (InterruptedException e) {
-							// if the service off-loaded running to a different thread, the currentThread
-							// could be waiting here and be interrupted when cancel comes in.
-							
-							// we "consume" the thread's current thread's interrupt status and finish.
-							break;
+			if ( call.getService() != null ) {
+				call.getService().callMethod(call.getMethodDesc(), call.getController(), call.getRequest(), serviceCallback);
+				if ( !serviceCallback.isDone() ) {
+					// this is only likely to come in here if another thread executes the callback that the
+					// one calling callMethod.
+					synchronized(serviceCallback) {
+						while(!serviceCallback.isDone()) {
+							try {
+								serviceCallback.wait();
+							} catch (InterruptedException e) {
+								// if the service off-loaded running to a different thread, the currentThread
+								// could be waiting here and be interrupted when cancel comes in.
+								
+								// we "consume" the thread's current thread's interrupt status and finish.
+								break;
+							}
 						}
 					}
+					// callback may or may not have finished
 				}
-				// callback may or may not have finished
+			} else {
+				try {
+					Message responseMessage = call.getBlockingService().callBlockingMethod(call.getMethodDesc(), call.getController(), call.getRequest());
+					serviceCallback.run(responseMessage);
+				} catch ( com.google.protobuf.ServiceException se ) {
+					log.warn("BlockingService threw ServiceException.", se);
+					serviceCallback.run(null);
+					call.getController().setFailed("ServiceException");
+				}
 			}
 			if ( Thread.interrupted() ) {
 				//log clearing interrupted flag, which might have been set if we were interrupted

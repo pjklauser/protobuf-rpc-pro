@@ -15,6 +15,7 @@
 */
 package com.googlecode.protobuf.pro.duplex.execute;
 
+import com.google.protobuf.BlockingService;
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.Service;
@@ -27,6 +28,7 @@ public class PendingServerCallState {
 	
 	private final RpcServerExecutorCallback executorCallback;
 	private final Service service;
+	private final BlockingService blockingService;
 	private final ServerRpcController controller;
 	private final MethodDescriptor methodDesc;
 	private final Message request;
@@ -44,6 +46,17 @@ public class PendingServerCallState {
 	public PendingServerCallState(RpcServerExecutorCallback executorCallback, Service service, ServerRpcController controller, MethodDescriptor methodDesc, Message request, long startTS) {
 		this.executorCallback = executorCallback;
 		this.service = service;
+		this.blockingService = null;
+		this.controller = controller;
+		this.methodDesc = methodDesc;
+		this.request = request;
+		this.startTS = startTS;
+	}
+
+	public PendingServerCallState(RpcServerExecutorCallback executorCallback, BlockingService service, ServerRpcController controller, MethodDescriptor methodDesc, Message request, long startTS) {
+		this.executorCallback = executorCallback;
+		this.service = null;
+		this.blockingService = service;
 		this.controller = controller;
 		this.methodDesc = methodDesc;
 		this.request = request;
@@ -100,10 +113,18 @@ public class PendingServerCallState {
 	}
 
 	/**
+	 * @return the blockingService
+	 */
+	public BlockingService getBlockingService() {
+		return blockingService;
+	}
+
+	/**
 	 * @return the executorCallback
 	 */
 	public RpcServerExecutorCallback getExecutorCallback() {
 		return executorCallback;
 	}
+
 
 }

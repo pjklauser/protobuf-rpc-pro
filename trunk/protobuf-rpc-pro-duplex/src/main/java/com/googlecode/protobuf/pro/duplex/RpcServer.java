@@ -27,7 +27,7 @@ import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
-import com.google.protobuf.Service;
+import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry.ServiceDescriptor;
 import com.googlecode.protobuf.pro.duplex.execute.PendingServerCallState;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerExecutorCallback;
@@ -97,9 +97,9 @@ public class RpcServer implements RpcServerExecutorCallback {
 					+ " already registered as PendingServerCall.");
 		}
 
-		Service service = rpcServiceRegistry.resolveService(rpcRequest
+		ServiceDescriptor sd = rpcServiceRegistry.resolveService(rpcRequest
 				.getServiceIdentifier());
-		if (service == null) {
+		if (sd == null) {
 			String errorMessage = "Unknown Service";
 			RpcError rpcError = RpcError.newBuilder()
 					.setCorrelationId(correlationId)
@@ -115,8 +115,13 @@ public class RpcServer implements RpcServerExecutorCallback {
 			doErrorLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
 			return;
 		}
-		MethodDescriptor methodDesc = service.getDescriptorForType()
-				.findMethodByName(rpcRequest.getMethodIdentifier());
+		MethodDescriptor methodDesc = null;
+		if ( sd.getBlockingService() != null ) {
+			methodDesc = sd.getBlockingService().getDescriptorForType().findMethodByName(rpcRequest.getMethodIdentifier());
+		} else {
+			methodDesc = sd.getService().getDescriptorForType().findMethodByName(rpcRequest.getMethodIdentifier());
+		}
+				
 		if (methodDesc == null) {
 			String errorMessage = "Unknown Method";
 			RpcError rpcError = RpcError.newBuilder()
@@ -133,11 +138,15 @@ public class RpcServer implements RpcServerExecutorCallback {
 			doErrorLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
 			return;
 		}
-		Message requestPrototype = service.getRequestPrototype(methodDesc);
+		Message requestPrototype = null;
+		if ( sd.getBlockingService() != null ) {
+			requestPrototype = sd.getBlockingService().getRequestPrototype(methodDesc);
+		} else {
+			requestPrototype = sd.getService().getRequestPrototype(methodDesc);
+		}
 
 		// fetch an optional ExtensionRegistry associated with the Service.
-		ExtensionRegistry extensionRegistry = rpcServiceRegistry.resolveExtensionRegistry(rpcRequest
-				.getServiceIdentifier());
+		ExtensionRegistry extensionRegistry = sd.getExtensionRegistry();
 		
 		Message request = null;
 		try {
@@ -169,8 +178,12 @@ public class RpcServer implements RpcServerExecutorCallback {
 		ServerRpcController controller = new ServerRpcController(rpcClient,
 					correlationId);
 
-		PendingServerCallState state = new PendingServerCallState(this,
-					service, controller, methodDesc, request, startTS);
+		PendingServerCallState state = null;
+		if ( sd.getBlockingService() != null ) {
+			state = new PendingServerCallState(this,sd.getBlockingService(), controller, methodDesc, request, startTS);
+		} else {
+			state = new PendingServerCallState(this,sd.getService(), controller, methodDesc, request, startTS);
+		}
 		pendingServerCallMap.put(correlationId, state);
 
 		callExecutor.execute(state);

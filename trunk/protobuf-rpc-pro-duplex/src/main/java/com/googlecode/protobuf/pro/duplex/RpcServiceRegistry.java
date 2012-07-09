@@ -21,6 +21,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.protobuf.BlockingService;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.Service;
 
@@ -38,8 +39,7 @@ public class RpcServiceRegistry {
 	
 	private static Log log = LogFactory.getLog(RpcServiceRegistry.class);
 	
-	private Map<String, Service> serviceNameMap = new HashMap<String, Service>();
-	private Map<String, ExtensionRegistry> extensionRegistryNameMap = new HashMap<String, ExtensionRegistry>();
+	private Map<String, ServiceDescriptor> serviceNameMap = new HashMap<String, ServiceDescriptor>();
 	
 	public RpcServiceRegistry() {
 	}
@@ -50,8 +50,8 @@ public class RpcServiceRegistry {
 	 * 
 	 * @param serviceImplementation
 	 */
-	public void registerService(Service serviceImplementation) { //TODO consider BlockingService
-		String serviceName = addService(serviceImplementation);
+	public void registerService(Service serviceImplementation) {
+		String serviceName = addService(serviceImplementation, null);
 		log.info("Registered " + serviceName);
 	}
 
@@ -66,8 +66,33 @@ public class RpcServiceRegistry {
 		if ( extensionRegistry == null ) {
 			throw new IllegalArgumentException("Missing extensionRegistry");
 		}
-		String serviceName = addService(serviceImplementation);
-		extensionRegistryNameMap.put(serviceName, extensionRegistry);
+		String serviceName = addService(serviceImplementation, extensionRegistry);
+		log.info("Registered " + serviceName + " with ExtensionRegistry");
+	}
+
+	/**
+	 * Registers a BlockingService implementation at an RPC server without an message
+	 * ExtensionRegistry.
+	 * 
+	 * @param serviceImplementation
+	 */
+	public void registerBlockingService(BlockingService serviceImplementation) {
+		String serviceName = addService(serviceImplementation, null);
+		log.info("Registered " + serviceName);
+	}
+
+	/**
+	 * Registers a BlockingService implementation at an RPC server with a message
+	 * ExtensionRegistry.
+	 * 
+	 * @param serviceImplementation
+	 * @param extensionRegistry
+	 */
+	public void registerService(BlockingService serviceImplementation, ExtensionRegistry extensionRegistry ) {
+		if ( extensionRegistry == null ) {
+			throw new IllegalArgumentException("Missing extensionRegistry");
+		}
+		String serviceName = addService(serviceImplementation, extensionRegistry);
 		log.info("Registered " + serviceName + " with ExtensionRegistry");
 	}
 
@@ -81,16 +106,12 @@ public class RpcServiceRegistry {
 		String serviceName = serviceImplementation.getDescriptorForType().getName();
 		if ( serviceNameMap.remove(serviceName) != null ) {
 			
-			if ( extensionRegistryNameMap.remove(serviceName) != null ) {
-				log.info("Removed " + serviceName + " with ExtensionRegistry");
-			} else {
-				log.info("Removed " + serviceName);
-			}
+			log.info("Removed " + serviceName);
 		}
 	}
 
-	public Service resolveService(String serviceName) {
-		Service s = serviceNameMap.get(serviceName);
+	public ServiceDescriptor resolveService(String serviceName) {
+		ServiceDescriptor s = serviceNameMap.get(serviceName);
 		if ( log.isDebugEnabled() ) {
 			if ( s != null ) {
 				log.debug("Resolved " + serviceName);
@@ -101,24 +122,62 @@ public class RpcServiceRegistry {
 		return s;
 	}
 
-	public ExtensionRegistry resolveExtensionRegistry(String serviceName) {
-		ExtensionRegistry er = extensionRegistryNameMap.get(serviceName);
-		if ( log.isDebugEnabled() ) {
-			if ( er != null ) {
-				log.debug("Resolved ExtensionRegistry " + serviceName);
-			}
-		}
-		return er;
-	}
-
-	private String addService(Service serviceImplementation) {
+	private String addService(Service serviceImplementation, ExtensionRegistry er) {
 		String serviceName = serviceImplementation.getDescriptorForType().getName();
 		if ( serviceNameMap.containsKey(serviceName) ) {
 			throw new IllegalStateException("Duplicate serviceName "+ serviceName);
 		}
-		serviceNameMap.put(serviceName, serviceImplementation);
+		serviceNameMap.put(serviceName, new ServiceDescriptor(serviceImplementation, er));
 		
 		return serviceName;
 	}
 
+	private String addService(BlockingService serviceImplementation, ExtensionRegistry er) {
+		String serviceName = serviceImplementation.getDescriptorForType().getName();
+		if ( serviceNameMap.containsKey(serviceName) ) {
+			throw new IllegalStateException("Duplicate serviceName "+ serviceName);
+		}
+		serviceNameMap.put(serviceName, new ServiceDescriptor(serviceImplementation, er));
+		
+		return serviceName;
+	}
+	
+	public static class ServiceDescriptor {
+		private final Service service;
+		private final BlockingService blockingService;
+		private final ExtensionRegistry extensionRegistry;
+		
+		public ServiceDescriptor( BlockingService s, ExtensionRegistry er ) {
+			this.service = null;
+			this.blockingService = s;
+			this.extensionRegistry = er;
+		}
+		
+		public ServiceDescriptor( Service s, ExtensionRegistry er ) {
+			this.service = s;
+			this.blockingService = null;
+			this.extensionRegistry = er;
+		}
+
+		/**
+		 * @return the service
+		 */
+		public Service getService() {
+			return service;
+		}
+
+		/**
+		 * @return the blockingService
+		 */
+		public BlockingService getBlockingService() {
+			return blockingService;
+		}
+
+		/**
+		 * @return the extensionRegistry
+		 */
+		public ExtensionRegistry getExtensionRegistry() {
+			return extensionRegistry;
+		}
+	}
 }
