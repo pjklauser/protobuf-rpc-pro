@@ -8,6 +8,8 @@ Feature: Out-of-Band RPC server replies
 
 Feature: provide "transparent" messages through Netty pipeline
 
+Feature: allow registration of BlockingServices in servers.
+
 Feature: provide easy access to the Netty pipeline.
 
 Feature: Provide WirePayload ( wire protocol ) extension possibility.
