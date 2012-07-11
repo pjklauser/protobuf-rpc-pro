@@ -18,6 +18,8 @@ Fix#9: reversed logging roles
 
 Discontinued: protobuf-streamer-pro is discontinued since the Out-of-Band messaging features can be used to allow pull of large files from Server to Client, making the separate library obsolete.
 
+Dependency Update: Netty 3.5.2.Final
+
 = 1.2.2 =
 
 Fix#8: fix for hanging due to close race condition.
