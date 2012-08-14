@@ -8,6 +8,7 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcController;
+import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
@@ -106,15 +107,23 @@ public class PingClient {
 				ByteString requestData = ByteString.copyFrom(new byte[payloadSize]);
 				Ping request = Ping.newBuilder().setNumber(procTime)
 						.setPingData(requestData).build();
-				Pong pong = myService.ping(controller, request);
-				if (pong.getPongData().size() != payloadSize) {
-					throw new Exception("Reply payload mismatch.");
+				try {
+					Pong pong = myService.ping(controller, request);
+					if (pong.getPongData().size() != payloadSize) {
+						throw new Exception("Reply payload mismatch.");
+					}
+					
+				} catch ( ServiceException e) {
+					log.warn("blocking call threw ServiceException. ", e);
 				}
 			}
 			endTS = System.currentTimeMillis();
 			log.error("BlockingCalls " + numCalls + " in " + (endTS - startTS)
 					/ 1000 + "s");
 
+
+		} catch ( Exception e ) {
+			log.error("Exiting due to Exception.", e);
 		} finally {
 			System.exit(0);
 		}

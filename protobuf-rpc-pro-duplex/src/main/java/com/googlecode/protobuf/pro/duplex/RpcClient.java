@@ -105,7 +105,6 @@ public class RpcClient implements RpcClientChannel {
 		rpcController.setCorrelationId(correlationId);
 
 		PendingClientCallState state = new PendingClientCallState(rpcController, method, responsePrototype, request, done);
-		registerPendingRequest(correlationId, state);
 		
 		RpcRequest rpcRequest = RpcRequest.newBuilder()
 			.setCorrelationId(correlationId)
@@ -119,7 +118,18 @@ public class RpcClient implements RpcClientChannel {
 			log.debug("Sending ["+rpcRequest.getCorrelationId()+"]RpcRequest.");
 		}
 		
-		channel.write(payload);
+		if ( channel.isOpen() ) {
+			registerPendingRequest(correlationId, state);
+
+			channel.write(payload);
+			
+		} else {
+			RpcError rpcError = RpcError.newBuilder().setCorrelationId(correlationId).setErrorMessage("Channel Closed").build();
+			
+			doLog( state, rpcError, rpcError.getErrorMessage() );
+			
+			state.handleFailure(rpcError.getErrorMessage());
+		}
 	}
 
 	/* (non-Javadoc)
