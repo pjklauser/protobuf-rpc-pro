@@ -82,7 +82,7 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 	 * Whether socket level communications between ALL clients peered with servers by this
 	 * Bootstrap should be compressed ( using ZLIB ).
 	 */
-	private boolean compression;
+	private boolean compression = false;
 	
 	/**
      * Creates a new instance stipulating client info.
@@ -141,6 +141,10 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
             throw new NullPointerException("remotedAddress");
         }
         SocketAddress localAddress = (SocketAddress) getOption("localAddress");
+        //Issue 14: bind client to local port.
+        if ( localAddress == null ) {
+        	localAddress = new InetSocketAddress(clientInfo.getPort());
+        }
         ChannelFuture connectFuture = super.connect(remoteAddress,localAddress).awaitUninterruptibly();
         
         if ( !connectFuture.isSuccess() ) {
@@ -189,8 +193,12 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
         	connectFuture.getChannel().close().awaitUninterruptibly();
 			throw new IOException("DuplexTcpServer CONNECT_RESPONSE correlationId mismatch. TcpClient sent " + connectRequest.getCorrelationId() + " received " + connectResponse.getCorrelationId() + " from TcpServer.");
 		}
-		String serverPID = connectResponse.hasServerPID() ? connectResponse.getServerPID() : "<NONE>";
-		PeerInfo serverInfo = new PeerInfo(remoteAddress.getHostName(), remoteAddress.getPort(), serverPID );
+		PeerInfo serverInfo = null;
+		if ( connectResponse.hasServerPID() ) {
+			serverInfo = new PeerInfo(remoteAddress.getHostName(), remoteAddress.getPort(), connectResponse.getServerPID() );
+		} else {
+			serverInfo = new PeerInfo(remoteAddress.getHostName(), remoteAddress.getPort() );
+		}
 		
 		RpcClient rpcClient = new RpcClient(channel, clientInfo, serverInfo, connectResponse.getCompress());
 		rpcClient.setCallLogger(getRpcLogger());

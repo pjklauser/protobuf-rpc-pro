@@ -42,7 +42,19 @@ public class PeerInfo {
 	private String pid;
 	
 	/**
+	 * Constructor to construct a PeerInfo with a specific localAddress and processId.
 	 * 
+	 * @param address
+	 * @param pid
+	 */
+	public PeerInfo( InetSocketAddress localAddress, String pid ) {
+		this(localAddress.getHostName(), localAddress.getPort());
+	}
+	
+	/**
+	 * Constructor to construct a PeerInfo with a specific localAddress.
+	 * A Random processId will be assigned for this PeerInfo instance.
+	 *  
 	 * @param address
 	 */
 	public PeerInfo( InetSocketAddress localAddress ) {
@@ -51,6 +63,7 @@ public class PeerInfo {
 	
 	/**
 	 * Constructor to construct a PeerInfo of one's own process.
+	 * A Random processId will be assigned for this PeerInfo instance.
 	 * 
 	 * @param hostName
 	 * @param port
@@ -58,8 +71,7 @@ public class PeerInfo {
 	public PeerInfo( String hostName, int port ) {
 		this.hostName = hostName;
 		this.port = port;
-		String pid = System.getProperty("pid","<NONE>");
-		this.pid = pid;
+		this.pid = java.util.UUID.randomUUID().toString();
 	}
 
 	/**
