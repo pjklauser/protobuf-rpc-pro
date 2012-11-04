@@ -3,3 +3,7 @@
 = Architecture =
 
 The picture below shows the libraries internal architecture.
+
+http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-duplex/doc/protobuf-rpc-pro.png
+
+The protobuf-rpc-pro libraries primary function is to enable fully duplex RPC calls multiplexed over a single TCP/IP socket connection. Due to this duplex nature, the component architecture is almost symetric on client and server sides.
