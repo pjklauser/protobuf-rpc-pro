@@ -1,4 +1,8 @@
 What changes are made from release to release. Check SVN history for more details.
+= Next =
+
+Fix 14: replacement of PID with UUID.
+
 = 2.0.1 =
 
 Dependency Update: upgraded to Netty version 3.5.3 Final.
