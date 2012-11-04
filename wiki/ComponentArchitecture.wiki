@@ -1,0 +1,5 @@
+#summary Show the internal components of protobuf-rpc-pro and how they work together.
+
+= Architecture =
+
+The picture below shows the libraries internal architecture.
