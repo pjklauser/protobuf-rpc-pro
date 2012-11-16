@@ -27,7 +27,7 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
-import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
+import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
 import com.googlecode.protobuf.pro.duplex.server.RpcClientRegistry;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode;
@@ -55,16 +55,12 @@ public class ServerConnectRequestHandler extends SimpleChannelUpstreamHandler {
 
 	private static Log log = LogFactory.getLog(ServerConnectRequestHandler.class);
 
-    private final PeerInfo serverInfo;
-    private final RpcClientRegistry rpcClientRegistry;
+	private final DuplexTcpServerBootstrap bootstrap;
     private final DuplexTcpServerPipelineFactory pipelineFactory;
-    private final RpcLogger logger;
     
-    public ServerConnectRequestHandler( PeerInfo serverInfo, RpcClientRegistry rpcClientRegistry, DuplexTcpServerPipelineFactory pipelineFactory, RpcLogger logger ) {
-    	this.serverInfo = serverInfo;
-    	this.rpcClientRegistry = rpcClientRegistry;
+    public ServerConnectRequestHandler( DuplexTcpServerBootstrap bootstrap, DuplexTcpServerPipelineFactory pipelineFactory ) {
+    	this.bootstrap = bootstrap;
     	this.pipelineFactory = pipelineFactory;
-    	this.logger = logger;
     }
     
     @Override
@@ -78,11 +74,10 @@ public class ServerConnectRequestHandler extends SimpleChannelUpstreamHandler {
         		PeerInfo connectingClientInfo = new PeerInfo(connectRequest.getClientHostName(), connectRequest.getClientPort(), connectRequest.getClientPID());
         		ConnectResponse connectResponse = null;
         		
-        		RpcClient rpcClient = new RpcClient(ctx.getChannel(), serverInfo, connectingClientInfo, connectRequest.getCompress() );
-        		rpcClient.setCallLogger(logger);
-        		if ( rpcClientRegistry.registerRpcClient(rpcClient) ) {
+        		RpcClient rpcClient = new RpcClient(ctx.getChannel(), bootstrap.getServerInfo(), connectingClientInfo, connectRequest.getCompress(), bootstrap.getLogger() );
+        		if ( bootstrap.getRpcClientRegistry().registerRpcClient(rpcClient) ) {
         			connectResponse = ConnectResponse.newBuilder().setCorrelationId(connectRequest.getCorrelationId())
-        					.setServerPID(serverInfo.getPid())
+        					.setServerPID(bootstrap.getServerInfo().getPid())
         					.setCompress(connectRequest.getCompress())
         					.build();
             		WirePayload payload = WirePayload.newBuilder().setConnectResponse(connectResponse).build();

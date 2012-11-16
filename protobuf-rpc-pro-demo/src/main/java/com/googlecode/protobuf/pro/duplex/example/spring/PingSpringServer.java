@@ -14,8 +14,8 @@ import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
-import com.googlecode.protobuf.pro.duplex.example.DefaultPingPongServiceImpl;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService;
+import com.googlecode.protobuf.pro.duplex.example.PingPongServiceFactory;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
@@ -24,7 +24,7 @@ import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 public class PingSpringServer {
 	
 	@Autowired(required = true)
-	private DefaultPingPongServiceImpl pingPongServiceImpl;
+	private PingPongServiceFactory.NonBlockingPingServer pingPongServiceImpl;
 
 	int port;
 	String host;
@@ -51,9 +51,10 @@ public class PingSpringServer {
 		bootstrap = new DuplexTcpServerBootstrap(serverInfo,
 				new NioServerSocketChannelFactory(
 						Executors.newCachedThreadPool(),
-						Executors.newCachedThreadPool()), executor);
+						Executors.newCachedThreadPool()));
+		bootstrap.setRpcServerCallExecutor(executor);
 		log.info("Proto Serverbootstrap created");
-
+		
 		// setup a RPC event listener - it just logs what happens
 		RpcConnectionEventNotifier rpcEventNotifier = new RpcConnectionEventNotifier();
 		RpcConnectionEventListener listener = new RpcConnectionEventListener() {

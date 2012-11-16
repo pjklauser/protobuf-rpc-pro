@@ -43,11 +43,10 @@ public class StatusServer {
         		serverInfo,
                 new NioServerSocketChannelFactory(
                         Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()),
-                new ThreadPoolCallExecutor(10, 10), 
-                logger);
+                        Executors.newCachedThreadPool()));
 
-		
+		bootstrap.setRpcServerCallExecutor(new ThreadPoolCallExecutor(10, 10));
+		bootstrap.setLogger(logger);
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
         shutdownHandler.addResource(bootstrap);
         

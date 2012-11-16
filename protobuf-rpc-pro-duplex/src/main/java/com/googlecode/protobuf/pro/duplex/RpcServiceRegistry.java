@@ -51,23 +51,33 @@ public class RpcServiceRegistry {
 	 * @param serviceImplementation
 	 */
 	public void registerService(Service serviceImplementation) {
-		String serviceName = addService(serviceImplementation, null);
-		log.info("Registered " + serviceName);
+		addService(true, serviceImplementation, null);
+	}
+
+	/**
+	 * Registers a Service implementation at an RPC server without an message
+	 * ExtensionRegistry.
+	 * 
+	 * @param allowTimeout whether to allow client timeouts to cause service cancellation.
+	 * @param serviceImplementation
+	 */
+	public void registerService(boolean allowTimeout, Service serviceImplementation) {
+		addService(allowTimeout, serviceImplementation, null);
 	}
 
 	/**
 	 * Registers a Service implementation at an RPC server with a message
 	 * ExtensionRegistry.
 	 * 
+	 * @param allowTimeout whether to allow client timeouts to cause service cancellation.
 	 * @param serviceImplementation
 	 * @param extensionRegistry
 	 */
-	public void registerService(Service serviceImplementation, ExtensionRegistry extensionRegistry ) {
+	public void registerService(boolean allowTimeout, Service serviceImplementation, ExtensionRegistry extensionRegistry ) {
 		if ( extensionRegistry == null ) {
 			throw new IllegalArgumentException("Missing extensionRegistry");
 		}
-		String serviceName = addService(serviceImplementation, extensionRegistry);
-		log.info("Registered " + serviceName + " with ExtensionRegistry");
+		addService(allowTimeout, serviceImplementation, extensionRegistry);
 	}
 
 	/**
@@ -77,23 +87,33 @@ public class RpcServiceRegistry {
 	 * @param serviceImplementation
 	 */
 	public void registerBlockingService(BlockingService serviceImplementation) {
-		String serviceName = addService(serviceImplementation, null);
-		log.info("Registered " + serviceName);
+		addService(true, serviceImplementation, null);
+	}
+	
+	/**
+	 * Registers a BlockingService implementation at an RPC server without an message
+	 * ExtensionRegistry.
+	 * 
+	 * @param allowTimeout whether to allow client timeouts to cause service cancellation.
+	 * @param serviceImplementation
+	 */
+	public void registerBlockingService(boolean allowTimeout, BlockingService serviceImplementation) {
+		addService(allowTimeout, serviceImplementation, null);
 	}
 
 	/**
 	 * Registers a BlockingService implementation at an RPC server with a message
 	 * ExtensionRegistry.
 	 * 
+	 * @param allowTimeout whether to allow client timeouts to cause service cancellation.
 	 * @param serviceImplementation
 	 * @param extensionRegistry
 	 */
-	public void registerService(BlockingService serviceImplementation, ExtensionRegistry extensionRegistry ) {
+	public void registerService(boolean allowTimeout, BlockingService serviceImplementation, ExtensionRegistry extensionRegistry ) {
 		if ( extensionRegistry == null ) {
 			throw new IllegalArgumentException("Missing extensionRegistry");
 		}
-		String serviceName = addService(serviceImplementation, extensionRegistry);
-		log.info("Registered " + serviceName + " with ExtensionRegistry");
+		addService(allowTimeout, serviceImplementation, extensionRegistry);
 	}
 
 	/**
@@ -122,22 +142,24 @@ public class RpcServiceRegistry {
 		return s;
 	}
 
-	private String addService(Service serviceImplementation, ExtensionRegistry er) {
+	private String addService(boolean allowTimeout, Service serviceImplementation, ExtensionRegistry er) {
 		String serviceName = serviceImplementation.getDescriptorForType().getName();
 		if ( serviceNameMap.containsKey(serviceName) ) {
 			throw new IllegalStateException("Duplicate serviceName "+ serviceName);
 		}
-		serviceNameMap.put(serviceName, new ServiceDescriptor(serviceImplementation, er));
+		serviceNameMap.put(serviceName, new ServiceDescriptor(allowTimeout, serviceImplementation, er));
+		log.info("Registered NonBlocking " + serviceName + (er!=null?" with ExtensionRegistry":"")+" allowTimeout="+(allowTimeout?"Y":"N"));
 		
 		return serviceName;
 	}
 
-	private String addService(BlockingService serviceImplementation, ExtensionRegistry er) {
+	private String addService(boolean allowTimeout, BlockingService serviceImplementation, ExtensionRegistry er) {
 		String serviceName = serviceImplementation.getDescriptorForType().getName();
 		if ( serviceNameMap.containsKey(serviceName) ) {
 			throw new IllegalStateException("Duplicate serviceName "+ serviceName);
 		}
-		serviceNameMap.put(serviceName, new ServiceDescriptor(serviceImplementation, er));
+		serviceNameMap.put(serviceName, new ServiceDescriptor(allowTimeout, serviceImplementation, er));
+		log.info("Registered Blocking " + serviceName + (er!=null?" with ExtensionRegistry":"")+" allowTimeout="+(allowTimeout?"Y":"N"));
 		
 		return serviceName;
 	}
@@ -146,17 +168,20 @@ public class RpcServiceRegistry {
 		private final Service service;
 		private final BlockingService blockingService;
 		private final ExtensionRegistry extensionRegistry;
+		private final boolean allowTimeout;
 		
-		public ServiceDescriptor( BlockingService s, ExtensionRegistry er ) {
+		public ServiceDescriptor( boolean allowTimeout, BlockingService s, ExtensionRegistry er ) {
 			this.service = null;
 			this.blockingService = s;
 			this.extensionRegistry = er;
+			this.allowTimeout = allowTimeout;
 		}
 		
-		public ServiceDescriptor( Service s, ExtensionRegistry er ) {
+		public ServiceDescriptor( boolean allowTimeout, Service s, ExtensionRegistry er ) {
 			this.service = s;
 			this.blockingService = null;
 			this.extensionRegistry = er;
+			this.allowTimeout = allowTimeout;
 		}
 
 		/**
@@ -178,6 +203,13 @@ public class RpcServiceRegistry {
 		 */
 		public ExtensionRegistry getExtensionRegistry() {
 			return extensionRegistry;
+		}
+
+		/**
+		 * @return the allowTimeout
+		 */
+		public boolean isAllowTimeout() {
+			return allowTimeout;
 		}
 	}
 }

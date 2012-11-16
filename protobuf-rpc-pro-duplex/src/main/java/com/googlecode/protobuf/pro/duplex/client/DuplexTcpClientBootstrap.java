@@ -54,6 +54,7 @@ import com.googlecode.protobuf.pro.duplex.handler.RpcServerHandler;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
+import com.googlecode.protobuf.pro.duplex.server.RpcClientRegistry;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
@@ -62,14 +63,30 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 
 	private static Log log = LogFactory.getLog(DuplexTcpClientBootstrap.class);
 	
+	private List<TcpConnectionEventListener> connectionEventListeners = new ArrayList<TcpConnectionEventListener>();
+
 	private PeerInfo clientInfo;
-	private RpcServiceRegistry rpcServiceRegistry = new RpcServiceRegistry();
-	private RpcServerCallExecutor rpcServerCallExecutor;
-	private RpcLogger logger = new CategoryPerServiceLogger();
+	/**
+	 * Whether socket level communications between ALL clients peered with servers by this
+	 * Bootstrap should be compressed ( using ZLIB ).
+	 */
+	private boolean compression = false;
 	
 	private AtomicInteger correlationId = new AtomicInteger(1);
 
-	private List<TcpConnectionEventListener> connectionEventListeners = new ArrayList<TcpConnectionEventListener>();
+	private final RpcClientRegistry rpcClientRegistry = new RpcClientRegistry();
+	private final RpcServiceRegistry rpcServiceRegistry = new RpcServiceRegistry();
+	private RpcServerCallExecutor rpcServerCallExecutor = null;
+	private ExtensionRegistry extensionRegistry;
+	private RpcSSLContext sslContext;
+	private RpcLogger logger = new CategoryPerServiceLogger();
+	
+	//TODO RuntimeConfigurator class
+		// InlineReverseRpcCalling => cannot use SameThreadCallExecutor
+			// ThreadPoolExecutor - unbounded/bounded queue, core, max threads, threadpoolfactory
+		// Netty ChannelFactory - NioServerSocketChannelFactory(   Executors.newCachedThreadPool(), Executors.newCachedThreadPool())); 
+		// TimeoutExecutor - thread factory, core poolsize, maxpoolsize,
+		// TimeoutChecker - thread factory, corepoolsize
 	
 	/**
 	 * All Netty Channels created and bound by this DuplexTcpClientBootstrap.
@@ -77,12 +94,6 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 	 * We keep hold of them to be able to do a clean shutdown.
 	 */
 	private ChannelGroup allChannels = new DefaultChannelGroup();
-	
-	/**
-	 * Whether socket level communications between ALL clients peered with servers by this
-	 * Bootstrap should be compressed ( using ZLIB ).
-	 */
-	private boolean compression = false;
 	
 	/**
      * Creates a new instance stipulating client info.
@@ -93,19 +104,7 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
     public DuplexTcpClientBootstrap(PeerInfo clientInfo, ChannelFactory channelFactory ) {
         super(channelFactory);
         this.clientInfo = clientInfo;
-        setPipelineFactory(new DuplexTcpClientPipelineFactory());
-    }
-    
-    /**
-     * Creates a new instance stipulating client info and a specific executor for server calls.
-     * 
-     * @param clientInfo
-     * @param channelFactory
-     * @param rpcServerCallExecutor
-     */
-    public DuplexTcpClientBootstrap(PeerInfo clientInfo, ChannelFactory channelFactory, RpcServerCallExecutor rpcServerCallExecutor ) {
-    	this( clientInfo, channelFactory);
-    	setRpcServerCallExecutor(rpcServerCallExecutor);
+        setPipelineFactory(new DuplexTcpClientPipelineFactory(this));
     }
     
 	public RpcClient peerWith( PeerInfo serverInfo ) throws IOException {
@@ -141,10 +140,6 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
             throw new NullPointerException("remotedAddress");
         }
         SocketAddress localAddress = (SocketAddress) getOption("localAddress");
-        //Issue 14: bind client to local port.
-        if ( localAddress == null ) {
-        	localAddress = new InetSocketAddress(clientInfo.getPort());
-        }
         ChannelFuture connectFuture = super.connect(remoteAddress,localAddress).awaitUninterruptibly();
         
         if ( !connectFuture.isSuccess() ) {
@@ -200,8 +195,7 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 			serverInfo = new PeerInfo(remoteAddress.getHostName(), remoteAddress.getPort() );
 		}
 		
-		RpcClient rpcClient = new RpcClient(channel, clientInfo, serverInfo, connectResponse.getCompress());
-		rpcClient.setCallLogger(getRpcLogger());
+		RpcClient rpcClient = new RpcClient(channel, clientInfo, serverInfo, connectResponse.getCompress(), getRpcLogger());
 		
 		RpcClientHandler rpcClientHandler = completePipeline(rpcClient);
 		rpcClientHandler.notifyOpened();
@@ -245,7 +239,7 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 		p.replace(Handler.CLIENT_CONNECT, Handler.RPC_CLIENT, rpcClientHandler);
 		
 		RpcServer rpcServer = new RpcServer(rpcClient, rpcServiceRegistry, rpcServerCallExecutor, logger);
-		RpcServerHandler rpcServerHandler = new RpcServerHandler(rpcServer); 
+		RpcServerHandler rpcServerHandler = new RpcServerHandler(rpcServer,rpcClientRegistry); 
 		p.addAfter(Handler.RPC_CLIENT, Handler.RPC_SERVER, rpcServerHandler);
 		
 		return rpcClientHandler;
@@ -339,10 +333,10 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 	}
 
 	/**
-	 * @param rpcServiceRegistry the rpcServiceRegistry to set
+	 * @return the rpcClientRegistry
 	 */
-	public void setRpcServiceRegistry(RpcServiceRegistry rpcServiceRegistry) {
-		this.rpcServiceRegistry = rpcServiceRegistry;
+	public RpcClientRegistry getRpcClientRegistry() {
+		return rpcClientRegistry;
 	}
 
 	/**
@@ -377,32 +371,16 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 	 * @return the sslContext
 	 */
 	public RpcSSLContext getSslContext() {
-		return ((DuplexTcpClientPipelineFactory)getPipelineFactory()).getSslContext();
+		return sslContext;
 	}
 
 	/**
 	 * @param sslContext the sslContext to set
 	 */
 	public void setSslContext(RpcSSLContext sslContext) {
-		((DuplexTcpClientPipelineFactory)getPipelineFactory()).setSslContext(sslContext);
+		this.sslContext = sslContext;
 	}
 
-	/**
-	 * @return the registered WirelinePayload's extension registry.
-	 */
-	public ExtensionRegistry getWirelinePayloadExtensionRegistry() {
-		return ((DuplexTcpClientPipelineFactory)getPipelineFactory()).getWirepayloadExtensionRegistry();
-	}
-	
-	/**
-	 * Set the WirelinePayload's extension registry.
-	 * 
-	 * @param extensionRegistry
-	 */
-	public void setWirelinePayloadExtensionRegistry( ExtensionRegistry extensionRegistry ) {
-		((DuplexTcpClientPipelineFactory)getPipelineFactory()).setWirepayloadExtensionRegistry(extensionRegistry);
-	}
-	
 	/**
 	 * @return the compression
 	 */
@@ -416,4 +394,19 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 	public void setCompression(boolean compression) {
 		this.compression = compression;
 	}
+
+	/**
+	 * @return the extensionRegistry
+	 */
+	public ExtensionRegistry getExtensionRegistry() {
+		return extensionRegistry;
+	}
+
+	/**
+	 * @param extensionRegistry the extensionRegistry to set
+	 */
+	public void setExtensionRegistry(ExtensionRegistry extensionRegistry) {
+		this.extensionRegistry = extensionRegistry;
+	}
+
 }

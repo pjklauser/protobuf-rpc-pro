@@ -2,7 +2,7 @@ package com.googlecode.protobuf.pro.duplex.example.spring;
 
 import org.springframework.context.annotation.Bean;
 
-import com.googlecode.protobuf.pro.duplex.example.DefaultPingPongServiceImpl;
+import com.googlecode.protobuf.pro.duplex.example.PingPongServiceFactory;
 
 
 public class SpringConfig
@@ -12,9 +12,9 @@ public class SpringConfig
 	
 	//Implementation of the Service Interface
 	@Bean(name="pingPongServiceImpl")
-	public DefaultPingPongServiceImpl pingPongServiceImpl()
+	public PingPongServiceFactory.NonBlockingPingServer pingPongServiceImpl()
 	{
-		return new DefaultPingPongServiceImpl();
+		return new PingPongServiceFactory.NonBlockingPingServer();
 	}
 	
 	//Will start the server

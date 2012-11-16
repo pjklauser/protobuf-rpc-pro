@@ -35,6 +35,7 @@ import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
 import com.googlecode.protobuf.pro.duplex.handler.RpcClientHandler;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
+import com.googlecode.protobuf.pro.duplex.timeout.RpcTimeoutExecutor;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel;
@@ -65,8 +66,6 @@ public class RpcClient implements RpcClientChannel {
 
 	private final Map<Integer, PendingClientCallState> pendingRequestMap = new ConcurrentHashMap<Integer, PendingClientCallState>();
 	
-	private final Channel channel;
-	
 	private final PeerInfo clientInfo;
 	private final PeerInfo serverInfo;
 	private final boolean compression;
@@ -74,13 +73,27 @@ public class RpcClient implements RpcClientChannel {
 	private Message onOobMessagePrototype;
 	private RpcCallback<Message> onOobMessageFunction;
 	
-	private RpcLogger rpcLogger;
+	private RpcServer rpcServer;
+	private final RpcLogger rpcLogger;
 	
-	public RpcClient( Channel channel, PeerInfo clientInfo, PeerInfo serverInfo, boolean compression ) {
+	private final Channel channel;
+	private final String channelName;
+	
+	public RpcClient( Channel channel, PeerInfo clientInfo, PeerInfo serverInfo, boolean compression, RpcLogger logger ) {
 		this.channel = channel;
 		this.clientInfo = clientInfo;
 		this.serverInfo = serverInfo;
 		this.compression = compression;
+		this.rpcLogger = logger;
+		this.channelName = clientInfo.getName() + "->" + serverInfo.getName();
+	}
+	
+	/**
+	 * The channel name of the RpcClient.
+	 * @return
+	 */
+	public String getChannelName() {
+		return channelName;
 	}
 	
 	/* (non-Javadoc)
@@ -111,6 +124,7 @@ public class RpcClient implements RpcClientChannel {
 			.setServiceIdentifier(state.getServiceIdentifier())
 			.setMethodIdentifier(state.getMethodIdentifier())
 			.setRequestBytes(request.toByteString())
+			.setTimeoutMs(rpcController.getTimeoutMs())
 			.build();
 		WirePayload payload = WirePayload.newBuilder().setRpcRequest(rpcRequest).build();
 		
@@ -139,15 +153,33 @@ public class RpcClient implements RpcClientChannel {
 	public Message callBlockingMethod(MethodDescriptor method,
 			RpcController controller, Message request, Message responsePrototype)
 			throws ServiceException {
+		ClientRpcController rpcController = (ClientRpcController)controller;
+		long deadlineTS = 0;
+		if ( rpcController.getTimeoutMs() > 0 ) {
+			deadlineTS = System.currentTimeMillis() + rpcController.getTimeoutMs();
+		}
+		
 		BlockingRpcCallback callback = new BlockingRpcCallback();
 		
-		callMethod( method, controller, request, responsePrototype, callback );
+		callMethod( method, rpcController, request, responsePrototype, callback );
         boolean interrupted = false;
         if ( !callback.isDone() ) {
 			synchronized(callback) {
 				while(!callback.isDone()) {
 					try {
-						callback.wait();
+						if ( deadlineTS > 0 ) {
+							long timeToDeadline = deadlineTS - System.currentTimeMillis();
+							if ( timeToDeadline <= 0 ) {
+								rpcController.getRpcClient().blockingCallTimeout(rpcController.getCorrelationId());
+								// this will pre-emptively timeout this call and set the callback done flag before returning.
+							} else {
+								// we wait at most until the deadline.
+								callback.wait(timeToDeadline);
+							}
+						} else {
+							// we wait indefinitely ( no timeout defined ).
+							callback.wait();
+						}
 					} catch (InterruptedException e) {
 						if ( log.isDebugEnabled() ) {
 							log.debug("Thread interrupted waiting in callBlockingMethod.", e);
@@ -161,8 +193,8 @@ public class RpcClient implements RpcClientChannel {
         if ( interrupted ) { //Defect 8. Unsafe wait/notify loop.
 			Thread.currentThread().interrupt();
         }
-        if (controller.failed()) {
-			throw new ServiceException(controller.errorText());
+        if (rpcController.failed()) {
+			throw new ServiceException(rpcController.errorText());
 		}
         if (interrupted && !callback.isDone()) {
 			throw new ServiceException("Blocking call interrupted.");
@@ -177,7 +209,7 @@ public class RpcClient implements RpcClientChannel {
 	
 	@Override
 	public String toString() {
-		return "RpcClientChannel->" + getPeerInfo();
+		return getChannelName();
 	}
 	
 	/* (non-Javadoc)
@@ -219,6 +251,35 @@ public class RpcClient implements RpcClientChannel {
 		}
 	}
 	
+	public void checkTimeouts( RpcTimeoutExecutor executor ) {
+		List<Map.Entry<Integer,PendingClientCallState>> result = new ArrayList<Map.Entry<Integer,PendingClientCallState>>();
+		result.addAll(pendingRequestMap.entrySet());
+		
+		for( Map.Entry<Integer,PendingClientCallState> call : result) {
+			if ( call.getValue().isTimeoutExceeded() ) {
+				RpcError rpcTimeout = RpcError.newBuilder().setCorrelationId(call.getKey()).setErrorMessage("Timeout").build();
+
+				executor.timeout(this, rpcTimeout);
+			}
+		}
+	}
+	
+	/**
+	 * A blocking call thread calls this method in 
+	 * {@link #callBlockingMethod(MethodDescriptor, RpcController, Message, Message)}
+	 * 
+	 * @param correlationid
+	 */
+	public void blockingCallTimeout( int correlationId ) {
+		RpcError rpcTimeout = RpcError.newBuilder().setCorrelationId(correlationId).setErrorMessage("Timeout").build();
+		error(rpcTimeout);
+	}
+	
+	/**
+	 * Receipt of an RpcError reply from a remote Peer.
+	 * 
+	 * @param rpcError
+	 */
 	public void error(RpcError rpcError) {
 		if ( log.isDebugEnabled() ) {
 			log.debug("Received ["+rpcError.getCorrelationId()+"]RpcError. ErrorMessage=" + rpcError.getErrorMessage());
@@ -237,6 +298,11 @@ public class RpcClient implements RpcClientChannel {
 		}
 	}
 	
+	/**
+	 * The receipt of a RpcResponse from a remote Peer.
+	 * 
+	 * @param rpcResponse
+	 */
 	public void response(RpcResponse rpcResponse) {
 		if ( log.isDebugEnabled() ) {
 			log.debug("Received ["+rpcResponse.getCorrelationId()+"]RpcResponse.");
@@ -383,6 +449,12 @@ public class RpcClient implements RpcClientChannel {
 		onOobMessagePrototype = responsePrototype;
 	}
 
+	/**
+	 * Log all information about a completed RPC call.
+	 * @param state
+	 * @param response
+	 * @param errorMessage
+	 */
 	protected void doLog( PendingClientCallState state, Message response, String errorMessage ) {
 		if ( rpcLogger != null ) {
 			rpcLogger.logCall(clientInfo, serverInfo, state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), state.getStartTimestamp(), System.currentTimeMillis());
@@ -415,6 +487,12 @@ public class RpcClient implements RpcClientChannel {
 		
 		private String reason;
 		private boolean failed;
+		
+		/**
+		 * Timeout in milliseconds, after which the RPC call times out and
+		 * no longer will expect a response.
+		 */
+		private int timeoutMs = 0;
 		
 		/**
 		 * Register an asynchronous callback function for ServerMessages
@@ -462,6 +540,7 @@ public class RpcClient implements RpcClientChannel {
 			correlationId = 0;
 			onOobResponseFunction = null;
 			onOobResponsePrototype = null;
+			timeoutMs = 0;
 		}
 
 		@Override
@@ -519,7 +598,27 @@ public class RpcClient implements RpcClientChannel {
 				}
 			}
 		}
-		
+
+		/**
+		 * @return the timeoutMs
+		 */
+		public int getTimeoutMs() {
+			return timeoutMs;
+		}
+
+		/**
+		 * @param timeoutMs the timeoutMs to set
+		 */
+		public void setTimeoutMs(int timeoutMs) {
+			this.timeoutMs = timeoutMs;
+		}
+
+		/**
+		 * @return the rpcClient
+		 */
+		public RpcClient getRpcClient() {
+			return rpcClient;
+		}
 	}
 
 	private static class BlockingRpcCallback implements RpcCallback<Message> {
@@ -563,6 +662,10 @@ public class RpcClient implements RpcClientChannel {
 			this.request = request;
 		}
 
+		public boolean isTimeoutExceeded() {
+			return controller.getTimeoutMs() > 0 && System.currentTimeMillis() > startTimestamp + controller.getTimeoutMs();
+		}
+		
 		public String getServiceIdentifier() {
 			return methodDesc.getService().getName();
 		}
@@ -651,17 +754,24 @@ public class RpcClient implements RpcClientChannel {
 	}
 
 	/**
-	 * @param callLogger the callLogger to set
-	 */
-	public void setCallLogger(RpcLogger callLogger) {
-		this.rpcLogger = callLogger;
-	}
-
-	/**
 	 * @return whether this client's communication is compressed.
 	 */
 	public boolean isCompression() {
 		return compression;
+	}
+
+	/**
+	 * @return the rpcServer
+	 */
+	public RpcServer getRpcServer() {
+		return rpcServer;
+	}
+
+	/**
+	 * @param rpcServer the rpcServer to set
+	 */
+	public void setRpcServer(RpcServer rpcServer) {
+		this.rpcServer = rpcServer;
 	}
 
 }

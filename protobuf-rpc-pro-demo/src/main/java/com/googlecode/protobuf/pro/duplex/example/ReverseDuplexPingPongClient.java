@@ -14,7 +14,6 @@ import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.example.PingPong.PongService;
-import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 
@@ -38,19 +37,17 @@ public class ReverseDuplexPingPongClient {
 		PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
     	
-		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 10);
-		
     	DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(
         		client, 
         		new NioClientSocketChannelFactory(
                 Executors.newCachedThreadPool(),
-                Executors.newCachedThreadPool()),
-                executor);
+                Executors.newCachedThreadPool()));
         bootstrap.setCompression(compress);
+		bootstrap.setRpcServerCallExecutor(new ThreadPoolCallExecutor(3, 10));			
         
         // Configure the client.
 
-    	Service pongService = PongService.newReflectiveService(new DefaultPingPongServiceImpl());
+    	Service pongService = PongService.newReflectiveService(new PingPongServiceFactory.NonBlockingPongServer());
     	bootstrap.getRpcServiceRegistry().registerService(pongService);
     	
         // Set up the event pipeline factory.

@@ -33,6 +33,7 @@ public class PendingServerCallState {
 	private final MethodDescriptor methodDesc;
 	private final Message request;
 	private final long startTS;
+	private final int timeoutMs;
 	
 	/**
 	 * The executor is set by the RpcServerCallExecutor before starting the call,
@@ -43,7 +44,7 @@ public class PendingServerCallState {
 	 */
 	private Runnable executor;
 	
-	public PendingServerCallState(RpcServerExecutorCallback executorCallback, Service service, ServerRpcController controller, MethodDescriptor methodDesc, Message request, long startTS) {
+	public PendingServerCallState(RpcServerExecutorCallback executorCallback, Service service, ServerRpcController controller, MethodDescriptor methodDesc, Message request, long startTS, int timeoutMs) {
 		this.executorCallback = executorCallback;
 		this.service = service;
 		this.blockingService = null;
@@ -51,9 +52,10 @@ public class PendingServerCallState {
 		this.methodDesc = methodDesc;
 		this.request = request;
 		this.startTS = startTS;
+		this.timeoutMs = timeoutMs;
 	}
 
-	public PendingServerCallState(RpcServerExecutorCallback executorCallback, BlockingService service, ServerRpcController controller, MethodDescriptor methodDesc, Message request, long startTS) {
+	public PendingServerCallState(RpcServerExecutorCallback executorCallback, BlockingService service, ServerRpcController controller, MethodDescriptor methodDesc, Message request, long startTS, int timeoutMs) {
 		this.executorCallback = executorCallback;
 		this.service = null;
 		this.blockingService = service;
@@ -61,6 +63,7 @@ public class PendingServerCallState {
 		this.methodDesc = methodDesc;
 		this.request = request;
 		this.startTS = startTS;
+		this.timeoutMs = timeoutMs;
 	}
 
 	/**
@@ -70,6 +73,10 @@ public class PendingServerCallState {
 		return controller;
 	}
 
+	public boolean isTimeoutExceeded() {
+		return timeoutMs > 0 && System.currentTimeMillis() > startTS + timeoutMs;
+	}
+	
 	/**
 	 * @return the request
 	 */
@@ -124,6 +131,13 @@ public class PendingServerCallState {
 	 */
 	public RpcServerExecutorCallback getExecutorCallback() {
 		return executorCallback;
+	}
+
+	/**
+	 * @return the timeoutMs
+	 */
+	public int getTimeoutMs() {
+		return timeoutMs;
 	}
 
 
