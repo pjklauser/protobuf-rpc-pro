@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
+import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
 
 /**
  * A ThreadPoolCallExecutor uses a pool of threads to handle the running of server side RPC calls.
@@ -67,11 +68,11 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 	Map<CallRunner,CallRunner> runningCalls = new ConcurrentHashMap<CallRunner, CallRunner>();
 	
 	public ThreadPoolCallExecutor(int corePoolSize, int maximumPoolSize) {
-		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(maximumPoolSize, true), Executors.defaultThreadFactory() );
+		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(maximumPoolSize, false), new RenamingThreadFactoryProxy("rpc", Executors.defaultThreadFactory()) );
 	}
 	
 	public ThreadPoolCallExecutor(int corePoolSize, int maximumPoolSize, ThreadFactory threadFactory) {
-		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(maximumPoolSize, true), threadFactory );
+		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(maximumPoolSize, false), threadFactory );
 	}
 	
 	public ThreadPoolCallExecutor(int corePoolSize, int maximumPoolSize,

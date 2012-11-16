@@ -50,9 +50,9 @@ public class MultithreadedPingClient {
 			DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(
 					client, new NioClientSocketChannelFactory(
 							Executors.newCachedThreadPool(),
-							Executors.newCachedThreadPool()),
-					new ThreadPoolCallExecutor(3, 10));
+							Executors.newCachedThreadPool()));
 			bootstrap.setCompression(compress);
+			bootstrap.setRpcServerCallExecutor(new ThreadPoolCallExecutor(3, 10));			
 			
 			// RPC payloads are uncompressed when logged - so reduce logging
 			CategoryPerServiceLogger logger = new CategoryPerServiceLogger();

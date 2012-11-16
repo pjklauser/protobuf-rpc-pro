@@ -28,69 +28,50 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import org.jboss.netty.handler.ssl.SslHandler;
 
-import com.google.protobuf.ExtensionRegistry;
-import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
-import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
+import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcServer;
-import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
-import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.handler.Handler;
 import com.googlecode.protobuf.pro.duplex.handler.RpcClientHandler;
 import com.googlecode.protobuf.pro.duplex.handler.RpcServerHandler;
 import com.googlecode.protobuf.pro.duplex.handler.ServerConnectRequestHandler;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
-import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol;
 
-public class DuplexTcpServerPipelineFactory implements
-        ChannelPipelineFactory {
+public class DuplexTcpServerPipelineFactory implements ChannelPipelineFactory {
 
-	private final PeerInfo serverInfo;
-	private final RpcServiceRegistry rpcServiceRegistry;
-	private final RpcClientRegistry rpcClientRegistry;
-	private final RpcServerCallExecutor rpcServerCallExecutor;
-	private final TcpConnectionEventListener eventListener;
+	private final DuplexTcpServerBootstrap bootstrap;
 	private final ServerConnectRequestHandler connectRequestHandler;
-	private ExtensionRegistry wirepayloadExtensionRegistry;
-	private final RpcLogger logger;
 	
-	private RpcSSLContext sslContext;
-	
-	public DuplexTcpServerPipelineFactory( PeerInfo serverInfo, RpcServiceRegistry rpcServiceRegistry, RpcClientRegistry rpcClientRegistry, RpcServerCallExecutor rpcServerCallExecutor, TcpConnectionEventListener eventListener, RpcLogger logger ) {
-		if ( serverInfo == null ) {
+	public DuplexTcpServerPipelineFactory( DuplexTcpServerBootstrap bootstrap ) {
+		if ( bootstrap == null ) {
+			throw new IllegalArgumentException("bootstrap");
+		}
+		if ( bootstrap.getServerInfo() == null ) {
 			throw new IllegalArgumentException("serverInfo");
 		}
-		if ( rpcServiceRegistry == null ) {
+		if ( bootstrap.getRpcServiceRegistry() == null ) {
 			throw new IllegalArgumentException("rpcServiceRegistry");
 		}
-		if ( rpcClientRegistry == null ) {
+		if ( bootstrap.getRpcClientRegistry() == null ) {
 			throw new IllegalArgumentException("rpcClientRegistry");
 		}
-		if ( rpcServerCallExecutor == null ) {
+		if ( bootstrap.getRpcServerCallExecutor() == null ) {
 			throw new IllegalArgumentException("rpcServerCallExecutor");
 		}
-		if ( eventListener == null ) {
-			throw new IllegalArgumentException("eventListener");
-		}
-		this.serverInfo = serverInfo;
-		this.rpcServiceRegistry = rpcServiceRegistry;
-		this.rpcClientRegistry = rpcClientRegistry;
-		this.rpcServerCallExecutor = rpcServerCallExecutor;
-		this.eventListener = eventListener;
-		this.logger = logger;
-		this.connectRequestHandler = new ServerConnectRequestHandler(serverInfo, rpcClientRegistry, this, logger);
+		this.bootstrap = bootstrap;
+		this.connectRequestHandler = new ServerConnectRequestHandler(bootstrap, this);
 	}
 	
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
 
-        if ( getSslContext() != null ) {
-        	p.addLast(Handler.SSL, new SslHandler(getSslContext().createServerEngine()) );
+        if ( bootstrap.getSslContext() != null ) {
+        	p.addLast(Handler.SSL, new SslHandler(bootstrap.getSslContext().createServerEngine()) );
         }
         
         p.addLast(Handler.FRAME_DECODER, new ProtobufVarint32FrameDecoder());
-        p.addLast(Handler.PROTOBUF_DECODER, new ProtobufDecoder(DuplexProtocol.WirePayload.getDefaultInstance(), getWirepayloadExtensionRegistry()));
+        p.addLast(Handler.PROTOBUF_DECODER, new ProtobufDecoder(DuplexProtocol.WirePayload.getDefaultInstance(), bootstrap.getWirelinePayloadExtensionRegistry()));
 
         p.addLast(Handler.FRAME_ENCODER, new ProtobufVarint32LengthFieldPrepender());
         p.addLast(Handler.PROTOBUF_ENCODER, new ProtobufEncoder());
@@ -107,71 +88,28 @@ public class DuplexTcpServerPipelineFactory implements
 	    	p.addAfter(Handler.DECOMPRESSOR, Handler.COMPRESSOR,  new ZlibDecoder(ZlibWrapper.GZIP));
     	}
     	
-    	RpcClientHandler rpcClientHandler = new RpcClientHandler(rpcClient, eventListener);
+		TcpConnectionEventListener informer = new TcpConnectionEventListener(){
+			@Override
+			public void connectionClosed(RpcClientChannel client) {
+				for( TcpConnectionEventListener listener : bootstrap.getListenersCopy() ) {
+					listener.connectionClosed(client);
+				}
+			}
+			@Override
+			public void connectionOpened(RpcClientChannel client) {
+				for( TcpConnectionEventListener listener : bootstrap.getListenersCopy() ) {
+					listener.connectionOpened(client);
+				}
+			}
+		};
+    	
+    	RpcClientHandler rpcClientHandler = new RpcClientHandler(rpcClient, informer);
     	p.replace(Handler.SERVER_CONNECT, Handler.RPC_CLIENT, rpcClientHandler);
     	
-    	RpcServer rpcServer = new RpcServer(rpcClient, rpcServiceRegistry, rpcServerCallExecutor, logger); 
-    	RpcServerHandler rpcServerHandler = new RpcServerHandler(rpcServer);
-    	rpcServerHandler.setRpcClientRegistry(rpcClientRegistry);
+    	RpcServer rpcServer = new RpcServer(rpcClient, bootstrap.getRpcServiceRegistry(), bootstrap.getRpcServerCallExecutor(), bootstrap.getLogger()); 
+    	RpcServerHandler rpcServerHandler = new RpcServerHandler(rpcServer,bootstrap.getRpcClientRegistry());
     	p.addAfter(Handler.RPC_CLIENT, Handler.RPC_SERVER, rpcServerHandler);
     	return rpcClientHandler;
     }
 
-	/**
-	 * @return the rpcServiceRegistry
-	 */
-	public RpcServiceRegistry getRpcServiceRegistry() {
-		return rpcServiceRegistry;
-	}
-
-	/**
-	 * @return the rpcClientRegistry
-	 */
-	public RpcClientRegistry getRpcClientRegistry() {
-		return rpcClientRegistry;
-	}
-
-	/**
-	 * @return the serverInfo
-	 */
-	public PeerInfo getServerInfo() {
-		return serverInfo;
-	}
-
-	/**
-	 * @return the rpcServerCallExecutor
-	 */
-	public RpcServerCallExecutor getRpcServerCallExecutor() {
-		return rpcServerCallExecutor;
-	}
-
-	/**
-	 * @return the sslContext
-	 */
-	public RpcSSLContext getSslContext() {
-		return sslContext;
-	}
-
-	/**
-	 * @param sslContext the sslContext to set
-	 */
-	public void setSslContext(RpcSSLContext sslContext) {
-		this.sslContext = sslContext;
-	}
-	
-	/**
-	 * @return the wirepayloadExtensionRegistry
-	 */
-	public ExtensionRegistry getWirepayloadExtensionRegistry() {
-		return wirepayloadExtensionRegistry;
-	}
-
-	/**
-	 * @param wirepayloadExtensionRegistry the wirepayloadExtensionRegistry to set
-	 */
-	public void setWirepayloadExtensionRegistry(
-			ExtensionRegistry wirepayloadExtensionRegistry) {
-		this.wirepayloadExtensionRegistry = wirepayloadExtensionRegistry;
-	}
-    
 }

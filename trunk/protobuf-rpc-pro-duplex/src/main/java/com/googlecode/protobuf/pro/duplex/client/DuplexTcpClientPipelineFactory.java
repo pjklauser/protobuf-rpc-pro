@@ -25,7 +25,6 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import org.jboss.netty.handler.ssl.SslHandler;
 
-import com.google.protobuf.ExtensionRegistry;
 import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.handler.ClientConnectResponseHandler;
 import com.googlecode.protobuf.pro.duplex.handler.Handler;
@@ -34,21 +33,22 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol;
 public class DuplexTcpClientPipelineFactory implements
         ChannelPipelineFactory {
 
-	private RpcSSLContext sslContext;
-	private ExtensionRegistry wirepayloadExtensionRegistry;
+	private final DuplexTcpClientBootstrap bootstrap;
 	
-    public DuplexTcpClientPipelineFactory() {
+    public DuplexTcpClientPipelineFactory( DuplexTcpClientBootstrap bootstrap ) {
+    	this.bootstrap = bootstrap;
     }
 
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
         
-        if ( getSslContext() != null ) {
-        	p.addLast(Handler.SSL, new SslHandler(getSslContext().createClientEngine()) );
+        RpcSSLContext ssl = bootstrap.getSslContext();
+        if ( ssl != null ) {
+        	p.addLast(Handler.SSL, new SslHandler(ssl.createClientEngine()) );
         }
 
         p.addLast(Handler.FRAME_DECODER, new ProtobufVarint32FrameDecoder());
-        p.addLast(Handler.PROTOBUF_DECODER, new ProtobufDecoder(DuplexProtocol.WirePayload.getDefaultInstance(),getWirepayloadExtensionRegistry()));
+        p.addLast(Handler.PROTOBUF_DECODER, new ProtobufDecoder(DuplexProtocol.WirePayload.getDefaultInstance(),bootstrap.getExtensionRegistry()));
 
         p.addLast(Handler.FRAME_ENCODER, new ProtobufVarint32LengthFieldPrepender());
         p.addLast(Handler.PROTOBUF_ENCODER, new ProtobufEncoder());
@@ -60,33 +60,4 @@ public class DuplexTcpClientPipelineFactory implements
         return p;
     }
 
-	/**
-	 * @return the sslContext
-	 */
-	public RpcSSLContext getSslContext() {
-		return sslContext;
-	}
-
-	/**
-	 * @param sslContext the sslContext to set
-	 */
-	public void setSslContext(RpcSSLContext sslContext) {
-		this.sslContext = sslContext;
-	}
-
-	/**
-	 * @return the wirepayloadExtensionRegistry
-	 */
-	public ExtensionRegistry getWirepayloadExtensionRegistry() {
-		return wirepayloadExtensionRegistry;
-	}
-
-	/**
-	 * @param wirepayloadExtensionRegistry the wirepayloadExtensionRegistry to set
-	 */
-	public void setWirepayloadExtensionRegistry(
-			ExtensionRegistry wirepayloadExtensionRegistry) {
-		this.wirepayloadExtensionRegistry = wirepayloadExtensionRegistry;
-	}
-    
 }

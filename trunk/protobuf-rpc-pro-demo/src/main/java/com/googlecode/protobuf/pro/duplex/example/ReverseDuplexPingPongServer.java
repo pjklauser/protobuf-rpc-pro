@@ -46,9 +46,8 @@ public class ReverseDuplexPingPongServer {
         		serverInfo,
                 new NioServerSocketChannelFactory(
                         Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()),
-                executor);
-
+                        Executors.newCachedThreadPool()));
+        bootstrap.setRpcServerCallExecutor(executor);
         bootstrap.setOption("sendBufferSize", 1048576);
         bootstrap.setOption("receiveBufferSize", 1048576);
         bootstrap.setOption("child.receiveBufferSize", 1048576);

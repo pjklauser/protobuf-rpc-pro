@@ -32,20 +32,20 @@ import java.util.TreeSet;
  * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  * @see <a href="http://www.iana.org/assignments/port-numbers">IANA.org</a>
  */
-public class AvailablePortFinder {
+public class AvailableServerPortFinder {
     /**
      * The minimum number of server port number.
      */
-    public static final int MIN_PORT_NUMBER = 49152; // PJK altered from 1 to be non priv.
+    public static final int MIN_PORT_NUMBER = 1;
     /**
      * The maximum number of server port number.
      */
-    public static final int MAX_PORT_NUMBER = 65535; // PJK altered from 49151 to be non priv.
+    public static final int MAX_PORT_NUMBER = 49152;
 
     /**
      * Creates a new instance.
      */
-    private AvailablePortFinder() {
+    private AvailableServerPortFinder() {
         // Do nothing
     }
 

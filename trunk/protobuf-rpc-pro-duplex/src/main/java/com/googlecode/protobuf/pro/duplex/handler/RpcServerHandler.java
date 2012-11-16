@@ -38,14 +38,18 @@ public class RpcServerHandler extends SimpleChannelUpstreamHandler {
 
 	private static Log log = LogFactory.getLog(RpcServerHandler.class);
 
-    private RpcServer rpcServer;
-    private RpcClientRegistry rpcClientRegistry; // only used on server side
+    private final RpcServer rpcServer;
+    private final RpcClientRegistry rpcClientRegistry;
     
-    public RpcServerHandler(RpcServer rpcServer) {
+    public RpcServerHandler(RpcServer rpcServer, RpcClientRegistry rpcClientRegistry) {
     	if ( rpcServer == null ) {
     		throw new IllegalArgumentException("rpcServer");
     	}
+    	if ( rpcClientRegistry == null ) {
+    		throw new IllegalArgumentException("rpcClientRegistry");
+    	}
     	this.rpcServer = rpcServer;
+    	this.rpcClientRegistry = rpcClientRegistry;
     }
 
     @Override
@@ -70,14 +74,7 @@ public class RpcServerHandler extends SimpleChannelUpstreamHandler {
     public void channelClosed(
             ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
     	ctx.sendUpstream(e);
-    	if ( rpcClientRegistry != null ) {
-    		// we could have used a separate channel pipeline handler to 
-    		// disconnect clients from the client registry just on the server
-    		// side, then the RpcServerHandler would be symmetric on client and server sides.
-    		// but i decided against it for (probably negligible) performance
-    		// reasons - lengthening the chain lessens performance 
-    		rpcClientRegistry.removeRpcClient(rpcServer.getRcpClient());
-    	}
+   		rpcClientRegistry.removeRpcClient(rpcServer.getRcpClient());
     	rpcServer.handleClosure();
     }
 
@@ -94,13 +91,6 @@ public class RpcServerHandler extends SimpleChannelUpstreamHandler {
 	 */
 	public RpcClientRegistry getRpcClientRegistry() {
 		return rpcClientRegistry;
-	}
-
-	/**
-	 * @param rpcClientRegistry the rpcClientRegistry to set
-	 */
-	public void setRpcClientRegistry(RpcClientRegistry rpcClientRegistry) {
-		this.rpcClientRegistry = rpcClientRegistry;
 	}
 
 	/**

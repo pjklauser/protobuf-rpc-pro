@@ -1327,6 +1327,10 @@ public final class DuplexProtocol {
     // required bytes requestBytes = 4;
     boolean hasRequestBytes();
     com.google.protobuf.ByteString getRequestBytes();
+    
+    // optional int32 timeoutMs = 5;
+    boolean hasTimeoutMs();
+    int getTimeoutMs();
   }
   public static final class RpcRequest extends
       com.google.protobuf.GeneratedMessage
@@ -1441,11 +1445,22 @@ public final class DuplexProtocol {
       return requestBytes_;
     }
     
+    // optional int32 timeoutMs = 5;
+    public static final int TIMEOUTMS_FIELD_NUMBER = 5;
+    private int timeoutMs_;
+    public boolean hasTimeoutMs() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public int getTimeoutMs() {
+      return timeoutMs_;
+    }
+    
     private void initFields() {
       correlationId_ = 0;
       serviceIdentifier_ = "";
       methodIdentifier_ = "";
       requestBytes_ = com.google.protobuf.ByteString.EMPTY;
+      timeoutMs_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1487,6 +1502,9 @@ public final class DuplexProtocol {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBytes(4, requestBytes_);
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(5, timeoutMs_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -1511,6 +1529,10 @@ public final class DuplexProtocol {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(4, requestBytes_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, timeoutMs_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1644,6 +1666,8 @@ public final class DuplexProtocol {
         bitField0_ = (bitField0_ & ~0x00000004);
         requestBytes_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000008);
+        timeoutMs_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -1698,6 +1722,10 @@ public final class DuplexProtocol {
           to_bitField0_ |= 0x00000008;
         }
         result.requestBytes_ = requestBytes_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.timeoutMs_ = timeoutMs_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1725,6 +1753,9 @@ public final class DuplexProtocol {
         }
         if (other.hasRequestBytes()) {
           setRequestBytes(other.getRequestBytes());
+        }
+        if (other.hasTimeoutMs()) {
+          setTimeoutMs(other.getTimeoutMs());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1791,6 +1822,11 @@ public final class DuplexProtocol {
             case 34: {
               bitField0_ |= 0x00000008;
               requestBytes_ = input.readBytes();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              timeoutMs_ = input.readInt32();
               break;
             }
           }
@@ -1912,6 +1948,27 @@ public final class DuplexProtocol {
       public Builder clearRequestBytes() {
         bitField0_ = (bitField0_ & ~0x00000008);
         requestBytes_ = getDefaultInstance().getRequestBytes();
+        onChanged();
+        return this;
+      }
+      
+      // optional int32 timeoutMs = 5;
+      private int timeoutMs_ ;
+      public boolean hasTimeoutMs() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public int getTimeoutMs() {
+        return timeoutMs_;
+      }
+      public Builder setTimeoutMs(int value) {
+        bitField0_ |= 0x00000010;
+        timeoutMs_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearTimeoutMs() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        timeoutMs_ = 0;
         onChanged();
         return this;
       }
@@ -5649,27 +5706,28 @@ public final class DuplexProtocol {
       "ntPID\030\004 \002(\t\022\020\n\010compress\030\005 \001(\010\"s\n\017Connect" +
       "Response\022\025\n\rcorrelationId\030\001 \002(\005\022\021\n\tserve" +
       "rPID\030\002 \001(\t\022$\n\terrorCode\030\003 \001(\0162\021.ConnectE" +
-      "rrorCode\022\020\n\010compress\030\004 \001(\010\"n\n\nRpcRequest" +
-      "\022\025\n\rcorrelationId\030\001 \002(\005\022\031\n\021serviceIdenti" +
-      "fier\030\002 \002(\t\022\030\n\020methodIdentifier\030\003 \002(\t\022\024\n\014" +
-      "requestBytes\030\004 \002(\014\";\n\013RpcResponse\022\025\n\rcor",
-      "relationId\030\001 \002(\005\022\025\n\rresponseBytes\030\002 \002(\014\"" +
-      "7\n\010RpcError\022\025\n\rcorrelationId\030\001 \002(\005\022\024\n\014er" +
-      "rorMessage\030\002 \002(\t\"\"\n\tRpcCancel\022\025\n\rcorrela" +
-      "tionId\030\001 \002(\005\":\n\013OobResponse\022\025\n\rcorrelati" +
-      "onId\030\001 \002(\005\022\024\n\014messageBytes\030\002 \002(\014\"\"\n\nOobM" +
-      "essage\022\024\n\014messageBytes\030\001 \002(\014\"\331\002\n\013WirePay" +
-      "load\022\'\n\016connectRequest\030\001 \001(\0132\017.ConnectRe" +
-      "quest\022)\n\017connectResponse\030\002 \001(\0132\020.Connect" +
-      "Response\022\037\n\nrpcRequest\030\003 \001(\0132\013.RpcReques" +
-      "t\022!\n\013rpcResponse\030\004 \001(\0132\014.RpcResponse\022\033\n\010",
-      "rpcError\030\005 \001(\0132\t.RpcError\022\035\n\trpcCancel\030\006" +
-      " \001(\0132\n.RpcCancel\022!\n\013oobResponse\030\007 \001(\0132\014." +
-      "OobResponse\022\037\n\noobMessage\030\010 \001(\0132\013.OobMes" +
-      "sage\022\'\n\022transparentMessage\030d \001(\0132\013.OobMe" +
-      "ssage*\t\010\350\007\020\200\200\200\200\002*)\n\020ConnectErrorCode\022\025\n\021" +
-      "ALREADY_CONNECTED\020\000B;\n\'com.googlecode.pr" +
-      "otobuf.pro.duplex.wireB\016DuplexProtocolH\001"
+      "rrorCode\022\020\n\010compress\030\004 \001(\010\"\201\001\n\nRpcReques" +
+      "t\022\025\n\rcorrelationId\030\001 \002(\005\022\031\n\021serviceIdent" +
+      "ifier\030\002 \002(\t\022\030\n\020methodIdentifier\030\003 \002(\t\022\024\n" +
+      "\014requestBytes\030\004 \002(\014\022\021\n\ttimeoutMs\030\005 \001(\005\";",
+      "\n\013RpcResponse\022\025\n\rcorrelationId\030\001 \002(\005\022\025\n\r" +
+      "responseBytes\030\002 \002(\014\"7\n\010RpcError\022\025\n\rcorre" +
+      "lationId\030\001 \002(\005\022\024\n\014errorMessage\030\002 \002(\t\"\"\n\t" +
+      "RpcCancel\022\025\n\rcorrelationId\030\001 \002(\005\":\n\013OobR" +
+      "esponse\022\025\n\rcorrelationId\030\001 \002(\005\022\024\n\014messag" +
+      "eBytes\030\002 \002(\014\"\"\n\nOobMessage\022\024\n\014messageByt" +
+      "es\030\001 \002(\014\"\331\002\n\013WirePayload\022\'\n\016connectReque" +
+      "st\030\001 \001(\0132\017.ConnectRequest\022)\n\017connectResp" +
+      "onse\030\002 \001(\0132\020.ConnectResponse\022\037\n\nrpcReque" +
+      "st\030\003 \001(\0132\013.RpcRequest\022!\n\013rpcResponse\030\004 \001",
+      "(\0132\014.RpcResponse\022\033\n\010rpcError\030\005 \001(\0132\t.Rpc" +
+      "Error\022\035\n\trpcCancel\030\006 \001(\0132\n.RpcCancel\022!\n\013" +
+      "oobResponse\030\007 \001(\0132\014.OobResponse\022\037\n\noobMe" +
+      "ssage\030\010 \001(\0132\013.OobMessage\022\'\n\022transparentM" +
+      "essage\030d \001(\0132\013.OobMessage*\t\010\350\007\020\200\200\200\200\002*)\n\020" +
+      "ConnectErrorCode\022\025\n\021ALREADY_CONNECTED\020\000B" +
+      ";\n\'com.googlecode.protobuf.pro.duplex.wi" +
+      "reB\016DuplexProtocolH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5697,7 +5755,7 @@ public final class DuplexProtocol {
           internal_static_RpcRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_RpcRequest_descriptor,
-              new java.lang.String[] { "CorrelationId", "ServiceIdentifier", "MethodIdentifier", "RequestBytes", },
+              new java.lang.String[] { "CorrelationId", "ServiceIdentifier", "MethodIdentifier", "RequestBytes", "TimeoutMs", },
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.class,
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.Builder.class);
           internal_static_RpcResponse_descriptor =

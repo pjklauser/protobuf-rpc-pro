@@ -31,10 +31,10 @@ import org.jboss.netty.channel.group.DefaultChannelGroup;
 
 import com.google.protobuf.ExtensionRegistry;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
-import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.RpcServiceRegistry;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
+import com.googlecode.protobuf.pro.duplex.execute.SameThreadExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
@@ -46,9 +46,13 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 	private List<TcpConnectionEventListener> connectionEventListeners = new ArrayList<TcpConnectionEventListener>();
 	
 	private final PeerInfo serverInfo;
+	
 	private final RpcServiceRegistry rpcServiceRegistry = new RpcServiceRegistry();
 	private final RpcClientRegistry rpcClientRegistry = new RpcClientRegistry();
-	private final RpcServerCallExecutor rpcServerCallExecutor;
+	private RpcServerCallExecutor rpcServerCallExecutor = new SameThreadExecutor();
+	private ExtensionRegistry extensionRegistry;
+	private RpcSSLContext sslContext;
+	private RpcLogger logger = new CategoryPerServiceLogger();
 
 	/**
 	 * All Netty Channels created and bound by this DuplexTcpServerBootstrap.
@@ -57,36 +61,13 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 	 */
 	private ChannelGroup allChannels = new DefaultChannelGroup();
 	
-	public DuplexTcpServerBootstrap(PeerInfo serverInfo, ChannelFactory channelFactory, RpcServerCallExecutor executor) {
-		this(serverInfo, channelFactory, executor, new CategoryPerServiceLogger());
-	}
-	
-	public DuplexTcpServerBootstrap(PeerInfo serverInfo, ChannelFactory channelFactory, RpcServerCallExecutor executor, RpcLogger logger) {
+	public DuplexTcpServerBootstrap(PeerInfo serverInfo, ChannelFactory channelFactory) {
 		super(channelFactory);
 		if ( serverInfo == null ) {
 			throw new IllegalArgumentException("serverInfo");
 		}
-		if ( executor == null ) {
-			throw new IllegalArgumentException("executor");
-		}
 		this.serverInfo = serverInfo;
-		this.rpcServerCallExecutor = executor;
-		TcpConnectionEventListener informer = new TcpConnectionEventListener(){
-			@Override
-			public void connectionClosed(RpcClientChannel client) {
-				for( TcpConnectionEventListener listener : getListenersCopy() ) {
-					listener.connectionClosed(client);
-				}
-			}
-			@Override
-			public void connectionOpened(RpcClientChannel client) {
-				for( TcpConnectionEventListener listener : getListenersCopy() ) {
-					listener.connectionOpened(client);
-				}
-			}
-		};
-    	
-		DuplexTcpServerPipelineFactory sf = new DuplexTcpServerPipelineFactory(serverInfo, rpcServiceRegistry, rpcClientRegistry, rpcServerCallExecutor, informer, logger); 
+		DuplexTcpServerPipelineFactory sf = new DuplexTcpServerPipelineFactory(this); 
 		setPipelineFactory(sf);
 	}
 
@@ -100,6 +81,7 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 				log.warn("localAddress " + localAddress + " does not match serverInfo's port " + serverInfo.getPort());
 			}
 		}
+    	
 		Channel c = super.bind(localAddress);
 		
 		allChannels.add(c);
@@ -132,7 +114,9 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 		log.debug("Releasing IO-Layer external resources.");
 		super.releaseExternalResources();
 		log.debug("Releasing RPC Executor external resources.");
-		this.rpcServerCallExecutor.shutdown();
+		if ( rpcServerCallExecutor != null ) {
+			rpcServerCallExecutor.shutdown();
+		}
 	}
 
 	@Override
@@ -140,7 +124,7 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 		return "ServerBootstrap:"+serverInfo;
 	}
 	
-	private List<TcpConnectionEventListener> getListenersCopy() {
+	public List<TcpConnectionEventListener> getListenersCopy() {
 		List<TcpConnectionEventListener> copy = new ArrayList<TcpConnectionEventListener>();
 		copy.addAll(getConnectionEventListeners());
 		
@@ -198,21 +182,21 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 	 * @return the sslContext
 	 */
 	public RpcSSLContext getSslContext() {
-		return ((DuplexTcpServerPipelineFactory)getPipelineFactory()).getSslContext();
+		return sslContext;
 	}
 
 	/**
 	 * @param sslContext the sslContext to set
 	 */
 	public void setSslContext(RpcSSLContext sslContext) {
-		((DuplexTcpServerPipelineFactory)getPipelineFactory()).setSslContext(sslContext);
+		this.sslContext = sslContext;
 	}
 
 	/**
 	 * @return the registered WirelinePayload's extension registry.
 	 */
 	public ExtensionRegistry getWirelinePayloadExtensionRegistry() {
-		return ((DuplexTcpServerPipelineFactory)getPipelineFactory()).getWirepayloadExtensionRegistry();
+		return extensionRegistry;
 	}
 	
 	/**
@@ -221,7 +205,35 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 	 * @param extensionRegistry
 	 */
 	public void setWirelinePayloadExtensionRegistry( ExtensionRegistry extensionRegistry ) {
-		((DuplexTcpServerPipelineFactory)getPipelineFactory()).setWirepayloadExtensionRegistry(extensionRegistry);
+		this.extensionRegistry = extensionRegistry;
+	}
+
+	/**
+	 * @return the logger
+	 */
+	public RpcLogger getLogger() {
+		return logger;
+	}
+
+	/**
+	 * @param logger the logger to set
+	 */
+	public void setLogger(RpcLogger logger) {
+		this.logger = logger;
+	}
+
+	/**
+	 * @return the rpcServerCallExecutor
+	 */
+	public RpcServerCallExecutor getRpcServerCallExecutor() {
+		return rpcServerCallExecutor;
+	}
+
+	/**
+	 * @param rpcServerCallExecutor the rpcServerCallExecutor to set
+	 */
+	public void setRpcServerCallExecutor(RpcServerCallExecutor rpcServerCallExecutor) {
+		this.rpcServerCallExecutor = rpcServerCallExecutor;
 	}
 	
 }

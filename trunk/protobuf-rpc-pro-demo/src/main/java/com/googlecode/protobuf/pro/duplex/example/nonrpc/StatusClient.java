@@ -43,8 +43,8 @@ public class StatusClient {
 			DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(
 					client, new NioClientSocketChannelFactory(
 							Executors.newCachedThreadPool(),
-							Executors.newCachedThreadPool()),
-					new ThreadPoolCallExecutor(3, 10));
+							Executors.newCachedThreadPool()));
+			bootstrap.setRpcServerCallExecutor(new ThreadPoolCallExecutor(3, 10));			
 			
 			RpcClientConnectionWatchdog watchdog = new RpcClientConnectionWatchdog(bootstrap);
 	        watchdog.start();

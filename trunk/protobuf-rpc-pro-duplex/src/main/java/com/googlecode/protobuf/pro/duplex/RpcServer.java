@@ -33,6 +33,7 @@ import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerExecutorCallback;
 import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
+import com.googlecode.protobuf.pro.duplex.timeout.RpcTimeoutExecutor;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest;
@@ -65,6 +66,9 @@ public class RpcServer implements RpcServerExecutorCallback {
 		this.rpcServiceRegistry = rpcServiceRegistry;
 		this.callExecutor = callExecutor;
 		this.logger = logger;
+		
+		// we link RpcClient and RpcServer together
+		rpcClient.setRpcServer(this);
 	}
 
 	public void request(RpcRequest rpcRequest) {
@@ -180,13 +184,26 @@ public class RpcServer implements RpcServerExecutorCallback {
 
 		PendingServerCallState state = null;
 		if ( sd.getBlockingService() != null ) {
-			state = new PendingServerCallState(this,sd.getBlockingService(), controller, methodDesc, request, startTS);
+			state = new PendingServerCallState(this,sd.getBlockingService(), controller, methodDesc, request, startTS, rpcRequest.getTimeoutMs());
 		} else {
-			state = new PendingServerCallState(this,sd.getService(), controller, methodDesc, request, startTS);
+			state = new PendingServerCallState(this,sd.getService(), controller, methodDesc, request, startTS, rpcRequest.getTimeoutMs());
 		}
 		pendingServerCallMap.put(correlationId, state);
 
 		callExecutor.execute(state);
+	}
+
+	public void checkTimeouts( RpcTimeoutExecutor executor ) {
+		List<Map.Entry<Integer,PendingServerCallState>> result = new ArrayList<Map.Entry<Integer,PendingServerCallState>>();
+		result.addAll(pendingServerCallMap.entrySet());
+		
+		for( Map.Entry<Integer,PendingServerCallState> call : result) {
+			if ( call.getValue().isTimeoutExceeded() ) {
+				RpcCancel rpcTimeout = RpcCancel.newBuilder().setCorrelationId(call.getKey()).build();
+
+				executor.timeout(this, rpcTimeout);
+			}
+		}
 	}
 
 	/**
@@ -269,8 +286,8 @@ public class RpcServer implements RpcServerExecutorCallback {
 	 */
 	public void handleClosure() {
 		List<Integer> pendingCallIds = new ArrayList<Integer>();
-		pendingCallIds.addAll(pendingServerCallMap.keySet());
 		do {
+			pendingCallIds.addAll(pendingServerCallMap.keySet());
 			for( Integer correlationId : pendingCallIds ) {
 				PendingServerCallState state = pendingServerCallMap.remove(correlationId);
 				if (state != null) {

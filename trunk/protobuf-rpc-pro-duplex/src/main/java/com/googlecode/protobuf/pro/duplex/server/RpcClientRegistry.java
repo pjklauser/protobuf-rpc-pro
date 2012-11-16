@@ -68,13 +68,13 @@ public class RpcClientRegistry {
 	 * @return true if registration is successful, false if already connected.
 	 */
 	public boolean registerRpcClient( RpcClient rpcClient ) {
-		RpcClient existingClient = clientNameMap.get(rpcClient.getServerInfo().getName());
+		RpcClient existingClient = clientNameMap.get(rpcClient.getChannelName());
 		if ( existingClient == null ) {
-			clientNameMap.put(rpcClient.getServerInfo().getName(), rpcClient);
+			clientNameMap.put(rpcClient.getChannelName(), rpcClient);
 			return true;
 		}
 		if ( log.isDebugEnabled() ) {
-			log.debug("RpcClient " + rpcClient.getServerInfo() + " is already registered with " + existingClient.getServerInfo());
+			log.debug("RpcClient " + rpcClient.getChannelName() + " is already registered with " + existingClient.getServerInfo());
 		}
 		return false;
 	}
@@ -85,6 +85,6 @@ public class RpcClientRegistry {
 	 * @param rpcClient
 	 */
 	public void removeRpcClient( RpcClient rpcClient ) {
-		clientNameMap.remove(rpcClient.getServerInfo().getName());
+		clientNameMap.remove(rpcClient.getChannelName());
 	}
 }
