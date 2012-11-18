@@ -15,6 +15,8 @@
 */
 package com.googlecode.protobuf.pro.duplex.timeout;
 
+import java.util.concurrent.ExecutorService;
+
 import com.googlecode.protobuf.pro.duplex.server.RpcClientRegistry;
 
 
@@ -22,7 +24,7 @@ import com.googlecode.protobuf.pro.duplex.server.RpcClientRegistry;
  * @author Peter Klauser
  *
  */
-public interface RpcTimeoutChecker {
+public interface RpcTimeoutChecker extends ExecutorService {
 
 	/**
 	 * Monitor all RPC client and server calls for all RpcChannels.
@@ -39,12 +41,6 @@ public interface RpcTimeoutChecker {
 	 */
 	public void stopChecking( RpcClientRegistry rpcClientRegistry );
 	
-	/**
-	 * Shutdown the Executor.
-	 */
-	public void shutdown();
-	
-
 	/**
 	 * The RpcTimeoutExecutor which will be used to timeout individual calls.
 	 * @param executor

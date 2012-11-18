@@ -15,12 +15,14 @@
 */
 package com.googlecode.protobuf.pro.duplex.execute;
 
+import java.util.concurrent.ExecutorService;
+
 
 /**
  * @author Peter Klauser
  *
  */
-public interface RpcServerCallExecutor {
+public interface RpcServerCallExecutor extends ExecutorService {
 
 	/**
 	 * Initiate Execution of the RPC call.
@@ -50,8 +52,4 @@ public interface RpcServerCallExecutor {
 	 */
 	public void cancel( Runnable executor );
 	
-	/**
-	 * Shutdown the Executor.
-	 */
-	public void shutdown();
 }

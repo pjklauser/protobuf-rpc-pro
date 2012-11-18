@@ -15,6 +15,8 @@
 */
 package com.googlecode.protobuf.pro.duplex.timeout;
 
+import java.util.concurrent.ExecutorService;
+
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcServer;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel;
@@ -25,7 +27,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
  * @author Peter Klauser
  *
  */
-public interface RpcTimeoutExecutor {
+public interface RpcTimeoutExecutor extends ExecutorService {
 
 	/**
 	 * Timeout a client side RPC call.
@@ -39,8 +41,4 @@ public interface RpcTimeoutExecutor {
 	 */
 	public void timeout( RpcServer rpcServer, RpcCancel rpcCancel );
 	
-	/**
-	 * Shutdown the Executor.
-	 */
-	public void shutdown();
 }

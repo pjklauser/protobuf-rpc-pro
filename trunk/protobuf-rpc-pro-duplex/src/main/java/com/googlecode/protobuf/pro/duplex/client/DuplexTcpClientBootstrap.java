@@ -81,13 +81,6 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 	private RpcSSLContext sslContext;
 	private RpcLogger logger = new CategoryPerServiceLogger();
 	
-	//TODO RuntimeConfigurator class
-		// InlineReverseRpcCalling => cannot use SameThreadCallExecutor
-			// ThreadPoolExecutor - unbounded/bounded queue, core, max threads, threadpoolfactory
-		// Netty ChannelFactory - NioServerSocketChannelFactory(   Executors.newCachedThreadPool(), Executors.newCachedThreadPool())); 
-		// TimeoutExecutor - thread factory, core poolsize, maxpoolsize,
-		// TimeoutChecker - thread factory, corepoolsize
-	
 	/**
 	 * All Netty Channels created and bound by this DuplexTcpClientBootstrap.
 	 * 
@@ -250,14 +243,10 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 	 */
 	@Override
 	public void releaseExternalResources() {
-		log.debug("Closing all channels.");
+		log.info("releaseExternalResources: Closing all channels.");
 		allChannels.close().awaitUninterruptibly();
 		log.debug("Releasing IO-Layer external resources.");
 		super.releaseExternalResources();
-		if ( rpcServerCallExecutor != null ) {
-			log.debug("Releasing RPC Executor external resources.");
-			rpcServerCallExecutor.shutdown();
-		}
 	}
 
 	@Override
