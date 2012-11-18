@@ -2,9 +2,13 @@
 What changes are made from release to release. Check SVN history for more details.
 = Next =
 
-Feature: TCP client port binding. includes AvailablePortFinder utility to allow selection of availible TCP ports for PeerInfo.
+Feature: RPC timeout
 
-Fix 14: replacement of PID with UUID.
+Fix: refactor Bootstrap client and server classes to be more symetric.
+
+Feature: new utility AvailablePortFinder utility to allow selection of availible server TCP ports for PeerInfo.
+
+Fix 14: replacement of PeerInfo's PID with UUID.
 
 = 2.0.1 =
 
