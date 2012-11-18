@@ -102,6 +102,7 @@ public class DuplexPingPongClient {
 
         CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
         shutdownHandler.addResource(bootstrap);
+        shutdownHandler.addResource(executor);
         shutdownHandler.addResource(checker);
         shutdownHandler.addResource(timeoutExecutor);
         
