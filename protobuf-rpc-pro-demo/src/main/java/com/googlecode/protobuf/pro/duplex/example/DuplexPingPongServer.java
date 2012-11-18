@@ -79,6 +79,7 @@ public class DuplexPingPongServer {
 
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
         shutdownHandler.addResource(bootstrap);
+        shutdownHandler.addResource(executor);
         shutdownHandler.addResource(timeoutChecker);
         shutdownHandler.addResource(timeoutExecutor);
         
@@ -132,10 +133,10 @@ public class DuplexPingPongServer {
         
         log.info("Serving " + serverInfo);
         /*
-        Thread.sleep(60000);
-        
-        bootstrap.releaseExternalResources();
+        Thread.sleep(10000);   
+        System.exit(0);
         */
+        
     }
     
     
