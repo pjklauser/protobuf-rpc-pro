@@ -16,8 +16,14 @@
 package com.googlecode.protobuf.pro.duplex.execute;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.WeakHashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -147,6 +153,73 @@ public class SameThreadExecutor implements RpcServerCallExecutor {
 		for( Thread t : threadsRunning ) {
 			cancel( (Runnable)t );
 		}
+	}
+
+	@Override
+	public List<Runnable> shutdownNow() {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public boolean isShutdown() {
+		return runningCalls.size() == 0;
+	}
+
+	@Override
+	public boolean isTerminated() {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public boolean awaitTermination(long timeout, TimeUnit unit)
+			throws InterruptedException {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public <T> Future<T> submit(Callable<T> task) {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public <T> Future<T> submit(Runnable task, T result) {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public Future<?> submit(Runnable task) {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks)
+			throws InterruptedException {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public <T> List<Future<T>> invokeAll(
+			Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit)
+			throws InterruptedException {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public <T> T invokeAny(Collection<? extends Callable<T>> tasks)
+			throws InterruptedException, ExecutionException {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public <T> T invokeAny(Collection<? extends Callable<T>> tasks,
+			long timeout, TimeUnit unit) throws InterruptedException,
+			ExecutionException, TimeoutException {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public void execute(Runnable command) {
+		throw new IllegalStateException();
 	}
 	
 	

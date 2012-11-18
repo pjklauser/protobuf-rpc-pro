@@ -109,14 +109,10 @@ public class DuplexTcpServerBootstrap extends ServerBootstrap {
 	 */
 	@Override
 	public void releaseExternalResources() {
-		log.debug("Closing all channels.");
+		log.info("releaseExternalResources: Closing all channels.");
 		allChannels.close().awaitUninterruptibly();
-		log.debug("Releasing IO-Layer external resources.");
+		log.debug("releaseExternalResources: Releasing IO-Layer external resources.");
 		super.releaseExternalResources();
-		log.debug("Releasing RPC Executor external resources.");
-		if ( rpcServerCallExecutor != null ) {
-			rpcServerCallExecutor.shutdown();
-		}
 	}
 
 	@Override

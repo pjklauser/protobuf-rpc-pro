@@ -17,14 +17,11 @@ package com.googlecode.protobuf.pro.duplex;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
-import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
-import com.googlecode.protobuf.pro.duplex.timeout.RpcTimeoutChecker;
-import com.googlecode.protobuf.pro.duplex.timeout.RpcTimeoutExecutor;
+import org.jboss.netty.bootstrap.Bootstrap;
 
 /**
  * Registers a JVM shutdown hook to cleanly shutdown any
@@ -37,124 +34,68 @@ public class CleanShutdownHandler {
 
 	private static Log log = LogFactory.getLog(CleanShutdownHandler.class);
 	
-	private List<DuplexTcpServerBootstrap> serverBootstraps = new LinkedList<DuplexTcpServerBootstrap>();
-	private List<DuplexTcpClientBootstrap> clientBootstraps = new LinkedList<DuplexTcpClientBootstrap>();
-	private List<RpcTimeoutChecker> timeoutCheckers = new LinkedList<RpcTimeoutChecker>();
-	private List<RpcTimeoutExecutor> timeoutExecutors = new LinkedList<RpcTimeoutExecutor>();
+	private List<Bootstrap> bootstraps = new LinkedList<Bootstrap>();
+	private List<ExecutorService> executors = new LinkedList<ExecutorService>();
 	
 	public CleanShutdownHandler() {
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
-				log.debug("Releasing " + serverBootstraps.size() + " ServerBootstrap.");
-				for( DuplexTcpServerBootstrap bootstrap : getServerBootstraps() ) {
+				log.debug("Releasing " + bootstraps.size() + " Bootstrap.");
+				for( Bootstrap bootstrap : getBootstraps() ) {
 					bootstrap.releaseExternalResources();
 				}
 				
-				log.debug("Releasing " + clientBootstraps.size() + " ClientBootstrap.");
-				for( DuplexTcpClientBootstrap bootstrap : getClientBootstraps() ) {
-					bootstrap.releaseExternalResources();
-				}
-
-				log.debug("Releasing " + timeoutCheckers.size() + " RpcTimeoutChecker.");
-				for( RpcTimeoutChecker timeoutChecker : getTimeoutCheckers() ) {
-					timeoutChecker.shutdown();
-				}
-
-				log.debug("Releasing " + timeoutExecutors.size() + " RpcTimeoutExecutor.");
-				for( RpcTimeoutExecutor timeoutExecutor : getTimeoutExecutors() ) {
-					timeoutExecutor.shutdown();
+				log.debug("Releasing " + executors.size() + " Executors.");
+				for( ExecutorService executor : getExecutors() ) {
+					executor.shutdown();
 				}
 			}
 		} ));
 	}
 	
-	public void addResource( DuplexTcpClientBootstrap bootstrap ) {
-		clientBootstraps.add(bootstrap);
+	public void addResource( Bootstrap bootstrap ) {
+		bootstraps.add(bootstrap);
 	}
 	
-	public void removeResource( DuplexTcpClientBootstrap bootstrap ) {
-		clientBootstraps.remove(bootstrap);
+	public void removeResource( Bootstrap bootstrap ) {
+		bootstraps.remove(bootstrap);
+	}
+
+	public void addResource( ExecutorService executor ) {
+		executors.add(executor);
 	}
 	
-	public void addResource( DuplexTcpServerBootstrap bootstrap ) {
-		serverBootstraps.add(bootstrap);
-	}
-	
-	public void removeResource( DuplexTcpServerBootstrap bootstrap ) {
-		serverBootstraps.remove(bootstrap);
-	}
-
-	public void addResource( RpcTimeoutChecker checker ) {
-		timeoutCheckers.add(checker);
-	}
-	
-	public void removeResource( RpcTimeoutChecker checker ) {
-		timeoutCheckers.remove(checker);
-	}
-
-	public void addResource( RpcTimeoutExecutor executor ) {
-		timeoutExecutors.add(executor);
-	}
-	
-	public void removeResource( RpcTimeoutExecutor executor ) {
-		timeoutExecutors.remove(executor);
+	public void removeResource( ExecutorService executor ) {
+		executors.remove(executor);
 	}
 
 	/**
-	 * @return the serverBootstraps
+	 * @return the executors
 	 */
-	public List<DuplexTcpServerBootstrap> getServerBootstraps() {
-		return serverBootstraps;
+	public List<ExecutorService> getExecutors() {
+		return executors;
 	}
 
 	/**
-	 * @param serverBootstraps the serverBootstraps to set
+	 * @param executors the executors to set
 	 */
-	public void setServerBootstraps(List<DuplexTcpServerBootstrap> serverBootstraps) {
-		this.serverBootstraps = serverBootstraps;
+	public void setExecutors(List<ExecutorService> executors) {
+		this.executors = executors;
 	}
 
 	/**
-	 * @return the clientBootstraps
+	 * @return the bootstraps
 	 */
-	public List<DuplexTcpClientBootstrap> getClientBootstraps() {
-		return clientBootstraps;
+	public List<Bootstrap> getBootstraps() {
+		return bootstraps;
 	}
 
 	/**
-	 * @param clientBootstraps the clientBootstraps to set
+	 * @param bootstraps the bootstraps to set
 	 */
-	public void setClientBootstraps(List<DuplexTcpClientBootstrap> clientBootstraps) {
-		this.clientBootstraps = clientBootstraps;
-	}
-
-	/**
-	 * @return the timeoutCheckers
-	 */
-	public List<RpcTimeoutChecker> getTimeoutCheckers() {
-		return timeoutCheckers;
-	}
-
-	/**
-	 * @param timeoutCheckers the timeoutCheckers to set
-	 */
-	public void setTimeoutCheckers(List<RpcTimeoutChecker> timeoutCheckers) {
-		this.timeoutCheckers = timeoutCheckers;
-	}
-
-	/**
-	 * @return the timeoutExecutors
-	 */
-	public List<RpcTimeoutExecutor> getTimeoutExecutors() {
-		return timeoutExecutors;
-	}
-
-	/**
-	 * @param timeoutExecutors the timeoutExecutors to set
-	 */
-	public void setTimeoutExecutors(List<RpcTimeoutExecutor> timeoutExecutors) {
-		this.timeoutExecutors = timeoutExecutors;
+	public void setBootstraps(List<Bootstrap> bootstraps) {
+		this.bootstraps = bootstraps;
 	}
 }
