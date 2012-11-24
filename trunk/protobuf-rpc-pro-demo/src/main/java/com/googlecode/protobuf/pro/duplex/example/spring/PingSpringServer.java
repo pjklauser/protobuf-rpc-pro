@@ -14,8 +14,8 @@ import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService;
 import com.googlecode.protobuf.pro.duplex.example.PingPongServiceFactory;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPingService;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
@@ -83,7 +83,7 @@ public class PingSpringServer {
 		bootstrap.registerConnectionEventListener(rpcEventNotifier);
 
 		// Register Ping Service
-		Service pingService = PingService.newReflectiveService(pingPongServiceImpl);
+		Service pingService = NonBlockingPingService.newReflectiveService(pingPongServiceImpl);
 
 		bootstrap.getRpcServiceRegistry().registerService(pingService);
 		log.info("Proto Ping Registerservice executed");

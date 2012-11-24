@@ -13,7 +13,7 @@ import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.client.RpcClientConnectionWatchdog;
-import com.googlecode.protobuf.pro.duplex.example.PingPong;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
