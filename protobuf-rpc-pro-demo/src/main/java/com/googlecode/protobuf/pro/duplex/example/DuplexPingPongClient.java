@@ -7,22 +7,20 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import com.google.protobuf.BlockingService;
-import com.google.protobuf.ByteString;
 import com.google.protobuf.Service;
-import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
-import com.googlecode.protobuf.pro.duplex.RpcClient.ClientRpcController;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.Ping;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.PingService.BlockingInterface;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.Pong;
-import com.googlecode.protobuf.pro.duplex.example.PingPong.PongService;
+import com.googlecode.protobuf.pro.duplex.example.program.AllClientTests;
+import com.googlecode.protobuf.pro.duplex.example.program.ShortTests;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPingService;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPongService;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPingService;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPongService;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
@@ -36,32 +34,25 @@ public class DuplexPingPongClient {
 	private static Log log = LogFactory.getLog(RpcClient.class);
 	
     public static void main(String[] args) throws Exception {
-		if ( args.length != 12 ) {
-			System.err.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort> <blocking=Y/N> <ssl=Y/N> <nodelay=Y/N> <compress=Y/N> <payloadBytes> <numCalls> <pingDurationTimeMs> <pingTimeoutMs>");
+		if ( args.length != 8 ) {
+			System.err.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort> <ssl=Y/N> <nodelay=Y/N> <compress=Y/N> <payloadSizeBytes>");
 			System.exit(-1);
 		}
 		String serverHostname = args[0];
 		int serverPort = Integer.parseInt(args[1]);
 		String clientHostname = args[2];
 		int clientPort = Integer.parseInt(args[3]);
+		boolean secure = "Y".equals(args[4]);
+		boolean nodelay = "Y".equals(args[5]);
+		boolean compress = "Y".equals(args[6]);
+		int payloadSize = Integer.parseInt(args[7]);
 
-		boolean blocking = args[4].equalsIgnoreCase("Y");
-		boolean secure = args[5].equalsIgnoreCase("Y");
-		boolean nodelay = args[6].equalsIgnoreCase("Y");
-		
-		boolean compress = "Y".equals(args[7]);
-		int payloadSize = Integer.parseInt(args[8]);
-
-		int numCalls = Integer.parseInt(args[9]);
-		int pingDurationMs = Integer.parseInt(args[10]); // sent to the server to determine how long the server takes to process the ping.
-		int pingTimeoutMs = Integer.parseInt(args[11]);
-		
-		log.info("DuplexPingPongClient port=" + clientPort  +" blocking=" + (blocking?"Y":"N")+ " ssl=" + (secure?"Y":"N") + " nodelay=" + (nodelay?"Y":"N")+ " pingDurationMs="+pingDurationMs +" pingTimeoutMs="+pingTimeoutMs);
+		log.info("DuplexPingPongClient port=" + clientPort  +" ssl=" + (secure?"Y":"N") + " nodelay=" + (nodelay?"Y":"N")+ " payloadSizeBytes="+payloadSize);
 		
 		PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
     	
-		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 10 );
+		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 100 );
 		
     	DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(
         		client, 
@@ -79,15 +70,6 @@ public class DuplexPingPongClient {
         	sslCtx.init();
         }
         
-        // Configure the client.
-        if ( blocking ) {
-        	BlockingService pongService = PongService.newReflectiveBlockingService(new PingPongServiceFactory.BlockingPongService());
-        	bootstrap.getRpcServiceRegistry().registerBlockingService(pongService);
-        } else {
-        	Service pongService = PongService.newReflectiveService(new PingPongServiceFactory.NonBlockingPongServer());
-        	bootstrap.getRpcServiceRegistry().registerService(pongService);
-        }
-
         // Set up the event pipeline factory.
     	bootstrap.setOption("connectTimeoutMillis",10000);
         bootstrap.setOption("connectResponseTimeoutMillis",10000);
@@ -132,43 +114,36 @@ public class DuplexPingPongClient {
 		};
 		rpcEventNotifier.setEventListener(listener);
     	bootstrap.registerConnectionEventListener(rpcEventNotifier);
-        
-    	RpcClientChannel channel = null;
-		try {
-	    	channel = bootstrap.peerWith(server);
-			BlockingInterface myService = PingService.newBlockingStub(channel);
-			
-	    	long startTS = 0;
-	    	long endTS = 0;
-	    	long numException = 0;
-	    	
-			startTS = System.currentTimeMillis();
 
-			for( int i = 0; i < numCalls; i++ ) {
-				if ( i % 100 == 1 ) {
-					log.warn(i);
-				}
-				ClientRpcController controller = channel.newRpcController();
-				controller.setTimeoutMs(pingTimeoutMs);
-				
-				ByteString requestData = ByteString.copyFrom(new byte[payloadSize]);
-				Ping ping = Ping.newBuilder().setNumber(pingDurationMs).setPingData(requestData).build();
-				try {
-					Pong pong = myService.ping(controller, ping);
-					if ( pong.getPongData().size() != payloadSize ) {
-						throw new Exception("Reply payload mismatch.");
-					}
-				} catch( ServiceException e ) {
-					log.warn("Ping ServiceException.", e);
-					numException++;
-				} 
-			}
-			endTS = System.currentTimeMillis();
-			log.warn("Calls " + numCalls + " in " + (endTS-startTS)/1000 + "s with " + numException + " ServiceExceptions.");
+        // Configure the client to provide a Pong Service in both blocking an non blocking varieties
+       	BlockingService bPongService = BlockingPongService.newReflectiveBlockingService(new PingPongServiceFactory.BlockingPongServer());
+       	bootstrap.getRpcServiceRegistry().registerBlockingService(bPongService);
+
+       	Service nbPongService = NonBlockingPongService.newReflectiveService(new PingPongServiceFactory.NonBlockingPongServer());
+        bootstrap.getRpcServiceRegistry().registerService(nbPongService);
+    	
+        // we give the client a blocking and non blocking (pong capable) Ping Service
+        BlockingService bPingService = BlockingPingService.newReflectiveBlockingService(new PingPongServiceFactory.BlockingPongingPingServer());
+        bootstrap.getRpcServiceRegistry().registerBlockingService(bPingService);
+
+        Service nbPingService = NonBlockingPingService.newReflectiveService(new PingPongServiceFactory.NonBlockingPongingPingServer());
+        bootstrap.getRpcServiceRegistry().registerService(nbPingService);
+
+    	bootstrap.peerWith(server);
+    	try {
+    		
+    		while( true ) {
+    	    	new ShortTests().execute(bootstrap.getRpcClientRegistry());
+    	    	
+    	    	new AllClientTests().execute(bootstrap.getRpcClientRegistry());
+    	    	
+    	    	Thread.sleep(60000);
+    		}
 		} catch( Throwable e ) {
 			log.error("Throwable.", e);
 		} finally {
 			System.exit(0);
 		}
     }
+    
 }

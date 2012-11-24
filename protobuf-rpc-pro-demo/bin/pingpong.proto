@@ -1,31 +1,60 @@
 // Copyright (c) 2010 Peter Klauser
 
 option java_generic_services = true;
-option java_package = "com.googlecode.protobuf.pro.duplex.example";
+option java_package = "com.googlecode.protobuf.pro.duplex.example.wire";
 option java_outer_classname = "PingPong";
 
+// the Ping message provides the server with all the information it needs to perform the Pong
+// so the pinging client controls the entire operation of the server remotely.
 message Ping {
-	required int32 number = 1;
-    required bytes pingData = 2;
+	required int32 sequenceNo = 1; // sequenceNo + payload data must be echoed back
+    required bytes pingPayload = 2;
+    optional int32 pingDurationMs = 3; // the duration of the ping call at server ( prior to pong )
+    optional bool  pingPercentComplete = 4; // whether the server shall provide percent complete indication back to client during ping. 
+    optional bool  pongRequired = 5; // whether the ping call shall reverse pong the pinging client
+    optional bool  pongBlocking = 6; // whether to call a clients blocking pong service or nonblocking pong service.
+    optional int32 pongDurationMs = 7; // the duration of the pong call at the client
+    optional int32 pongTimeoutMs = 8; // the timeout of the pong call at the server
+    optional bool  pongPercentComplete = 9; // whether the client shall provide percent complete indication back to server during pong. 
 }
 
 message Pong {
-	required int32 number = 1;
-    required bytes pongData = 2;
+	required int32 sequenceNo = 1; // sequenceNo of the ping which requests pong
+    required bytes pongData = 2; // the pingPayload copied in the pong
+    optional int32 pongDurationMs = 3; // the duration of the pong call at the client
+    optional bool  pongPercentComplete = 4; // whether the client shall provide percent complete indication back to server during pong. 
 }
 
 message PercentComplete {
-	required int32 percentageComplete = 1;
+	enum OperationName {
+	  PING = 0; // percent complete relates to a ping
+	  PONG = 1;
+	}
+	required float percentageComplete = 1;
+	optional int32 sequenceNo = 2; // to which ping or pong sequenceNo does percent complete this apply. ( used for validation )
+	optional OperationName op = 3; // to validate
 }
 
 message Status {
 	required string message = 1;
 }
-	
-service PingService {
+
+
+// in order to demonstrate simultaneously the serving of synchronous
+// and asynchronous services, we need to give the "same" service different
+// names.
+service BlockingPingService {
     rpc ping(Ping) returns (Pong);
 }
 
-service PongService {
+service NonBlockingPingService {
+    rpc ping(Ping) returns (Pong);
+}
+
+service BlockingPongService {
+    rpc pong(Pong) returns (Ping);
+}
+
+service NonBlockingPongService {
     rpc pong(Pong) returns (Ping);
 }
