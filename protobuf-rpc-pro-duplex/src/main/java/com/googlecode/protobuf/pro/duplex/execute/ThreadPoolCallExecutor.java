@@ -68,11 +68,11 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 	Map<CallRunner,CallRunner> runningCalls = new ConcurrentHashMap<CallRunner, CallRunner>();
 	
 	public ThreadPoolCallExecutor(int corePoolSize, int maximumPoolSize) {
-		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(maximumPoolSize, false), new RenamingThreadFactoryProxy("rpc", Executors.defaultThreadFactory()) );
+		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(corePoolSize, false), new RenamingThreadFactoryProxy("rpc", Executors.defaultThreadFactory()) );
 	}
 	
 	public ThreadPoolCallExecutor(int corePoolSize, int maximumPoolSize, ThreadFactory threadFactory) {
-		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(maximumPoolSize, false), threadFactory );
+		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(corePoolSize, false), threadFactory );
 	}
 	
 	public ThreadPoolCallExecutor(int corePoolSize, int maximumPoolSize,
@@ -199,7 +199,14 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 				// canceled before start - return immediately
 				return;
 			}
-			
+			// due to buffering in the RpcServerCallExecutor, we may already be timed-out
+			// so we dont want to process the call towards the RPC service.
+			if( call.isTimeoutExceeded() ) {
+				// set the controller's cancel indicator
+				call.getController().startCancel();
+				serviceCallback.run(null);
+				return;
+			}
 			if ( call.getService() != null ) {
 				call.getService().callMethod(call.getMethodDesc(), call.getController(), call.getRequest(), serviceCallback);
 				if ( !serviceCallback.isDone() ) {
