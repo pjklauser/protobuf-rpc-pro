@@ -194,6 +194,9 @@ public class DuplexTcpClientBootstrap extends ClientBootstrap {
 		rpcClientHandler.notifyOpened();
 		
 		allChannels.add(channel);
+		if ( !getRpcClientRegistry().registerRpcClient(rpcClient) ) {
+			log.warn("Client RpcClient already registered. Bug??");
+		}
 		// channels remove themselves when closed.
         return rpcClient;
     }

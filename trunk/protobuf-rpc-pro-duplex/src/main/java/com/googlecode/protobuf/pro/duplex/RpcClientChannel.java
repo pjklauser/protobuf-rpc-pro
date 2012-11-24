@@ -19,7 +19,6 @@ import org.jboss.netty.channel.ChannelPipeline;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
-import com.googlecode.protobuf.pro.duplex.RpcClient.ClientRpcController;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;

@@ -15,10 +15,14 @@
 */
 package com.googlecode.protobuf.pro.duplex.execute;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
+import com.google.protobuf.RpcController;
+import com.googlecode.protobuf.pro.duplex.LocalCallVariableHolder;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 
@@ -26,7 +30,7 @@ import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
  * @author Peter Klauser
  *
  */
-public class ServerRpcController implements com.google.protobuf.RpcController {
+public class ServerRpcController implements RpcController, LocalCallVariableHolder {
 
 	private String failureReason;
 	private final AtomicBoolean canceled = new AtomicBoolean(false);
@@ -34,33 +38,64 @@ public class ServerRpcController implements com.google.protobuf.RpcController {
 	private RpcCallback<Object> cancelNotifyCallback;
 	private RpcClient rpcClient;
 	private int correlationId;
+	/**
+	 * A convenient store of call local variables.
+	 * The values are not transmitted, just kept locally. Is cleared on {@link #reset()}
+	 */
+	private Map<String, Object> callLocalVariables;
 	
 	public ServerRpcController( RpcClient rpcClient, int correlationId ) {
 		this.rpcClient = rpcClient;
 		this.correlationId = correlationId;
 	}
 	
+	public static ServerRpcController getRpcController( com.google.protobuf.RpcController controller ) {
+		ServerRpcController c = (ServerRpcController)controller;
+		return c;
+	}
+
 	public static RpcClientChannel getRpcChannel( com.google.protobuf.RpcController controller ) {
 		ServerRpcController c = (ServerRpcController)controller;
 		return c.getRpcClient();
 	}
+
+	@Override
+	public synchronized Object getCallLocalVariable( String key ) {
+		if ( callLocalVariables != null ) {
+			return callLocalVariables.get(key);
+		}
+		return null;
+	}
 	
+	@Override
+	public synchronized Object storeCallLocalVariable( String key, Object value ) {
+		if ( callLocalVariables != null ) {
+			callLocalVariables = new HashMap<String,Object>();
+		}
+		return callLocalVariables.put(key, value);
+	}
+	
+	@Override
 	public String errorText() {
 		throw new IllegalStateException("Client-side use only.");
 	}
 
+	@Override
 	public boolean failed() {
 		throw new IllegalStateException("Client-side use only.");
 	}
 
+	@Override
 	public void startCancel() {
 		this.canceled.set(true);
 	}
 
+	@Override
 	public boolean isCanceled() {
 		return canceled.get();
 	}
 
+	@Override
 	public void notifyOnCancel(RpcCallback<Object> callback) {
 		if ( isCanceled() ) {
 			callback.run(null);
@@ -74,6 +109,7 @@ public class ServerRpcController implements com.google.protobuf.RpcController {
 		this.failureReason = reason;
 	}
 
+	@Override
 	public void reset() {
 		throw new IllegalStateException("Client-side use only.");
 	}

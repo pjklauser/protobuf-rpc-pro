@@ -79,19 +79,7 @@ public class ClientConnectResponseHandler extends SimpleChannelUpstreamHandler {
         }
         ctx.sendUpstream(e);
     }
-/*
-    @Override
-    public void channelConnected(
-            ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-        // Get the SslHandler from the pipeline
-        // which were added in SecureChatPipelineFactory.
-        SslHandler sslHandler = ctx.getPipeline().get(SslHandler.class);
-        if ( sslHandler != null ) {
-            // Begin handshake.
-            sslHandler.handshake();
-        }
-    }
-*/
+
     @Override
     public void channelClosed(
             ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {

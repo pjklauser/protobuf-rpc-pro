@@ -54,11 +54,11 @@ public class TimeoutExecutor extends ThreadPoolExecutor implements RpcTimeoutExe
 	private static Log log = LogFactory.getLog(TimeoutExecutor.class);
 
 	public TimeoutExecutor(int corePoolSize, int maximumPoolSize) {
-		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(maximumPoolSize, false), new RenamingThreadFactoryProxy("timeout", Executors.defaultThreadFactory()) );
+		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(corePoolSize, false), new RenamingThreadFactoryProxy("timeout", Executors.defaultThreadFactory()) );
 	}
 	
 	public TimeoutExecutor(int corePoolSize, int maximumPoolSize, ThreadFactory threadFactory) {
-		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(maximumPoolSize, false), threadFactory );
+		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(corePoolSize, false), threadFactory );
 	}
 	
 	public TimeoutExecutor(int corePoolSize, int maximumPoolSize,

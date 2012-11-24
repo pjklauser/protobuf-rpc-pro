@@ -30,7 +30,6 @@ import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
-import com.googlecode.protobuf.pro.duplex.RpcClient.ClientRpcController;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 
