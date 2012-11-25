@@ -62,7 +62,7 @@ public class PingPongServiceFactory {
 
 				long total = processUntil - processStart;
 				long processed = System.currentTimeMillis() - processStart;
-				float percentComplete = ( processed/total)*100.0f;
+				float percentComplete = ( processed*100.0f/total);
 				
 				PercentComplete pc = PercentComplete.newBuilder().setOp(operationName).setSequenceNo(seqNo).setPercentageComplete(percentComplete).build();
 				rpcController.sendOobResponse(pc);
