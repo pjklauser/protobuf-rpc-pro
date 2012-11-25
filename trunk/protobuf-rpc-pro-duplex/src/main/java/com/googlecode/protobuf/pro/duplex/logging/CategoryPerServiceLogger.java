@@ -15,12 +15,17 @@
  */
 package com.googlecode.protobuf.pro.duplex.logging;
 
+import java.util.UUID;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
+import com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage;
+import com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse;
+import com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo;
 
@@ -32,6 +37,7 @@ public class CategoryPerServiceLogger implements RpcLogger {
 
 	private boolean logRequestProto = true;
 	private boolean logResponseProto = true;
+	private boolean logEventProto = true;
 
 	/*
 	 * (non-Javadoc)
@@ -47,6 +53,8 @@ public class CategoryPerServiceLogger implements RpcLogger {
 			Message request, Message response, String errorMessage,
 			int correlationId, long requestTS, long responseTS) {
 		int duration = (int)(responseTS - requestTS);
+		String reqUUID = null;
+		String resUUID = null;
 		
 		String summaryCategoryName = signature + ".info";
 		Log log = LogFactory.getLog(summaryCategoryName);
@@ -62,15 +70,17 @@ public class CategoryPerServiceLogger implements RpcLogger {
 				rpcCall.setError(errorMessage);
 			}
 			if (request != null) {
-				RpcPayloadInfo reqInfo = RpcPayloadInfo.newBuilder().setTs(requestTS).setSize(request.getSerializedSize()).build();
+				reqUUID = UUID.randomUUID().toString();
+				RpcPayloadInfo reqInfo = RpcPayloadInfo.newBuilder().setUuid(reqUUID).setTs(requestTS).setSize(request.getSerializedSize()).build();
 				rpcCall.setRequest(reqInfo);
 			}
 			if (response != null) {
-				RpcPayloadInfo resInfo  = RpcPayloadInfo.newBuilder().setTs(responseTS).setSize(response.getSerializedSize()).build();
+				resUUID = UUID.randomUUID().toString();
+				RpcPayloadInfo resInfo  = RpcPayloadInfo.newBuilder().setUuid(resUUID).setTs(responseTS).setSize(response.getSerializedSize()).build();
 				rpcCall.setResponse(resInfo);
 			}
 
-			summaryText = TextFormat.printToString(rpcCall.build());
+			summaryText = TextFormat.shortDebugString(rpcCall.build());
 		}
 
 		String requestCategoryName = signature + ".data.request";
@@ -78,7 +88,8 @@ public class CategoryPerServiceLogger implements RpcLogger {
 		String requestText = null;
 		if (isLogRequestProto() && request != null) {
 			if (reqlog.isInfoEnabled()) {
-				requestText = TextFormat.printToString(request);
+				PayloadContent pc = PayloadContent.newBuilder().setUuid(reqUUID).setContent(TextFormat.shortDebugString(request)).build();
+				requestText = TextFormat.shortDebugString(pc);
 			}
 		}
 
@@ -87,24 +98,94 @@ public class CategoryPerServiceLogger implements RpcLogger {
 		String responseText = null;
 		if (isLogResponseProto() && response != null) {
 			if (reslog.isInfoEnabled()) {
-				responseText = TextFormat.printToString(response);
+				PayloadContent pc = PayloadContent.newBuilder().setUuid(reqUUID).setContent(TextFormat.shortDebugString(response)).build();
+				responseText = TextFormat.shortDebugString(pc);
 			}
 		}
 
 		if (summaryText != null) {
-			synchronized (log) {
-				log.info(summaryText);
-			}
+			log.info(summaryText);
 		}
 		if (requestText != null) {
-			synchronized (reqlog) {
-				reqlog.info(requestText);
-			}
+			reqlog.info(requestText);
 		}
 		if (responseText != null) {
-			synchronized (reslog) {
-				reslog.info(responseText);
+			reslog.info(responseText);
+		}
+	}
+
+	@Override
+	public void logOobResponse(PeerInfo client, PeerInfo server,
+			Message message, String signature, int correlationId, long eventTS) {
+		String summaryCategoryName = signature + ".info.oob";
+		String uuid = UUID.randomUUID().toString();
+		
+		Log log = LogFactory.getLog(summaryCategoryName);
+		String summaryText = null;
+		if (log.isInfoEnabled()) {
+			OobResponse.Builder rpcCall = OobResponse.newBuilder()
+					.setCorId(correlationId)
+					.setClient(client.toString())
+					.setServer(server.toString())
+					.setSignature(signature);
+			if (message != null) {
+				RpcPayloadInfo evInfo = RpcPayloadInfo.newBuilder().setUuid(uuid).setTs(eventTS).setSize(message.getSerializedSize()).build();
+				rpcCall.setEvent(evInfo);
 			}
+			summaryText = TextFormat.shortDebugString(rpcCall.build());
+		}
+
+		String responseCategoryName = signature + ".data.response.oob";
+		Log reslog = LogFactory.getLog(responseCategoryName);
+		String responseText = null;
+		if (isLogResponseProto() && message != null) {
+			if (reslog.isInfoEnabled()) {
+				PayloadContent pc = PayloadContent.newBuilder().setUuid(uuid).setContent(TextFormat.shortDebugString(message)).build();
+				responseText = TextFormat.shortDebugString(pc);
+			}
+		}
+
+		if (summaryText != null) {
+			log.info(summaryText);
+		}
+		if (responseText != null) {
+			reslog.info(responseText);
+		}
+	}
+
+	@Override
+	public void logOobMessage(PeerInfo client, PeerInfo server,
+			Message message, long eventTS) {
+		String summaryCategoryName = "oobmessage.info";
+		String uuid = UUID.randomUUID().toString();
+		Log log = LogFactory.getLog(summaryCategoryName);
+		String summaryText = null;
+		if (log.isInfoEnabled()) {
+			OobMessage.Builder oobMessage = OobMessage.newBuilder()
+					.setClient(client.toString())
+					.setServer(server.toString());
+			if (message != null) {
+				RpcPayloadInfo evInfo = RpcPayloadInfo.newBuilder().setUuid(uuid).setTs(eventTS).setSize(message.getSerializedSize()).build();
+				oobMessage.setEvent(evInfo);
+			}
+			summaryText = TextFormat.shortDebugString(oobMessage.build());
+		}
+
+		String eventCategoryName = "oobmessage.data";
+		Log evlog = LogFactory.getLog(eventCategoryName);
+		String eventText = null;
+		if (isLogEventProto() && message != null) {
+			if (evlog.isInfoEnabled()) {
+				PayloadContent pc = PayloadContent.newBuilder().setUuid(uuid).setContent(TextFormat.shortDebugString(message)).build();
+				eventText = TextFormat.printToString(pc);
+			}
+		}
+
+		if (summaryText != null) {
+			log.info(summaryText);
+		}
+		if (eventText != null) {
+			evlog.info(eventText);
 		}
 	}
 
@@ -137,5 +218,20 @@ public class CategoryPerServiceLogger implements RpcLogger {
 	public void setLogResponseProto(boolean logResponseProto) {
 		this.logResponseProto = logResponseProto;
 	}
+
+	/**
+	 * @return the logEventProto
+	 */
+	public boolean isLogEventProto() {
+		return logEventProto;
+	}
+
+	/**
+	 * @param logEventProto the logEventProto to set
+	 */
+	public void setLogEventProto(boolean logEventProto) {
+		this.logEventProto = logEventProto;
+	}
+
 
 }

@@ -59,13 +59,13 @@ public class RpcServer implements RpcServerExecutorCallback {
 	private final RpcClient rpcClient;
 	private final RpcServiceRegistry rpcServiceRegistry;
 	private final RpcServerCallExecutor callExecutor;
-	private final RpcLogger logger;
+	private final RpcLogger rpcLogger;
 	
 	public RpcServer(RpcClient rcpClient, RpcServiceRegistry rpcServiceRegistry, RpcServerCallExecutor callExecutor, RpcLogger logger ) {
 		this.rpcClient = rcpClient;
 		this.rpcServiceRegistry = rpcServiceRegistry;
 		this.callExecutor = callExecutor;
-		this.logger = logger;
+		this.rpcLogger = logger;
 		
 		// we link RpcClient and RpcServer together
 		rpcClient.setRpcServer(this);
@@ -179,8 +179,7 @@ public class RpcServer implements RpcServerExecutorCallback {
 			doErrorLog(correlationId, methodDesc.getFullName(), rpcRequest, rpcError, errorMessage);
 			return;
 		}
-		ServerRpcController controller = new ServerRpcController(rpcClient,
-					correlationId);
+		ServerRpcController controller = new ServerRpcController(rpcClient,methodDesc.getFullName(),correlationId);
 
 		PendingServerCallState state = null;
 		if ( sd.getBlockingService() != null ) {
@@ -306,14 +305,14 @@ public class RpcServer implements RpcServerExecutorCallback {
 	}
 	
 	protected void doErrorLog( int correlationId, String signature, Message request, Message response, String errorMessage ) {
-		if ( logger != null ) {
-			logger.logCall(rpcClient.getServerInfo(), rpcClient.getClientInfo(), signature, request, response, errorMessage, correlationId, System.currentTimeMillis(), System.currentTimeMillis());
+		if ( rpcLogger != null ) {
+			rpcLogger.logCall(rpcClient.getServerInfo(), rpcClient.getClientInfo(), signature, request, response, errorMessage, correlationId, System.currentTimeMillis(), System.currentTimeMillis());
 		}
 	}
 	
 	protected void doLog( PendingServerCallState state, Message response, String errorMessage ) {
-		if ( logger != null ) {
-			logger.logCall(rpcClient.getServerInfo(), rpcClient.getClientInfo(), state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), state.getStartTS(), System.currentTimeMillis());
+		if ( rpcLogger != null ) {
+			rpcLogger.logCall(rpcClient.getServerInfo(), rpcClient.getClientInfo(), state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), state.getStartTS(), System.currentTimeMillis());
 		}
 	}
 	

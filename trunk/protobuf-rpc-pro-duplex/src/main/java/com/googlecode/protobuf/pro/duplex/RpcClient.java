@@ -140,7 +140,7 @@ public class RpcClient implements RpcClientChannel {
 		} else {
 			RpcError rpcError = RpcError.newBuilder().setCorrelationId(correlationId).setErrorMessage("Channel Closed").build();
 			
-			doLog( state, rpcError, rpcError.getErrorMessage() );
+			doLogRpc( state, rpcError, rpcError.getErrorMessage() );
 			
 			state.handleFailure(rpcError.getErrorMessage());
 		}
@@ -227,6 +227,8 @@ public class RpcClient implements RpcClientChannel {
 		}
 		
 		channel.write(payload);
+
+		doLogOobMessageOutbound(message);
 	}
 
 	public void receiveOobMessage(OobMessage msg) {
@@ -236,6 +238,8 @@ public class RpcClient implements RpcClientChannel {
 				onMsg = onOobMessagePrototype.newBuilderForType().mergeFrom(msg.getMessageBytes()).build();
 
 				onOobMessageFunction.run(onMsg);
+
+				doLogOobMessageInbound(onMsg);
 				
 			} catch ( InvalidProtocolBufferException e ) {
 				String errorMessage = "Invalid UncorrelatedMessage Protobuf.";
@@ -287,7 +291,7 @@ public class RpcClient implements RpcClientChannel {
 		PendingClientCallState state = removePendingRequest(rpcError.getCorrelationId());
 		if ( state != null ) {
 			
-			doLog( state, rpcError, rpcError.getErrorMessage() );
+			doLogRpc( state, rpcError, rpcError.getErrorMessage() );
 			
 			state.handleFailure(rpcError.getErrorMessage());
 		} else {
@@ -313,13 +317,13 @@ public class RpcClient implements RpcClientChannel {
 			try {
 				response = state.getResponsePrototype().newBuilderForType().mergeFrom(rpcResponse.getResponseBytes()).build();
 
-				doLog( state, response, null );
+				doLogRpc( state, response, null );
 				
 				state.handleResponse( response );
 			} catch ( InvalidProtocolBufferException e ) {
 				String errorMessage = "Invalid Response Protobuf.";
 				
-				doLog( state, rpcResponse, errorMessage );
+				doLogRpc( state, rpcResponse, errorMessage );
 				
 				state.handleFailure(errorMessage);
 			}
@@ -338,7 +342,7 @@ public class RpcClient implements RpcClientChannel {
 	 * @param correlationId
 	 * @param oobMessage
 	 */
-	public void sendOobResponse( int correlationId, Message oobMessage ) {
+	public void sendOobResponse( String serviceName, int correlationId, Message oobMessage ) {
 		OobResponse msg = OobResponse.newBuilder()
 				.setCorrelationId(correlationId)
 				.setMessageBytes(oobMessage.toByteString())
@@ -349,6 +353,8 @@ public class RpcClient implements RpcClientChannel {
 		if ( log.isDebugEnabled() ) {
 			log.debug("Sending ["+msg.getCorrelationId()+"]OobResponse.");
 		}
+		
+		doLogOobResponseOutbound(serviceName, correlationId, oobMessage);
 		
 		channel.write(payload);
 	}
@@ -362,7 +368,10 @@ public class RpcClient implements RpcClientChannel {
 	public void receiveOobResponse( OobResponse serverMessage ) {
 		PendingClientCallState state = getPendingRequest(serverMessage.getCorrelationId());
 		if ( state != null ) {
-			state.getController().receiveOobResponse(serverMessage);
+			Message processedMessage = state.getController().receiveOobResponse(serverMessage);
+			if ( processedMessage != null ) {
+				doLogOobResponseInbound(state, processedMessage);
+			}
 		} else {
 			// this can happen when we have cancellation and the server still responds.
 			if ( log.isDebugEnabled() ) {
@@ -392,7 +401,7 @@ public class RpcClient implements RpcClientChannel {
 			
 			String errorMessage = "Cancel";
 			
-			doLog(state, rpcCancel, errorMessage);
+			doLogRpc(state, rpcCancel, errorMessage);
 
 			state.handleFailure(errorMessage);
 			
@@ -422,7 +431,7 @@ public class RpcClient implements RpcClientChannel {
 				if ( state != null ) {
 					RpcError rpcError = RpcError.newBuilder().setCorrelationId(correlationId).setErrorMessage("Forced Closure").build();
 					
-					doLog( state, rpcError, rpcError.getErrorMessage() );
+					doLogRpc( state, rpcError, rpcError.getErrorMessage() );
 					
 					state.handleFailure(rpcError.getErrorMessage());
 				}
@@ -455,9 +464,49 @@ public class RpcClient implements RpcClientChannel {
 	 * @param response
 	 * @param errorMessage
 	 */
-	protected void doLog( PendingClientCallState state, Message response, String errorMessage ) {
+	protected void doLogRpc( PendingClientCallState state, Message response, String errorMessage ) {
 		if ( rpcLogger != null ) {
 			rpcLogger.logCall(clientInfo, serverInfo, state.getMethodDesc().getFullName(), state.getRequest(), response, errorMessage, state.getController().getCorrelationId(), state.getStartTimestamp(), System.currentTimeMillis());
+		}
+	}
+	
+	/**
+	 * Log all information about the received OobResponse of an RPC call.
+	 * @param state
+	 * @param response
+	 */
+	protected void doLogOobResponseInbound( PendingClientCallState state, Message oobResponse) {
+		if ( rpcLogger != null ) {
+			rpcLogger.logOobResponse(clientInfo, serverInfo, oobResponse, state.getMethodDesc().getFullName(), state.getController().getCorrelationId(), System.currentTimeMillis());
+		}
+	}
+	
+	/**
+	 * Log all information about the received OobResponse of an RPC call.
+	 * @param state
+	 * @param response
+	 */
+	protected void doLogOobResponseOutbound( String serviceName, int correlationId, Message oobResponse) {
+		if ( rpcLogger != null ) {
+			rpcLogger.logOobResponse(serverInfo, clientInfo, oobResponse, serviceName, correlationId, System.currentTimeMillis());
+		}
+	}
+	
+	/**
+	 * Log all information about an outbound OobMessage.
+	 */
+	protected void doLogOobMessageOutbound( Message message ) {
+		if ( rpcLogger != null ) {
+			rpcLogger.logOobMessage(clientInfo, serverInfo, message, System.currentTimeMillis());
+		}
+	}
+	
+	/**
+	 * Log all information about an inbound OobMessage.
+	 */
+	protected void doLogOobMessageInbound( Message message ) {
+		if ( rpcLogger != null ) {
+			rpcLogger.logOobMessage(serverInfo, clientInfo, message, System.currentTimeMillis());
 		}
 	}
 	

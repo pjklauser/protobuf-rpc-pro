@@ -8,6 +8,491 @@ public final class RpcLogEntry {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+  public interface PayloadContentOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string uuid = 1;
+    boolean hasUuid();
+    String getUuid();
+    
+    // required string content = 2;
+    boolean hasContent();
+    String getContent();
+  }
+  public static final class PayloadContent extends
+      com.google.protobuf.GeneratedMessage
+      implements PayloadContentOrBuilder {
+    // Use PayloadContent.newBuilder() to construct.
+    private PayloadContent(Builder builder) {
+      super(builder);
+    }
+    private PayloadContent(boolean noInit) {}
+    
+    private static final PayloadContent defaultInstance;
+    public static PayloadContent getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public PayloadContent getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_PayloadContent_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_PayloadContent_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required string uuid = 1;
+    public static final int UUID_FIELD_NUMBER = 1;
+    private java.lang.Object uuid_;
+    public boolean hasUuid() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getUuid() {
+      java.lang.Object ref = uuid_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          uuid_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getUuidBytes() {
+      java.lang.Object ref = uuid_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        uuid_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required string content = 2;
+    public static final int CONTENT_FIELD_NUMBER = 2;
+    private java.lang.Object content_;
+    public boolean hasContent() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getContent() {
+      java.lang.Object ref = content_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          content_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getContentBytes() {
+      java.lang.Object ref = content_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        content_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    private void initFields() {
+      uuid_ = "";
+      content_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasUuid()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasContent()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getUuidBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getContentBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getUuidBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getContentBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContentOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_PayloadContent_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_PayloadContent_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        uuid_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        content_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent.getDescriptor();
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent getDefaultInstanceForType() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent.getDefaultInstance();
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent build() {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent buildPartial() {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent result = new com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.uuid_ = uuid_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.content_ = content_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent) {
+          return mergeFrom((com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent other) {
+        if (other == com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent.getDefaultInstance()) return this;
+        if (other.hasUuid()) {
+          setUuid(other.getUuid());
+        }
+        if (other.hasContent()) {
+          setContent(other.getContent());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasUuid()) {
+          
+          return false;
+        }
+        if (!hasContent()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              uuid_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              content_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required string uuid = 1;
+      private java.lang.Object uuid_ = "";
+      public boolean hasUuid() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public String getUuid() {
+        java.lang.Object ref = uuid_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          uuid_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setUuid(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        uuid_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearUuid() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        uuid_ = getDefaultInstance().getUuid();
+        onChanged();
+        return this;
+      }
+      void setUuid(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        uuid_ = value;
+        onChanged();
+      }
+      
+      // required string content = 2;
+      private java.lang.Object content_ = "";
+      public boolean hasContent() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getContent() {
+        java.lang.Object ref = content_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          content_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setContent(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        content_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearContent() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        content_ = getDefaultInstance().getContent();
+        onChanged();
+        return this;
+      }
+      void setContent(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        content_ = value;
+        onChanged();
+      }
+      
+      // @@protoc_insertion_point(builder_scope:PayloadContent)
+    }
+    
+    static {
+      defaultInstance = new PayloadContent(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:PayloadContent)
+  }
+  
   public interface RpcPayloadInfoOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
@@ -18,6 +503,10 @@ public final class RpcLogEntry {
     // optional int32 size = 2;
     boolean hasSize();
     int getSize();
+    
+    // optional string uuid = 3;
+    boolean hasUuid();
+    String getUuid();
   }
   public static final class RpcPayloadInfo extends
       com.google.protobuf.GeneratedMessage
@@ -68,9 +557,42 @@ public final class RpcLogEntry {
       return size_;
     }
     
+    // optional string uuid = 3;
+    public static final int UUID_FIELD_NUMBER = 3;
+    private java.lang.Object uuid_;
+    public boolean hasUuid() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public String getUuid() {
+      java.lang.Object ref = uuid_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          uuid_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getUuidBytes() {
+      java.lang.Object ref = uuid_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        uuid_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     private void initFields() {
       ts_ = 0L;
       size_ = 0;
+      uuid_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -94,6 +616,9 @@ public final class RpcLogEntry {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(2, size_);
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getUuidBytes());
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -110,6 +635,10 @@ public final class RpcLogEntry {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, size_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getUuidBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -239,6 +768,8 @@ public final class RpcLogEntry {
         bitField0_ = (bitField0_ & ~0x00000001);
         size_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
+        uuid_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       
@@ -285,6 +816,10 @@ public final class RpcLogEntry {
           to_bitField0_ |= 0x00000002;
         }
         result.size_ = size_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.uuid_ = uuid_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -306,6 +841,9 @@ public final class RpcLogEntry {
         }
         if (other.hasSize()) {
           setSize(other.getSize());
+        }
+        if (other.hasUuid()) {
+          setUuid(other.getUuid());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -350,6 +888,11 @@ public final class RpcLogEntry {
             case 16: {
               bitField0_ |= 0x00000002;
               size_ = input.readInt32();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              uuid_ = input.readBytes();
               break;
             }
           }
@@ -398,6 +941,42 @@ public final class RpcLogEntry {
         size_ = 0;
         onChanged();
         return this;
+      }
+      
+      // optional string uuid = 3;
+      private java.lang.Object uuid_ = "";
+      public boolean hasUuid() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public String getUuid() {
+        java.lang.Object ref = uuid_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          uuid_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setUuid(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        uuid_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearUuid() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        uuid_ = getDefaultInstance().getUuid();
+        onChanged();
+        return this;
+      }
+      void setUuid(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000004;
+        uuid_ = value;
+        onChanged();
       }
       
       // @@protoc_insertion_point(builder_scope:RpcPayloadInfo)
@@ -1532,6 +2111,1458 @@ public final class RpcLogEntry {
     // @@protoc_insertion_point(class_scope:RpcCall)
   }
   
+  public interface OobResponseOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string server = 1;
+    boolean hasServer();
+    String getServer();
+    
+    // required string signature = 2;
+    boolean hasSignature();
+    String getSignature();
+    
+    // required string client = 3;
+    boolean hasClient();
+    String getClient();
+    
+    // required int32 corId = 4;
+    boolean hasCorId();
+    int getCorId();
+    
+    // optional .RpcPayloadInfo event = 5;
+    boolean hasEvent();
+    com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getEvent();
+    com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getEventOrBuilder();
+  }
+  public static final class OobResponse extends
+      com.google.protobuf.GeneratedMessage
+      implements OobResponseOrBuilder {
+    // Use OobResponse.newBuilder() to construct.
+    private OobResponse(Builder builder) {
+      super(builder);
+    }
+    private OobResponse(boolean noInit) {}
+    
+    private static final OobResponse defaultInstance;
+    public static OobResponse getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public OobResponse getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_OobResponse_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_OobResponse_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required string server = 1;
+    public static final int SERVER_FIELD_NUMBER = 1;
+    private java.lang.Object server_;
+    public boolean hasServer() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getServer() {
+      java.lang.Object ref = server_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          server_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getServerBytes() {
+      java.lang.Object ref = server_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        server_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required string signature = 2;
+    public static final int SIGNATURE_FIELD_NUMBER = 2;
+    private java.lang.Object signature_;
+    public boolean hasSignature() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getSignature() {
+      java.lang.Object ref = signature_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          signature_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getSignatureBytes() {
+      java.lang.Object ref = signature_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        signature_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required string client = 3;
+    public static final int CLIENT_FIELD_NUMBER = 3;
+    private java.lang.Object client_;
+    public boolean hasClient() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public String getClient() {
+      java.lang.Object ref = client_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          client_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getClientBytes() {
+      java.lang.Object ref = client_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        client_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required int32 corId = 4;
+    public static final int CORID_FIELD_NUMBER = 4;
+    private int corId_;
+    public boolean hasCorId() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public int getCorId() {
+      return corId_;
+    }
+    
+    // optional .RpcPayloadInfo event = 5;
+    public static final int EVENT_FIELD_NUMBER = 5;
+    private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo event_;
+    public boolean hasEvent() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getEvent() {
+      return event_;
+    }
+    public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getEventOrBuilder() {
+      return event_;
+    }
+    
+    private void initFields() {
+      server_ = "";
+      signature_ = "";
+      client_ = "";
+      corId_ = 0;
+      event_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasServer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasSignature()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasClient()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasCorId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (hasEvent()) {
+        if (!getEvent().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getServerBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getSignatureBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getClientBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, corId_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(5, event_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getServerBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getSignatureBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getClientBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, corId_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, event_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_OobResponse_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_OobResponse_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getEventFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        server_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        signature_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        client_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        corId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        if (eventBuilder_ == null) {
+          event_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+        } else {
+          eventBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse.getDescriptor();
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse getDefaultInstanceForType() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse.getDefaultInstance();
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse build() {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse buildPartial() {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse result = new com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.server_ = server_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.signature_ = signature_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.client_ = client_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.corId_ = corId_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (eventBuilder_ == null) {
+          result.event_ = event_;
+        } else {
+          result.event_ = eventBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse) {
+          return mergeFrom((com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse other) {
+        if (other == com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse.getDefaultInstance()) return this;
+        if (other.hasServer()) {
+          setServer(other.getServer());
+        }
+        if (other.hasSignature()) {
+          setSignature(other.getSignature());
+        }
+        if (other.hasClient()) {
+          setClient(other.getClient());
+        }
+        if (other.hasCorId()) {
+          setCorId(other.getCorId());
+        }
+        if (other.hasEvent()) {
+          mergeEvent(other.getEvent());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasServer()) {
+          
+          return false;
+        }
+        if (!hasSignature()) {
+          
+          return false;
+        }
+        if (!hasClient()) {
+          
+          return false;
+        }
+        if (!hasCorId()) {
+          
+          return false;
+        }
+        if (hasEvent()) {
+          if (!getEvent().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              server_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              signature_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              client_ = input.readBytes();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              corId_ = input.readInt32();
+              break;
+            }
+            case 42: {
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder subBuilder = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.newBuilder();
+              if (hasEvent()) {
+                subBuilder.mergeFrom(getEvent());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setEvent(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required string server = 1;
+      private java.lang.Object server_ = "";
+      public boolean hasServer() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public String getServer() {
+        java.lang.Object ref = server_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          server_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setServer(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        server_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearServer() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        server_ = getDefaultInstance().getServer();
+        onChanged();
+        return this;
+      }
+      void setServer(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        server_ = value;
+        onChanged();
+      }
+      
+      // required string signature = 2;
+      private java.lang.Object signature_ = "";
+      public boolean hasSignature() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getSignature() {
+        java.lang.Object ref = signature_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          signature_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setSignature(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        signature_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearSignature() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        signature_ = getDefaultInstance().getSignature();
+        onChanged();
+        return this;
+      }
+      void setSignature(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        signature_ = value;
+        onChanged();
+      }
+      
+      // required string client = 3;
+      private java.lang.Object client_ = "";
+      public boolean hasClient() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public String getClient() {
+        java.lang.Object ref = client_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          client_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setClient(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        client_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearClient() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        client_ = getDefaultInstance().getClient();
+        onChanged();
+        return this;
+      }
+      void setClient(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000004;
+        client_ = value;
+        onChanged();
+      }
+      
+      // required int32 corId = 4;
+      private int corId_ ;
+      public boolean hasCorId() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public int getCorId() {
+        return corId_;
+      }
+      public Builder setCorId(int value) {
+        bitField0_ |= 0x00000008;
+        corId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearCorId() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        corId_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional .RpcPayloadInfo event = 5;
+      private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo event_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> eventBuilder_;
+      public boolean hasEvent() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getEvent() {
+        if (eventBuilder_ == null) {
+          return event_;
+        } else {
+          return eventBuilder_.getMessage();
+        }
+      }
+      public Builder setEvent(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo value) {
+        if (eventBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          event_ = value;
+          onChanged();
+        } else {
+          eventBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder setEvent(
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder builderForValue) {
+        if (eventBuilder_ == null) {
+          event_ = builderForValue.build();
+          onChanged();
+        } else {
+          eventBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder mergeEvent(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo value) {
+        if (eventBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              event_ != com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance()) {
+            event_ =
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.newBuilder(event_).mergeFrom(value).buildPartial();
+          } else {
+            event_ = value;
+          }
+          onChanged();
+        } else {
+          eventBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder clearEvent() {
+        if (eventBuilder_ == null) {
+          event_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          eventBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder getEventBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getEventFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getEventOrBuilder() {
+        if (eventBuilder_ != null) {
+          return eventBuilder_.getMessageOrBuilder();
+        } else {
+          return event_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> 
+          getEventFieldBuilder() {
+        if (eventBuilder_ == null) {
+          eventBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder>(
+                  event_,
+                  getParentForChildren(),
+                  isClean());
+          event_ = null;
+        }
+        return eventBuilder_;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:OobResponse)
+    }
+    
+    static {
+      defaultInstance = new OobResponse(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:OobResponse)
+  }
+  
+  public interface OobMessageOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string server = 1;
+    boolean hasServer();
+    String getServer();
+    
+    // required string client = 2;
+    boolean hasClient();
+    String getClient();
+    
+    // optional .RpcPayloadInfo event = 3;
+    boolean hasEvent();
+    com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getEvent();
+    com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getEventOrBuilder();
+  }
+  public static final class OobMessage extends
+      com.google.protobuf.GeneratedMessage
+      implements OobMessageOrBuilder {
+    // Use OobMessage.newBuilder() to construct.
+    private OobMessage(Builder builder) {
+      super(builder);
+    }
+    private OobMessage(boolean noInit) {}
+    
+    private static final OobMessage defaultInstance;
+    public static OobMessage getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public OobMessage getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_OobMessage_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_OobMessage_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required string server = 1;
+    public static final int SERVER_FIELD_NUMBER = 1;
+    private java.lang.Object server_;
+    public boolean hasServer() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getServer() {
+      java.lang.Object ref = server_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          server_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getServerBytes() {
+      java.lang.Object ref = server_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        server_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required string client = 2;
+    public static final int CLIENT_FIELD_NUMBER = 2;
+    private java.lang.Object client_;
+    public boolean hasClient() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getClient() {
+      java.lang.Object ref = client_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          client_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getClientBytes() {
+      java.lang.Object ref = client_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        client_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // optional .RpcPayloadInfo event = 3;
+    public static final int EVENT_FIELD_NUMBER = 3;
+    private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo event_;
+    public boolean hasEvent() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getEvent() {
+      return event_;
+    }
+    public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getEventOrBuilder() {
+      return event_;
+    }
+    
+    private void initFields() {
+      server_ = "";
+      client_ = "";
+      event_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasServer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasClient()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (hasEvent()) {
+        if (!getEvent().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getServerBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getClientBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, event_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getServerBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getClientBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, event_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_OobMessage_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_OobMessage_fieldAccessorTable;
+      }
+      
+      // Construct using com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getEventFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        server_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        client_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (eventBuilder_ == null) {
+          event_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+        } else {
+          eventBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage.getDescriptor();
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage getDefaultInstanceForType() {
+        return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage.getDefaultInstance();
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage build() {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage buildPartial() {
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage result = new com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.server_ = server_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.client_ = client_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (eventBuilder_ == null) {
+          result.event_ = event_;
+        } else {
+          result.event_ = eventBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage) {
+          return mergeFrom((com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage other) {
+        if (other == com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage.getDefaultInstance()) return this;
+        if (other.hasServer()) {
+          setServer(other.getServer());
+        }
+        if (other.hasClient()) {
+          setClient(other.getClient());
+        }
+        if (other.hasEvent()) {
+          mergeEvent(other.getEvent());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasServer()) {
+          
+          return false;
+        }
+        if (!hasClient()) {
+          
+          return false;
+        }
+        if (hasEvent()) {
+          if (!getEvent().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              server_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              client_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder subBuilder = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.newBuilder();
+              if (hasEvent()) {
+                subBuilder.mergeFrom(getEvent());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setEvent(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required string server = 1;
+      private java.lang.Object server_ = "";
+      public boolean hasServer() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public String getServer() {
+        java.lang.Object ref = server_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          server_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setServer(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        server_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearServer() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        server_ = getDefaultInstance().getServer();
+        onChanged();
+        return this;
+      }
+      void setServer(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        server_ = value;
+        onChanged();
+      }
+      
+      // required string client = 2;
+      private java.lang.Object client_ = "";
+      public boolean hasClient() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getClient() {
+        java.lang.Object ref = client_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          client_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setClient(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        client_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearClient() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        client_ = getDefaultInstance().getClient();
+        onChanged();
+        return this;
+      }
+      void setClient(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        client_ = value;
+        onChanged();
+      }
+      
+      // optional .RpcPayloadInfo event = 3;
+      private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo event_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> eventBuilder_;
+      public boolean hasEvent() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo getEvent() {
+        if (eventBuilder_ == null) {
+          return event_;
+        } else {
+          return eventBuilder_.getMessage();
+        }
+      }
+      public Builder setEvent(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo value) {
+        if (eventBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          event_ = value;
+          onChanged();
+        } else {
+          eventBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      public Builder setEvent(
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder builderForValue) {
+        if (eventBuilder_ == null) {
+          event_ = builderForValue.build();
+          onChanged();
+        } else {
+          eventBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      public Builder mergeEvent(com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo value) {
+        if (eventBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              event_ != com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance()) {
+            event_ =
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.newBuilder(event_).mergeFrom(value).buildPartial();
+          } else {
+            event_ = value;
+          }
+          onChanged();
+        } else {
+          eventBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      public Builder clearEvent() {
+        if (eventBuilder_ == null) {
+          event_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          eventBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder getEventBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getEventFieldBuilder().getBuilder();
+      }
+      public com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getEventOrBuilder() {
+        if (eventBuilder_ != null) {
+          return eventBuilder_.getMessageOrBuilder();
+        } else {
+          return event_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> 
+          getEventFieldBuilder() {
+        if (eventBuilder_ == null) {
+          eventBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder>(
+                  event_,
+                  getParentForChildren(),
+                  isClean());
+          event_ = null;
+        }
+        return eventBuilder_;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:OobMessage)
+    }
+    
+    static {
+      defaultInstance = new OobMessage(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:OobMessage)
+  }
+  
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_PayloadContent_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_PayloadContent_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_RpcPayloadInfo_descriptor;
   private static
@@ -1542,6 +3573,16 @@ public final class RpcLogEntry {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_RpcCall_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_OobResponse_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_OobResponse_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_OobMessage_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_OobMessage_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1551,36 +3592,67 @@ public final class RpcLogEntry {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\035protobuf-rpc-duplex-log.proto\"*\n\016RpcPa" +
-      "yloadInfo\022\n\n\002ts\030\001 \002(\003\022\014\n\004size\030\002 \001(\005\"\261\001\n\007" +
-      "RpcCall\022\020\n\010duration\030\001 \002(\005\022\016\n\006server\030\002 \002(" +
-      "\t\022\021\n\tsignature\030\003 \002(\t\022\016\n\006client\030\004 \002(\t\022\r\n\005" +
-      "corId\030\005 \002(\005\022\r\n\005error\030\006 \001(\t\022 \n\007request\030\007 " +
-      "\001(\0132\017.RpcPayloadInfo\022!\n\010response\030\010 \001(\0132\017" +
-      ".RpcPayloadInfoB;\n*com.googlecode.protob" +
-      "uf.pro.duplex.loggingB\013RpcLogEntryH\001"
+      "\n\035protobuf-rpc-duplex-log.proto\"/\n\016Paylo" +
+      "adContent\022\014\n\004uuid\030\001 \002(\t\022\017\n\007content\030\002 \002(\t" +
+      "\"8\n\016RpcPayloadInfo\022\n\n\002ts\030\001 \002(\003\022\014\n\004size\030\002" +
+      " \001(\005\022\014\n\004uuid\030\003 \001(\t\"\261\001\n\007RpcCall\022\020\n\010durati" +
+      "on\030\001 \002(\005\022\016\n\006server\030\002 \002(\t\022\021\n\tsignature\030\003 " +
+      "\002(\t\022\016\n\006client\030\004 \002(\t\022\r\n\005corId\030\005 \002(\005\022\r\n\005er" +
+      "ror\030\006 \001(\t\022 \n\007request\030\007 \001(\0132\017.RpcPayloadI" +
+      "nfo\022!\n\010response\030\010 \001(\0132\017.RpcPayloadInfo\"o" +
+      "\n\013OobResponse\022\016\n\006server\030\001 \002(\t\022\021\n\tsignatu" +
+      "re\030\002 \002(\t\022\016\n\006client\030\003 \002(\t\022\r\n\005corId\030\004 \002(\005\022",
+      "\036\n\005event\030\005 \001(\0132\017.RpcPayloadInfo\"L\n\nOobMe" +
+      "ssage\022\016\n\006server\030\001 \002(\t\022\016\n\006client\030\002 \002(\t\022\036\n" +
+      "\005event\030\003 \001(\0132\017.RpcPayloadInfoB;\n*com.goo" +
+      "glecode.protobuf.pro.duplex.loggingB\013Rpc" +
+      "LogEntryH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_RpcPayloadInfo_descriptor =
+          internal_static_PayloadContent_descriptor =
             getDescriptor().getMessageTypes().get(0);
+          internal_static_PayloadContent_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_PayloadContent_descriptor,
+              new java.lang.String[] { "Uuid", "Content", },
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent.class,
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContent.Builder.class);
+          internal_static_RpcPayloadInfo_descriptor =
+            getDescriptor().getMessageTypes().get(1);
           internal_static_RpcPayloadInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_RpcPayloadInfo_descriptor,
-              new java.lang.String[] { "Ts", "Size", },
+              new java.lang.String[] { "Ts", "Size", "Uuid", },
               com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.class,
               com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder.class);
           internal_static_RpcCall_descriptor =
-            getDescriptor().getMessageTypes().get(1);
+            getDescriptor().getMessageTypes().get(2);
           internal_static_RpcCall_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_RpcCall_descriptor,
               new java.lang.String[] { "Duration", "Server", "Signature", "Client", "CorId", "Error", "Request", "Response", },
               com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall.class,
               com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCall.Builder.class);
+          internal_static_OobResponse_descriptor =
+            getDescriptor().getMessageTypes().get(3);
+          internal_static_OobResponse_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_OobResponse_descriptor,
+              new java.lang.String[] { "Server", "Signature", "Client", "CorId", "Event", },
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse.class,
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponse.Builder.class);
+          internal_static_OobMessage_descriptor =
+            getDescriptor().getMessageTypes().get(4);
+          internal_static_OobMessage_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_OobMessage_descriptor,
+              new java.lang.String[] { "Server", "Client", "Event", },
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage.class,
+              com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessage.Builder.class);
           return null;
         }
       };
