@@ -128,13 +128,18 @@ public class ClientRpcController implements RpcController, LocalCallVariableHold
 		onOobResponsePrototype = responsePrototype;
 	}
 	
-	public void receiveOobResponse(OobResponse msg) {
+	/**
+	 * 
+	 * @param msg
+	 * @return true the message processed, null if none processed.
+	 */
+	public Message receiveOobResponse(OobResponse msg) {
 		if ( msg.getCorrelationId() != correlationId ) {
 			// only possible with race condition on client reset and re-use when a server message
 			// comes back
 			log.info("Correlation mismatch client " + correlationId + " OobResponse " + msg.getCorrelationId());
 			
-			return; // don't process the server message anymore in this case.
+			return null; // don't process the server message anymore in this case.
 		}
 		if ( onOobResponsePrototype != null && onOobResponseFunction != null ) {
 			Message onMsg = null;
@@ -143,10 +148,9 @@ public class ClientRpcController implements RpcController, LocalCallVariableHold
 
 				onOobResponseFunction.run(onMsg);
 				
+				return onMsg;
 			} catch ( InvalidProtocolBufferException e ) {
 				String errorMessage = "Invalid OobResponse Protobuf for correlationId " + correlationId;
-				
-				//TODO doLog( state, rpcResponse, errorMessage );
 				
 				log.warn(errorMessage, e);
 			}			
@@ -156,6 +160,7 @@ public class ClientRpcController implements RpcController, LocalCallVariableHold
 				log.debug("No onOobResponseCallbackFunction registered for correlationId " + correlationId);
 			}
 		}
+		return null;
 	}
 
 	/**

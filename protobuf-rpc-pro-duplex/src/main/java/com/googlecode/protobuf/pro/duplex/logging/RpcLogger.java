@@ -45,5 +45,25 @@ public interface RpcLogger {
 	 * @param responseTS the timestamp of the response.
 	 */
 	public void logCall( PeerInfo client, PeerInfo server, String signature, Message request, Message response, String errorMessage, int correlationId, long requestTS, long responseTS );
+
+	/**
+	 * Log the receipt or sending of an OobResponse.
+	 * @param client
+	 * @param server
+	 * @param signature
+	 * @param message
+	 * @param correlationId
+	 * @param eventTS
+	 */
+	public void logOobResponse( PeerInfo client, PeerInfo server, Message message, String signature, int correlationId, long eventTS );
 	
+	/**
+	 * Log the receipt or sending of an OobMessage.
+	 * @param client
+	 * @param server
+	 * @param message
+	 * @param eventTS
+	 */
+	public void logOobMessage( PeerInfo client, PeerInfo server, Message message, long eventTS );
+
 }

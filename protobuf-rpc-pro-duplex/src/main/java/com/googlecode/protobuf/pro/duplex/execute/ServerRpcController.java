@@ -38,15 +38,18 @@ public class ServerRpcController implements RpcController, LocalCallVariableHold
 	private RpcCallback<Object> cancelNotifyCallback;
 	private RpcClient rpcClient;
 	private int correlationId;
+	private String serviceName;
+	
 	/**
 	 * A convenient store of call local variables.
 	 * The values are not transmitted, just kept locally. Is cleared on {@link #reset()}
 	 */
 	private Map<String, Object> callLocalVariables;
 	
-	public ServerRpcController( RpcClient rpcClient, int correlationId ) {
+	public ServerRpcController( RpcClient rpcClient, String serviceName, int correlationId ) {
 		this.rpcClient = rpcClient;
 		this.correlationId = correlationId;
+		this.serviceName = serviceName;
 	}
 	
 	public static ServerRpcController getRpcController( com.google.protobuf.RpcController controller ) {
@@ -155,6 +158,13 @@ public class ServerRpcController implements RpcController, LocalCallVariableHold
 	 * @param msg
 	 */
 	public void sendOobResponse( Message msg ) {
-		rpcClient.sendOobResponse(correlationId, msg);
+		rpcClient.sendOobResponse(serviceName, correlationId, msg);
+	}
+
+	/**
+	 * @return the serviceName
+	 */
+	public String getServiceName() {
+		return serviceName;
 	}
 }
