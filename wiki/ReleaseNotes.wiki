@@ -2,7 +2,7 @@
 What changes are made from release to release. Check SVN history for more details.
 = 3.0.0 =
 
-Feature: RPC timeout
+Feature: RPC timeout. See wiki page "RpcTimeout" for more info.
 
 Fix: refactor Bootstrap client and server classes to be more symetric.
 
