@@ -1,4 +1,5 @@
 #summary Show the internal components of protobuf-rpc-pro and how they work together.
+#labels Phase-Design
 
 = Architecture =
 
