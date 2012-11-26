@@ -234,7 +234,7 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 				} catch ( com.google.protobuf.ServiceException se ) {
 					log.warn("BlockingService threw ServiceException.", se);
 					serviceCallback.run(null);
-					call.getController().setFailed("ServiceException");
+					call.getController().setFailed(se.getMessage());
 				}
 			}
 			if ( Thread.interrupted() ) {

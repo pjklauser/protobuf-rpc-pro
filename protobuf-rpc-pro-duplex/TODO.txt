@@ -1,17 +1,8 @@
-demo: timeout
+demo: more timeout examples, more cancellation examples
+
+java util logging
+
 wiki docu pic & text : premise timeout seldome. Scann regular intervals. Semantics on client and server side.
-
-
-Demo : precent complete oob replies
-log protos for oob and oobreplies
-
-compression as Bootstrap.setOption("compress");
-
-Slimdown stack - using "Bootstrap" as attribute
-
-update copyright notice.
-
-RpcServer delayed processing protection ( using timeout + time of arrival  ). RpcCallerExecutors
 
 RpcTimeout Description
 
@@ -22,6 +13,7 @@ RpcServer
 			true  - the server call is "cancelled" ( equivalent of a client issueing an explicit cancel )
 				the running thread is "interrupted" which might cause transactional rollback.
 			false - the server call is not cancelled and allowed to finish.
+		If an RPC server call has timed out before starting processing due to buffering in the RpcServerCallExecutor it will be ignored.
 		When a RPC server call completes and the timeout of the call has exceeded the client's timeout, NO response will be transferred to the client. 
 		This mandates that the client manages handling timeouts on the client side for both blocking and nonblocking calls.
 		The mechanism that timeouts are monitored on the server side does not depend on whether blocking server calls are implemented or nonblocking calls( reflexive service vs blocking service ), in the same way that client cancellation is handled the same way in both.
