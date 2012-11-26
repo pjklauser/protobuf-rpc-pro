@@ -155,8 +155,8 @@ public class DuplexPingPongServer {
         } else {
         	while( true ) {
         		try {
-        			log.info("Sleeping 30s before retesting clients.");
-        	    	Thread.sleep(30000);
+        			log.info("Sleeping 60s before retesting clients.");
+        	    	Thread.sleep(60000);
         	    	new ShortTests().execute(bootstrap.getRpcClientRegistry());
         		} catch( Throwable e ) {
         			log.warn("Throwable.", e);

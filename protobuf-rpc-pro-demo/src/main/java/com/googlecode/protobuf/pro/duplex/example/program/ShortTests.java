@@ -73,5 +73,25 @@ public class ShortTests implements ExecutableProgram {
     	c = new SimpleBlockingPingClient(config);
     	exec.execute(c,channel);
     	
+    	// server blocking ping with reverse blocking pong - 1 call, no timeout, no processing time
+    	config = new DemoDescriptor(1, 1, new DemoDescriptor.CallDescriptor(0,0,true,false), new DemoDescriptor.CallDescriptor(0,0,true,false));
+    	c = new SimpleBlockingPingClient(config);
+    	exec.execute(c,channel);
+
+    	// server nonblocking ping with reverse nonblocking pong - 1 call, no timeout, no processing time
+    	config = new DemoDescriptor(1, 1, new DemoDescriptor.CallDescriptor(0,0,false,false), new DemoDescriptor.CallDescriptor(0,0,false,false));
+    	c = new SimpleBlockingPingClient(config);
+    	exec.execute(c,channel);
+    	
+    	// server blocking ping with reverse pong - 20 calls, no timeout, no processing time, but pong times out after 0.5s
+    	config = new DemoDescriptor(1, 1, new DemoDescriptor.CallDescriptor(0,0,true,false), new DemoDescriptor.CallDescriptor(1000,500,true,false));
+    	c = new SimpleBlockingPingClient(config);
+    	exec.execute(c,channel);
+    	
+    	// server nonblocking ping with reverse nonblocking pong - 20 calls, no timeout, no processing time, but pong times out after 0.5s
+    	config = new DemoDescriptor(1, 1, new DemoDescriptor.CallDescriptor(0,0,false,false), new DemoDescriptor.CallDescriptor(1000,500,false,false));
+    	c = new SimpleBlockingPingClient(config);
+    	exec.execute(c,channel);
+    	
 	}
 }

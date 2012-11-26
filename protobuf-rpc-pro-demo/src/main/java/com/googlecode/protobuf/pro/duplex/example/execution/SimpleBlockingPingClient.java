@@ -77,6 +77,7 @@ public class SimpleBlockingPingClient implements ExecutableClient {
 				}
 				Ping ping = pingBuilder.build();
 				Pong pong = null;
+				long callStartTS = System.currentTimeMillis();
 				try {
 					if ( config.getPingCall().isCallBlockingImpl()){
 						pong = blockingService.ping(controller, ping);
@@ -107,15 +108,18 @@ public class SimpleBlockingPingClient implements ExecutableClient {
 					}
 				} catch ( ServiceException e ) {
 					if ( "Timeout".equals(e.getMessage())) {
+						long callEndTS = System.currentTimeMillis();
 						// actual roundTripTime >= roundTripTime, we don't know by how much, but we add a 1s safety factor
-						int roundTripTime = config.getPingCall().getDurationMs();
-						if ( config.getPongCall() != null ) {
-							roundTripTime += config.getPongCall().getDurationMs();
-							roundTripTime += 1000;
-						}
-						roundTripTime += 1000;
+						long roundTripTime = callEndTS - callStartTS;
 						if ( roundTripTime >= config.getPingCall().getTimeoutMs() ) {
 							// timeout is ok
+						} else {
+							throw e;
+						}
+					} else if ( "Client call failed with Timeout".equals(e.getMessage())) {
+						// actual roundTripTime >= roundTripTime, we don't know by how much, but we add a 1s safety factor
+						if ( config.getPongCall() != null && config.getPongCall().getTimeoutMs() <= config.getPongCall().getDurationMs() ) {
+							// pong should timeout and return failure to ping
 						} else {
 							throw e;
 						}
