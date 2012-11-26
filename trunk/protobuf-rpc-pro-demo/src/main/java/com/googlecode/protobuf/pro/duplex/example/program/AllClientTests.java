@@ -53,6 +53,21 @@ public class AllClientTests implements ExecutableProgram {
     	ClientExecutor exec = new ClientExecutor();
     	DemoDescriptor config = null;
     	
+    	// server blocking ping with reverse pong - 100 calls, no timeout, no processing time
+    	config = new DemoDescriptor(100, 1, new DemoDescriptor.CallDescriptor(0,0,true,false), new DemoDescriptor.CallDescriptor(0,0,true,false));
+    	c = new SimpleBlockingPingClient(config);
+    	exec.execute(c,channel);
+    	
+    	// server non blocking ping with reverse blocking pong - 100 calls, no timeout, no processing time
+    	config = new DemoDescriptor(100, 1, new DemoDescriptor.CallDescriptor(0,0,false,false), new DemoDescriptor.CallDescriptor(0,0,true,false));
+    	c = new SimpleBlockingPingClient(config);
+    	exec.execute(c,channel);
+    	
+    	// server non blocking ping with reverse non blocking pong - 100 calls, no timeout, no processing time
+    	config = new DemoDescriptor(100, 1, new DemoDescriptor.CallDescriptor(0,0,false,false), new DemoDescriptor.CallDescriptor(0,0,false,false));
+    	c = new SimpleBlockingPingClient(config);
+    	exec.execute(c,channel);
+    	
     	// pong call
     	c = new SimpleBlockingPongClient(new DemoDescriptor(10, 100, null, new DemoDescriptor.CallDescriptor(100,0,false,false)));
     	exec.execute(c, channel);
@@ -88,5 +103,16 @@ public class AllClientTests implements ExecutableProgram {
     		clients[i] = new SimpleBlockingPingClient(config);
     	}
     	exec.execute(clients,channel);
+
+    	// server blocking ping with reverse pong - 20 calls, no timeout, no processing time, but pong times out after 0.5s
+    	config = new DemoDescriptor(20, 1, new DemoDescriptor.CallDescriptor(0,0,true,false), new DemoDescriptor.CallDescriptor(1000,500,true,false));
+    	c = new SimpleBlockingPingClient(config);
+    	exec.execute(c,channel);
+    	
+    	// server nonblocking ping with reverse nonblocking pong - 20 calls, no timeout, no processing time, but pong times out after 0.5s
+    	config = new DemoDescriptor(20, 1, new DemoDescriptor.CallDescriptor(0,0,false,false), new DemoDescriptor.CallDescriptor(1000,500,false,false));
+    	c = new SimpleBlockingPingClient(config);
+    	exec.execute(c,channel);
+    	
 	}
 }
