@@ -111,15 +111,9 @@ public class SimpleBlockingPingClient implements ExecutableClient {
 						long callEndTS = System.currentTimeMillis();
 						// actual roundTripTime >= roundTripTime, we don't know by how much, but we add a 1s safety factor
 						long roundTripTime = callEndTS - callStartTS;
-						if ( roundTripTime >= config.getPingCall().getTimeoutMs() ) {
+						if ( config.getPingCall().getTimeoutMs() > 0 && roundTripTime >= config.getPingCall().getTimeoutMs() ||
+								( config.getPongCall() != null && config.getPongCall().getTimeoutMs() <= config.getPongCall().getDurationMs() )) {
 							// timeout is ok
-						} else {
-							throw e;
-						}
-					} else if ( "Client call failed with Timeout".equals(e.getMessage())) {
-						// actual roundTripTime >= roundTripTime, we don't know by how much, but we add a 1s safety factor
-						if ( config.getPongCall() != null && config.getPongCall().getTimeoutMs() <= config.getPongCall().getDurationMs() ) {
-							// pong should timeout and return failure to ping
 						} else {
 							throw e;
 						}
