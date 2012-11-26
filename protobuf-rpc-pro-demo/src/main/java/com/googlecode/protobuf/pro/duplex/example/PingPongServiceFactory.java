@@ -203,7 +203,7 @@ public class PingPongServiceFactory {
 
 						clientResponse = clientService.pong(clientController, clientRequest);
 					} catch ( ServiceException e ) {
-						controller.setFailed("Client call failed with " + e.getMessage());
+						controller.setFailed(e.getMessage());
 						done.run(null);
 						return;
 					}
@@ -220,7 +220,7 @@ public class PingPongServiceFactory {
 
 						clientResponse = clientService.pong(clientController, clientRequest);
 					} catch ( ServiceException e ) {
-						controller.setFailed("Client call failed with " + e.getMessage());
+						controller.setFailed(e.getMessage());
 						done.run(null);
 						return;
 					}
