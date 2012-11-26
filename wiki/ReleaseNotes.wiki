@@ -10,6 +10,8 @@ Feature: new utility AvailablePortFinder utility to allow selection of availible
 
 Fix 14: replacement of PeerInfo's PID with UUID.
 
+Dependency Update: upgraded to Netty version 3.5.10 Final.
+
 = 2.0.1 =
 
 Dependency Update: upgraded to Netty version 3.5.3 Final.
