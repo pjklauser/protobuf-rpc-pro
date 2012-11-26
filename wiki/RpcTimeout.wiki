@@ -1,5 +1,5 @@
+#summary Information about the RPC timeout feature.
 #labels Phase-Design
-#Information about the RPC timeout feature.
 
 = RPC timeout =
 
