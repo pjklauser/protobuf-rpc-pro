@@ -1,9 +1,0 @@
-pipeline example
-
-logging API
-
-example SSL
-
-Howto - extend for compression
-
-demo - print xfer times as Bit/s
