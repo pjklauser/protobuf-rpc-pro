@@ -1,8 +1,6 @@
 #summary A brief description of the libraries features.
 #labels Featured,Phase-Design
 
-= Features =
-
 == TCP connection re-use ==
 
 RPC calls from an RPC client can be multiplexed over a single TCP socket to an RPC server. The RPC client has full control of the TCP socket, which is kept open between calls. This avoids the extra overhead of TCP connection establishment for each call ( SYN, SSL handshake ).
