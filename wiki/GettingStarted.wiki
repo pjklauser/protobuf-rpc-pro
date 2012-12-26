@@ -1,5 +1,5 @@
 #summary a quickstart guide to utilizing protobuf-rpc-pro
-#labels Phase-Deploy
+#labels Phase-Deploy,Featured
 
 = Getting Started =
 
