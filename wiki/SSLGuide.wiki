@@ -1,5 +1,5 @@
 #summary Step by Step guide to setting up secure communications.
-#labels Phase-Deploy
+#labels Phase-Deploy,Featured
 
 = Introduction =
 
