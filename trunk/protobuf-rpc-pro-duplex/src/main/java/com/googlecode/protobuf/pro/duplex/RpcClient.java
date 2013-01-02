@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelPipeline;
 
@@ -60,7 +60,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  */
 public class RpcClient implements RpcClientChannel {
 
-	private static Log log = LogFactory.getLog(RpcClient.class);
+	private static Logger log = LoggerFactory.getLogger(RpcClient.class);
 	
 	private AtomicInteger correlationId = new AtomicInteger(1);
 
@@ -459,7 +459,7 @@ public class RpcClient implements RpcClientChannel {
 	}
 
 	/**
-	 * Log all information about a completed RPC call.
+	 * Logger all information about a completed RPC call.
 	 * @param state
 	 * @param response
 	 * @param errorMessage
@@ -471,7 +471,7 @@ public class RpcClient implements RpcClientChannel {
 	}
 	
 	/**
-	 * Log all information about the received OobResponse of an RPC call.
+	 * Logger all information about the received OobResponse of an RPC call.
 	 * @param state
 	 * @param response
 	 */
@@ -482,7 +482,7 @@ public class RpcClient implements RpcClientChannel {
 	}
 	
 	/**
-	 * Log all information about the received OobResponse of an RPC call.
+	 * Logger all information about the received OobResponse of an RPC call.
 	 * @param state
 	 * @param response
 	 */
@@ -493,7 +493,7 @@ public class RpcClient implements RpcClientChannel {
 	}
 	
 	/**
-	 * Log all information about an outbound OobMessage.
+	 * Logger all information about an outbound OobMessage.
 	 */
 	protected void doLogOobMessageOutbound( Message message ) {
 		if ( rpcLogger != null ) {
@@ -502,7 +502,7 @@ public class RpcClient implements RpcClientChannel {
 	}
 	
 	/**
-	 * Log all information about an inbound OobMessage.
+	 * Logger all information about an inbound OobMessage.
 	 */
 	protected void doLogOobMessageInbound( Message message ) {
 		if ( rpcLogger != null ) {

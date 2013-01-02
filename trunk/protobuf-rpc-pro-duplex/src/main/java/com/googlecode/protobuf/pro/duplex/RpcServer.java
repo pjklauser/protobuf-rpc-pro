@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.ExtensionRegistry;
@@ -52,7 +52,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  */
 public class RpcServer implements RpcServerExecutorCallback {
 
-	private static Log log = LogFactory.getLog(RpcServer.class);
+	private static Logger log = LoggerFactory.getLogger(RpcServer.class);
 
 	private final Map<Integer, PendingServerCallState> pendingServerCallMap = new ConcurrentHashMap<Integer, PendingServerCallState>();
 

@@ -19,8 +19,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.bootstrap.Bootstrap;
 
 /**
@@ -32,7 +32,7 @@ import org.jboss.netty.bootstrap.Bootstrap;
  */
 public class CleanShutdownHandler {
 
-	private static Log log = LogFactory.getLog(CleanShutdownHandler.class);
+	private static Logger log = LoggerFactory.getLogger(CleanShutdownHandler.class);
 	
 	private List<Bootstrap> bootstraps = new LinkedList<Bootstrap>();
 	private List<ExecutorService> executors = new LinkedList<ExecutorService>();

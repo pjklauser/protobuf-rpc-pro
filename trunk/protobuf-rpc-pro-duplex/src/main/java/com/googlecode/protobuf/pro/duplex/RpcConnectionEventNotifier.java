@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.channel.ChannelPipeline;
 
 import com.google.protobuf.Descriptors.MethodDescriptor;
@@ -47,7 +47,7 @@ import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 public class RpcConnectionEventNotifier implements
 		TcpConnectionEventListener {
 
-	private static Log log = LogFactory.getLog(RpcConnectionEventNotifier.class);
+	private static Logger log = LoggerFactory.getLogger(RpcConnectionEventNotifier.class);
 
 	private Map<String,RpcClientChannel> peerNameMap = new ConcurrentHashMap<String, RpcClientChannel>();
 	

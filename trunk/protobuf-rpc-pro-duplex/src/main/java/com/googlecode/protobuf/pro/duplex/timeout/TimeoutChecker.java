@@ -24,8 +24,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
@@ -39,7 +39,7 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  */
 public class TimeoutChecker extends ScheduledThreadPoolExecutor implements RpcTimeoutChecker {
 
-	private static Log log = LogFactory.getLog(TimeoutChecker.class);
+	private static Logger log = LoggerFactory.getLogger(TimeoutChecker.class);
 
 	private RpcTimeoutExecutor timeoutExecutor;
 	private final int sleepTimeMs;

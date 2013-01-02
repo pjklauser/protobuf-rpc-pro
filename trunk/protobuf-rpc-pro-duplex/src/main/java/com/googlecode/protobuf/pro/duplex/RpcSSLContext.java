@@ -30,14 +30,14 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.protobuf.pro.duplex.util.ResourceUtils;
 
 public class RpcSSLContext {
 
-	private static Log log = LogFactory.getLog(RpcSSLContext.class);
+	private static Logger log = LoggerFactory.getLogger(RpcSSLContext.class);
 
 	private String keystoreType = "JKS";
 	private String keystorePath;

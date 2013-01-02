@@ -15,8 +15,8 @@
 */
 package com.googlecode.protobuf.pro.duplex.handler;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandler.Sharable;
@@ -53,7 +53,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 @Sharable
 public class ServerConnectRequestHandler extends SimpleChannelUpstreamHandler {
 
-	private static Log log = LogFactory.getLog(ServerConnectRequestHandler.class);
+	private static Logger log = LoggerFactory.getLogger(ServerConnectRequestHandler.class);
 
 	private final DuplexTcpServerBootstrap bootstrap;
     private final DuplexTcpServerPipelineFactory pipelineFactory;

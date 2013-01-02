@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
@@ -39,7 +39,7 @@ import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
  */
 public class RpcClientRegistry {
 	
-	private static Log log = LogFactory.getLog(RpcClientRegistry.class);
+	private static Logger log = LoggerFactory.getLogger(RpcClientRegistry.class);
 	
 	private Map<String, RpcClient> clientNameMap = new ConcurrentHashMap<String, RpcClient>();
 	

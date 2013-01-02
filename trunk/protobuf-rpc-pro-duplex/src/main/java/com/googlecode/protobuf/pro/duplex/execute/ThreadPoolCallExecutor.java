@@ -25,8 +25,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
@@ -63,7 +63,7 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  */
 public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcServerCallExecutor, RejectedExecutionHandler {
 
-	private static Log log = LogFactory.getLog(ThreadPoolCallExecutor.class);
+	private static Logger log = LoggerFactory.getLogger(ThreadPoolCallExecutor.class);
 
 	Map<CallRunner,CallRunner> runningCalls = new ConcurrentHashMap<CallRunner, CallRunner>();
 	
