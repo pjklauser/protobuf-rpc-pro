@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
@@ -36,7 +36,7 @@ import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
  */
 public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 	
-    private static Log log = LogFactory.getLog(RpcClientConnectionWatchdog.class);
+    private static Logger log = LoggerFactory.getLogger(RpcClientConnectionWatchdog.class);
 	
 	private List<RetryState> watchedClients = new ArrayList<RetryState>();
 	

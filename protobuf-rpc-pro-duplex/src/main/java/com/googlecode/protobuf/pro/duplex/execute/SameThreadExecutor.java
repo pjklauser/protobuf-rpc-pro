@@ -25,8 +25,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
@@ -50,7 +50,7 @@ import com.google.protobuf.RpcCallback;
  */
 public class SameThreadExecutor implements RpcServerCallExecutor {
 
-	private static Log log = LogFactory.getLog(SameThreadExecutor.class);
+	private static Logger log = LoggerFactory.getLogger(SameThreadExecutor.class);
 	
 	//weak hashmap of threads
 	WeakHashMap<Thread, PendingServerCallState> runningCalls = new WeakHashMap<Thread,PendingServerCallState>();

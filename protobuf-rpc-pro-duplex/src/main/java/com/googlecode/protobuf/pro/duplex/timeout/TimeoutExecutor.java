@@ -22,8 +22,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcServer;
@@ -51,7 +51,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
  */
 public class TimeoutExecutor extends ThreadPoolExecutor implements RpcTimeoutExecutor {
 
-	private static Log log = LogFactory.getLog(TimeoutExecutor.class);
+	private static Logger log = LoggerFactory.getLogger(TimeoutExecutor.class);
 
 	public TimeoutExecutor(int corePoolSize, int maximumPoolSize) {
 		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(corePoolSize, false), new RenamingThreadFactoryProxy("timeout", Executors.defaultThreadFactory()) );

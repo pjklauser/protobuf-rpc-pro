@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
@@ -61,7 +61,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
 public class DuplexTcpClientBootstrap extends ClientBootstrap {
 
-	private static Log log = LogFactory.getLog(DuplexTcpClientBootstrap.class);
+	private static Logger log = LoggerFactory.getLogger(DuplexTcpClientBootstrap.class);
 	
 	private List<TcpConnectionEventListener> connectionEventListeners = new ArrayList<TcpConnectionEventListener>();
 

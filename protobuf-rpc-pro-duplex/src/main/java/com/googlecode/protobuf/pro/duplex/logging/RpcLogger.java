@@ -32,7 +32,7 @@ import com.googlecode.protobuf.pro.duplex.PeerInfo;
 public interface RpcLogger {
 
 	/**
-	 * Log a single RPC call.
+	 * Logger a single RPC call.
 	 * 
 	 * @param client the initiator of the RPC call.
 	 * @param server the server of the RPC all.
@@ -47,7 +47,7 @@ public interface RpcLogger {
 	public void logCall( PeerInfo client, PeerInfo server, String signature, Message request, Message response, String errorMessage, int correlationId, long requestTS, long responseTS );
 
 	/**
-	 * Log the receipt or sending of an OobResponse.
+	 * Logger the receipt or sending of an OobResponse.
 	 * @param client
 	 * @param server
 	 * @param signature
@@ -58,7 +58,7 @@ public interface RpcLogger {
 	public void logOobResponse( PeerInfo client, PeerInfo server, Message message, String signature, int correlationId, long eventTS );
 	
 	/**
-	 * Log the receipt or sending of an OobMessage.
+	 * Logger the receipt or sending of an OobMessage.
 	 * @param client
 	 * @param server
 	 * @param message

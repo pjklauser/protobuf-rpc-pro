@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
@@ -41,7 +41,7 @@ import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
 
 public class DuplexTcpServerBootstrap extends ServerBootstrap {
 
-	private static Log log = LogFactory.getLog(DuplexTcpServerBootstrap.class);
+	private static Logger log = LoggerFactory.getLogger(DuplexTcpServerBootstrap.class);
 	
 	private List<TcpConnectionEventListener> connectionEventListeners = new ArrayList<TcpConnectionEventListener>();
 	

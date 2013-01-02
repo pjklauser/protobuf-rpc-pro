@@ -18,8 +18,8 @@ package com.googlecode.protobuf.pro.duplex;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
@@ -29,7 +29,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse;
 
 public class ClientRpcController implements RpcController, LocalCallVariableHolder {
 
-	private static Log log = LogFactory.getLog(ClientRpcController.class);
+	private static Logger log = LoggerFactory.getLogger(ClientRpcController.class);
 
 	private RpcClient rpcClient;
 	private int correlationId;

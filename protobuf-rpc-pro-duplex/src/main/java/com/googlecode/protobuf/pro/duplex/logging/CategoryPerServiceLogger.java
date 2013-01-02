@@ -17,8 +17,8 @@ package com.googlecode.protobuf.pro.duplex.logging;
 
 import java.util.UUID;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.TextFormat;
@@ -57,7 +57,7 @@ public class CategoryPerServiceLogger implements RpcLogger {
 		String resUUID = null;
 		
 		String summaryCategoryName = signature + ".info";
-		Log log = LogFactory.getLog(summaryCategoryName);
+	 Logger log = LoggerFactory.getLogger(summaryCategoryName);
 		String summaryText = null;
 		if (log.isInfoEnabled()) {
 			RpcCall.Builder rpcCall = RpcCall.newBuilder()
@@ -84,7 +84,7 @@ public class CategoryPerServiceLogger implements RpcLogger {
 		}
 
 		String requestCategoryName = signature + ".data.request";
-		Log reqlog = LogFactory.getLog(requestCategoryName);
+	 Logger reqlog = LoggerFactory.getLogger(requestCategoryName);
 		String requestText = null;
 		if (isLogRequestProto() && request != null) {
 			if (reqlog.isInfoEnabled()) {
@@ -94,7 +94,7 @@ public class CategoryPerServiceLogger implements RpcLogger {
 		}
 
 		String responseCategoryName = signature + ".data.response";
-		Log reslog = LogFactory.getLog(responseCategoryName);
+	 Logger reslog = LoggerFactory.getLogger(responseCategoryName);
 		String responseText = null;
 		if (isLogResponseProto() && response != null) {
 			if (reslog.isInfoEnabled()) {
@@ -120,7 +120,7 @@ public class CategoryPerServiceLogger implements RpcLogger {
 		String summaryCategoryName = signature + ".info.oob";
 		String uuid = UUID.randomUUID().toString();
 		
-		Log log = LogFactory.getLog(summaryCategoryName);
+	 Logger log = LoggerFactory.getLogger(summaryCategoryName);
 		String summaryText = null;
 		if (log.isInfoEnabled()) {
 			OobResponse.Builder rpcCall = OobResponse.newBuilder()
@@ -136,7 +136,7 @@ public class CategoryPerServiceLogger implements RpcLogger {
 		}
 
 		String responseCategoryName = signature + ".data.response.oob";
-		Log reslog = LogFactory.getLog(responseCategoryName);
+	 Logger reslog = LoggerFactory.getLogger(responseCategoryName);
 		String responseText = null;
 		if (isLogResponseProto() && message != null) {
 			if (reslog.isInfoEnabled()) {
@@ -158,7 +158,7 @@ public class CategoryPerServiceLogger implements RpcLogger {
 			Message message, long eventTS) {
 		String summaryCategoryName = "oobmessage.info";
 		String uuid = UUID.randomUUID().toString();
-		Log log = LogFactory.getLog(summaryCategoryName);
+	 Logger log = LoggerFactory.getLogger(summaryCategoryName);
 		String summaryText = null;
 		if (log.isInfoEnabled()) {
 			OobMessage.Builder oobMessage = OobMessage.newBuilder()
@@ -172,7 +172,7 @@ public class CategoryPerServiceLogger implements RpcLogger {
 		}
 
 		String eventCategoryName = "oobmessage.data";
-		Log evlog = LogFactory.getLog(eventCategoryName);
+	 Logger evlog = LoggerFactory.getLogger(eventCategoryName);
 		String eventText = null;
 		if (isLogEventProto() && message != null) {
 			if (evlog.isInfoEnabled()) {

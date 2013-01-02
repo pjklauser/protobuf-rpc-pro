@@ -18,8 +18,8 @@ package com.googlecode.protobuf.pro.duplex;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.ExtensionRegistry;
@@ -37,7 +37,7 @@ import com.google.protobuf.Service;
  */
 public class RpcServiceRegistry {
 	
-	private static Log log = LogFactory.getLog(RpcServiceRegistry.class);
+	private static Logger log = LoggerFactory.getLogger(RpcServiceRegistry.class);
 	
 	private Map<String, ServiceDescriptor> serviceNameMap = new HashMap<String, ServiceDescriptor>();
 	

@@ -19,8 +19,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
@@ -46,7 +46,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  */
 public class ClientConnectResponseHandler extends SimpleChannelUpstreamHandler {
 
-	private static Log log = LogFactory.getLog(ClientConnectResponseHandler.class);
+	private static Logger log = LoggerFactory.getLogger(ClientConnectResponseHandler.class);
 
     public static final long DEFAULT_CONNECT_RESPONSE_TIMEOUT_MS = 10000;
     
