@@ -17,8 +17,8 @@ package com.googlecode.protobuf.pro.duplex.example;
 
 import java.util.concurrent.Executors;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import com.google.protobuf.BlockingService;
@@ -46,7 +46,7 @@ import com.googlecode.protobuf.pro.duplex.timeout.TimeoutExecutor;
 
 public class DuplexPingPongClient {
 
-	private static Log log = LogFactory.getLog(RpcClient.class);
+	private static Logger log = LoggerFactory.getLogger(RpcClient.class);
 	
     public static void main(String[] args) throws Exception {
 		if ( args.length != 8 ) {

@@ -18,8 +18,8 @@ package com.googlecode.protobuf.pro.duplex.example.nonrpc;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import com.google.protobuf.RpcCallback;
@@ -36,7 +36,7 @@ import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 
 public class StatusServer {
 	
-	private static Log log = LogFactory.getLog(StatusServer.class);
+	private static Logger log = LoggerFactory.getLogger(StatusServer.class);
 	
 	public static void main(String[] args) throws Exception {
 		if ( args.length != 2 ) {

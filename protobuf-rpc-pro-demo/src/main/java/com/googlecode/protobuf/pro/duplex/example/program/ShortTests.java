@@ -17,8 +17,8 @@ package com.googlecode.protobuf.pro.duplex.example.program;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.example.execution.CancellingNonBlockingPingClient;
@@ -31,7 +31,7 @@ import com.googlecode.protobuf.pro.duplex.server.RpcClientRegistry;
 
 public class ShortTests implements ExecutableProgram {
 
-	private static Log log = LogFactory.getLog(ShortTests.class);
+	private static Logger log = LoggerFactory.getLogger(ShortTests.class);
 
 	public ShortTests() {
 	}

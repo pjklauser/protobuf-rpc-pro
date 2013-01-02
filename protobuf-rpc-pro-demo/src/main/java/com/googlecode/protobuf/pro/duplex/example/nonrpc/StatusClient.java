@@ -17,8 +17,8 @@ package com.googlecode.protobuf.pro.duplex.example.nonrpc;
 
 import java.util.concurrent.Executors;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import com.google.protobuf.RpcCallback;
@@ -35,7 +35,7 @@ import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
 
 public class StatusClient {
 
-	private static Log log = LogFactory.getLog(StatusClient.class);
+	private static Logger log = LoggerFactory.getLogger(StatusClient.class);
 
 	private static RpcClientChannel channel = null;
 	
