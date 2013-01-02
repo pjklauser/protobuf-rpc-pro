@@ -15,14 +15,14 @@
 */
 package com.googlecode.protobuf.pro.duplex.example.wire;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 
 public class ClientExecutor {
 
-	private static Log log = LogFactory.getLog(ClientExecutor.class);
+	private static Logger log = LoggerFactory.getLogger(ClientExecutor.class);
 
 	public ClientExecutor() {
 	}

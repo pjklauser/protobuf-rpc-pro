@@ -20,8 +20,8 @@ import java.util.concurrent.Executors;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -44,7 +44,7 @@ public class PingSpringServer {
 	int port;
 	String host;
 
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger log = LoggerFactory.getLogger(getClass());
 
 	private DuplexTcpServerBootstrap bootstrap;
 

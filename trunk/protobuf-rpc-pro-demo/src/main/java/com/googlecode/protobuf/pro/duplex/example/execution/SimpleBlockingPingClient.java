@@ -15,8 +15,8 @@
 */
 package com.googlecode.protobuf.pro.duplex.example.execution;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.ClientRpcController;
@@ -32,7 +32,7 @@ import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Pong;
 
 public class SimpleBlockingPingClient implements ExecutableClient {
 
-	private static Log log = LogFactory.getLog(SimpleBlockingPingClient.class);
+	private static Logger log = LoggerFactory.getLogger(SimpleBlockingPingClient.class);
 
 	private DemoDescriptor config;
 	private Throwable error;
