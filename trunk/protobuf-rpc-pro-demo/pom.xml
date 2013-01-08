@@ -4,7 +4,7 @@
 	<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 	<artifactId>protobuf-rpc-pro-demo</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.1</version>
+	<version>3.0.2</version>
 	<name>Protobuf RPC Pro Implementation</name>
 	<description>Demo code for protobuf-rpc-pro.</description>
 	<url>http://code.google.com/p/protobuf-rpc-pro/</url>
@@ -106,7 +106,7 @@
 		<dependency>
 			<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 			<artifactId>protobuf-rpc-pro-duplex</artifactId>
-			<version>3.0.1</version>
+			<version>3.0.2</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
