@@ -444,7 +444,7 @@ public class RpcClient implements RpcClientChannel {
 	 */
 	@Override
 	public ChannelPipeline getPipeline() {
-		return getPipeline();
+		return channel.getPipeline();
 	}
 	
 	/* (non-Javadoc)
