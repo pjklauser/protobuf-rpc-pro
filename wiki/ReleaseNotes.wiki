@@ -1,6 +1,10 @@
 #summary description of changes from one release to the next.
 #labels Phase-Deploy,Featured
 What changes are made from release to release. Check SVN history for more details.
+= 3.0.2 =
+
+Issue 17: stackoverlfow - infinite loop calling RpcClient.getPipeline().
+
 = 3.0.1 =
 
 Issue 10: replace commons logging with slf4j-api. Demo classes use logback-classic dependency configured by VM arguments adding system property -Dlogback.configurationFile="./lib/logback.xml".
