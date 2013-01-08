@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.example.execution.CancellingNonBlockingPingClient;
+import com.googlecode.protobuf.pro.duplex.example.execution.PipelineModifyingClient;
 import com.googlecode.protobuf.pro.duplex.example.execution.SimpleBlockingPingClient;
 import com.googlecode.protobuf.pro.duplex.example.wire.ClientExecutor;
 import com.googlecode.protobuf.pro.duplex.example.wire.DemoDescriptor;
@@ -51,6 +52,10 @@ public class ShortTests implements ExecutableProgram {
     	ExecutableClient c = null;
     	ClientExecutor exec = new ClientExecutor();
     	DemoDescriptor config = null;
+    	
+    	// Issue 17: infinite recursion getting the pipeline
+    	c = new PipelineModifyingClient();
+    	exec.execute(c, channel);
     	
     	// cancelled ping
     	c = new CancellingNonBlockingPingClient(new DemoDescriptor(10, 100, new DemoDescriptor.CallDescriptor(100,0,false,false)));
