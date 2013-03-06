@@ -1,6 +1,10 @@
 #summary description of changes from one release to the next.
 #labels Phase-Deploy,Featured
 What changes are made from release to release. Check SVN history for more details.
+
+= 3.1.0 (coming soon)=
+Issue 19: Upgrade dependency to Protobuf 2.5. New protoc idl compiler required for clients.
+
 = 3.0.2 =
 
 Issue 17: stackoverlfow - infinite loop calling RpcClient.getPipeline().
