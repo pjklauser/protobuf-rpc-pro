@@ -17,9 +17,9 @@ package com.googlecode.protobuf.pro.duplex.example;
 
 import java.util.concurrent.Executors;
 
+import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
@@ -31,6 +31,7 @@ import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.example.program.AllClientTests;
+import com.googlecode.protobuf.pro.duplex.example.program.ClientPerformanceTests;
 import com.googlecode.protobuf.pro.duplex.example.program.ShortTests;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPingService;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPongService;
@@ -148,6 +149,9 @@ public class DuplexPingPongClient {
     	try {
     		
     		while( true ) {
+    			
+    			new ClientPerformanceTests().execute(bootstrap.getRpcClientRegistry());
+    			
     	    	new ShortTests().execute(bootstrap.getRpcClientRegistry());
     	    	
     	    	new AllClientTests().execute(bootstrap.getRpcClientRegistry());
