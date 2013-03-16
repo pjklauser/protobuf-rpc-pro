@@ -2,7 +2,7 @@
 #labels Phase-Deploy,Featured
 What changes are made from release to release. Check SVN history for more details.
 
-= 4.0.0 (coming soon)=
+= 3.1.0 =
 Issue 16: Upgrade to Netty 4.
 
 Issue 19: Upgrade dependency to Protobuf 2.5. New protoc idl compiler required for clients.
