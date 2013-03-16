@@ -66,11 +66,7 @@ Finally to close the RpcClientChannel so it cannot be used anymore do, call clos
 {{{
 	channel.close();
 }}}
-If you are not going to use the DuplexTcpClientBootstrap anymore and want to exit cleanly you need to releaseExternalResources on it.
-{{{
-	bootstrap.releaseExternalResources();
-}}}
-Alternatively you can register all DuplexTcpClientBootstraps with an instance of the CleanShutdownHandler utility class to perform a clean shutdown on exit.
+You can register all Bootstraps and DuplexTcpClientPipelineFactory with an instance of the CleanShutdownHandler utility class to perform a clean shutdown on exit.
 
 == Server Code ==
 
@@ -80,17 +76,31 @@ The server side is pretty similar to the client above. The server needs to know 
 }}}
 You need then to create a DuplexTcpServerBootstrap and provide it an RpcCallExecutor.
 {{{
-    	RpcServerCallExecutor executor = new ThreadPoolCallExecutor(10, 10);
+    	RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 200);
     	
-        DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(
-        		serverInfo,
-                new NioServerSocketChannelFactory(
-                        Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()),
-                executor);
+    	DuplexTcpServerPipelineFactory serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
+    	serverFactory.setRpcServerCallExecutor(executor);
+}}}
+Now the DuplexTcpServerPipelineFactory needs to be registered as a child ChannelInitializer handler of the Netty ServerBootstrap.
+{{{
+        ServerBootstrap bootstrap = new ServerBootstrap();
+        bootstrap.group(new NioEventLoopGroup(0,new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory())),
+        		new NioEventLoopGroup(0,new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory()))
+        		);
+        bootstrap.channel(NioServerSocketChannel.class);
+        bootstrap.childHandler(serverFactory);
+        bootstrap.localAddress(serverInfo.getPort());
+}}}
+The Netty ServerBootstrap can be used to set all TCP/IP settings.
+{{{
+        bootstrap.option(ChannelOption.SO_SNDBUF, 1048576);
+        bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
+        bootstrap.childOption(ChannelOption.SO_RCVBUF, 1048576);
+        bootstrap.childOption(ChannelOption.SO_SNDBUF, 1048576);
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
 }}}
 Then you need to register your server side services with the bootstrap. Again here the registration is dynamic and can change at runtime.
-{{{
+{{{        
     	bootstrap.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
 }}}
 Finally binding the bootstrap to the TCP port will start off the socket accepting and clients can start to connect.
@@ -107,9 +117,9 @@ You can then also close the server by closing the channel which the bootstrap is
 
 == Reverse RPC ==
 
-The client and server examples above show how a client can call a RPC service registered at the server. In order to enable a server to call a client, it is necessary first for there to be a RPC service registered at the client.
+The client and server examples above show how a client can call a RPC service registered at the serverFactory. In order to enable a server to call a client, it is necessary first for there to be a RPC service registered at the client.
 {{{
-    	bootstrap.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
+    	serverFactory.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
 }}}
 Both client and server bootstraps have a RpcServiceRegistry. Secondly the server code needs to get hold of a RpcClientChannel to communicate back to the client. This is possible through the RpcController on the server side which is available during server call processing, or through the server's RpcClientRegistry at any time.
 
@@ -124,16 +134,21 @@ The external dependencies have been kept to a minimum. Netty and commons logging
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>2.4.1</version>
+			<version>2.5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
-			<version>3.4.1.Final</version>
+			<version>4.0.0.Beta2</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.1</version>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jzlib</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.2</version>
 		</dependency>
 }}}
