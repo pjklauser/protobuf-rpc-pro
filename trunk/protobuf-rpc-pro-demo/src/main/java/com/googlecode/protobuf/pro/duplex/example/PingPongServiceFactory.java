@@ -174,7 +174,7 @@ public class PingPongServiceFactory {
      * call. The final response of the server will be what
      * the client replied in the pong response.
      */
-	static class NonBlockingPongingPingServer implements NonBlockingPingService.Interface {
+	public static class NonBlockingPongingPingServer implements NonBlockingPingService.Interface {
 
 		@Override
 		public void ping(RpcController controller, Ping request, RpcCallback<Pong> done) {
