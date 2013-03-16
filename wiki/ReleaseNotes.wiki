@@ -2,8 +2,12 @@
 #labels Phase-Deploy,Featured
 What changes are made from release to release. Check SVN history for more details.
 
-= 3.1.0 (coming soon)=
+= 4.0.0 (coming soon)=
+Issue 16: Upgrade to Netty 4.
+
 Issue 19: Upgrade dependency to Protobuf 2.5. New protoc idl compiler required for clients.
+
+Out-of-Band messaging now allows client code do success evaluation and/or blocking until completion. See RpcClientChannel#sendOobMessage and ServerRpcController#sendOobResponse methods returning ChannelFuture .
 
 = 3.0.2 =
 
