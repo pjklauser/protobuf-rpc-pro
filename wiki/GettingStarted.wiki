@@ -58,7 +58,7 @@ The same RpcClientChannel can be used multiple times for calls to the server, us
 
 In order to service RPC calls on the client side, you just need to register a service implementation with the bootstrap.
 {{{
-    	bootstrap.getRpcServiceRegistry().registerService(new PingPongServiceImpl());
+    	clientFactory.getRpcServiceRegistry().registerService(new PingPongServiceImpl());
 }}}    	
 Service implementations can be added and removed at runtime. Service methods are looked up by "shortname" so the server and client "packaging" need not be identical.
 
@@ -101,7 +101,7 @@ The Netty ServerBootstrap can be used to set all TCP/IP settings.
 }}}
 Then you need to register your server side services with the bootstrap. Again here the registration is dynamic and can change at runtime.
 {{{        
-    	bootstrap.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
+    	serverFactory.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
 }}}
 Finally binding the bootstrap to the TCP port will start off the socket accepting and clients can start to connect.
 {{{
@@ -110,7 +110,7 @@ Finally binding the bootstrap to the TCP port will start off the socket acceptin
 If you want to track the RPC peering events with clients, use a RpcClientConnectionRegistry or a TcpConnectionEventListener for TCP connection events. This is the mechanism you can use to "discover" RPC clients before they "call" any service.
 {{{
     	RpcClientConnectionRegistry clientRegistry = new RpcClientConnectionRegistry();
-    	bootstrap.registerConnectionEventListener(clientRegistry);
+    	serverFactory.registerConnectionEventListener(clientRegistry);
 }}}
 You can then also close the server by closing the channel which the bootstrap is bound to and finally releaseExternalResources on final shutdown. Also here you can use the CleanShutdownHandler to perform a clean close on exit.
 
@@ -119,7 +119,7 @@ You can then also close the server by closing the channel which the bootstrap is
 
 The client and server examples above show how a client can call a RPC service registered at the serverFactory. In order to enable a server to call a client, it is necessary first for there to be a RPC service registered at the client.
 {{{
-    	serverFactory.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
+    	clientFactory.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
 }}}
 Both client and server bootstraps have a RpcServiceRegistry. Secondly the server code needs to get hold of a RpcClientChannel to communicate back to the client. This is possible through the RpcController on the server side which is available during server call processing, or through the server's RpcClientRegistry at any time.
 
