@@ -58,7 +58,7 @@ public class SimpleBlockingPongClient implements ExecutableClient {
 				final ClientRpcController controller = channel.newRpcController();
 				controller.setTimeoutMs(config.getPongCall().getTimeoutMs());
 				
-				// we set a Oob response callback even if we dont request percentComplete messages
+				// we set a Oob response callback even if we don't request percentComplete messages
 				// to be able to test if we receive any when we didn't ask.
 				PercentCompleteCallback pcc = new PercentCompleteCallback(controller);
 				controller.setOobResponseCallback( PercentComplete.getDefaultInstance(), pcc);

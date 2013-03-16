@@ -15,7 +15,7 @@
 */
 package com.googlecode.protobuf.pro.duplex.example.execution;
 
-import org.jboss.netty.channel.ChannelPipeline;
+import io.netty.channel.ChannelPipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class PipelineModifyingClient implements ExecutableClient {
 	public void execute(RpcClientChannel channel) {
 		try {
 			ChannelPipeline p = channel.getPipeline();
-			log.info("ChannelPipeline handlers: " + p.getNames());
+			log.info("ChannelPipeline handlers: " + p.names());
 			
 		} catch ( Throwable t ) {
 			this.error = t;

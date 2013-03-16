@@ -4,7 +4,7 @@
 	<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 	<artifactId>protobuf-rpc-pro-demo</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.2</version>
+	<version>3.0.3</version>
 	<name>Protobuf RPC Pro Implementation</name>
 	<description>Demo code for protobuf-rpc-pro.</description>
 	<url>http://code.google.com/p/protobuf-rpc-pro/</url>
@@ -76,12 +76,17 @@
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>2.4.1</version>
+			<version>2.5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>
-			<artifactId>netty</artifactId>
-			<version>3.6.0.Final</version>
+			<artifactId>netty-all</artifactId>
+			<version>4.0.0.Beta2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jzlib</artifactId>
+			<version>1.1.2</version>
 		</dependency>
 	    <dependency>
 			<groupId>org.slf4j</groupId>
@@ -106,7 +111,7 @@
 		<dependency>
 			<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 			<artifactId>protobuf-rpc-pro-duplex</artifactId>
-			<version>3.0.2</version>
+			<version>3.0.3</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

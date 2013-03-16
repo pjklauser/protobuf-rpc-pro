@@ -15,11 +15,15 @@
 */
 package com.googlecode.protobuf.pro.duplex.example;
 
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+
 import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
@@ -36,7 +40,7 @@ import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPongS
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
-import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
+import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
 import com.googlecode.protobuf.pro.duplex.timeout.RpcTimeoutChecker;
 import com.googlecode.protobuf.pro.duplex.timeout.RpcTimeoutExecutor;
 import com.googlecode.protobuf.pro.duplex.timeout.TimeoutChecker;
@@ -67,14 +71,8 @@ public class DuplexPingPongServer {
 
     	RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 200);
     	
-        // Configure the server.
-        DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(
-        		serverInfo,
-                new NioServerSocketChannelFactory(
-                        Executors.newCachedThreadPool( new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory()) ),
-                        Executors.newCachedThreadPool(new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory()) )));
-        bootstrap.setRpcServerCallExecutor(executor);
-
+    	DuplexTcpServerPipelineFactory serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
+    	serverFactory.setRpcServerCallExecutor(executor);
         if ( secure ) {
         	RpcSSLContext sslCtx = new RpcSSLContext();
         	sslCtx.setKeystorePassword("changeme");
@@ -83,25 +81,14 @@ public class DuplexPingPongServer {
         	sslCtx.setTruststorePath("./lib/truststore");
         	sslCtx.init();
         	
-        	bootstrap.setSslContext(sslCtx);
+        	serverFactory.setSslContext(sslCtx);
         }
-        bootstrap.setOption("sendBufferSize", 1048576);
-        bootstrap.setOption("receiveBufferSize", 1048576);
-        bootstrap.setOption("child.receiveBufferSize", 1048576);
-        bootstrap.setOption("child.sendBufferSize", 1048576);
-        bootstrap.setOption("tcpNoDelay", nodelay);
         
         RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(1,5);
 		RpcTimeoutChecker timeoutChecker = new TimeoutChecker();
 		timeoutChecker.setTimeoutExecutor(timeoutExecutor);
-		timeoutChecker.startChecking(bootstrap.getRpcClientRegistry());
+		timeoutChecker.startChecking(serverFactory.getRpcClientRegistry());
 
-		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
-        shutdownHandler.addResource(bootstrap);
-        shutdownHandler.addResource(executor);
-        shutdownHandler.addResource(timeoutChecker);
-        shutdownHandler.addResource(timeoutExecutor);
-        
         // setup a RPC event listener - it just logs what happens
         RpcConnectionEventNotifier rpcEventNotifier = new RpcConnectionEventNotifier();
         RpcConnectionEventListener listener = new RpcConnectionEventListener() {
@@ -127,24 +114,43 @@ public class DuplexPingPongServer {
 			}
 		};
 		rpcEventNotifier.setEventListener(listener);
-    	bootstrap.registerConnectionEventListener(rpcEventNotifier);
+		serverFactory.registerConnectionEventListener(rpcEventNotifier);
 
     	// we give the server a blocking and non blocking (pong capable) Ping Service
         BlockingService bPingService = BlockingPingService.newReflectiveBlockingService(new PingPongServiceFactory.BlockingPongingPingServer());
-        bootstrap.getRpcServiceRegistry().registerBlockingService(bPingService);
+        serverFactory.getRpcServiceRegistry().registerBlockingService(bPingService);
 
         Service nbPingService = NonBlockingPingService.newReflectiveService(new PingPongServiceFactory.NonBlockingPongingPingServer());
-        bootstrap.getRpcServiceRegistry().registerService(nbPingService);
+        serverFactory.getRpcServiceRegistry().registerService(nbPingService);
 
         // Configure the server to provide a Pong Service in both blocking an non blocking varieties
        	BlockingService bPongService = BlockingPongService.newReflectiveBlockingService(new PingPongServiceFactory.BlockingPongServer());
-       	bootstrap.getRpcServiceRegistry().registerBlockingService(bPongService);
+       	serverFactory.getRpcServiceRegistry().registerBlockingService(bPongService);
 
        	Service nbPongService = NonBlockingPongService.newReflectiveService(new PingPongServiceFactory.NonBlockingPongServer());
-        bootstrap.getRpcServiceRegistry().registerService(nbPongService);
+       	serverFactory.getRpcServiceRegistry().registerService(nbPongService);
         
+        // Configure the server.
+        ServerBootstrap bootstrap = new ServerBootstrap();
+        bootstrap.group(new NioEventLoopGroup(0,new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory())),
+        		new NioEventLoopGroup(0,new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory()))
+        		);
+        bootstrap.channel(NioServerSocketChannel.class);
+        bootstrap.option(ChannelOption.SO_SNDBUF, 1048576);
+        bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
+        bootstrap.childOption(ChannelOption.SO_RCVBUF, 1048576);
+        bootstrap.childOption(ChannelOption.SO_SNDBUF, 1048576);
+        bootstrap.option(ChannelOption.TCP_NODELAY, nodelay);
+        bootstrap.childHandler(serverFactory);
+        bootstrap.localAddress(serverInfo.getPort());
         
     	// Bind and start to accept incoming connections.
+		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
+        shutdownHandler.addResource(bootstrap);
+        shutdownHandler.addResource(executor);
+        shutdownHandler.addResource(timeoutChecker);
+        shutdownHandler.addResource(timeoutExecutor);
+        
         bootstrap.bind();
         
         log.info("Serving " + serverInfo);
@@ -157,7 +163,7 @@ public class DuplexPingPongServer {
         		try {
         			log.info("Sleeping 60s before retesting clients.");
         	    	Thread.sleep(60000);
-        	    	new ShortTests().execute(bootstrap.getRpcClientRegistry());
+        	    	new ShortTests().execute(serverFactory.getRpcClientRegistry());
         		} catch( Throwable e ) {
         			log.warn("Throwable.", e);
         		}

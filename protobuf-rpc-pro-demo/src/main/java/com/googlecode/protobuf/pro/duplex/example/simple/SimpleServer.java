@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
 */
-package com.googlecode.protobuf.pro.duplex.example.nonrpc;
+package com.googlecode.protobuf.pro.duplex.example.simple;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -27,12 +27,17 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.protobuf.BlockingService;
 import com.google.protobuf.RpcCallback;
+import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
+import com.googlecode.protobuf.pro.duplex.example.PingPongServiceFactory;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPingService;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPingService;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Status;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
@@ -40,9 +45,9 @@ import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
 import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
 
-public class StatusServer {
+public class SimpleServer {
 	
-	private static Logger log = LoggerFactory.getLogger(StatusServer.class);
+	private static Logger log = LoggerFactory.getLogger(SimpleServer.class);
 	
 	public static void main(String[] args) throws Exception {
 		if ( args.length != 2 ) {
@@ -64,14 +69,6 @@ public class StatusServer {
     	serverFactory.setRpcServerCallExecutor(new ThreadPoolCallExecutor(10, 10));
     	serverFactory.setLogger(logger);
     	
-        final RpcCallback<PingPong.Status> clientStatusCallback = new RpcCallback<PingPong.Status>() {
-
-			@Override
-			public void run(PingPong.Status parameter) {
-				log.info("Received " + parameter);
-			}
-        	
-		};
         // setup a RPC event listener - it just logs what happens
         RpcConnectionEventNotifier rpcEventNotifier = new RpcConnectionEventNotifier();
         RpcConnectionEventListener listener = new RpcConnectionEventListener() {
@@ -79,15 +76,11 @@ public class StatusServer {
 			@Override
 			public void connectionReestablished(RpcClientChannel clientChannel) {
 				log.info("connectionReestablished " + clientChannel);
-
-				clientChannel.setOobMessageCallback(Status.getDefaultInstance(), clientStatusCallback);
 			}
 			
 			@Override
 			public void connectionOpened(RpcClientChannel clientChannel) {
 				log.info("connectionOpened " + clientChannel);
-				
-				clientChannel.setOobMessageCallback(Status.getDefaultInstance(), clientStatusCallback);
 			}
 			
 			@Override
@@ -98,11 +91,17 @@ public class StatusServer {
 			@Override
 			public void connectionChanged(RpcClientChannel clientChannel) {
 				log.info("connectionChanged " + clientChannel);
-				clientChannel.setOobMessageCallback(Status.getDefaultInstance(), clientStatusCallback);
 			}
 		};
 		rpcEventNotifier.setEventListener(listener);
 		serverFactory.registerConnectionEventListener(rpcEventNotifier);
+
+    	// we give the server a blocking and non blocking (pong capable) Ping Service
+        BlockingService bPingService = BlockingPingService.newReflectiveBlockingService(new PingPongServiceFactory.BlockingPongingPingServer());
+        serverFactory.getRpcServiceRegistry().registerBlockingService(bPingService);
+
+        Service nbPingService = NonBlockingPingService.newReflectiveService(new PingPongServiceFactory.NonBlockingPongingPingServer());
+        serverFactory.getRpcServiceRegistry().registerService(nbPingService);
 
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(new NioEventLoopGroup(0,new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory())),
@@ -127,22 +126,7 @@ public class StatusServer {
         while ( true ) {
 
             List<RpcClientChannel> clients = serverFactory.getRpcClientRegistry().getAllClients();
-            for ( RpcClientChannel client : clients ) {
-            	
-            	PingPong.Status serverStatus = PingPong.Status.newBuilder()
-            			.setMessage("Server "+ serverFactory.getServerInfo() + " OK@" + System.currentTimeMillis()).build();
-            	
-            	ChannelFuture oobSend = client.sendOobMessage(serverStatus);
-            	if ( !oobSend.isDone() ) {
-            		log.info("Waiting for completion.");
-            		oobSend.syncUninterruptibly();
-            	}
-            	if ( !oobSend.isSuccess() ) {
-            		log.warn("OobMessage send failed.", oobSend.cause());
-            	}
-            	
-            }
-            log.info("Sleeping 5s before sending serverStatus to all clients.");
+            log.info("Number of clients="+ clients.size());
 
         	Thread.sleep(5000);
         }

@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
 */
-package com.googlecode.protobuf.pro.duplex.example.nonrpc;
+package com.googlecode.protobuf.pro.duplex.example.simple;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -24,21 +24,30 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
+import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
+import com.googlecode.protobuf.pro.duplex.ClientRpcController;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientPipelineFactory;
 import com.googlecode.protobuf.pro.duplex.client.RpcClientConnectionWatchdog;
+import com.googlecode.protobuf.pro.duplex.example.wire.PercentCompleteCallback;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPingService;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPingService;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.PercentComplete;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Ping;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Pong;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
 
-public class StatusClient {
+public class SimpleClient {
 
-	private static Logger log = LoggerFactory.getLogger(StatusClient.class);
+	private static Logger log = LoggerFactory.getLogger(SimpleClient.class);
 
 	private static RpcClientChannel channel = null;
 	
@@ -67,15 +76,6 @@ public class StatusClient {
 			logger.setLogResponseProto(false);
 			clientFactory.setRpcLogger(logger);
 			
-			final RpcCallback<PingPong.Status> serverStatusCallback = new RpcCallback<PingPong.Status>() {
-
-				@Override
-				public void run(PingPong.Status parameter) {
-					log.info("Received " + parameter);
-				}
-	        	
-			};
-			
 			// Set up the event pipeline factory.
 	        // setup a RPC event listener - it just logs what happens
 	        RpcConnectionEventNotifier rpcEventNotifier = new RpcConnectionEventNotifier();
@@ -86,14 +86,12 @@ public class StatusClient {
 				public void connectionReestablished(RpcClientChannel clientChannel) {
 					log.info("connectionReestablished " + clientChannel);
 					channel = clientChannel;
-					channel.setOobMessageCallback(PingPong.Status.getDefaultInstance(), serverStatusCallback);
 				}
 				
 				@Override
 				public void connectionOpened(RpcClientChannel clientChannel) {
 					log.info("connectionOpened " + clientChannel);
 					channel = clientChannel;
-					clientChannel.setOobMessageCallback(PingPong.Status.getDefaultInstance(), serverStatusCallback);
 				}
 				
 				@Override
@@ -130,22 +128,34 @@ public class StatusClient {
 			
 			while (true && channel != null) {
 				
-            	PingPong.Status clientStatus = PingPong.Status.newBuilder()
-            			.setMessage("Client " + channel + " OK@" + System.currentTimeMillis()).build();
-            	
-            	ChannelFuture oobSend = channel.sendOobMessage(clientStatus);
-            	if ( !oobSend.isDone() ) {
-            		log.info("Waiting for completion.");
-            		oobSend.syncUninterruptibly();
-            	}
-            	if ( !oobSend.isSuccess() ) {
-            		log.warn("OobMessage send failed.", oobSend.cause());
-            	}
+				BlockingPingService.BlockingInterface blockingService = BlockingPingService.newBlockingStub(channel);
+				final ClientRpcController controller = channel.newRpcController();
+				controller.setTimeoutMs(0);
+					
+				Ping.Builder pingBuilder = Ping.newBuilder();
+				pingBuilder.setSequenceNo(1);
+				pingBuilder.setPingDurationMs(1000);
+				pingBuilder.setPingPayload(ByteString.copyFromUtf8("Hello World!"));
+				pingBuilder.setPingPercentComplete(false);
+				pingBuilder.setPongRequired(false);
+				pingBuilder.setPongBlocking(true);
+				pingBuilder.setPongDurationMs(1000);
+				pingBuilder.setPongTimeoutMs(0);
+				pingBuilder.setPongPercentComplete(false);
+
+				Ping ping = pingBuilder.build();
+				try {
+					Pong pong = blockingService.ping(controller, ping);
+				} catch ( ServiceException e ) {
+					log.warn("Call failed.", e);
+				}
 				
-				Thread.sleep(1000);
+				Thread.sleep(10000);
 				
 			}
 
+		} catch ( Exception e ) {
+			log.warn("Failure.", e);
 		} finally {
 			System.exit(0);
 		}
