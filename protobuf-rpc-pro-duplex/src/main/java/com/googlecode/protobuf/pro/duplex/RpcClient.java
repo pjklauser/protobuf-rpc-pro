@@ -15,6 +15,10 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelPipeline;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +27,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelPipeline;
 
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -216,7 +218,7 @@ public class RpcClient implements RpcClientChannel {
 	 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#sendOobMessage(com.google.protobuf.Message)
 	 */
 	@Override
-	public void sendOobMessage(Message message) {
+	public ChannelFuture sendOobMessage(Message message) {
 		OobMessage msg = OobMessage.newBuilder()
 				.setMessageBytes(message.toByteString())
 				.build();
@@ -226,9 +228,10 @@ public class RpcClient implements RpcClientChannel {
 			log.debug("Sending OobMessage.");
 		}
 		
-		channel.write(payload);
+		ChannelFuture future = channel.write(payload);
 
 		doLogOobMessageOutbound(message);
+		return future;
 	}
 
 	public void receiveOobMessage(OobMessage msg) {
@@ -342,7 +345,7 @@ public class RpcClient implements RpcClientChannel {
 	 * @param correlationId
 	 * @param oobMessage
 	 */
-	public void sendOobResponse( String serviceName, int correlationId, Message oobMessage ) {
+	public ChannelFuture sendOobResponse( String serviceName, int correlationId, Message oobMessage ) {
 		OobResponse msg = OobResponse.newBuilder()
 				.setCorrelationId(correlationId)
 				.setMessageBytes(oobMessage.toByteString())
@@ -356,7 +359,7 @@ public class RpcClient implements RpcClientChannel {
 		
 		doLogOobResponseOutbound(serviceName, correlationId, oobMessage);
 		
-		channel.write(payload);
+		return channel.write(payload);
 	}
 	
 	/**
@@ -444,7 +447,7 @@ public class RpcClient implements RpcClientChannel {
 	 */
 	@Override
 	public ChannelPipeline getPipeline() {
-		return channel.getPipeline();
+		return channel.pipeline();
 	}
 	
 	/* (non-Javadoc)

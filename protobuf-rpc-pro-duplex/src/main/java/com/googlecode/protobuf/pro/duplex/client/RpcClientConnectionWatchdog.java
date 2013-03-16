@@ -15,6 +15,8 @@
 */
 package com.googlecode.protobuf.pro.duplex.client;
 
+import io.netty.bootstrap.Bootstrap;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +42,16 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 	
 	private List<RetryState> watchedClients = new ArrayList<RetryState>();
 	
-	private final DuplexTcpClientBootstrap clientBootstrap;
+	private final DuplexTcpClientPipelineFactory pipelineFactory;
+	private final Bootstrap bootstrap;
 	
 	private Thread thread;
 	private WatchdogThread watchdogThread;
 	private long retryIntervalMillis = 10000;
 	
-	public RpcClientConnectionWatchdog(DuplexTcpClientBootstrap clientBootstrap)  {
-		this.clientBootstrap = clientBootstrap;
+	public RpcClientConnectionWatchdog(DuplexTcpClientPipelineFactory clientBootstrap, Bootstrap bootstrap)  {
+		this.pipelineFactory = clientBootstrap;
+		this.bootstrap = bootstrap;
 	}
 
 	public void start() {
@@ -174,7 +178,7 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 			state.lastRetryTime = System.currentTimeMillis();
 			try {
 				log.info("Retry connecting " + serverInfo );
-				watchdog.getClientBootstrap().peerWith(serverInfo);
+				watchdog.getPipelineFactory().peerWith(serverInfo,watchdog.getBootstrap());
 				log.info("Retry succeeded " + serverInfo );
 				watchdog.removeRetryState(state);
 			} catch ( IOException e ) {
@@ -217,10 +221,17 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 	}
 
 	/**
-	 * @return the clientBootstrap
+	 * @return the pipelineFactory
 	 */
-	public DuplexTcpClientBootstrap getClientBootstrap() {
-		return clientBootstrap;
+	public DuplexTcpClientPipelineFactory getPipelineFactory() {
+		return pipelineFactory;
+	}
+
+	/**
+	 * @return the bootstrap
+	 */
+	public Bootstrap getBootstrap() {
+		return bootstrap;
 	}
 	
 }

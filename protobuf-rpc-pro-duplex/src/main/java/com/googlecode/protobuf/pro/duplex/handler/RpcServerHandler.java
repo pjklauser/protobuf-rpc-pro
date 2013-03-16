@@ -15,13 +15,11 @@
 */
 package com.googlecode.protobuf.pro.duplex.handler;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.googlecode.protobuf.pro.duplex.RpcServer;
 import com.googlecode.protobuf.pro.duplex.server.RpcClientRegistry;
@@ -34,7 +32,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  * @author Peter Klauser
  *
  */
-public class RpcServerHandler extends SimpleChannelUpstreamHandler {
+public class RpcServerHandler extends ChannelInboundMessageHandlerAdapter<WirePayload> {
 
 	private static Logger log = LoggerFactory.getLogger(RpcServerHandler.class);
 
@@ -52,37 +50,43 @@ public class RpcServerHandler extends SimpleChannelUpstreamHandler {
     	this.rpcClientRegistry = rpcClientRegistry;
     }
 
-    @Override
-    public void messageReceived(
-            ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-        if ( e.getMessage() instanceof WirePayload) {
-        	WirePayload payload = (WirePayload)e.getMessage();
-        	if ( payload.hasRpcRequest() ) {
-        		rpcServer.request(payload.getRpcRequest());
-        		return;
-        	} else if ( payload.hasRpcCancel() ) {
-        		rpcServer.cancel(payload.getRpcCancel());
-        		return;
-        	}
-        	// serverMessage, unsolicitedMessage, rpcResponse, rpcError were consumed further down by RpcClientHandler.
-        	// everything else is passed through to potentially later channel handlers which are modified by using code.
-        }
-        ctx.sendUpstream(e);
-    }
+	/* (non-Javadoc)
+	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
+	 */
+	@Override
+	protected void messageReceived(ChannelHandlerContext ctx, WirePayload payload)
+			throws Exception {
+    	if ( payload.hasRpcRequest() ) {
+    		rpcServer.request(payload.getRpcRequest());
+    		return;
+    	} else if ( payload.hasRpcCancel() ) {
+    		rpcServer.cancel(payload.getRpcCancel());
+    		return;
+    	} else {
+    	// serverMessage, unsolicitedMessage, rpcResponse, rpcError were consumed further down by RpcClientHandler.
+    	// everything else is passed through to potentially later channel handlers which are modified by using code.
+    		ctx.nextInboundMessageBuffer().add(payload);
+    	}
+	}
 
-    @Override
-    public void channelClosed(
-            ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-    	ctx.sendUpstream(e);
+	/* (non-Javadoc)
+	 * @see io.netty.channel.ChannelStateHandlerAdapter#channelInactive(io.netty.channel.ChannelHandlerContext)
+	 */
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		super.channelInactive(ctx);
    		rpcClientRegistry.removeRpcClient(rpcServer.getRcpClient());
     	rpcServer.handleClosure();
-    }
+	}
 
-    @Override
-    public void exceptionCaught(
-            ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-    	log.warn("Exception caught during RPC operation.", e.getCause());
-    	ctx.getChannel().close();
+	/* (non-Javadoc)
+	 * @see io.netty.channel.ChannelHandlerAdapter#exceptionCaught(io.netty.channel.ChannelHandlerContext, java.lang.Throwable)
+	 */
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+			throws Exception {
+    	log.warn("Exception caught during RPC operation.", cause);
+    	ctx.close();
     	rpcServer.getRcpClient().handleClosure();
     }
     
@@ -99,5 +103,6 @@ public class RpcServerHandler extends SimpleChannelUpstreamHandler {
 	public RpcServer getRpcServer() {
 		return rpcServer;
 	}
+
 
 }

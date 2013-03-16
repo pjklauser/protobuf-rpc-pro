@@ -15,19 +15,16 @@
 */
 package com.googlecode.protobuf.pro.duplex.handler;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
-import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
@@ -44,7 +41,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  * @author Peter Klauser
  *
  */
-public class ClientConnectResponseHandler extends SimpleChannelUpstreamHandler {
+public class ClientConnectResponseHandler extends ChannelInboundMessageHandlerAdapter<WirePayload> {
 
 	private static Logger log = LoggerFactory.getLogger(ClientConnectResponseHandler.class);
 
@@ -64,35 +61,42 @@ public class ClientConnectResponseHandler extends SimpleChannelUpstreamHandler {
         return null;
     }
 
-    @Override
-    public void messageReceived(
-            ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-        if ( e.getMessage() instanceof WirePayload) {
-        	ConnectResponse connectResponse = ((WirePayload)e.getMessage()).getConnectResponse();
-        	if ( connectResponse != null ) {
-        		if ( log.isDebugEnabled() ) {
-        			log.debug("Received ["+connectResponse.getCorrelationId()+"]ConnectResponse.");
-        		}
-        		answerQueue.put(connectResponse);
-        		return;
-        	}
-        }
-        ctx.sendUpstream(e);
+	/* (non-Javadoc)
+	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
+	 */
+	@Override
+	protected void messageReceived(ChannelHandlerContext ctx, WirePayload msg)
+			throws Exception {
+		if ( msg.hasConnectResponse() ) {
+	    	ConnectResponse connectResponse = msg.getConnectResponse();
+    		if ( log.isDebugEnabled() ) {
+    			log.debug("Received ["+connectResponse.getCorrelationId()+"]ConnectResponse.");
+    		}
+    		answerQueue.put(connectResponse);
+    		return;
+		} else {
+			ctx.nextInboundMessageBuffer().add(msg);
+		}
     }
 
-    @Override
-    public void channelClosed(
-            ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+	/* (non-Javadoc)
+	 * @see io.netty.channel.ChannelStateHandlerAdapter#channelInactive(io.netty.channel.ChannelHandlerContext)
+	 */
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		super.channelInactive(ctx);
     	answerQueue.put(EMPTY_RESPONSE);
-        ctx.sendUpstream(e);
     }
     
-    @Override
-    public void exceptionCaught(
-            ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-    	log.warn("Exception caught during RPC connection handshake.", e.getCause());
-    	if ( ctx.getChannel().isConnected() ) {
-    		ctx.getChannel().close();
-    	}
+	/* (non-Javadoc)
+	 * @see io.netty.channel.ChannelHandlerAdapter#exceptionCaught(io.netty.channel.ChannelHandlerContext, java.lang.Throwable)
+	 */
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+			throws Exception {
+		super.exceptionCaught(ctx, cause);
+    	log.warn("Exception caught during RPC connection handshake.", cause);
+    	ctx.close();
     }
+
 }

@@ -15,19 +15,17 @@
 */
 package com.googlecode.protobuf.pro.duplex.handler;
 
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelFutureListener;
-import org.jboss.netty.channel.ChannelHandler.Sharable;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClient;
-import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
 import com.googlecode.protobuf.pro.duplex.server.RpcClientRegistry;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode;
@@ -51,67 +49,70 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  *
  */
 @Sharable
-public class ServerConnectRequestHandler extends SimpleChannelUpstreamHandler {
+public class ServerConnectRequestHandler extends ChannelInboundMessageHandlerAdapter<WirePayload> {
 
 	private static Logger log = LoggerFactory.getLogger(ServerConnectRequestHandler.class);
 
-	private final DuplexTcpServerBootstrap bootstrap;
     private final DuplexTcpServerPipelineFactory pipelineFactory;
     
-    public ServerConnectRequestHandler( DuplexTcpServerBootstrap bootstrap, DuplexTcpServerPipelineFactory pipelineFactory ) {
-    	this.bootstrap = bootstrap;
+    public ServerConnectRequestHandler( DuplexTcpServerPipelineFactory pipelineFactory ) {
     	this.pipelineFactory = pipelineFactory;
     }
     
-    @Override
-    public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-        if ( e.getMessage() instanceof WirePayload) {
-        	ConnectRequest connectRequest = ((WirePayload)e.getMessage()).getConnectRequest();
+	/* (non-Javadoc)
+	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
+	 */
+	@Override
+	protected void messageReceived(ChannelHandlerContext ctx, WirePayload msg)
+			throws Exception {
+		if ( msg.hasConnectRequest() ) {
+			ConnectRequest connectRequest = msg.getConnectRequest();
     		if ( log.isDebugEnabled() ) {
     			log.debug("Received ["+connectRequest.getCorrelationId()+"]ConnectRequest.");
     		}
-        	if ( connectRequest != null ) {
-        		PeerInfo connectingClientInfo = new PeerInfo(connectRequest.getClientHostName(), connectRequest.getClientPort(), connectRequest.getClientPID());
-        		ConnectResponse connectResponse = null;
+    		PeerInfo connectingClientInfo = new PeerInfo(connectRequest.getClientHostName(), connectRequest.getClientPort(), connectRequest.getClientPID());
+    		ConnectResponse connectResponse = null;
+    		
+    		RpcClient rpcClient = new RpcClient(ctx.channel(), pipelineFactory.getServerInfo(), connectingClientInfo, connectRequest.getCompress(), pipelineFactory.getLogger() );
+    		if ( pipelineFactory.getRpcClientRegistry().registerRpcClient(rpcClient) ) {
+    			connectResponse = ConnectResponse.newBuilder().setCorrelationId(connectRequest.getCorrelationId())
+    					.setServerPID(pipelineFactory.getServerInfo().getPid())
+    					.setCompress(connectRequest.getCompress())
+    					.build();
+        		WirePayload payload = WirePayload.newBuilder().setConnectResponse(connectResponse).build();
         		
-        		RpcClient rpcClient = new RpcClient(ctx.getChannel(), bootstrap.getServerInfo(), connectingClientInfo, connectRequest.getCompress(), bootstrap.getLogger() );
-        		if ( bootstrap.getRpcClientRegistry().registerRpcClient(rpcClient) ) {
-        			connectResponse = ConnectResponse.newBuilder().setCorrelationId(connectRequest.getCorrelationId())
-        					.setServerPID(bootstrap.getServerInfo().getPid())
-        					.setCompress(connectRequest.getCompress())
-        					.build();
-            		WirePayload payload = WirePayload.newBuilder().setConnectResponse(connectResponse).build();
-            		
-            		if ( log.isDebugEnabled() ) {
-            			log.debug("Sending ["+connectResponse.getCorrelationId()+"]ConnectResponse.");
-            		}
-            		ctx.getChannel().write(payload);
-            		
-            		// now we swap this Handler out of the pipeline and complete the server side pipeline.
-            		RpcClientHandler clientHandler = pipelineFactory.completePipeline(rpcClient);
-            		clientHandler.notifyOpened();
-        		} else {
-        			connectResponse = ConnectResponse.newBuilder().setCorrelationId(connectRequest.getCorrelationId()).setErrorCode(ConnectErrorCode.ALREADY_CONNECTED).build();
-            		WirePayload payload = WirePayload.newBuilder().setConnectResponse(connectResponse).build();
-            		
-            		if ( log.isDebugEnabled() ) {
-            			log.debug("Sending ["+connectResponse.getCorrelationId()+"]ConnectResponse. Already Connected.");
-            		}
-            		ChannelFuture future = ctx.getChannel().write(payload);
-            		future.addListener(ChannelFutureListener.CLOSE); // close after write response.
+        		if ( log.isDebugEnabled() ) {
+        			log.debug("Sending ["+connectResponse.getCorrelationId()+"]ConnectResponse.");
         		}
-        		return;
-        	}
-        }
-        ctx.sendUpstream(e);
-    }
-
-    @Override
-    public void exceptionCaught(
-            ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-    	log.warn("Exception caught during RPC connection handshake.", e.getCause());
-    	if ( ctx.getChannel().isConnected() ) {
-    		ctx.getChannel().close();
+        		ctx.channel().write(payload);
+        		
+        		// now we swap this Handler out of the pipeline and complete the server side pipeline.
+        		RpcClientHandler clientHandler = pipelineFactory.completePipeline(rpcClient);
+        		clientHandler.notifyOpened();
+    		} else {
+    			connectResponse = ConnectResponse.newBuilder().setCorrelationId(connectRequest.getCorrelationId()).setErrorCode(ConnectErrorCode.ALREADY_CONNECTED).build();
+        		WirePayload payload = WirePayload.newBuilder().setConnectResponse(connectResponse).build();
+        		
+        		if ( log.isDebugEnabled() ) {
+        			log.debug("Sending ["+connectResponse.getCorrelationId()+"]ConnectResponse. Already Connected.");
+        		}
+        		ChannelFuture future = ctx.channel().write(payload);
+        		future.addListener(ChannelFutureListener.CLOSE); // close after write response.
+    		}
+    	} else {
+    		ctx.nextInboundMessageBuffer().add(msg);
     	}
     }
+
+	/* (non-Javadoc)
+	 * @see io.netty.channel.ChannelHandlerAdapter#exceptionCaught(io.netty.channel.ChannelHandlerContext, java.lang.Throwable)
+	 */
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+			throws Exception {
+		super.exceptionCaught(ctx, cause);
+    	log.warn("Exception caught during RPC connection handshake.", cause);
+    	ctx.close();
+    }
+
 }

@@ -15,13 +15,15 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
+import io.netty.bootstrap.Bootstrap;
+import io.netty.bootstrap.ServerBootstrap;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jboss.netty.bootstrap.Bootstrap;
 
 /**
  * Registers a JVM shutdown hook to cleanly shutdown any
@@ -34,6 +36,7 @@ public class CleanShutdownHandler {
 
 	private static Logger log = LoggerFactory.getLogger(CleanShutdownHandler.class);
 	
+	private List<ServerBootstrap> servers = new LinkedList<ServerBootstrap>();
 	private List<Bootstrap> bootstraps = new LinkedList<Bootstrap>();
 	private List<ExecutorService> executors = new LinkedList<ExecutorService>();
 	
@@ -42,9 +45,14 @@ public class CleanShutdownHandler {
 			
 			@Override
 			public void run() {
-				log.debug("Releasing " + bootstraps.size() + " Bootstrap.");
+				log.debug("Releasing " + bootstraps.size() + " Client Bootstrap.");
 				for( Bootstrap bootstrap : getBootstraps() ) {
-					bootstrap.releaseExternalResources();
+					bootstrap.shutdown();
+				}
+				
+				log.debug("Releasing " + servers.size() + " Server Bootstrap.");
+				for( ServerBootstrap server : getServerBootstraps() ) {
+					server.shutdown();
 				}
 				
 				log.debug("Releasing " + executors.size() + " Executors.");
@@ -55,6 +63,14 @@ public class CleanShutdownHandler {
 		} ));
 	}
 	
+	public void addResource( ServerBootstrap bootstrap ) {
+		servers.add(bootstrap);
+	}
+	
+	public void removeResource( ServerBootstrap bootstrap ) {
+		servers.remove(bootstrap);
+	}
+
 	public void addResource( Bootstrap bootstrap ) {
 		bootstraps.add(bootstrap);
 	}
@@ -83,6 +99,13 @@ public class CleanShutdownHandler {
 	 */
 	public void setExecutors(List<ExecutorService> executors) {
 		this.executors = executors;
+	}
+
+	/**
+	 * @return the client bootstraps
+	 */
+	public List<ServerBootstrap> getServerBootstraps() {
+		return servers;
 	}
 
 	/**

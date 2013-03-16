@@ -15,13 +15,12 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
-import org.jboss.netty.channel.ChannelPipeline;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelPipeline;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
-import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientBootstrap;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
-import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerBootstrap;
 
 /**
  * An RpcClientChannel is constructed once when a connection is established
@@ -85,7 +84,7 @@ public interface RpcClientChannel extends com.google.protobuf.RpcChannel, com.go
 	 * 
 	 * @param message
 	 */
-	public void sendOobMessage( Message message );
+	public ChannelFuture sendOobMessage( Message message );
 	
 	/**
 	 * Allow to register a callback for unsolicited messages from the server.
