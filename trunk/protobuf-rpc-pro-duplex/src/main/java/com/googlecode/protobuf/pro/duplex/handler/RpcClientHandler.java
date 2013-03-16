@@ -15,10 +15,8 @@
 */
 package com.googlecode.protobuf.pro.duplex.handler;
 
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundMessageHandlerAdapter;
 
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
@@ -32,7 +30,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  * @author Peter Klauser
  *
  */
-public class RpcClientHandler extends SimpleChannelUpstreamHandler {
+public class RpcClientHandler extends ChannelInboundMessageHandlerAdapter<WirePayload> {
 
     private RpcClient rpcClient;
     private TcpConnectionEventListener eventListener;
@@ -48,41 +46,43 @@ public class RpcClientHandler extends SimpleChannelUpstreamHandler {
     	this.rpcClient = rpcClient;
     }
 
-    @Override
-    public void messageReceived(
-            ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-        if ( e.getMessage() instanceof WirePayload) {
-        	WirePayload payload = (WirePayload)e.getMessage();
-        	if ( payload.hasRpcResponse() ) {
-        		rpcClient.response(payload.getRpcResponse());
-        		return;
-        	} else if ( payload.hasRpcError() ) {
-        		rpcClient.error(payload.getRpcError());
-        		return;
-        	} else if ( payload.hasOobResponse() ) {
-        		rpcClient.receiveOobResponse(payload.getOobResponse());
-        		return;
-        	} else if ( payload.hasOobMessage() ) {
-        		rpcClient.receiveOobMessage(payload.getOobMessage());
-        		return;
-        	} else if ( payload.hasTransparentMessage() ) {
-        		// just so that it's not forgotten sometime...
-                ctx.sendUpstream(e);
-        		return;
-        	}
+	/* (non-Javadoc)
+	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
+	 */
+	@Override
+	protected void messageReceived(ChannelHandlerContext ctx, WirePayload payload)
+			throws Exception {
+    	if ( payload.hasRpcResponse() ) {
+    		rpcClient.response(payload.getRpcResponse());
+    		return;
+    	} else if ( payload.hasRpcError() ) {
+    		rpcClient.error(payload.getRpcError());
+    		return;
+    	} else if ( payload.hasOobResponse() ) {
+    		rpcClient.receiveOobResponse(payload.getOobResponse());
+    		return;
+    	} else if ( payload.hasOobMessage() ) {
+    		rpcClient.receiveOobMessage(payload.getOobMessage());
+    		return;
+    	} else if ( payload.hasTransparentMessage() ) {
+    		// just so that it's not forgotten sometime...
+    		ctx.nextInboundMessageBuffer().add(payload);
+    	} else {
         	// rpcRequest, rpcCancel, clientMessage go further up to the RpcServerHandler
         	// transparentMessage are also sent up but not handled anywhere explicitly 
-        }
-        ctx.sendUpstream(e);
+    		ctx.nextInboundMessageBuffer().add(payload);
+    	}
     }
 
-    @Override
-    public void channelClosed(
-            ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-        ctx.sendUpstream(e);
+	/* (non-Javadoc)
+	 * @see io.netty.channel.ChannelStateHandlerAdapter#channelInactive(io.netty.channel.ChannelHandlerContext)
+	 */
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		super.channelInactive(ctx);
         rpcClient.handleClosure();
         notifyClosed();
-    }
+	}
 
     public void notifyClosed() {
     	eventListener.connectionClosed(rpcClient);

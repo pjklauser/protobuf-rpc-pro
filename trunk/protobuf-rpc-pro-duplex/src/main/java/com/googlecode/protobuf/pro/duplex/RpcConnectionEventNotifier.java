@@ -15,6 +15,9 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelPipeline;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jboss.netty.channel.ChannelPipeline;
 
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.Message;
@@ -222,7 +224,7 @@ public class RpcConnectionEventNotifier implements
 		 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#sendUnsolicitedMessage(com.google.protobuf.Message)
 		 */
 		@Override
-		public void sendOobMessage(Message message) {
+		public ChannelFuture sendOobMessage(Message message) {
 			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
 		}
 		

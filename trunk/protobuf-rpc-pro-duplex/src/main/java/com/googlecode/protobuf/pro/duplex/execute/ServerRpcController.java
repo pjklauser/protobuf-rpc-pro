@@ -15,6 +15,8 @@
 */
 package com.googlecode.protobuf.pro.duplex.execute;
 
+import io.netty.channel.ChannelFuture;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -157,8 +159,8 @@ public class ServerRpcController implements RpcController, LocalCallVariableHold
 	 * 
 	 * @param msg
 	 */
-	public void sendOobResponse( Message msg ) {
-		rpcClient.sendOobResponse(serviceName, correlationId, msg);
+	public ChannelFuture sendOobResponse( Message msg ) {
+		return rpcClient.sendOobResponse(serviceName, correlationId, msg);
 	}
 
 	/**
