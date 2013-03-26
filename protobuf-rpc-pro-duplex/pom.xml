@@ -4,7 +4,7 @@
 	<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 	<artifactId>protobuf-rpc-pro-duplex</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.3</version>
+	<version>3.0.4</version>
 	<name>Protobuf RPC Pro Implementation</name>
 	<description>Protobuf RPC Pro is a java protocol buffers RPC implementation featuring bidirectional RPC calls and TCP socket connection re-use and the option of secure communications.</description>
 	<url>http://code.google.com/p/protobuf-rpc-pro/</url>
@@ -19,11 +19,20 @@
 		<connection>scm:svn:http://protobuf-rpc-pro.googlecode.com/svn/trunk/</connection>
 		<developerConnection>scm:svn:https://protobuf-rpc-pro.googlecode.com/svn/trunk/</developerConnection>
 	</scm>
+ 	<properties>
+ 		<developer.email>pjklauser@gmail.com</developer.email>
+ 	</properties>
+ 	
+ 	<organization>
+ 		<name>Protobuf RPC Pro</name>
+ 		<url>http://code.google.com/p/protobuf-rpc-pro</url>
+ 	</organization>
+ 	
 	<developers>
 		<developer>
 		<id>klp</id>
 		<name>Peter Klauser</name>
-		<email>pjklauser@gmail.com</email>
+		<email>${developer.email}</email>
 		</developer>
 	</developers>
 	<licenses>
@@ -70,6 +79,50 @@
 					</execution>
 				</executions>
 			</plugin>
+ 			<plugin>
+ 				<groupId>org.apache.felix</groupId>
+ 				<artifactId>maven-bundle-plugin</artifactId>
+ 				<version>2.3.7</version>
+ 				<extensions>true</extensions>
+ 				<configuration>
+ 					<archive>
+ 						<addMavenDescriptor>true</addMavenDescriptor>
+ 					</archive>
+ 					<supportedProjectTypes>
+ 						<supportedProjectType>jar</supportedProjectType>
+ 					</supportedProjectTypes>
+ 					<instructions>
+ 						<Bundle-ContactAddress>${developer.email}</Bundle-ContactAddress>
+ 						<Built-By>${project.organization.name}</Built-By>
+ 						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+ 						<Bundle-Description>${project.description}</Bundle-Description>
+ 						<Bundle-DocURL>${project.organization.url}</Bundle-DocURL>
+ 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+ 						<Bundle-Version>${project.version}</Bundle-Version>
+ 					</instructions>
+ 				</configuration>
+ 				<executions>
+ 					<execution>
+ 						<id>bundle</id>
+ 						<goals>
+ 							<goal>manifest</goal>
+ 						</goals>
+ 						<phase>prepare-package</phase>
+ 						<inherited>true</inherited>
+ 					</execution>
+ 				</executions>
+ 			</plugin>
+ 
+ 			<plugin>
+ 				<groupId>org.apache.maven.plugins</groupId>
+ 				<artifactId>maven-jar-plugin</artifactId>
+ 				<version>2.3.2</version>
+ 				<configuration>
+ 					<archive>
+ 						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+ 					</archive>
+ 				</configuration>
+ 			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -81,7 +134,7 @@
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
-			<version>4.0.0.Beta2</version>
+			<version>4.0.0.CR1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jcraft</groupId>
