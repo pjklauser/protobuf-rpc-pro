@@ -65,7 +65,7 @@ public class ClientConnectResponseHandler extends ChannelInboundMessageHandlerAd
 	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
 	 */
 	@Override
-	protected void messageReceived(ChannelHandlerContext ctx, WirePayload msg)
+	public void messageReceived(ChannelHandlerContext ctx, WirePayload msg)
 			throws Exception {
 		if ( msg.hasConnectResponse() ) {
 	    	ConnectResponse connectResponse = msg.getConnectResponse();

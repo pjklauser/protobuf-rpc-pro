@@ -54,7 +54,7 @@ public class RpcServerHandler extends ChannelInboundMessageHandlerAdapter<WirePa
 	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
 	 */
 	@Override
-	protected void messageReceived(ChannelHandlerContext ctx, WirePayload payload)
+	public void messageReceived(ChannelHandlerContext ctx, WirePayload payload)
 			throws Exception {
     	if ( payload.hasRpcRequest() ) {
     		rpcServer.request(payload.getRpcRequest());

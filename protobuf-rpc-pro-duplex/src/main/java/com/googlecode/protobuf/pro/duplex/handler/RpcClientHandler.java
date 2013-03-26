@@ -50,7 +50,7 @@ public class RpcClientHandler extends ChannelInboundMessageHandlerAdapter<WirePa
 	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
 	 */
 	@Override
-	protected void messageReceived(ChannelHandlerContext ctx, WirePayload payload)
+	public void messageReceived(ChannelHandlerContext ctx, WirePayload payload)
 			throws Exception {
     	if ( payload.hasRpcResponse() ) {
     		rpcClient.response(payload.getRpcResponse());

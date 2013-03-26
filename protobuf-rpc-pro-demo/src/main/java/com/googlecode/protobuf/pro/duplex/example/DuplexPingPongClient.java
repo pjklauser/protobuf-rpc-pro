@@ -137,7 +137,7 @@ public class DuplexPingPongClient {
         clientFactory.getRpcServiceRegistry().registerService(nbPingService);
 
 		Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(new NioEventLoopGroup(16));
+        bootstrap.group(new NioEventLoopGroup());
         bootstrap.handler(clientFactory);
         bootstrap.channel(NioSocketChannel.class);
         bootstrap.option(ChannelOption.TCP_NODELAY, nodelay);
