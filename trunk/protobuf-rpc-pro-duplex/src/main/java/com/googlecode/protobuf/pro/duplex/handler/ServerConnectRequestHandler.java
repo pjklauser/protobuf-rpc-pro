@@ -63,7 +63,7 @@ public class ServerConnectRequestHandler extends ChannelInboundMessageHandlerAda
 	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
 	 */
 	@Override
-	protected void messageReceived(ChannelHandlerContext ctx, WirePayload msg)
+	public void messageReceived(ChannelHandlerContext ctx, WirePayload msg)
 			throws Exception {
 		if ( msg.hasConnectRequest() ) {
 			ConnectRequest connectRequest = msg.getConnectRequest();
