@@ -2,6 +2,10 @@
 #labels Phase-Deploy,Featured
 What changes are made from release to release. Check SVN history for more details.
 
+= 3.0.4 =
+Issue 11: Provided OSGI bundle.
+Upgraded to Netty 4.0.0.CR1.
+
 = 3.0.3 =
 Issue 16: Upgrade to Netty 4.0.0.Beta2. There is a difference in the Bootstrap code which clients and servers use to construct their components. Checkout the changed examples.
 
@@ -11,7 +15,7 @@ Out-of-Band messaging now allows client code do success evaluation and/or blocki
 
 = 3.0.2 =
 
-Issue 17: stackoverlfow - infinite loop calling RpcClient.getPipeline().
+Issue 17: stackoverflow - infinite loop calling RpcClient.getPipeline().
 
 = 3.0.1 =
 
