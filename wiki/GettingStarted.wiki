@@ -3,7 +3,7 @@
 
 = Getting Started =
 
-The [http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-duplex/src/test/java/com/googlecode/protobuf/pro/duplex/example example] source package contains several runnable examples. 
+The [http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-demo/src/main/java/com/googlecode/protobuf/pro/duplex/example/ example] source package contains several runnable examples. 
 
 The examples use a simple [http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-duplex/src/test/protos/pingpong.proto PingPong] service where a client can call "ping" on a server.
 
