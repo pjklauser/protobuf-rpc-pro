@@ -16,7 +16,7 @@
 package com.googlecode.protobuf.pro.duplex;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
+import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,8 +36,7 @@ public class CleanShutdownHandler {
 
 	private static Logger log = LoggerFactory.getLogger(CleanShutdownHandler.class);
 	
-	private List<ServerBootstrap> servers = new LinkedList<ServerBootstrap>();
-	private List<Bootstrap> bootstraps = new LinkedList<Bootstrap>();
+	private List<EventExecutorGroup> bootstraps = new LinkedList<EventExecutorGroup>();
 	private List<ExecutorService> executors = new LinkedList<ExecutorService>();
 	
 	public CleanShutdownHandler() {
@@ -46,13 +45,8 @@ public class CleanShutdownHandler {
 			@Override
 			public void run() {
 				log.debug("Releasing " + bootstraps.size() + " Client Bootstrap.");
-				for( Bootstrap bootstrap : getBootstraps() ) {
-					bootstrap.shutdown();
-				}
-				
-				log.debug("Releasing " + servers.size() + " Server Bootstrap.");
-				for( ServerBootstrap server : getServerBootstraps() ) {
-					server.shutdown();
+				for( EventExecutorGroup bootstrap : getBootstraps() ) {
+					bootstrap.shutdownGracefully();
 				}
 				
 				log.debug("Releasing " + executors.size() + " Executors.");
@@ -63,15 +57,7 @@ public class CleanShutdownHandler {
 		} ));
 	}
 	
-	public void addResource( ServerBootstrap bootstrap ) {
-		servers.add(bootstrap);
-	}
-	
-	public void removeResource( ServerBootstrap bootstrap ) {
-		servers.remove(bootstrap);
-	}
-
-	public void addResource( Bootstrap bootstrap ) {
+	public void addResource( EventExecutorGroup bootstrap ) {
 		bootstraps.add(bootstrap);
 	}
 	
@@ -102,23 +88,16 @@ public class CleanShutdownHandler {
 	}
 
 	/**
-	 * @return the client bootstraps
-	 */
-	public List<ServerBootstrap> getServerBootstraps() {
-		return servers;
-	}
-
-	/**
 	 * @return the bootstraps
 	 */
-	public List<Bootstrap> getBootstraps() {
+	public List<EventExecutorGroup> getBootstraps() {
 		return bootstraps;
 	}
 
 	/**
 	 * @param bootstraps the bootstraps to set
 	 */
-	public void setBootstraps(List<Bootstrap> bootstraps) {
+	public void setBootstraps(List<EventExecutorGroup> bootstraps) {
 		this.bootstraps = bootstraps;
 	}
 }
