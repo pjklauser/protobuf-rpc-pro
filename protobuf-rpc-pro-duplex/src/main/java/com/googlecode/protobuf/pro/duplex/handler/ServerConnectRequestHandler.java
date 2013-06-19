@@ -19,7 +19,8 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+import io.netty.channel.MessageList;
+import io.netty.handler.codec.MessageToMessageDecoder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  *
  */
 @Sharable
-public class ServerConnectRequestHandler extends ChannelInboundMessageHandlerAdapter<WirePayload> {
+public class ServerConnectRequestHandler extends MessageToMessageDecoder<WirePayload> {
 
 	private static Logger log = LoggerFactory.getLogger(ServerConnectRequestHandler.class);
 
@@ -63,8 +64,8 @@ public class ServerConnectRequestHandler extends ChannelInboundMessageHandlerAda
 	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
 	 */
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, WirePayload msg)
-			throws Exception {
+	protected void decode(ChannelHandlerContext ctx, WirePayload msg,
+			MessageList<Object> out) throws Exception {
 		if ( msg.hasConnectRequest() ) {
 			ConnectRequest connectRequest = msg.getConnectRequest();
     		if ( log.isDebugEnabled() ) {
@@ -100,7 +101,7 @@ public class ServerConnectRequestHandler extends ChannelInboundMessageHandlerAda
         		future.addListener(ChannelFutureListener.CLOSE); // close after write response.
     		}
     	} else {
-    		ctx.nextInboundMessageBuffer().add(msg);
+    		out.add(msg);
     	}
     }
 

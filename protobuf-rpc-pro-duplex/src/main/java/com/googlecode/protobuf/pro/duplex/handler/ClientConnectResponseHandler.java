@@ -16,7 +16,8 @@
 package com.googlecode.protobuf.pro.duplex.handler;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+import io.netty.channel.MessageList;
+import io.netty.handler.codec.MessageToMessageDecoder;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -41,7 +42,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  * @author Peter Klauser
  *
  */
-public class ClientConnectResponseHandler extends ChannelInboundMessageHandlerAdapter<WirePayload> {
+public class ClientConnectResponseHandler extends MessageToMessageDecoder<WirePayload> {
 
 	private static Logger log = LoggerFactory.getLogger(ClientConnectResponseHandler.class);
 
@@ -65,8 +66,8 @@ public class ClientConnectResponseHandler extends ChannelInboundMessageHandlerAd
 	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
 	 */
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, WirePayload msg)
-			throws Exception {
+	protected void decode(ChannelHandlerContext ctx, WirePayload msg,
+			MessageList<Object> out) throws Exception {
 		if ( msg.hasConnectResponse() ) {
 	    	ConnectResponse connectResponse = msg.getConnectResponse();
     		if ( log.isDebugEnabled() ) {
@@ -75,9 +76,10 @@ public class ClientConnectResponseHandler extends ChannelInboundMessageHandlerAd
     		answerQueue.put(connectResponse);
     		return;
 		} else {
-			ctx.nextInboundMessageBuffer().add(msg);
+			out.add(msg);
 		}
-    }
+		
+	}
 
 	/* (non-Javadoc)
 	 * @see io.netty.channel.ChannelStateHandlerAdapter#channelInactive(io.netty.channel.ChannelHandlerContext)

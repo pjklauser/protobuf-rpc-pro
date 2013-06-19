@@ -16,7 +16,8 @@
 package com.googlecode.protobuf.pro.duplex.handler;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+import io.netty.channel.MessageList;
+import io.netty.handler.codec.MessageToMessageDecoder;
 
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
@@ -30,7 +31,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  * @author Peter Klauser
  *
  */
-public class RpcClientHandler extends ChannelInboundMessageHandlerAdapter<WirePayload> {
+public class RpcClientHandler extends MessageToMessageDecoder<WirePayload> {
 
     private RpcClient rpcClient;
     private TcpConnectionEventListener eventListener;
@@ -47,30 +48,30 @@ public class RpcClientHandler extends ChannelInboundMessageHandlerAdapter<WirePa
     }
 
 	/* (non-Javadoc)
-	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
+	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#decode(io.netty.channel.ChannelHandlerContext, java.lang.Object)
 	 */
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, WirePayload payload)
-			throws Exception {
-    	if ( payload.hasRpcResponse() ) {
-    		rpcClient.response(payload.getRpcResponse());
+	protected void decode(ChannelHandlerContext ctx, WirePayload msg,
+			MessageList<Object> out) throws Exception {
+    	if ( msg.hasRpcResponse() ) {
+    		rpcClient.response(msg.getRpcResponse());
     		return;
-    	} else if ( payload.hasRpcError() ) {
-    		rpcClient.error(payload.getRpcError());
+    	} else if ( msg.hasRpcError() ) {
+    		rpcClient.error(msg.getRpcError());
     		return;
-    	} else if ( payload.hasOobResponse() ) {
-    		rpcClient.receiveOobResponse(payload.getOobResponse());
+    	} else if ( msg.hasOobResponse() ) {
+    		rpcClient.receiveOobResponse(msg.getOobResponse());
     		return;
-    	} else if ( payload.hasOobMessage() ) {
-    		rpcClient.receiveOobMessage(payload.getOobMessage());
+    	} else if ( msg.hasOobMessage() ) {
+    		rpcClient.receiveOobMessage(msg.getOobMessage());
     		return;
-    	} else if ( payload.hasTransparentMessage() ) {
+    	} else if ( msg.hasTransparentMessage() ) {
     		// just so that it's not forgotten sometime...
-    		ctx.nextInboundMessageBuffer().add(payload);
+    		out.add(msg);
     	} else {
         	// rpcRequest, rpcCancel, clientMessage go further up to the RpcServerHandler
         	// transparentMessage are also sent up but not handled anywhere explicitly 
-    		ctx.nextInboundMessageBuffer().add(payload);
+    		out.add(msg);
     	}
     }
 
