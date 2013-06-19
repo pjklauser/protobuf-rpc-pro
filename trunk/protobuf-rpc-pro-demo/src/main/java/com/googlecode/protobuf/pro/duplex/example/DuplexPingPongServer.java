@@ -132,9 +132,9 @@ public class DuplexPingPongServer {
         
         // Configure the server.
         ServerBootstrap bootstrap = new ServerBootstrap();
-        bootstrap.group(new NioEventLoopGroup(2,new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory())),
-        		new NioEventLoopGroup(2,new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory()))
-        		);
+        NioEventLoopGroup boss = new NioEventLoopGroup(2,new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory()));
+        NioEventLoopGroup workers = new NioEventLoopGroup(16,new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory()));
+        bootstrap.group(boss, workers);
         bootstrap.channel(NioServerSocketChannel.class);
         bootstrap.option(ChannelOption.SO_SNDBUF, 1048576);
         bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
@@ -146,7 +146,8 @@ public class DuplexPingPongServer {
         
     	// Bind and start to accept incoming connections.
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
-        shutdownHandler.addResource(bootstrap);
+        shutdownHandler.addResource(boss);
+        shutdownHandler.addResource(workers);
         shutdownHandler.addResource(executor);
         shutdownHandler.addResource(timeoutChecker);
         shutdownHandler.addResource(timeoutExecutor);

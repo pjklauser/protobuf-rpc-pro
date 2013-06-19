@@ -18,6 +18,7 @@ package com.googlecode.protobuf.pro.duplex.example.nonrpc;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
@@ -34,6 +35,7 @@ import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Status;
+import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
@@ -61,7 +63,8 @@ public class StatusServer {
 
 		// Configure the server.
     	DuplexTcpServerPipelineFactory serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
-    	serverFactory.setRpcServerCallExecutor(new ThreadPoolCallExecutor(10, 10));
+    	RpcServerCallExecutor rpcExecutor = new ThreadPoolCallExecutor(10, 10);
+    	serverFactory.setRpcServerCallExecutor(rpcExecutor);
     	serverFactory.setLogger(logger);
     	
         final RpcCallback<PingPong.Status> clientStatusCallback = new RpcCallback<PingPong.Status>() {
@@ -105,9 +108,9 @@ public class StatusServer {
 		serverFactory.registerConnectionEventListener(rpcEventNotifier);
 
         ServerBootstrap bootstrap = new ServerBootstrap();
-        bootstrap.group(new NioEventLoopGroup(0,new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory())),
-        		new NioEventLoopGroup(0,new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory()))
-        		);
+        EventLoopGroup boss = new NioEventLoopGroup(2,new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory()));
+        EventLoopGroup workers = new NioEventLoopGroup(16,new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory()));
+        bootstrap.group(boss,workers);
         bootstrap.channel(NioServerSocketChannel.class);
         bootstrap.option(ChannelOption.SO_SNDBUF, 1048576);
         bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
@@ -118,8 +121,10 @@ public class StatusServer {
         bootstrap.localAddress(serverInfo.getPort());
 
 		CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
-        shutdownHandler.addResource(bootstrap);
-
+        shutdownHandler.addResource(boss);
+        shutdownHandler.addResource(workers);
+        shutdownHandler.addResource(rpcExecutor);
+        
     	// Bind and start to accept incoming connections.
         bootstrap.bind();
         log.info("Serving " + bootstrap);

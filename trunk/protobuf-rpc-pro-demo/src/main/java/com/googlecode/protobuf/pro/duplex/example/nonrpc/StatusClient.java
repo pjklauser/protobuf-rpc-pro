@@ -15,9 +15,12 @@
 */
 package com.googlecode.protobuf.pro.duplex.example.nonrpc;
 
+import java.util.concurrent.Executors;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
@@ -35,6 +38,7 @@ import com.googlecode.protobuf.pro.duplex.example.wire.PingPong;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
+import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
 
 public class StatusClient {
 
@@ -111,7 +115,8 @@ public class StatusClient {
 			clientFactory.registerConnectionEventListener(rpcEventNotifier);
 
 			Bootstrap bootstrap = new Bootstrap();
-	        bootstrap.group(new NioEventLoopGroup(16));
+	        EventLoopGroup workers = new NioEventLoopGroup(16,new RenamingThreadFactoryProxy("workers", Executors.defaultThreadFactory()));
+	        bootstrap.group(workers);
 	        bootstrap.handler(clientFactory);
 	        bootstrap.channel(NioSocketChannel.class);
 	        bootstrap.option(ChannelOption.TCP_NODELAY, true);
@@ -124,7 +129,7 @@ public class StatusClient {
 	        watchdog.start();
 
 			CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
-			shutdownHandler.addResource(bootstrap);
+			shutdownHandler.addResource(workers);
 
 	        clientFactory.peerWith(server, bootstrap);
 			

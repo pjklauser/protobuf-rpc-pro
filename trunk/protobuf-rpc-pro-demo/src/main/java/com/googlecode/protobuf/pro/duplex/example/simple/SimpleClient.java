@@ -16,16 +16,17 @@
 package com.googlecode.protobuf.pro.duplex.example.simple;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+
+import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ByteString;
-import com.google.protobuf.RpcCallback;
 import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.ClientRpcController;
@@ -34,16 +35,14 @@ import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientPipelineFactory;
 import com.googlecode.protobuf.pro.duplex.client.RpcClientConnectionWatchdog;
-import com.googlecode.protobuf.pro.duplex.example.wire.PercentCompleteCallback;
-import com.googlecode.protobuf.pro.duplex.example.wire.PingPong;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPingService;
-import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPingService;
-import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.PercentComplete;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Ping;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Pong;
+import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
+import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
 
 public class SimpleClient {
 
@@ -68,7 +67,8 @@ public class SimpleClient {
 		try {
 			DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory(client);
 			clientFactory.setConnectResponseTimeoutMillis(10000);
-			clientFactory.setRpcServerCallExecutor(new ThreadPoolCallExecutor(3, 10));			
+	    	RpcServerCallExecutor rpcExecutor = new ThreadPoolCallExecutor(3, 10);
+			clientFactory.setRpcServerCallExecutor(rpcExecutor);			
 			
 			// RPC payloads are uncompressed when logged - so reduce logging
 			CategoryPerServiceLogger logger = new CategoryPerServiceLogger();
@@ -109,7 +109,9 @@ public class SimpleClient {
 			clientFactory.registerConnectionEventListener(rpcEventNotifier);
 
 			Bootstrap bootstrap = new Bootstrap();
-	        bootstrap.group(new NioEventLoopGroup(16));
+	        EventLoopGroup workers = new NioEventLoopGroup(16,new RenamingThreadFactoryProxy("workers", Executors.defaultThreadFactory()));
+
+	        bootstrap.group(workers);
 	        bootstrap.handler(clientFactory);
 	        bootstrap.channel(NioSocketChannel.class);
 	        bootstrap.option(ChannelOption.TCP_NODELAY, true);
@@ -122,8 +124,9 @@ public class SimpleClient {
 	        watchdog.start();
 
 			CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
-			shutdownHandler.addResource(bootstrap);
-
+			shutdownHandler.addResource(workers);
+			shutdownHandler.addResource(rpcExecutor);
+			
 	        clientFactory.peerWith(server, bootstrap);
 			
 			while (true && channel != null) {

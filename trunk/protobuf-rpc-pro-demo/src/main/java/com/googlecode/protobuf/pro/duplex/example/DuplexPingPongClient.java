@@ -65,7 +65,7 @@ public class DuplexPingPongClient {
 		boolean compress = "Y".equals(args[6]);
 		int payloadSize = Integer.parseInt(args[7]);
 
-		log.info("DuplexPingPongClient port=" + clientPort  +" ssl=" + (secure?"Y":"N") + " nodelay=" + (nodelay?"Y":"N")+ " payloadSizeBytes="+payloadSize);
+		log.info("DuplexPingPongClient port=" + clientPort  +" ssl=" + (secure?"Y":"N") + " nodelay=" + (nodelay?"Y":"N")+ " compress=" +(compress?"Y":"N")+ " payloadSizeBytes="+payloadSize);
 		
 		PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
