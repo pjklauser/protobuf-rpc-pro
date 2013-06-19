@@ -16,7 +16,8 @@
 package com.googlecode.protobuf.pro.duplex.handler;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+import io.netty.channel.MessageList;
+import io.netty.handler.codec.MessageToMessageDecoder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
  * @author Peter Klauser
  *
  */
-public class RpcServerHandler extends ChannelInboundMessageHandlerAdapter<WirePayload> {
+public class RpcServerHandler extends MessageToMessageDecoder<WirePayload> {
 
 	private static Logger log = LoggerFactory.getLogger(RpcServerHandler.class);
 
@@ -51,21 +52,21 @@ public class RpcServerHandler extends ChannelInboundMessageHandlerAdapter<WirePa
     }
 
 	/* (non-Javadoc)
-	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#messageReceived(io.netty.channel.ChannelHandlerContext, java.lang.Object)
+	 * @see io.netty.channel.ChannelInboundMessageHandlerAdapter#decode(io.netty.channel.ChannelHandlerContext, java.lang.Object)
 	 */
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, WirePayload payload)
-			throws Exception {
-    	if ( payload.hasRpcRequest() ) {
-    		rpcServer.request(payload.getRpcRequest());
+	protected void decode(ChannelHandlerContext ctx, WirePayload msg,
+			MessageList<Object> out) throws Exception {
+    	if ( msg.hasRpcRequest() ) {
+    		rpcServer.request(msg.getRpcRequest());
     		return;
-    	} else if ( payload.hasRpcCancel() ) {
-    		rpcServer.cancel(payload.getRpcCancel());
+    	} else if ( msg.hasRpcCancel() ) {
+    		rpcServer.cancel(msg.getRpcCancel());
     		return;
     	} else {
     	// serverMessage, unsolicitedMessage, rpcResponse, rpcError were consumed further down by RpcClientHandler.
     	// everything else is passed through to potentially later channel handlers which are modified by using code.
-    		ctx.nextInboundMessageBuffer().add(payload);
+    		out.add(msg);
     	}
 	}
 
