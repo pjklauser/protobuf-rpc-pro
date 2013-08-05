@@ -15,7 +15,6 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
-import io.netty.bootstrap.Bootstrap;
 import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.util.LinkedList;
@@ -61,10 +60,6 @@ public class CleanShutdownHandler {
 		bootstraps.add(bootstrap);
 	}
 	
-	public void removeResource( Bootstrap bootstrap ) {
-		bootstraps.remove(bootstrap);
-	}
-
 	public void addResource( ExecutorService executor ) {
 		executors.add(executor);
 	}

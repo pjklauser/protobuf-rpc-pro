@@ -19,8 +19,9 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.MessageList;
 import io.netty.handler.codec.MessageToMessageDecoder;
+
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +66,7 @@ public class ServerConnectRequestHandler extends MessageToMessageDecoder<WirePay
 	 */
 	@Override
 	protected void decode(ChannelHandlerContext ctx, WirePayload msg,
-			MessageList<Object> out) throws Exception {
+			List<Object> out) throws Exception {
 		if ( msg.hasConnectRequest() ) {
 			ConnectRequest connectRequest = msg.getConnectRequest();
     		if ( log.isDebugEnabled() ) {
@@ -85,7 +86,7 @@ public class ServerConnectRequestHandler extends MessageToMessageDecoder<WirePay
         		if ( log.isDebugEnabled() ) {
         			log.debug("Sending ["+connectResponse.getCorrelationId()+"]ConnectResponse.");
         		}
-        		ctx.channel().write(payload);
+        		ctx.channel().writeAndFlush(payload);
         		
         		// now we swap this Handler out of the pipeline and complete the server side pipeline.
         		RpcClientHandler clientHandler = pipelineFactory.completePipeline(rpcClient);
@@ -97,7 +98,7 @@ public class ServerConnectRequestHandler extends MessageToMessageDecoder<WirePay
         		if ( log.isDebugEnabled() ) {
         			log.debug("Sending ["+connectResponse.getCorrelationId()+"]ConnectResponse. Already Connected.");
         		}
-        		ChannelFuture future = ctx.channel().write(payload);
+        		ChannelFuture future = ctx.channel().writeAndFlush(payload);
         		future.addListener(ChannelFutureListener.CLOSE); // close after write response.
     		}
     	} else {

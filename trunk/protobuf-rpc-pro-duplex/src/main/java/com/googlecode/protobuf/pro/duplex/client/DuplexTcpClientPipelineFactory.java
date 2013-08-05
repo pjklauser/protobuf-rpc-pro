@@ -132,7 +132,7 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 		if ( log.isDebugEnabled() ) {
 			log.debug("Sending ["+connectRequest.getCorrelationId()+"]ConnectRequest.");
 		}
-		channel.write(payload);
+		channel.writeAndFlush(payload);
 		
 		ClientConnectResponseHandler connectResponseHandler = (ClientConnectResponseHandler)channel.pipeline().get(Handler.CLIENT_CONNECT);
 		if ( connectResponseHandler == null ) {
