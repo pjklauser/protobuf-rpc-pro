@@ -145,8 +145,10 @@ public class DuplexPingPongClient {
         bootstrap.option(ChannelOption.SO_SNDBUF, 1048576);
         bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
 
-    	clientFactory.peerWith(server, bootstrap);
+        shutdownHandler.addResource(bootstrap.group());
+        
     	try {
+        	clientFactory.peerWith(server, bootstrap);
     		
     		while( true ) {
     			
