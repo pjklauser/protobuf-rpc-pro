@@ -137,7 +137,7 @@ public class RpcClient implements RpcClientChannel {
 		if ( channel.isOpen() ) {
 			registerPendingRequest(correlationId, state);
 
-			channel.write(payload);
+			channel.writeAndFlush(payload);
 			
 		} else {
 			RpcError rpcError = RpcError.newBuilder().setCorrelationId(correlationId).setErrorMessage("Channel Closed").build();
@@ -156,40 +156,51 @@ public class RpcClient implements RpcClientChannel {
 			RpcController controller, Message request, Message responsePrototype)
 			throws ServiceException {
 		ClientRpcController rpcController = (ClientRpcController)controller;
-		long deadlineTS = 0;
+		long deadlineTSNano = 0;
 		if ( rpcController.getTimeoutMs() > 0 ) {
-			deadlineTS = System.currentTimeMillis() + rpcController.getTimeoutMs();
+			deadlineTSNano = System.nanoTime() + rpcController.getTimeoutMs()*1000;
 		}
 		
 		BlockingRpcCallback callback = new BlockingRpcCallback();
 		
 		callMethod( method, rpcController, request, responsePrototype, callback );
         boolean interrupted = false;
-        if ( !callback.isDone() ) {
-			synchronized(callback) {
-				while(!callback.isDone()) {
-					try {
-						if ( deadlineTS > 0 ) {
-							long timeToDeadline = deadlineTS - System.currentTimeMillis();
-							if ( timeToDeadline <= 0 ) {
-								rpcController.getRpcClient().blockingCallTimeout(rpcController.getCorrelationId());
-								// this will pre-emptively timeout this call and set the callback done flag before returning.
-							} else {
-								// we wait at most until the deadline.
+		while(!callback.isDone()) {
+			try {
+				if ( deadlineTSNano > 0 ) {
+					long timeToDeadline = deadlineTSNano - System.nanoTime();
+					if ( timeToDeadline <= 0 ) {
+						rpcController.getRpcClient().blockingCallTimeout(rpcController.getCorrelationId());
+						// this will pre-emptively timeout this call and set the callback done flag before returning.
+						// Issue25: infinite loop, assumption was race condition of timeout handling with correct response.
+						// so we moved synchronization inside the loop, and make sure we exit.
+						if ( !callback.isDone() ) {
+							log.error("Issue25: not fixed - callback after timeout handling not finished. Please re-open issue.");
+							// probably return null - since callback run() is not completed.
+							break;
+						}
+					} else {
+						// we wait at most until the deadline.
+						synchronized(callback) {
+							if ( !callback.isDone() ) {
 								callback.wait(timeToDeadline);
 							}
-						} else {
-							// we wait indefinitely ( no timeout defined ).
+						}
+					}
+				} else {
+					// we wait indefinitely ( no timeout defined ).
+					synchronized(callback) {
+						if ( !callback.isDone() ) {
 							callback.wait();
 						}
-					} catch (InterruptedException e) {
-						if ( log.isDebugEnabled() ) {
-							log.debug("Thread interrupted waiting in callBlockingMethod.", e);
-						}
-						interrupted = true;
-						break; // Server side blocking call to client must exit here
 					}
 				}
+			} catch (InterruptedException e) {
+				if ( log.isDebugEnabled() ) {
+					log.debug("Thread interrupted waiting in callBlockingMethod.", e);
+				}
+				interrupted = true;
+				break; // Server side blocking call to client must exit here
 			}
 		}
         if ( interrupted ) { //Defect 8. Unsafe wait/notify loop.
@@ -228,7 +239,7 @@ public class RpcClient implements RpcClientChannel {
 			log.debug("Sending OobMessage.");
 		}
 		
-		ChannelFuture future = channel.write(payload);
+		ChannelFuture future = channel.writeAndFlush(payload);
 
 		doLogOobMessageOutbound(message);
 		return future;
@@ -359,7 +370,7 @@ public class RpcClient implements RpcClientChannel {
 		
 		doLogOobResponseOutbound(serviceName, correlationId, oobMessage);
 		
-		return channel.write(payload);
+		return channel.writeAndFlush(payload);
 	}
 	
 	/**
@@ -400,7 +411,7 @@ public class RpcClient implements RpcClientChannel {
 				log.debug("Sending ["+rpcCancel.getCorrelationId()+"]RpcCancel.");
 			}
 			WirePayload payload = WirePayload.newBuilder().setRpcCancel(rpcCancel).build();
-			channel.write( payload ).awaitUninterruptibly();
+			channel.writeAndFlush( payload ).awaitUninterruptibly();
 			
 			String errorMessage = "Cancel";
 			
