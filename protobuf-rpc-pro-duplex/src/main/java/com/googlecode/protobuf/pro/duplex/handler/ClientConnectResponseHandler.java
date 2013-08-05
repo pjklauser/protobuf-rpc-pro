@@ -16,9 +16,9 @@
 package com.googlecode.protobuf.pro.duplex.handler;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.MessageList;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -67,7 +67,7 @@ public class ClientConnectResponseHandler extends MessageToMessageDecoder<WirePa
 	 */
 	@Override
 	protected void decode(ChannelHandlerContext ctx, WirePayload msg,
-			MessageList<Object> out) throws Exception {
+			List<Object> out) throws Exception {
 		if ( msg.hasConnectResponse() ) {
 	    	ConnectResponse connectResponse = msg.getConnectResponse();
     		if ( log.isDebugEnabled() ) {

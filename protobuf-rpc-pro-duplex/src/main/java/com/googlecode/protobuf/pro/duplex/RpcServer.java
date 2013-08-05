@@ -90,7 +90,7 @@ public class RpcServer implements RpcServerExecutorCallback {
 			if ( log.isDebugEnabled() ) {
 				log.debug("Sending ["+rpcError.getCorrelationId()+"]RpcError.");
 			}
-			rpcClient.getChannel().write(payload);
+			rpcClient.getChannel().writeAndFlush(payload);
 
 			doErrorLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
 			return;
@@ -114,7 +114,7 @@ public class RpcServer implements RpcServerExecutorCallback {
 			if ( log.isDebugEnabled() ) {
 				log.debug("Sending ["+rpcError.getCorrelationId()+"]RpcError.");
 			}
-			rpcClient.getChannel().write(payload);
+			rpcClient.getChannel().writeAndFlush(payload);
 
 			doErrorLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
 			return;
@@ -137,7 +137,7 @@ public class RpcServer implements RpcServerExecutorCallback {
 			if ( log.isDebugEnabled() ) {
 				log.debug("Sending ["+rpcError.getCorrelationId()+"]RpcError.");
 			}
-			rpcClient.getChannel().write(payload);
+			rpcClient.getChannel().writeAndFlush(payload);
 
 			doErrorLog(correlationId, "Unknown", rpcRequest, rpcError, errorMessage);
 			return;
@@ -174,7 +174,7 @@ public class RpcServer implements RpcServerExecutorCallback {
 			if ( log.isDebugEnabled() ) {
 				log.debug("Sending ["+rpcError.getCorrelationId()+"]RpcError.");
 			}
-			rpcClient.getChannel().write(payload);
+			rpcClient.getChannel().writeAndFlush(payload);
 
 			doErrorLog(correlationId, methodDesc.getFullName(), rpcRequest, rpcError, errorMessage);
 			return;
@@ -257,7 +257,7 @@ public class RpcServer implements RpcServerExecutorCallback {
 				if ( log.isDebugEnabled() ) {
 					log.debug("Sending ["+rpcResponse.getCorrelationId()+"]RpcResponse.");
 				}
-				rpcClient.getChannel().write(payload);
+				rpcClient.getChannel().writeAndFlush(payload);
 
 				doLog(state, message, null);
 			} else {
@@ -271,7 +271,7 @@ public class RpcServer implements RpcServerExecutorCallback {
 				if ( log.isDebugEnabled() ) {
 					log.debug("Sending ["+rpcError.getCorrelationId()+"]RpcError.");
 				}
-				rpcClient.getChannel().write(payload);
+				rpcClient.getChannel().writeAndFlush(payload);
 				
 				doLog(state, rpcError, errorMessage);
 			}

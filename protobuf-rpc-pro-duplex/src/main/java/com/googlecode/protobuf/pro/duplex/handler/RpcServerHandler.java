@@ -15,8 +15,9 @@
 */
 package com.googlecode.protobuf.pro.duplex.handler;
 
+import java.util.List;
+
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.MessageList;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
 import org.slf4j.Logger;
@@ -56,7 +57,7 @@ public class RpcServerHandler extends MessageToMessageDecoder<WirePayload> {
 	 */
 	@Override
 	protected void decode(ChannelHandlerContext ctx, WirePayload msg,
-			MessageList<Object> out) throws Exception {
+			List<Object> out) throws Exception {
     	if ( msg.hasRpcRequest() ) {
     		rpcServer.request(msg.getRpcRequest());
     		return;
