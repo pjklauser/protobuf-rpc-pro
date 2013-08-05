@@ -45,10 +45,8 @@ public class CancellingNonBlockingPingClient implements ExecutableClient {
 	@Override
 	public void execute(RpcClientChannel channel){
 		try {
-			long startTS = 0;
+			long startTS = System.currentTimeMillis();
 			long endTS = 0;
-
-			startTS = System.currentTimeMillis();
 
 			BlockingPingService.Interface blockingService = BlockingPingService.newStub(channel);
 			NonBlockingPingService.Interface nonBlockingService = NonBlockingPingService.newStub(channel);
@@ -94,6 +92,7 @@ public class CancellingNonBlockingPingClient implements ExecutableClient {
 					}
 				};
 				
+				long callStartTs = System.currentTimeMillis();
 				if ( config.getPingCall().isCallBlockingImpl()) {
 					blockingService.ping(controller, ping, callback);
 				} else {
@@ -104,7 +103,7 @@ public class CancellingNonBlockingPingClient implements ExecutableClient {
 
 				while( controller.getCallLocalVariable("failure") == null ) {
 					Thread.sleep(100);
-					if ( System.currentTimeMillis() - startTS > config.getPingCall().getDurationMs() ) {
+					if ( System.currentTimeMillis() - callStartTs > config.getPingCall().getDurationMs() ) {
 						throw new Exception("Cancellation didn't complete call.");
 					}
 				}
