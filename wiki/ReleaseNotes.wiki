@@ -2,6 +2,10 @@
 #labels Phase-Deploy,Featured
 What changes are made from release to release. Check SVN history for more details.
 
+= 3.0.6 =
+
+Issue 25: Fix part2 - timeout after microseconds instead of nanoseconds.
+
 = 3.0.5 =
 Upgrade to Java1.7 compile and bytecode
 
