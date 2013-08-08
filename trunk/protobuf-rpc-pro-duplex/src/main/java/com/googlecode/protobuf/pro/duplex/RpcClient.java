@@ -158,7 +158,7 @@ public class RpcClient implements RpcClientChannel {
 		ClientRpcController rpcController = (ClientRpcController)controller;
 		long deadlineTSNano = 0;
 		if ( rpcController.getTimeoutMs() > 0 ) {
-			deadlineTSNano = System.nanoTime() + rpcController.getTimeoutMs()*1000;
+			deadlineTSNano = System.nanoTime() + rpcController.getTimeoutMs()*1000000;
 		}
 		
 		BlockingRpcCallback callback = new BlockingRpcCallback();
