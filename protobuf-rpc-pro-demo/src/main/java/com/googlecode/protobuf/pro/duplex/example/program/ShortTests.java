@@ -69,6 +69,10 @@ public class ShortTests implements ExecutableProgram {
     	c = new SimpleBlockingPingClient(new DemoDescriptor(1, 100, new DemoDescriptor.CallDescriptor(1000,10000,false,false)));
     	exec.execute(c,channel);
     	
+    	// Issue25: simple blocking ping - 1s timeout, 20s processing time, no percentComplete
+    	c = new SimpleBlockingPingClient(new DemoDescriptor(1, 100, new DemoDescriptor.CallDescriptor(10000,1000,true,false)));
+    	exec.execute(c,channel);
+    	
     	// simple ping - 10s timeout, 5s processing time, percentComplete
     	c = new SimpleBlockingPingClient(new DemoDescriptor(1, 100, new DemoDescriptor.CallDescriptor(5000,10000,false,true)));
     	exec.execute(c,channel);

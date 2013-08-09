@@ -111,11 +111,14 @@ public class SimpleBlockingPingClient implements ExecutableClient {
 						long callEndTS = System.currentTimeMillis();
 						// actual roundTripTime >= roundTripTime, we don't know by how much, but we add a 1s safety factor
 						long roundTripTime = callEndTS - callStartTS;
-						if ( config.getPingCall().getTimeoutMs() > 0 && roundTripTime >= config.getPingCall().getTimeoutMs() ||
-								( config.getPongCall() != null && config.getPongCall().getTimeoutMs() <= config.getPongCall().getDurationMs() )) {
+						if ( config.getPingCall().getTimeoutMs() > 0 && roundTripTime >= config.getPingCall().getTimeoutMs()) {
 							// timeout is ok
 						} else {
-							throw e;
+							if ( config.getPongCall() != null && config.getPongCall().getTimeoutMs() <= config.getPongCall().getDurationMs()) {
+								// timeout is ok
+							} else {
+								throw e;
+							}
 						}
 					} else {
 						throw e;
