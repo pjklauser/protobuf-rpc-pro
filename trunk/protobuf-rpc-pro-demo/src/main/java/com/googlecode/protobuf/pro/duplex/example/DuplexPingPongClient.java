@@ -152,12 +152,12 @@ public class DuplexPingPongClient {
     		
     		while( true ) {
     			
-    			new ClientPerformanceTests().execute(clientFactory.getRpcClientRegistry());
-    			
     	    	new ShortTests().execute(clientFactory.getRpcClientRegistry());
     	    	
     	    	new AllClientTests().execute(clientFactory.getRpcClientRegistry());
     	    	
+    			new ClientPerformanceTests().execute(clientFactory.getRpcClientRegistry());
+    			
     	    	Thread.sleep(60000);
     		}
 		} catch( Throwable e ) {

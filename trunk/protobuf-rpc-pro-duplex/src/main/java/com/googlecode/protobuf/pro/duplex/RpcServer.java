@@ -262,6 +262,9 @@ public class RpcServer implements RpcServerExecutorCallback {
 				doLog(state, message, null);
 			} else {
 				String errorMessage = state.getController().getFailed();
+				if ( errorMessage == null ) {
+					errorMessage = "null";
+				}
 				RpcError rpcError = RpcError.newBuilder()
 						.setCorrelationId(correlationId)
 						.setErrorMessage(errorMessage).build();
