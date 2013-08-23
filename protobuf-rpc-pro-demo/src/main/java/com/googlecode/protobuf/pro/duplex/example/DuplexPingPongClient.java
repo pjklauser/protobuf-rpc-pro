@@ -83,6 +83,8 @@ public class DuplexPingPongClient {
         	sslCtx.setTruststorePassword("changeme");
         	sslCtx.setTruststorePath("./lib/truststore");
         	sslCtx.init();
+        	
+        	clientFactory.setSslContext(sslCtx);
         }
 
         RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(1,5);
