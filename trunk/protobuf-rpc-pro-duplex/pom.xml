@@ -4,7 +4,7 @@
 	<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 	<artifactId>protobuf-rpc-pro-duplex</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.7</version>
+	<version>3.0.8</version>
 	<name>Protobuf RPC Pro Implementation</name>
 	<description>Protobuf RPC Pro is a java protocol buffers RPC implementation featuring bidirectional RPC calls and TCP socket connection re-use and the option of secure communications.</description>
 	<url>http://code.google.com/p/protobuf-rpc-pro/</url>
@@ -134,13 +134,15 @@
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
-			<version>4.0.6.Final</version>
+			<version>4.0.10.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jzlib</artifactId>
 			<version>1.1.2</version>
+			<optional>true</optional>
 		</dependency>
+		
 	    <dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
