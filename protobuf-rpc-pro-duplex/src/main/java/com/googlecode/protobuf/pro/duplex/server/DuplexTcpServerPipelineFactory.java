@@ -20,6 +20,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.compression.JZlibDecoder;
 import io.netty.handler.codec.compression.JZlibEncoder;
+import io.netty.handler.codec.compression.ZlibCodecFactory;
 import io.netty.handler.codec.compression.ZlibWrapper;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
@@ -97,8 +98,8 @@ public class DuplexTcpServerPipelineFactory extends ChannelInitializer<Channel> 
     	ChannelPipeline p = rpcClient.getChannel().pipeline();
 
     	if ( rpcClient.isCompression() ) {
-	    	p.addBefore(Handler.FRAME_DECODER, Handler.DECOMPRESSOR, new JZlibDecoder(ZlibWrapper.GZIP));
-	    	p.addAfter(Handler.DECOMPRESSOR, Handler.COMPRESSOR,  new JZlibEncoder(ZlibWrapper.GZIP));
+	    	p.addBefore(Handler.FRAME_DECODER, Handler.COMPRESSOR, ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP));
+	    	p.addAfter(Handler.COMPRESSOR, Handler.DECOMPRESSOR, ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
     	}
     	
 		TcpConnectionEventListener informer = new TcpConnectionEventListener(){
