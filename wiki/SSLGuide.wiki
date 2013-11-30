@@ -163,7 +163,7 @@ $ openssl rsa -in client.key.original -out client.key
 
 4] sign client certificate with our SERVER cert.
 
-$ openssl x509 -req -days 365 -in client.csr -CAkey server.key -CA server.crt -set_serial 01 -out client.crt
+$ openssl x509 -req -days 364 -in client.csr -CAkey server.key -CA server.crt -set_serial 01 -out client.crt
 
 5] convert client key to DER form
 
