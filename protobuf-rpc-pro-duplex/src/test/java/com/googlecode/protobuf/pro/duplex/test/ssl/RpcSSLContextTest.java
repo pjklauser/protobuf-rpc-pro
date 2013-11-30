@@ -1,12 +1,15 @@
 package com.googlecode.protobuf.pro.duplex.test.ssl;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
 
 import com.googlecode.protobuf.pro.duplex.RpcSSLContext;
 
-public class RpcSSLContextTest extends TestCase {
+public class RpcSSLContextTest{
 
 	
+	@Test	
 	public void testLoad() throws Exception {
 		RpcSSLContext ctx = new RpcSSLContext();
 		
