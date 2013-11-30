@@ -48,28 +48,21 @@ public class RpcSSLContext {
 	private String truststorePassword;
 	
 	private SSLContext sslContext;
+	private KeyManager[] keyManagers;
+	private TrustManager[] trustManagers;
 	
 	public RpcSSLContext() {
 		
 	}
 	
 	public void init() throws Exception {
-		sslContext = createSSLContext( getKeystoreType(), getKeystorePath(), getKeystorePassword(), getTruststoreType(), getTruststorePath(), getTruststorePassword());
-
+		keyManagers = loadKeyManagers(keystoreType, keystorePath, keystorePassword);
+		trustManagers = loadTrustManager(truststoreType, truststorePath, truststorePassword);
+		sslContext = createSSLContext( keyManagers, trustManagers);
 	}
 	
-	public static SSLContext createSSLContext( 
-			String keystoreType, 
-			String keystorePath,
-			String keystorePassword, 
-			String trustStoreType,
-			String trustStorePath,
-			String trustStorePassword) throws Exception {
-		
+	private static SSLContext createSSLContext( KeyManager[] keyManagers, TrustManager[] trustManagers) throws Exception {
 		SSLContext sslContext = SSLContext.getInstance("TLS");
-		KeyManager[] keyManagers = loadKeyManagers(keystoreType, keystorePath,
-				keystorePassword);
-		TrustManager[] trustManagers = loadTrustManager(trustStoreType, trustStorePath, trustStorePassword);
 
 		// just for logging - certificate problems are a pain in the b_tt.
 		for( TrustManager mgr : trustManagers ) {
@@ -235,6 +228,20 @@ public class RpcSSLContext {
 		engine.setUseClientMode(false);
 		engine.setNeedClientAuth(true);
 		return engine;
+	}
+
+	/**
+	 * @return the keyManagers
+	 */
+	public KeyManager[] getKeyManagers() {
+		return keyManagers;
+	}
+
+	/**
+	 * @return the trustManagers
+	 */
+	public TrustManager[] getTrustManagers() {
+		return trustManagers;
 	}
 
 }
