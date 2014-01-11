@@ -2,6 +2,12 @@
 #labels Phase-Deploy,Featured
 What changes are made from release to release. Check SVN history for more details.
 
+= 3.1.0 =
+
+Issue 28: Fix issues with protobuf extension registry to decode extensions.
+
+Upgrade to Netty.4.0.14.Final
+
 = 3.0.9 =
 
 Issue 23: Depend on specific netty modules instead of netty-all to get better OSGI bundling.
