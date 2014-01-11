@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.Descriptors.MethodDescriptor;
+import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
@@ -71,6 +72,7 @@ public class RpcClient implements RpcClientChannel {
 	private final PeerInfo clientInfo;
 	private final PeerInfo serverInfo;
 	private final boolean compression;
+	private final ExtensionRegistry extensionRegistry;
 	
 	private Message onOobMessagePrototype;
 	private RpcCallback<Message> onOobMessageFunction;
@@ -81,13 +83,14 @@ public class RpcClient implements RpcClientChannel {
 	private final Channel channel;
 	private final String channelName;
 	
-	public RpcClient( Channel channel, PeerInfo clientInfo, PeerInfo serverInfo, boolean compression, RpcLogger logger ) {
+	public RpcClient( Channel channel, PeerInfo clientInfo, PeerInfo serverInfo, boolean compression, RpcLogger logger, ExtensionRegistry extensionRegistry ) {
 		this.channel = channel;
 		this.clientInfo = clientInfo;
 		this.serverInfo = serverInfo;
 		this.compression = compression;
 		this.rpcLogger = logger;
 		this.channelName = clientInfo.getName() + "->" + serverInfo.getName();
+		this.extensionRegistry = extensionRegistry;
 	}
 	
 	/**
@@ -249,7 +252,7 @@ public class RpcClient implements RpcClientChannel {
 		if ( onOobMessagePrototype != null && onOobMessageFunction != null ) {
 			Message onMsg = null;
 			try {
-				onMsg = onOobMessagePrototype.newBuilderForType().mergeFrom(msg.getMessageBytes()).build();
+				onMsg = onOobMessagePrototype.newBuilderForType().mergeFrom(msg.getMessageBytes(),getExtensionRegistry()).build();
 
 				onOobMessageFunction.run(onMsg);
 
@@ -329,7 +332,7 @@ public class RpcClient implements RpcClientChannel {
 		if ( state != null ) {
 			Message response = null;
 			try {
-				response = state.getResponsePrototype().newBuilderForType().mergeFrom(rpcResponse.getResponseBytes()).build();
+				response = state.getResponsePrototype().newBuilderForType().mergeFrom(rpcResponse.getResponseBytes(),getExtensionRegistry()).build();
 
 				doLogRpc( state, response, null );
 				
@@ -695,6 +698,13 @@ public class RpcClient implements RpcClientChannel {
 	 */
 	public void setRpcServer(RpcServer rpcServer) {
 		this.rpcServer = rpcServer;
+	}
+
+	/**
+	 * @return the extensionRegistry
+	 */
+	public ExtensionRegistry getExtensionRegistry() {
+		return extensionRegistry;
 	}
 
 }

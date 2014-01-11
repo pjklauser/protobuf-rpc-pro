@@ -20,7 +20,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.compression.JZlibEncoder;
 import io.netty.handler.codec.compression.ZlibCodecFactory;
 import io.netty.handler.codec.compression.ZlibWrapper;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
@@ -79,6 +78,7 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 	private final RpcServiceRegistry rpcServiceRegistry = new RpcServiceRegistry();
 	private RpcServerCallExecutor rpcServerCallExecutor = null;
 	private ExtensionRegistry extensionRegistry;
+	private ExtensionRegistry wirelinePayloadExtensionRegistry;
 	private RpcSSLContext sslContext;
 	private RpcLogger logger = new CategoryPerServiceLogger();
 	private long connectResponseTimeoutMillis = ClientConnectResponseHandler.DEFAULT_CONNECT_RESPONSE_TIMEOUT_MS;
@@ -163,12 +163,12 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 			serverInfo = new PeerInfo(remoteAddress.getHostName(), remoteAddress.getPort() );
 		}
 		
-		RpcClient rpcClient = new RpcClient(channel, clientInfo, serverInfo, connectResponse.getCompress(), getRpcLogger());
+		RpcClient rpcClient = new RpcClient(channel, clientInfo, serverInfo, connectResponse.getCompress(), getRpcLogger(), getExtensionRegistry());
 		
 		RpcClientHandler rpcClientHandler = completePipeline(rpcClient);
 		rpcClientHandler.notifyOpened();
 		
-		// TODO FIXME allChannels.add(channel);
+		// register the rpcClient in the RpcClientRegistry
 		if ( !getRpcClientRegistry().registerRpcClient(rpcClient) ) {
 			log.warn("Client RpcClient already registered. Bug??");
 		}
@@ -189,7 +189,7 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
         }
 
         p.addLast(Handler.FRAME_DECODER, new ProtobufVarint32FrameDecoder());
-        p.addLast(Handler.PROTOBUF_DECODER, new ProtobufDecoder(DuplexProtocol.WirePayload.getDefaultInstance(),getExtensionRegistry()));
+        p.addLast(Handler.PROTOBUF_DECODER, new ProtobufDecoder(DuplexProtocol.WirePayload.getDefaultInstance(),getWirelinePayloadExtensionRegistry()));
 
         p.addLast(Handler.FRAME_ENCODER, new ProtobufVarint32LengthFieldPrepender());
         p.addLast(Handler.PROTOBUF_ENCODER, new ProtobufEncoder());
@@ -360,6 +360,22 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 	 */
 	public void setCompression(boolean compression) {
 		this.compression = compression;
+	}
+
+	/**
+	 * @return the registered WirelinePayload's extension registry.
+	 */
+	public ExtensionRegistry getWirelinePayloadExtensionRegistry() {
+		return wirelinePayloadExtensionRegistry;
+	}
+	
+	/**
+	 * Set the WirelinePayload's extension registry.
+	 * 
+	 * @param extensionRegistry
+	 */
+	public void setWirelinePayloadExtensionRegistry( ExtensionRegistry wirelinePayloadExtensionRegistry ) {
+		this.wirelinePayloadExtensionRegistry = wirelinePayloadExtensionRegistry;
 	}
 
 	/**

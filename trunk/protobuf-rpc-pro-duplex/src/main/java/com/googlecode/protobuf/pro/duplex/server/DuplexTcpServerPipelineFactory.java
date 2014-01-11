@@ -18,8 +18,6 @@ package com.googlecode.protobuf.pro.duplex.server;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.compression.JZlibDecoder;
-import io.netty.handler.codec.compression.JZlibEncoder;
 import io.netty.handler.codec.compression.ZlibCodecFactory;
 import io.netty.handler.codec.compression.ZlibWrapper;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
@@ -31,9 +29,6 @@ import io.netty.handler.ssl.SslHandler;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ExtensionRegistry;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
@@ -64,6 +59,7 @@ public class DuplexTcpServerPipelineFactory extends ChannelInitializer<Channel> 
 	private final RpcClientRegistry rpcClientRegistry = new RpcClientRegistry();
 	private RpcServerCallExecutor rpcServerCallExecutor = new SameThreadExecutor();
 	private ExtensionRegistry extensionRegistry;
+	private ExtensionRegistry wirelinePayloadExtensionRegistry;
 	private RpcSSLContext sslContext;
 	private RpcLogger logger = new CategoryPerServiceLogger();
 
@@ -202,10 +198,26 @@ public class DuplexTcpServerPipelineFactory extends ChannelInitializer<Channel> 
 	}
 
 	/**
+	 * @return the registered extension registry.
+	 */
+	public ExtensionRegistry getExtensionRegistry() {
+		return extensionRegistry;
+	}
+	
+	/**
+	 * Set the extension registry.
+	 * 
+	 * @param extensionRegistry
+	 */
+	public void setExtensionRegistry( ExtensionRegistry extensionRegistry ) {
+		this.extensionRegistry = extensionRegistry;
+	}
+
+	/**
 	 * @return the registered WirelinePayload's extension registry.
 	 */
 	public ExtensionRegistry getWirelinePayloadExtensionRegistry() {
-		return extensionRegistry;
+		return wirelinePayloadExtensionRegistry;
 	}
 	
 	/**
@@ -213,8 +225,8 @@ public class DuplexTcpServerPipelineFactory extends ChannelInitializer<Channel> 
 	 * 
 	 * @param extensionRegistry
 	 */
-	public void setWirelinePayloadExtensionRegistry( ExtensionRegistry extensionRegistry ) {
-		this.extensionRegistry = extensionRegistry;
+	public void setWirelinePayloadExtensionRegistry( ExtensionRegistry wirelinePayloadExtensionRegistry ) {
+		this.wirelinePayloadExtensionRegistry = wirelinePayloadExtensionRegistry;
 	}
 
 	/**

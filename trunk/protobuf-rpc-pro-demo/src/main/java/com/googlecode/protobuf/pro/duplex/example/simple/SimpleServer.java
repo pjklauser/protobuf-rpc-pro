@@ -28,12 +28,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.BlockingService;
+import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.Service;
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.example.PingPongServiceFactory;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPingService;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPingService;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
@@ -64,6 +66,11 @@ public class SimpleServer {
 
 		// Configure the server.
     	DuplexTcpServerPipelineFactory serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
+
+    	ExtensionRegistry r = ExtensionRegistry.newInstance();
+		PingPong.registerAllExtensions(r);
+		serverFactory.setExtensionRegistry(r);
+    	
     	RpcServerCallExecutor rpcExecutor = new ThreadPoolCallExecutor(10, 10);
     	serverFactory.setRpcServerCallExecutor(rpcExecutor);
     	serverFactory.setLogger(logger);
@@ -97,10 +104,10 @@ public class SimpleServer {
 
     	// we give the server a blocking and non blocking (pong capable) Ping Service
         BlockingService bPingService = BlockingPingService.newReflectiveBlockingService(new PingPongServiceFactory.BlockingPongingPingServer());
-        serverFactory.getRpcServiceRegistry().registerBlockingService(bPingService);
+        serverFactory.getRpcServiceRegistry().registerService(true, bPingService);
 
         Service nbPingService = NonBlockingPingService.newReflectiveService(new PingPongServiceFactory.NonBlockingPongingPingServer());
-        serverFactory.getRpcServiceRegistry().registerService(nbPingService);
+        serverFactory.getRpcServiceRegistry().registerService(true, nbPingService);
 
         ServerBootstrap bootstrap = new ServerBootstrap();
         EventLoopGroup boss = new NioEventLoopGroup(2,new RenamingThreadFactoryProxy("boss", Executors.defaultThreadFactory()));

@@ -15,7 +15,8 @@ message Ping {
     optional bool  pongBlocking = 6; // whether to call a clients blocking pong service or nonblocking pong service.
     optional int32 pongDurationMs = 7; // the duration of the pong call at the client
     optional int32 pongTimeoutMs = 8; // the timeout of the pong call at the server
-    optional bool  pongPercentComplete = 9; // whether the client shall provide percent complete indication back to server during pong. 
+    optional bool  pongPercentComplete = 9; // whether the client shall provide percent complete indication back to server during pong.
+    extensions 100 to 999; 
 }
 
 message Pong {
@@ -23,6 +24,7 @@ message Pong {
     required bytes pongData = 2; // the pingPayload copied in the pong
     optional int32 pongDurationMs = 3; // the duration of the pong call at the client
     optional bool  pongPercentComplete = 4; // whether the client shall provide percent complete indication back to server during pong. 
+    extensions 100 to 999; 
 }
 
 message PercentComplete {
@@ -38,6 +40,20 @@ message PercentComplete {
 message Status {
 	required string message = 1;
 }
+
+
+message ExtendedPing {
+  extend Ping {
+    optional int32 extendedIntField = 100;
+  }
+}
+
+message ExtendedPong {
+  extend Pong {
+    optional int32 extendedIntField = 100;
+  }
+}
+
 
 
 // in order to demonstrate simultaneously the serving of synchronous
