@@ -75,7 +75,7 @@ public class ServerConnectRequestHandler extends MessageToMessageDecoder<WirePay
     		PeerInfo connectingClientInfo = new PeerInfo(connectRequest.getClientHostName(), connectRequest.getClientPort(), connectRequest.getClientPID());
     		ConnectResponse connectResponse = null;
     		
-    		RpcClient rpcClient = new RpcClient(ctx.channel(), pipelineFactory.getServerInfo(), connectingClientInfo, connectRequest.getCompress(), pipelineFactory.getLogger() );
+    		RpcClient rpcClient = new RpcClient(ctx.channel(), pipelineFactory.getServerInfo(), connectingClientInfo, connectRequest.getCompress(), pipelineFactory.getLogger(), pipelineFactory.getExtensionRegistry() );
     		if ( pipelineFactory.getRpcClientRegistry().registerRpcClient(rpcClient) ) {
     			connectResponse = ConnectResponse.newBuilder().setCorrelationId(connectRequest.getCorrelationId())
     					.setServerPID(pipelineFactory.getServerInfo().getPid())

@@ -150,7 +150,7 @@ public class RpcServer implements RpcServerExecutorCallback {
 		}
 
 		// fetch an optional ExtensionRegistry associated with the Service.
-		ExtensionRegistry extensionRegistry = sd.getExtensionRegistry();
+		ExtensionRegistry extensionRegistry = rpcClient.getExtensionRegistry();
 		
 		Message request = null;
 		try {

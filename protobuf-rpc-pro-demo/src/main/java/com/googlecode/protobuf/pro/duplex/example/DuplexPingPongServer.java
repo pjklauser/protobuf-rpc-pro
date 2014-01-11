@@ -118,14 +118,14 @@ public class DuplexPingPongServer {
 
     	// we give the server a blocking and non blocking (pong capable) Ping Service
         BlockingService bPingService = BlockingPingService.newReflectiveBlockingService(new PingPongServiceFactory.BlockingPongingPingServer());
-        serverFactory.getRpcServiceRegistry().registerBlockingService(bPingService);
+        serverFactory.getRpcServiceRegistry().registerService(bPingService);
 
         Service nbPingService = NonBlockingPingService.newReflectiveService(new PingPongServiceFactory.NonBlockingPongingPingServer());
         serverFactory.getRpcServiceRegistry().registerService(nbPingService);
 
         // Configure the server to provide a Pong Service in both blocking an non blocking varieties
        	BlockingService bPongService = BlockingPongService.newReflectiveBlockingService(new PingPongServiceFactory.BlockingPongServer());
-       	serverFactory.getRpcServiceRegistry().registerBlockingService(bPongService);
+       	serverFactory.getRpcServiceRegistry().registerService(bPongService);
 
        	Service nbPongService = NonBlockingPongService.newReflectiveService(new PingPongServiceFactory.NonBlockingPongServer());
        	serverFactory.getRpcServiceRegistry().registerService(nbPongService);

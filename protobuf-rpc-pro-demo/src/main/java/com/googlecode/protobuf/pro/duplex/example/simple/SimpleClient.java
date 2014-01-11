@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.CleanShutdownHandler;
 import com.googlecode.protobuf.pro.duplex.ClientRpcController;
@@ -35,7 +36,10 @@ import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.RpcConnectionEventNotifier;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientPipelineFactory;
 import com.googlecode.protobuf.pro.duplex.client.RpcClientConnectionWatchdog;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPingService;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPing;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPong;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Ping;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Pong;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
@@ -66,6 +70,11 @@ public class SimpleClient {
 
 		try {
 			DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory(client);
+			
+	    	ExtensionRegistry r = ExtensionRegistry.newInstance();
+			PingPong.registerAllExtensions(r);
+			clientFactory.setExtensionRegistry(r);
+
 			clientFactory.setConnectResponseTimeoutMillis(10000);
 	    	RpcServerCallExecutor rpcExecutor = new ThreadPoolCallExecutor(3, 10);
 			clientFactory.setRpcServerCallExecutor(rpcExecutor);			
@@ -146,9 +155,17 @@ public class SimpleClient {
 				pingBuilder.setPongTimeoutMs(0);
 				pingBuilder.setPongPercentComplete(false);
 
+				// set an extension value
+				pingBuilder.setExtension(ExtendedPing.extendedIntField, 111);
+				
 				Ping ping = pingBuilder.build();
 				try {
 					Pong pong = blockingService.ping(controller, ping);
+					
+					Integer ext = pong.getExtension(ExtendedPong.extendedIntField);
+					if ( ext == null || ext != 111) {
+						log.warn("Extension not parsed. Value=", ext);
+					}
 				} catch ( ServiceException e ) {
 					log.warn("Call failed.", e);
 				}

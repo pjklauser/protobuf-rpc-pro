@@ -15,6 +15,9 @@
 */
 package com.googlecode.protobuf.pro.duplex.example;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
@@ -22,6 +25,8 @@ import com.googlecode.protobuf.pro.duplex.ClientRpcController;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPingService;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPongService;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPing;
+import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPong;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPingService;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPongService;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.PercentComplete;
@@ -38,6 +43,8 @@ import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
  */
 public class PingPongServiceFactory {
 	
+	private static Logger log = LoggerFactory.getLogger(PingPongServiceFactory.class);
+
 	private static void doPercentCompleteProcessing( RpcController controller, int processingTime, OperationName operationName, int seqNo ) {
 		ServerRpcController rpcController = ServerRpcController.getRpcController(controller);
 		
@@ -188,6 +195,8 @@ public class PingPongServiceFactory {
 				return;
 			}
 			
+			Integer ext = request.getExtension(ExtendedPing.extendedIntField);
+			
 			// must call the blocking or non blocking pong of the client calling ping.
 			if ( request.getPongRequired() ) {
 				RpcClientChannel channel = ServerRpcController.getRpcChannel(controller);
@@ -199,15 +208,31 @@ public class PingPongServiceFactory {
 					
 					Ping clientResponse = null;
 					try {
-						Pong clientRequest = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload()).build();
-
+						Pong.Builder clientRequestBuilder = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload());
+						if ( ext != null ) {
+							clientRequestBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+						}
+						Pong clientRequest = clientRequestBuilder.build();
+						
 						clientResponse = clientService.pong(clientController, clientRequest);
+						if ( ext != null ) {
+							Integer repliedExt=clientResponse.getExtension(ExtendedPing.extendedIntField);
+							if ( repliedExt == null ) {
+								log.warn("Did not receive extension in reply to pong.");
+							} else if ( repliedExt.intValue() != ext.intValue() ) {
+								log.warn("Extension value mismatch in reply to pong.");
+							}
+						}
 					} catch ( ServiceException e ) {
 						controller.setFailed(e.getMessage());
 						done.run(null);
 						return;
 					}
-					Pong response = Pong.newBuilder().setSequenceNo(clientResponse.getSequenceNo()).setPongData(clientResponse.getPingPayload()).build();
+					Pong.Builder responseBuilder = Pong.newBuilder().setSequenceNo(clientResponse.getSequenceNo()).setPongData(clientResponse.getPingPayload());
+					if ( ext != null ) {
+						responseBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+					}
+					Pong response = responseBuilder.build();
 					done.run(response);
 				} else {
 					NonBlockingPongService.BlockingInterface clientService = NonBlockingPongService.newBlockingStub(channel);
@@ -216,21 +241,40 @@ public class PingPongServiceFactory {
 					
 					Ping clientResponse = null;
 					try {
-						Pong clientRequest = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload()).build();
+						Pong.Builder clientRequestBuilder = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload());
+						if ( ext != null ) {
+							clientRequestBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+						}
+						Pong clientRequest = clientRequestBuilder.build();
 
 						clientResponse = clientService.pong(clientController, clientRequest);
+						if ( ext != null ) {
+							Integer repliedExt=clientResponse.getExtension(ExtendedPing.extendedIntField);
+							if ( repliedExt == null ) {
+								log.warn("Did not receive extension in reply to pong.");
+							} else if ( repliedExt.intValue() != ext.intValue() ) {
+								log.warn("Extension value mismatch in reply to pong.");
+							}
+						}
 					} catch ( ServiceException e ) {
 						controller.setFailed(e.getMessage());
 						done.run(null);
 						return;
 					}
-					Pong response = Pong.newBuilder().setSequenceNo(clientResponse.getSequenceNo()).setPongData(clientResponse.getPingPayload()).build();
+					Pong.Builder responseBuilder = Pong.newBuilder().setSequenceNo(clientResponse.getSequenceNo()).setPongData(clientResponse.getPingPayload());
+					if ( ext != null ) {
+						responseBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+					}
+					Pong response = responseBuilder.build();
 					done.run(response);
-
 				}
 				
 			} else {
-				Pong response = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongData(request.getPingPayload()).build();
+				Pong.Builder responseBuilder = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongData(request.getPingPayload());
+				if ( ext != null ) {
+					responseBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+				}
+				Pong response = responseBuilder.build();
 				done.run(response);
 			}
 		}
@@ -259,6 +303,8 @@ public class PingPongServiceFactory {
 				return null;
 			}
 			
+			Integer ext = request.getExtension(ExtendedPing.extendedIntField);
+			
 			Pong response = null;
 			if ( request.getPongRequired() ) {
 				RpcClientChannel channel = ServerRpcController.getRpcChannel(controller);
@@ -267,22 +313,60 @@ public class PingPongServiceFactory {
 					ClientRpcController clientController = channel.newRpcController();
 					clientController.setTimeoutMs(request.getPongTimeoutMs());
 					
-					Pong clientRequest = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload()).build();
+					Pong.Builder clientRequestBuilder = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload());
+					if ( ext != null ) {
+						clientRequestBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+					}
+					Pong clientRequest = clientRequestBuilder.build();
 		
 					Ping clientResponse = clientService.pong(clientController, clientRequest);
-					response = Pong.newBuilder().setSequenceNo(clientResponse.getSequenceNo()).setPongData(clientResponse.getPingPayload()).build();
+					if ( ext != null ) {
+						Integer repliedExt=clientResponse.getExtension(ExtendedPing.extendedIntField);
+						if ( repliedExt == null ) {
+							log.warn("Did not receive extension in reply to pong.");
+						} else if ( repliedExt.intValue() != ext.intValue() ) {
+							log.warn("Extension value mismatch in reply to pong.");
+						}
+					}
+					
+					Pong.Builder responseBuilder = Pong.newBuilder().setSequenceNo(clientResponse.getSequenceNo()).setPongData(clientResponse.getPingPayload());
+					if ( ext != null ) {
+						responseBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+					}
+					response = responseBuilder.build();
 				} else {
 					NonBlockingPongService.BlockingInterface clientService = NonBlockingPongService.newBlockingStub(channel);
 					ClientRpcController clientController = channel.newRpcController();
 					clientController.setTimeoutMs(request.getPongTimeoutMs());
 					
-					Pong clientRequest = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload()).build();
+					Pong.Builder clientRequestBuilder = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload());
+					if ( ext != null ) {
+						clientRequestBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+					}
+					Pong clientRequest = clientRequestBuilder.build();
 		
 					Ping clientResponse = clientService.pong(clientController, clientRequest);
-					response = Pong.newBuilder().setSequenceNo(clientResponse.getSequenceNo()).setPongData(clientResponse.getPingPayload()).build();
+					if ( ext != null ) {
+						Integer repliedExt=clientResponse.getExtension(ExtendedPing.extendedIntField);
+						if ( repliedExt == null ) {
+							log.warn("Did not receive extension in reply to pong.");
+						} else if ( repliedExt.intValue() != ext.intValue() ) {
+							log.warn("Extension value mismatch in reply to pong.");
+						}
+					}
+
+					Pong.Builder responseBuilder = Pong.newBuilder().setSequenceNo(clientResponse.getSequenceNo()).setPongData(clientResponse.getPingPayload());
+					if ( ext != null ) {
+						responseBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+					}
+					response = responseBuilder.build();
 				}
 			} else {
-				response = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongData(request.getPingPayload()).build();
+				Pong.Builder responseBuilder = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongData(request.getPingPayload());
+				if ( ext != null ) {
+					responseBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+				}
+				response = responseBuilder.build();
 			}
 			return response;
 		}
