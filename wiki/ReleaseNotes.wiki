@@ -2,6 +2,10 @@
 #labels Phase-Deploy,Featured
 What changes are made from release to release. Check SVN history for more details.
 
+= 3.1.1 =
+
+Issue 29: RpcServiceRegistry to use service's fullName for indexing to avoid duplicate name registration problems. 
+
 = 3.1.0 =
 
 Issue 28: Fix issues with protobuf extension registry to decode extensions.
