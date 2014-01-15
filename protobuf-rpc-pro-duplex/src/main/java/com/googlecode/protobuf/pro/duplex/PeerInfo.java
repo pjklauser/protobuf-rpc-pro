@@ -42,13 +42,29 @@ public class PeerInfo {
 	private String pid;
 	
 	/**
+	 * A "floating" client PeerInfo which is not bound to any local port, and has a new
+	 * random pid.
+	 */
+	public PeerInfo() {
+		this(null, -1);
+	}
+	
+	/**
+	 * A client PeerInfo which is not bound to any local port, but has a given pid.
+	 * @param pid
+	 */
+	public PeerInfo( String pid ) {
+		this(null, -1, pid);
+	}
+	
+	/**
 	 * Constructor to construct a PeerInfo with a specific localAddress and processId.
 	 * 
 	 * @param address
 	 * @param pid
 	 */
 	public PeerInfo( InetSocketAddress localAddress, String pid ) {
-		this(localAddress.getHostName(), localAddress.getPort());
+		this(localAddress.getHostName(), localAddress.getPort(), pid);
 	}
 	
 	/**

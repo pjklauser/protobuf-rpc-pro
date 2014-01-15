@@ -72,7 +72,9 @@ public class DuplexPingPongClient {
     	
 		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 100 );
 
-		DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory(client);
+		DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory();
+		clientFactory.setClientInfo(client); // forces a local port nr.
+		
 		clientFactory.setConnectResponseTimeoutMillis(10000);
 		clientFactory.setRpcServerCallExecutor(executor);
 		clientFactory.setCompression(compress);
