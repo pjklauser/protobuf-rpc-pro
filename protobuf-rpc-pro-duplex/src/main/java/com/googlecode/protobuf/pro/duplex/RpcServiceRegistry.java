@@ -18,12 +18,11 @@ package com.googlecode.protobuf.pro.duplex;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.jws.soap.SOAPBinding.Use;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.BlockingService;
+import com.google.protobuf.Descriptors;
 import com.google.protobuf.Service;
 
 /**
@@ -111,7 +110,7 @@ public class RpcServiceRegistry {
 	 * @param serviceImplementation
 	 */
 	public void removeService(Service serviceImplementation) {
-		String serviceName = serviceImplementation.getDescriptorForType().getName();
+		String serviceName = getServiceName(serviceImplementation.getDescriptorForType());
 		if ( serviceNameMap.remove(serviceName) != null ) {
 			
 			log.info("Removed " + serviceName);
@@ -131,7 +130,7 @@ public class RpcServiceRegistry {
 	}
 
 	private String addService(boolean allowTimeout, Service serviceImplementation) {
-		String serviceName = serviceImplementation.getDescriptorForType().getName();
+		String serviceName = getServiceName(serviceImplementation.getDescriptorForType());
 		if ( serviceNameMap.containsKey(serviceName) ) {
 			throw new IllegalStateException("Duplicate serviceName "+ serviceName);
 		}
@@ -142,7 +141,7 @@ public class RpcServiceRegistry {
 	}
 
 	private String addService(boolean allowTimeout, BlockingService serviceImplementation) {
-		String serviceName = serviceImplementation.getDescriptorForType().getName();
+		String serviceName = getServiceName(serviceImplementation.getDescriptorForType());
 		if ( serviceNameMap.containsKey(serviceName) ) {
 			throw new IllegalStateException("Duplicate serviceName "+ serviceName);
 		}
@@ -150,6 +149,11 @@ public class RpcServiceRegistry {
 		log.info("Registered Blocking " + serviceName + " allowTimeout="+(allowTimeout?"Y":"N"));
 		
 		return serviceName;
+	}
+	
+	//Issue 29: use FQN for services to avoid problems with duplicate service names in different pkgs.
+	private String getServiceName( Descriptors.ServiceDescriptor descriptor ) {
+		return descriptor.getFullName();
 	}
 	
 	public static class ServiceDescriptor {
