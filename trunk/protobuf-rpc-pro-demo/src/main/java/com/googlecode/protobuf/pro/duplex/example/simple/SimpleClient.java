@@ -69,7 +69,10 @@ public class SimpleClient {
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
 
 		try {
-			DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory(client);
+			DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory();
+			// force the use of a local port
+			// - normally you don't need this
+			clientFactory.setClientInfo(client);
 			
 	    	ExtensionRegistry r = ExtensionRegistry.newInstance();
 			PingPong.registerAllExtensions(r);

@@ -65,7 +65,17 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 	
 	private List<TcpConnectionEventListener> connectionEventListeners = new ArrayList<TcpConnectionEventListener>();
 
+	/**
+	 * Setting the clientInfo to a PeerInfo which has a hostname and port will bind the local TCP endpoint
+	 * to a specific port.
+	 * 
+	 * This will have the effect that only a single outgoing connection can be made to a RPC server.
+	 * This is useful only if the server is statefull and interested when the "same" client (re)connects. 
+	 * 
+	 * see Issue 30: https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=30
+	 */
 	private PeerInfo clientInfo;
+	
 	/**
 	 * Whether socket level communications between ALL clients peered with servers by this
 	 * Bootstrap should be compressed ( using ZLIB ).
@@ -83,8 +93,15 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 	private RpcLogger logger = new CategoryPerServiceLogger();
 	private long connectResponseTimeoutMillis = ClientConnectResponseHandler.DEFAULT_CONNECT_RESPONSE_TIMEOUT_MS;
 	
-    public DuplexTcpClientPipelineFactory( PeerInfo clientInfo ) {
-    	this.clientInfo = clientInfo;
+	/**
+	 * Create a factory for RpcClients.
+	 * 
+	 * To force use of a specific local port binding use {@link #setClientInfo(PeerInfo)}.
+	 * 
+	 * @param clientInfo
+	 */
+    public DuplexTcpClientPipelineFactory() {
+    	this.clientInfo = new PeerInfo();
     }
 
 	public RpcClient peerWith( PeerInfo serverInfo, Bootstrap bootstrap ) throws IOException {
@@ -112,18 +129,26 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
         if (remoteAddress == null) {
             throw new NullPointerException("remotedAddress");
         }
-        ChannelFuture connectFuture = bootstrap.connect(remoteAddress).awaitUninterruptibly();
+        InetSocketAddress localAddress = null;
+        if ( clientInfo.getHostName() != null ) {
+        	localAddress = new InetSocketAddress(clientInfo.getHostName(), clientInfo.getPort());
+        }
+        ChannelFuture connectFuture = bootstrap.connect(remoteAddress, localAddress).awaitUninterruptibly();
         
         if ( !connectFuture.isSuccess() ) {
     		throw new IOException("Failed to connect to " + remoteAddress, connectFuture.cause());
         }
         
         Channel channel = connectFuture.channel();
+        InetSocketAddress connectedAddress = (InetSocketAddress) channel.localAddress();
+        
+        PeerInfo effectiveClientInfo = new PeerInfo( clientInfo.getHostName() == null ? connectedAddress.getHostName() : clientInfo.getHostName(),
+        		connectedAddress.getPort(), clientInfo.getPid() );
         
 		ConnectRequest connectRequest = ConnectRequest.newBuilder()
-		.setClientHostName(clientInfo.getHostName())
-		.setClientPort(clientInfo.getPort())
-		.setClientPID(clientInfo.getPid())
+		.setClientHostName(effectiveClientInfo.getHostName())
+		.setClientPort(effectiveClientInfo.getPort())
+		.setClientPID(effectiveClientInfo.getPid())
 		.setCorrelationId(correlationId.incrementAndGet())
 		.setCompress(isCompression())
 		.build();
@@ -163,7 +188,7 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 			serverInfo = new PeerInfo(remoteAddress.getHostName(), remoteAddress.getPort() );
 		}
 		
-		RpcClient rpcClient = new RpcClient(channel, clientInfo, serverInfo, connectResponse.getCompress(), getRpcLogger(), getExtensionRegistry());
+		RpcClient rpcClient = new RpcClient(channel, effectiveClientInfo, serverInfo, connectResponse.getCompress(), getRpcLogger(), getExtensionRegistry());
 		
 		RpcClientHandler rpcClientHandler = completePipeline(rpcClient);
 		rpcClientHandler.notifyOpened();
@@ -286,7 +311,13 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 	}
 
 	/**
-	 * @param clientInfo the clientInfo to set
+	 * There can be only one peering with a single server if this method is used to
+	 * set a specific client peerInfo.
+	 * 
+	 * If you want to use a free client port each time, then use the default constructor and
+	 * never set this clientInfo.
+	 * 
+	 * @param clientInfo the clientInfo to set to force a local port binding.
 	 */
 	public void setClientInfo(PeerInfo clientInfo) {
 		this.clientInfo = clientInfo;

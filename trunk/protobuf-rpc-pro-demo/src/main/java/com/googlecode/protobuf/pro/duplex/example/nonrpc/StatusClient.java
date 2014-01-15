@@ -47,21 +47,18 @@ public class StatusClient {
 	private static RpcClientChannel channel = null;
 	
 	public static void main(String[] args) throws Exception {
-		if (args.length != 4) {
+		if (args.length != 2) {
 			System.err
-					.println("usage: <serverHostname> <serverPort> <clientHostname> <clientPort>");
+					.println("usage: <serverHostname> <serverPort>");
 			System.exit(-1);
 		}
 		String serverHostname = args[0];
 		int serverPort = Integer.parseInt(args[1]);
-		String clientHostname = args[2];
-		int clientPort = Integer.parseInt(args[3]);
 
-		PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
 
 		try {
-			DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory(client);
+			DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory();
 			clientFactory.setConnectResponseTimeoutMillis(10000);
 			clientFactory.setRpcServerCallExecutor(new ThreadPoolCallExecutor(3, 10));			
 			
