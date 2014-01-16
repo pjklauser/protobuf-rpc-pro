@@ -593,7 +593,7 @@ public class RpcClient implements RpcClientChannel {
 		}
 		
 		public String getServiceIdentifier() {
-			return methodDesc.getService().getName();
+			return methodDesc.getService().getFullName(); //Issue 29: use full name
 		}
 		
 		public String getMethodIdentifier() {
