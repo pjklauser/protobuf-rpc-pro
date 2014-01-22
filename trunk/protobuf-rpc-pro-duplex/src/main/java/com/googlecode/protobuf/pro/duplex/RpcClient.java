@@ -171,8 +171,8 @@ public class RpcClient implements RpcClientChannel {
 		while(!callback.isDone()) {
 			try {
 				if ( deadlineTSNano > 0 ) {
-					long timeToDeadline = deadlineTSNano - System.nanoTime();
-					if ( timeToDeadline <= 0 ) {
+					long timeToDeadlineNano = deadlineTSNano - System.nanoTime();
+					if ( timeToDeadlineNano <= 0 ) {
 						rpcController.getRpcClient().blockingCallTimeout(rpcController.getCorrelationId());
 						// this will pre-emptively timeout this call and set the callback done flag before returning.
 						// Issue25: infinite loop, assumption was race condition of timeout handling with correct response.
@@ -183,10 +183,12 @@ public class RpcClient implements RpcClientChannel {
 							break;
 						}
 					} else {
+						int timeToDeadlineMs = (int)(timeToDeadlineNano / 1000000l);
+						int remainderNano = (int)(timeToDeadlineNano - (timeToDeadlineMs*1000000l));
 						// we wait at most until the deadline.
 						synchronized(callback) {
 							if ( !callback.isDone() ) {
-								callback.wait(timeToDeadline);
+								callback.wait(timeToDeadlineMs,remainderNano);
 							}
 						}
 					}
