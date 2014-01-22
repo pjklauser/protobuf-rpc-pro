@@ -65,7 +65,9 @@ public class TimeoutChecker extends ScheduledThreadPoolExecutor implements RpcTi
 						RpcClient client = (RpcClient)c;
 						
 						if ( timeoutExecutor != null ) {
-							log.info("Timeout checking " + client);
+							if ( log.isDebugEnabled() ) {
+								log.debug("Timeout checking " + client);
+							}
 							if ( client.getRpcServer() != null ) {
 								client.getRpcServer().checkTimeouts(timeoutExecutor);
 							}
