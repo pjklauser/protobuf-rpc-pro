@@ -4,6 +4,14 @@ What changes are made from release to release. Check SVN history for more detail
 
 = 3.2.1 =
 
+Upgrade to Netty 4.0.15.Final
+
+Issue 31: debug loggig for timeout checker
+
+Issue 25: refix to wait correct number of nanos on client timeout.
+
+= 3.2.1 =
+
 Issue 29: RpcServiceRegistry to use service's fullName for indexing to avoid duplicate name registration problems. 
 (don't use 3.2 it is broken for this issue)
 
