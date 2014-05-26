@@ -15,6 +15,7 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +55,21 @@ public class RpcServiceRegistry {
 	}
 
 	/**
+	 * Return a map of service names to their descriptors.
+	 * @return
+	 */
+	public Map<String, ServiceDescriptor> getServices() {
+		return Collections.unmodifiableMap(serviceNameMap);
+	}
+	
+	/**
+	 * Clears all registered services.
+	 */
+	public void clear() {
+		serviceNameMap.clear();
+	}
+	
+	/**
 	 * Registers a Service implementation at an RPC server.
 	 * 
 	 * @param allowTimeout whether to allow client timeouts to cause service cancellation.
@@ -75,16 +91,6 @@ public class RpcServiceRegistry {
 	/**
 	 * Registers a BlockingService implementation at an RPC server.
 	 * 
-	 * @deprecated use {@link #registerService(BlockingService)}
-	 * @param serviceImplementation
-	 */
-	public void registerBlockingService(BlockingService serviceImplementation) {
-		addService(true, serviceImplementation);
-	}
-	
-	/**
-	 * Registers a BlockingService implementation at an RPC server.
-	 * 
 	 * @param allowTimeout whether to allow client timeouts to cause service cancellation.
 	 * @param serviceImplementation
 	 */
@@ -93,23 +99,26 @@ public class RpcServiceRegistry {
 	}
 
 	/**
-	 * Registers a BlockingService implementation at an RPC server.
-	 * 
-	 * @deprecated use {@link #addService(boolean, BlockingService)}
-	 * @param allowTimeout whether to allow client timeouts to cause service cancellation.
-	 * @param serviceImplementation
-	 */
-	public void registerBlockingService(boolean allowTimeout, BlockingService serviceImplementation) {
-		addService(allowTimeout, serviceImplementation);
-	}
-	
-	/**
 	 * Removes a Service and it's corresponding ExtensionRegistry if
 	 * one exists.
 	 * 
 	 * @param serviceImplementation
 	 */
 	public void removeService(Service serviceImplementation) {
+		String serviceName = getServiceName(serviceImplementation.getDescriptorForType());
+		if ( serviceNameMap.remove(serviceName) != null ) {
+			
+			log.info("Removed " + serviceName);
+		}
+	}
+
+	/**
+	 * Removes a BlockingService and it's corresponding ExtensionRegistry if
+	 * one exists.
+	 * 
+	 * @param serviceImplementation
+	 */
+	public void removeService(BlockingService serviceImplementation) {
 		String serviceName = getServiceName(serviceImplementation.getDescriptorForType());
 		if ( serviceNameMap.remove(serviceName) != null ) {
 			
