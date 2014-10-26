@@ -58,6 +58,8 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  * requests. If a RPC call comes in where a Thread is not ready to handle, you will receive
  * a "Server Overload" error.
  * 
+ * TODO find out the queue type which is linked and not blocking unlimited size.
+ *  
  * @author Peter Klauser
  *
  */

@@ -89,10 +89,10 @@ public final class DuplexProtocol {
     // @@protoc_insertion_point(enum_scope:ConnectErrorCode)
   }
 
-  public interface ConnectRequestOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ConnectRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ConnectRequest)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 correlationId = 1;
     /**
      * <code>required int32 correlationId = 1;</code>
      */
@@ -102,7 +102,6 @@ public final class DuplexProtocol {
      */
     int getCorrelationId();
 
-    // required string clientHostName = 2;
     /**
      * <code>required string clientHostName = 2;</code>
      */
@@ -117,7 +116,6 @@ public final class DuplexProtocol {
     com.google.protobuf.ByteString
         getClientHostNameBytes();
 
-    // required int32 clientPort = 3;
     /**
      * <code>required int32 clientPort = 3;</code>
      */
@@ -127,7 +125,6 @@ public final class DuplexProtocol {
      */
     int getClientPort();
 
-    // required string clientPID = 4;
     /**
      * <code>required string clientPID = 4;</code>
      */
@@ -142,7 +139,6 @@ public final class DuplexProtocol {
     com.google.protobuf.ByteString
         getClientPIDBytes();
 
-    // optional bool compress = 5;
     /**
      * <code>optional bool compress = 5;</code>
      */
@@ -156,8 +152,9 @@ public final class DuplexProtocol {
    * Protobuf type {@code ConnectRequest}
    */
   public static final class ConnectRequest extends
-      com.google.protobuf.GeneratedMessage
-      implements ConnectRequestOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:ConnectRequest)
+      ConnectRequestOrBuilder {
     // Use ConnectRequest.newBuilder() to construct.
     private ConnectRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -209,8 +206,9 @@ public final class DuplexProtocol {
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              clientHostName_ = input.readBytes();
+              clientHostName_ = bs;
               break;
             }
             case 24: {
@@ -219,8 +217,9 @@ public final class DuplexProtocol {
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              clientPID_ = input.readBytes();
+              clientPID_ = bs;
               break;
             }
             case 40: {
@@ -268,7 +267,6 @@ public final class DuplexProtocol {
     }
 
     private int bitField0_;
-    // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
     private int correlationId_;
     /**
@@ -284,7 +282,6 @@ public final class DuplexProtocol {
       return correlationId_;
     }
 
-    // required string clientHostName = 2;
     public static final int CLIENTHOSTNAME_FIELD_NUMBER = 2;
     private java.lang.Object clientHostName_;
     /**
@@ -327,7 +324,6 @@ public final class DuplexProtocol {
       }
     }
 
-    // required int32 clientPort = 3;
     public static final int CLIENTPORT_FIELD_NUMBER = 3;
     private int clientPort_;
     /**
@@ -343,7 +339,6 @@ public final class DuplexProtocol {
       return clientPort_;
     }
 
-    // required string clientPID = 4;
     public static final int CLIENTPID_FIELD_NUMBER = 4;
     private java.lang.Object clientPID_;
     /**
@@ -386,7 +381,6 @@ public final class DuplexProtocol {
       }
     }
 
-    // optional bool compress = 5;
     public static final int COMPRESS_FIELD_NUMBER = 5;
     private boolean compress_;
     /**
@@ -412,7 +406,8 @@ public final class DuplexProtocol {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasCorrelationId()) {
         memoizedIsInitialized = 0;
@@ -563,8 +558,9 @@ public final class DuplexProtocol {
      * Protobuf type {@code ConnectRequest}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:ConnectRequest)
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_ConnectRequest_descriptor;
@@ -733,7 +729,6 @@ public final class DuplexProtocol {
       }
       private int bitField0_;
 
-      // required int32 correlationId = 1;
       private int correlationId_ ;
       /**
        * <code>required int32 correlationId = 1;</code>
@@ -766,7 +761,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // required string clientHostName = 2;
       private java.lang.Object clientHostName_ = "";
       /**
        * <code>required string clientHostName = 2;</code>
@@ -780,9 +774,12 @@ public final class DuplexProtocol {
       public java.lang.String getClientHostName() {
         java.lang.Object ref = clientHostName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          clientHostName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            clientHostName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -840,7 +837,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // required int32 clientPort = 3;
       private int clientPort_ ;
       /**
        * <code>required int32 clientPort = 3;</code>
@@ -873,7 +869,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // required string clientPID = 4;
       private java.lang.Object clientPID_ = "";
       /**
        * <code>required string clientPID = 4;</code>
@@ -887,9 +882,12 @@ public final class DuplexProtocol {
       public java.lang.String getClientPID() {
         java.lang.Object ref = clientPID_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          clientPID_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            clientPID_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -947,7 +945,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // optional bool compress = 5;
       private boolean compress_ ;
       /**
        * <code>optional bool compress = 5;</code>
@@ -991,10 +988,10 @@ public final class DuplexProtocol {
     // @@protoc_insertion_point(class_scope:ConnectRequest)
   }
 
-  public interface ConnectResponseOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ConnectResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ConnectResponse)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 correlationId = 1;
     /**
      * <code>required int32 correlationId = 1;</code>
      */
@@ -1004,7 +1001,6 @@ public final class DuplexProtocol {
      */
     int getCorrelationId();
 
-    // optional string serverPID = 2;
     /**
      * <code>optional string serverPID = 2;</code>
      */
@@ -1019,7 +1015,6 @@ public final class DuplexProtocol {
     com.google.protobuf.ByteString
         getServerPIDBytes();
 
-    // optional .ConnectErrorCode errorCode = 3;
     /**
      * <code>optional .ConnectErrorCode errorCode = 3;</code>
      */
@@ -1029,7 +1024,6 @@ public final class DuplexProtocol {
      */
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode getErrorCode();
 
-    // optional bool compress = 4;
     /**
      * <code>optional bool compress = 4;</code>
      */
@@ -1043,8 +1037,9 @@ public final class DuplexProtocol {
    * Protobuf type {@code ConnectResponse}
    */
   public static final class ConnectResponse extends
-      com.google.protobuf.GeneratedMessage
-      implements ConnectResponseOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:ConnectResponse)
+      ConnectResponseOrBuilder {
     // Use ConnectResponse.newBuilder() to construct.
     private ConnectResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -1096,8 +1091,9 @@ public final class DuplexProtocol {
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              serverPID_ = input.readBytes();
+              serverPID_ = bs;
               break;
             }
             case 24: {
@@ -1156,7 +1152,6 @@ public final class DuplexProtocol {
     }
 
     private int bitField0_;
-    // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
     private int correlationId_;
     /**
@@ -1172,7 +1167,6 @@ public final class DuplexProtocol {
       return correlationId_;
     }
 
-    // optional string serverPID = 2;
     public static final int SERVERPID_FIELD_NUMBER = 2;
     private java.lang.Object serverPID_;
     /**
@@ -1215,7 +1209,6 @@ public final class DuplexProtocol {
       }
     }
 
-    // optional .ConnectErrorCode errorCode = 3;
     public static final int ERRORCODE_FIELD_NUMBER = 3;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode errorCode_;
     /**
@@ -1231,7 +1224,6 @@ public final class DuplexProtocol {
       return errorCode_;
     }
 
-    // optional bool compress = 4;
     public static final int COMPRESS_FIELD_NUMBER = 4;
     private boolean compress_;
     /**
@@ -1256,7 +1248,8 @@ public final class DuplexProtocol {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasCorrelationId()) {
         memoizedIsInitialized = 0;
@@ -1388,8 +1381,9 @@ public final class DuplexProtocol {
      * Protobuf type {@code ConnectResponse}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:ConnectResponse)
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_ConnectResponse_descriptor;
@@ -1535,7 +1529,6 @@ public final class DuplexProtocol {
       }
       private int bitField0_;
 
-      // required int32 correlationId = 1;
       private int correlationId_ ;
       /**
        * <code>required int32 correlationId = 1;</code>
@@ -1568,7 +1561,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // optional string serverPID = 2;
       private java.lang.Object serverPID_ = "";
       /**
        * <code>optional string serverPID = 2;</code>
@@ -1582,9 +1574,12 @@ public final class DuplexProtocol {
       public java.lang.String getServerPID() {
         java.lang.Object ref = serverPID_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          serverPID_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            serverPID_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -1642,7 +1637,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // optional .ConnectErrorCode errorCode = 3;
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode errorCode_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectErrorCode.ALREADY_CONNECTED;
       /**
        * <code>optional .ConnectErrorCode errorCode = 3;</code>
@@ -1678,7 +1672,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // optional bool compress = 4;
       private boolean compress_ ;
       /**
        * <code>optional bool compress = 4;</code>
@@ -1722,10 +1715,10 @@ public final class DuplexProtocol {
     // @@protoc_insertion_point(class_scope:ConnectResponse)
   }
 
-  public interface RpcRequestOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface RpcRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:RpcRequest)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 correlationId = 1;
     /**
      * <code>required int32 correlationId = 1;</code>
      */
@@ -1735,7 +1728,6 @@ public final class DuplexProtocol {
      */
     int getCorrelationId();
 
-    // required string serviceIdentifier = 2;
     /**
      * <code>required string serviceIdentifier = 2;</code>
      */
@@ -1750,7 +1742,6 @@ public final class DuplexProtocol {
     com.google.protobuf.ByteString
         getServiceIdentifierBytes();
 
-    // required string methodIdentifier = 3;
     /**
      * <code>required string methodIdentifier = 3;</code>
      */
@@ -1765,7 +1756,6 @@ public final class DuplexProtocol {
     com.google.protobuf.ByteString
         getMethodIdentifierBytes();
 
-    // required bytes requestBytes = 4;
     /**
      * <code>required bytes requestBytes = 4;</code>
      */
@@ -1775,7 +1765,6 @@ public final class DuplexProtocol {
      */
     com.google.protobuf.ByteString getRequestBytes();
 
-    // optional int32 timeoutMs = 5;
     /**
      * <code>optional int32 timeoutMs = 5;</code>
      */
@@ -1789,8 +1778,9 @@ public final class DuplexProtocol {
    * Protobuf type {@code RpcRequest}
    */
   public static final class RpcRequest extends
-      com.google.protobuf.GeneratedMessage
-      implements RpcRequestOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:RpcRequest)
+      RpcRequestOrBuilder {
     // Use RpcRequest.newBuilder() to construct.
     private RpcRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -1842,13 +1832,15 @@ public final class DuplexProtocol {
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              serviceIdentifier_ = input.readBytes();
+              serviceIdentifier_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              methodIdentifier_ = input.readBytes();
+              methodIdentifier_ = bs;
               break;
             }
             case 34: {
@@ -1901,7 +1893,6 @@ public final class DuplexProtocol {
     }
 
     private int bitField0_;
-    // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
     private int correlationId_;
     /**
@@ -1917,7 +1908,6 @@ public final class DuplexProtocol {
       return correlationId_;
     }
 
-    // required string serviceIdentifier = 2;
     public static final int SERVICEIDENTIFIER_FIELD_NUMBER = 2;
     private java.lang.Object serviceIdentifier_;
     /**
@@ -1960,7 +1950,6 @@ public final class DuplexProtocol {
       }
     }
 
-    // required string methodIdentifier = 3;
     public static final int METHODIDENTIFIER_FIELD_NUMBER = 3;
     private java.lang.Object methodIdentifier_;
     /**
@@ -2003,7 +1992,6 @@ public final class DuplexProtocol {
       }
     }
 
-    // required bytes requestBytes = 4;
     public static final int REQUESTBYTES_FIELD_NUMBER = 4;
     private com.google.protobuf.ByteString requestBytes_;
     /**
@@ -2019,7 +2007,6 @@ public final class DuplexProtocol {
       return requestBytes_;
     }
 
-    // optional int32 timeoutMs = 5;
     public static final int TIMEOUTMS_FIELD_NUMBER = 5;
     private int timeoutMs_;
     /**
@@ -2045,7 +2032,8 @@ public final class DuplexProtocol {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasCorrelationId()) {
         memoizedIsInitialized = 0;
@@ -2196,8 +2184,9 @@ public final class DuplexProtocol {
      * Protobuf type {@code RpcRequest}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:RpcRequest)
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcRequest_descriptor;
@@ -2366,7 +2355,6 @@ public final class DuplexProtocol {
       }
       private int bitField0_;
 
-      // required int32 correlationId = 1;
       private int correlationId_ ;
       /**
        * <code>required int32 correlationId = 1;</code>
@@ -2399,7 +2387,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // required string serviceIdentifier = 2;
       private java.lang.Object serviceIdentifier_ = "";
       /**
        * <code>required string serviceIdentifier = 2;</code>
@@ -2413,9 +2400,12 @@ public final class DuplexProtocol {
       public java.lang.String getServiceIdentifier() {
         java.lang.Object ref = serviceIdentifier_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          serviceIdentifier_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            serviceIdentifier_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2473,7 +2463,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // required string methodIdentifier = 3;
       private java.lang.Object methodIdentifier_ = "";
       /**
        * <code>required string methodIdentifier = 3;</code>
@@ -2487,9 +2476,12 @@ public final class DuplexProtocol {
       public java.lang.String getMethodIdentifier() {
         java.lang.Object ref = methodIdentifier_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          methodIdentifier_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            methodIdentifier_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2547,7 +2539,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // required bytes requestBytes = 4;
       private com.google.protobuf.ByteString requestBytes_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>required bytes requestBytes = 4;</code>
@@ -2583,7 +2574,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // optional int32 timeoutMs = 5;
       private int timeoutMs_ ;
       /**
        * <code>optional int32 timeoutMs = 5;</code>
@@ -2627,10 +2617,10 @@ public final class DuplexProtocol {
     // @@protoc_insertion_point(class_scope:RpcRequest)
   }
 
-  public interface RpcResponseOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface RpcResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:RpcResponse)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 correlationId = 1;
     /**
      * <code>required int32 correlationId = 1;</code>
      */
@@ -2640,7 +2630,6 @@ public final class DuplexProtocol {
      */
     int getCorrelationId();
 
-    // required bytes responseBytes = 2;
     /**
      * <code>required bytes responseBytes = 2;</code>
      */
@@ -2654,8 +2643,9 @@ public final class DuplexProtocol {
    * Protobuf type {@code RpcResponse}
    */
   public static final class RpcResponse extends
-      com.google.protobuf.GeneratedMessage
-      implements RpcResponseOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:RpcResponse)
+      RpcResponseOrBuilder {
     // Use RpcResponse.newBuilder() to construct.
     private RpcResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -2751,7 +2741,6 @@ public final class DuplexProtocol {
     }
 
     private int bitField0_;
-    // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
     private int correlationId_;
     /**
@@ -2767,7 +2756,6 @@ public final class DuplexProtocol {
       return correlationId_;
     }
 
-    // required bytes responseBytes = 2;
     public static final int RESPONSEBYTES_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString responseBytes_;
     /**
@@ -2790,7 +2778,8 @@ public final class DuplexProtocol {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasCorrelationId()) {
         memoizedIsInitialized = 0;
@@ -2912,8 +2901,9 @@ public final class DuplexProtocol {
      * Protobuf type {@code RpcResponse}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:RpcResponse)
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcResponse_descriptor;
@@ -3043,7 +3033,6 @@ public final class DuplexProtocol {
       }
       private int bitField0_;
 
-      // required int32 correlationId = 1;
       private int correlationId_ ;
       /**
        * <code>required int32 correlationId = 1;</code>
@@ -3076,7 +3065,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // required bytes responseBytes = 2;
       private com.google.protobuf.ByteString responseBytes_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>required bytes responseBytes = 2;</code>
@@ -3123,10 +3111,10 @@ public final class DuplexProtocol {
     // @@protoc_insertion_point(class_scope:RpcResponse)
   }
 
-  public interface RpcErrorOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface RpcErrorOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:RpcError)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 correlationId = 1;
     /**
      * <code>required int32 correlationId = 1;</code>
      */
@@ -3136,7 +3124,6 @@ public final class DuplexProtocol {
      */
     int getCorrelationId();
 
-    // required string errorMessage = 2;
     /**
      * <code>required string errorMessage = 2;</code>
      */
@@ -3155,8 +3142,9 @@ public final class DuplexProtocol {
    * Protobuf type {@code RpcError}
    */
   public static final class RpcError extends
-      com.google.protobuf.GeneratedMessage
-      implements RpcErrorOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:RpcError)
+      RpcErrorOrBuilder {
     // Use RpcError.newBuilder() to construct.
     private RpcError(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -3208,8 +3196,9 @@ public final class DuplexProtocol {
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              errorMessage_ = input.readBytes();
+              errorMessage_ = bs;
               break;
             }
           }
@@ -3252,7 +3241,6 @@ public final class DuplexProtocol {
     }
 
     private int bitField0_;
-    // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
     private int correlationId_;
     /**
@@ -3268,7 +3256,6 @@ public final class DuplexProtocol {
       return correlationId_;
     }
 
-    // required string errorMessage = 2;
     public static final int ERRORMESSAGE_FIELD_NUMBER = 2;
     private java.lang.Object errorMessage_;
     /**
@@ -3318,7 +3305,8 @@ public final class DuplexProtocol {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasCorrelationId()) {
         memoizedIsInitialized = 0;
@@ -3440,8 +3428,9 @@ public final class DuplexProtocol {
      * Protobuf type {@code RpcError}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:RpcError)
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcError_descriptor;
@@ -3573,7 +3562,6 @@ public final class DuplexProtocol {
       }
       private int bitField0_;
 
-      // required int32 correlationId = 1;
       private int correlationId_ ;
       /**
        * <code>required int32 correlationId = 1;</code>
@@ -3606,7 +3594,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // required string errorMessage = 2;
       private java.lang.Object errorMessage_ = "";
       /**
        * <code>required string errorMessage = 2;</code>
@@ -3620,9 +3607,12 @@ public final class DuplexProtocol {
       public java.lang.String getErrorMessage() {
         java.lang.Object ref = errorMessage_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          errorMessage_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            errorMessage_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3691,10 +3681,10 @@ public final class DuplexProtocol {
     // @@protoc_insertion_point(class_scope:RpcError)
   }
 
-  public interface RpcCancelOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface RpcCancelOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:RpcCancel)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 correlationId = 1;
     /**
      * <code>required int32 correlationId = 1;</code>
      */
@@ -3708,8 +3698,9 @@ public final class DuplexProtocol {
    * Protobuf type {@code RpcCancel}
    */
   public static final class RpcCancel extends
-      com.google.protobuf.GeneratedMessage
-      implements RpcCancelOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:RpcCancel)
+      RpcCancelOrBuilder {
     // Use RpcCancel.newBuilder() to construct.
     private RpcCancel(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -3800,7 +3791,6 @@ public final class DuplexProtocol {
     }
 
     private int bitField0_;
-    // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
     private int correlationId_;
     /**
@@ -3822,7 +3812,8 @@ public final class DuplexProtocol {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasCorrelationId()) {
         memoizedIsInitialized = 0;
@@ -3933,8 +3924,9 @@ public final class DuplexProtocol {
      * Protobuf type {@code RpcCancel}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:RpcCancel)
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_RpcCancel_descriptor;
@@ -4051,7 +4043,6 @@ public final class DuplexProtocol {
       }
       private int bitField0_;
 
-      // required int32 correlationId = 1;
       private int correlationId_ ;
       /**
        * <code>required int32 correlationId = 1;</code>
@@ -4095,10 +4086,10 @@ public final class DuplexProtocol {
     // @@protoc_insertion_point(class_scope:RpcCancel)
   }
 
-  public interface OobResponseOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface OobResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:OobResponse)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 correlationId = 1;
     /**
      * <code>required int32 correlationId = 1;</code>
      */
@@ -4108,7 +4099,6 @@ public final class DuplexProtocol {
      */
     int getCorrelationId();
 
-    // required bytes messageBytes = 2;
     /**
      * <code>required bytes messageBytes = 2;</code>
      */
@@ -4122,8 +4112,9 @@ public final class DuplexProtocol {
    * Protobuf type {@code OobResponse}
    */
   public static final class OobResponse extends
-      com.google.protobuf.GeneratedMessage
-      implements OobResponseOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:OobResponse)
+      OobResponseOrBuilder {
     // Use OobResponse.newBuilder() to construct.
     private OobResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -4219,7 +4210,6 @@ public final class DuplexProtocol {
     }
 
     private int bitField0_;
-    // required int32 correlationId = 1;
     public static final int CORRELATIONID_FIELD_NUMBER = 1;
     private int correlationId_;
     /**
@@ -4235,7 +4225,6 @@ public final class DuplexProtocol {
       return correlationId_;
     }
 
-    // required bytes messageBytes = 2;
     public static final int MESSAGEBYTES_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString messageBytes_;
     /**
@@ -4258,7 +4247,8 @@ public final class DuplexProtocol {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasCorrelationId()) {
         memoizedIsInitialized = 0;
@@ -4380,8 +4370,9 @@ public final class DuplexProtocol {
      * Protobuf type {@code OobResponse}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:OobResponse)
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_OobResponse_descriptor;
@@ -4511,7 +4502,6 @@ public final class DuplexProtocol {
       }
       private int bitField0_;
 
-      // required int32 correlationId = 1;
       private int correlationId_ ;
       /**
        * <code>required int32 correlationId = 1;</code>
@@ -4544,7 +4534,6 @@ public final class DuplexProtocol {
         return this;
       }
 
-      // required bytes messageBytes = 2;
       private com.google.protobuf.ByteString messageBytes_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>required bytes messageBytes = 2;</code>
@@ -4591,10 +4580,10 @@ public final class DuplexProtocol {
     // @@protoc_insertion_point(class_scope:OobResponse)
   }
 
-  public interface OobMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface OobMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:OobMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required bytes messageBytes = 1;
     /**
      * <code>required bytes messageBytes = 1;</code>
      */
@@ -4608,8 +4597,9 @@ public final class DuplexProtocol {
    * Protobuf type {@code OobMessage}
    */
   public static final class OobMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements OobMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:OobMessage)
+      OobMessageOrBuilder {
     // Use OobMessage.newBuilder() to construct.
     private OobMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -4700,7 +4690,6 @@ public final class DuplexProtocol {
     }
 
     private int bitField0_;
-    // required bytes messageBytes = 1;
     public static final int MESSAGEBYTES_FIELD_NUMBER = 1;
     private com.google.protobuf.ByteString messageBytes_;
     /**
@@ -4722,7 +4711,8 @@ public final class DuplexProtocol {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasMessageBytes()) {
         memoizedIsInitialized = 0;
@@ -4833,8 +4823,9 @@ public final class DuplexProtocol {
      * Protobuf type {@code OobMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:OobMessage)
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_OobMessage_descriptor;
@@ -4951,7 +4942,6 @@ public final class DuplexProtocol {
       }
       private int bitField0_;
 
-      // required bytes messageBytes = 1;
       private com.google.protobuf.ByteString messageBytes_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>required bytes messageBytes = 1;</code>
@@ -4999,10 +4989,10 @@ public final class DuplexProtocol {
   }
 
   public interface WirePayloadOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:WirePayload)
       com.google.protobuf.GeneratedMessage.
           ExtendableMessageOrBuilder<WirePayload> {
 
-    // optional .ConnectRequest connectRequest = 1;
     /**
      * <code>optional .ConnectRequest connectRequest = 1;</code>
      */
@@ -5016,7 +5006,6 @@ public final class DuplexProtocol {
      */
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder getConnectRequestOrBuilder();
 
-    // optional .ConnectResponse connectResponse = 2;
     /**
      * <code>optional .ConnectResponse connectResponse = 2;</code>
      */
@@ -5030,7 +5019,6 @@ public final class DuplexProtocol {
      */
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder getConnectResponseOrBuilder();
 
-    // optional .RpcRequest rpcRequest = 3;
     /**
      * <code>optional .RpcRequest rpcRequest = 3;</code>
      */
@@ -5044,7 +5032,6 @@ public final class DuplexProtocol {
      */
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder getRpcRequestOrBuilder();
 
-    // optional .RpcResponse rpcResponse = 4;
     /**
      * <code>optional .RpcResponse rpcResponse = 4;</code>
      */
@@ -5058,7 +5045,6 @@ public final class DuplexProtocol {
      */
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder getRpcResponseOrBuilder();
 
-    // optional .RpcError rpcError = 5;
     /**
      * <code>optional .RpcError rpcError = 5;</code>
      */
@@ -5072,7 +5058,6 @@ public final class DuplexProtocol {
      */
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder getRpcErrorOrBuilder();
 
-    // optional .RpcCancel rpcCancel = 6;
     /**
      * <code>optional .RpcCancel rpcCancel = 6;</code>
      */
@@ -5086,7 +5071,6 @@ public final class DuplexProtocol {
      */
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder getRpcCancelOrBuilder();
 
-    // optional .OobResponse oobResponse = 7;
     /**
      * <code>optional .OobResponse oobResponse = 7;</code>
      *
@@ -5115,7 +5099,6 @@ public final class DuplexProtocol {
      */
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder getOobResponseOrBuilder();
 
-    // optional .OobMessage oobMessage = 8;
     /**
      * <code>optional .OobMessage oobMessage = 8;</code>
      *
@@ -5141,7 +5124,6 @@ public final class DuplexProtocol {
      */
     com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder getOobMessageOrBuilder();
 
-    // optional .OobMessage transparentMessage = 100;
     /**
      * <code>optional .OobMessage transparentMessage = 100;</code>
      *
@@ -5175,7 +5157,9 @@ public final class DuplexProtocol {
    */
   public static final class WirePayload extends
       com.google.protobuf.GeneratedMessage.ExtendableMessage<
-        WirePayload> implements WirePayloadOrBuilder {
+        WirePayload> implements
+      // @@protoc_insertion_point(message_implements:WirePayload)
+      WirePayloadOrBuilder {
     // Use WirePayload.newBuilder() to construct.
     private WirePayload(com.google.protobuf.GeneratedMessage.ExtendableBuilder<com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload, ?> builder) {
       super(builder);
@@ -5378,7 +5362,6 @@ public final class DuplexProtocol {
     }
 
     private int bitField0_;
-    // optional .ConnectRequest connectRequest = 1;
     public static final int CONNECTREQUEST_FIELD_NUMBER = 1;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest connectRequest_;
     /**
@@ -5400,7 +5383,6 @@ public final class DuplexProtocol {
       return connectRequest_;
     }
 
-    // optional .ConnectResponse connectResponse = 2;
     public static final int CONNECTRESPONSE_FIELD_NUMBER = 2;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse connectResponse_;
     /**
@@ -5422,7 +5404,6 @@ public final class DuplexProtocol {
       return connectResponse_;
     }
 
-    // optional .RpcRequest rpcRequest = 3;
     public static final int RPCREQUEST_FIELD_NUMBER = 3;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest rpcRequest_;
     /**
@@ -5444,7 +5425,6 @@ public final class DuplexProtocol {
       return rpcRequest_;
     }
 
-    // optional .RpcResponse rpcResponse = 4;
     public static final int RPCRESPONSE_FIELD_NUMBER = 4;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse rpcResponse_;
     /**
@@ -5466,7 +5446,6 @@ public final class DuplexProtocol {
       return rpcResponse_;
     }
 
-    // optional .RpcError rpcError = 5;
     public static final int RPCERROR_FIELD_NUMBER = 5;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError rpcError_;
     /**
@@ -5488,7 +5467,6 @@ public final class DuplexProtocol {
       return rpcError_;
     }
 
-    // optional .RpcCancel rpcCancel = 6;
     public static final int RPCCANCEL_FIELD_NUMBER = 6;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel rpcCancel_;
     /**
@@ -5510,7 +5488,6 @@ public final class DuplexProtocol {
       return rpcCancel_;
     }
 
-    // optional .OobResponse oobResponse = 7;
     public static final int OOBRESPONSE_FIELD_NUMBER = 7;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse oobResponse_;
     /**
@@ -5547,7 +5524,6 @@ public final class DuplexProtocol {
       return oobResponse_;
     }
 
-    // optional .OobMessage oobMessage = 8;
     public static final int OOBMESSAGE_FIELD_NUMBER = 8;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage oobMessage_;
     /**
@@ -5581,7 +5557,6 @@ public final class DuplexProtocol {
       return oobMessage_;
     }
 
-    // optional .OobMessage transparentMessage = 100;
     public static final int TRANSPARENTMESSAGE_FIELD_NUMBER = 100;
     private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage transparentMessage_;
     /**
@@ -5632,7 +5607,8 @@ public final class DuplexProtocol {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (hasConnectRequest()) {
         if (!getConnectRequest().isInitialized()) {
@@ -5859,7 +5835,9 @@ public final class DuplexProtocol {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.ExtendableBuilder<
-          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload, Builder> implements com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayloadOrBuilder {
+          com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload, Builder> implements
+        // @@protoc_insertion_point(builder_implements:WirePayload)
+        com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayloadOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.internal_static_WirePayload_descriptor;
@@ -6184,7 +6162,6 @@ public final class DuplexProtocol {
       }
       private int bitField0_;
 
-      // optional .ConnectRequest connectRequest = 1;
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest connectRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder> connectRequestBuilder_;
@@ -6293,7 +6270,7 @@ public final class DuplexProtocol {
         if (connectRequestBuilder_ == null) {
           connectRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequest.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectRequestOrBuilder>(
-                  connectRequest_,
+                  getConnectRequest(),
                   getParentForChildren(),
                   isClean());
           connectRequest_ = null;
@@ -6301,7 +6278,6 @@ public final class DuplexProtocol {
         return connectRequestBuilder_;
       }
 
-      // optional .ConnectResponse connectResponse = 2;
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse connectResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder> connectResponseBuilder_;
@@ -6410,7 +6386,7 @@ public final class DuplexProtocol {
         if (connectResponseBuilder_ == null) {
           connectResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponseOrBuilder>(
-                  connectResponse_,
+                  getConnectResponse(),
                   getParentForChildren(),
                   isClean());
           connectResponse_ = null;
@@ -6418,7 +6394,6 @@ public final class DuplexProtocol {
         return connectResponseBuilder_;
       }
 
-      // optional .RpcRequest rpcRequest = 3;
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest rpcRequest_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder> rpcRequestBuilder_;
@@ -6527,7 +6502,7 @@ public final class DuplexProtocol {
         if (rpcRequestBuilder_ == null) {
           rpcRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequestOrBuilder>(
-                  rpcRequest_,
+                  getRpcRequest(),
                   getParentForChildren(),
                   isClean());
           rpcRequest_ = null;
@@ -6535,7 +6510,6 @@ public final class DuplexProtocol {
         return rpcRequestBuilder_;
       }
 
-      // optional .RpcResponse rpcResponse = 4;
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse rpcResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder> rpcResponseBuilder_;
@@ -6644,7 +6618,7 @@ public final class DuplexProtocol {
         if (rpcResponseBuilder_ == null) {
           rpcResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponseOrBuilder>(
-                  rpcResponse_,
+                  getRpcResponse(),
                   getParentForChildren(),
                   isClean());
           rpcResponse_ = null;
@@ -6652,7 +6626,6 @@ public final class DuplexProtocol {
         return rpcResponseBuilder_;
       }
 
-      // optional .RpcError rpcError = 5;
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError rpcError_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder> rpcErrorBuilder_;
@@ -6761,7 +6734,7 @@ public final class DuplexProtocol {
         if (rpcErrorBuilder_ == null) {
           rpcErrorBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcErrorOrBuilder>(
-                  rpcError_,
+                  getRpcError(),
                   getParentForChildren(),
                   isClean());
           rpcError_ = null;
@@ -6769,7 +6742,6 @@ public final class DuplexProtocol {
         return rpcErrorBuilder_;
       }
 
-      // optional .RpcCancel rpcCancel = 6;
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel rpcCancel_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder> rpcCancelBuilder_;
@@ -6878,7 +6850,7 @@ public final class DuplexProtocol {
         if (rpcCancelBuilder_ == null) {
           rpcCancelBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancelOrBuilder>(
-                  rpcCancel_,
+                  getRpcCancel(),
                   getParentForChildren(),
                   isClean());
           rpcCancel_ = null;
@@ -6886,7 +6858,6 @@ public final class DuplexProtocol {
         return rpcCancelBuilder_;
       }
 
-      // optional .OobResponse oobResponse = 7;
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse oobResponse_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder> oobResponseBuilder_;
@@ -7040,7 +7011,7 @@ public final class DuplexProtocol {
         if (oobResponseBuilder_ == null) {
           oobResponseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponseOrBuilder>(
-                  oobResponse_,
+                  getOobResponse(),
                   getParentForChildren(),
                   isClean());
           oobResponse_ = null;
@@ -7048,7 +7019,6 @@ public final class DuplexProtocol {
         return oobResponseBuilder_;
       }
 
-      // optional .OobMessage oobMessage = 8;
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage oobMessage_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder> oobMessageBuilder_;
@@ -7193,7 +7163,7 @@ public final class DuplexProtocol {
         if (oobMessageBuilder_ == null) {
           oobMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder>(
-                  oobMessage_,
+                  getOobMessage(),
                   getParentForChildren(),
                   isClean());
           oobMessage_ = null;
@@ -7201,7 +7171,6 @@ public final class DuplexProtocol {
         return oobMessageBuilder_;
       }
 
-      // optional .OobMessage transparentMessage = 100;
       private com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage transparentMessage_ = com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder> transparentMessageBuilder_;
@@ -7355,7 +7324,7 @@ public final class DuplexProtocol {
         if (transparentMessageBuilder_ == null) {
           transparentMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage.Builder, com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessageOrBuilder>(
-                  transparentMessage_,
+                  getTransparentMessage(),
                   getParentForChildren(),
                   isClean());
           transparentMessage_ = null;
@@ -7374,47 +7343,47 @@ public final class DuplexProtocol {
     // @@protoc_insertion_point(class_scope:WirePayload)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ConnectRequest_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_ConnectRequest_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ConnectResponse_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_ConnectResponse_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_RpcRequest_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_RpcRequest_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_RpcResponse_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_RpcResponse_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_RpcError_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_RpcError_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_RpcCancel_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_RpcCancel_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_OobResponse_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_OobResponse_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_OobMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_OobMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_WirePayload_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -7458,71 +7427,71 @@ public final class DuplexProtocol {
       "reB\016DuplexProtocolH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_ConnectRequest_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_ConnectRequest_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_ConnectRequest_descriptor,
-              new java.lang.String[] { "CorrelationId", "ClientHostName", "ClientPort", "ClientPID", "Compress", });
-          internal_static_ConnectResponse_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_ConnectResponse_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_ConnectResponse_descriptor,
-              new java.lang.String[] { "CorrelationId", "ServerPID", "ErrorCode", "Compress", });
-          internal_static_RpcRequest_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_RpcRequest_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_RpcRequest_descriptor,
-              new java.lang.String[] { "CorrelationId", "ServiceIdentifier", "MethodIdentifier", "RequestBytes", "TimeoutMs", });
-          internal_static_RpcResponse_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_RpcResponse_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_RpcResponse_descriptor,
-              new java.lang.String[] { "CorrelationId", "ResponseBytes", });
-          internal_static_RpcError_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_RpcError_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_RpcError_descriptor,
-              new java.lang.String[] { "CorrelationId", "ErrorMessage", });
-          internal_static_RpcCancel_descriptor =
-            getDescriptor().getMessageTypes().get(5);
-          internal_static_RpcCancel_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_RpcCancel_descriptor,
-              new java.lang.String[] { "CorrelationId", });
-          internal_static_OobResponse_descriptor =
-            getDescriptor().getMessageTypes().get(6);
-          internal_static_OobResponse_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_OobResponse_descriptor,
-              new java.lang.String[] { "CorrelationId", "MessageBytes", });
-          internal_static_OobMessage_descriptor =
-            getDescriptor().getMessageTypes().get(7);
-          internal_static_OobMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_OobMessage_descriptor,
-              new java.lang.String[] { "MessageBytes", });
-          internal_static_WirePayload_descriptor =
-            getDescriptor().getMessageTypes().get(8);
-          internal_static_WirePayload_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_WirePayload_descriptor,
-              new java.lang.String[] { "ConnectRequest", "ConnectResponse", "RpcRequest", "RpcResponse", "RpcError", "RpcCancel", "OobResponse", "OobMessage", "TransparentMessage", });
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
+    internal_static_ConnectRequest_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_ConnectRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_ConnectRequest_descriptor,
+        new java.lang.String[] { "CorrelationId", "ClientHostName", "ClientPort", "ClientPID", "Compress", });
+    internal_static_ConnectResponse_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_ConnectResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_ConnectResponse_descriptor,
+        new java.lang.String[] { "CorrelationId", "ServerPID", "ErrorCode", "Compress", });
+    internal_static_RpcRequest_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_RpcRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_RpcRequest_descriptor,
+        new java.lang.String[] { "CorrelationId", "ServiceIdentifier", "MethodIdentifier", "RequestBytes", "TimeoutMs", });
+    internal_static_RpcResponse_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_RpcResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_RpcResponse_descriptor,
+        new java.lang.String[] { "CorrelationId", "ResponseBytes", });
+    internal_static_RpcError_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_RpcError_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_RpcError_descriptor,
+        new java.lang.String[] { "CorrelationId", "ErrorMessage", });
+    internal_static_RpcCancel_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_RpcCancel_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_RpcCancel_descriptor,
+        new java.lang.String[] { "CorrelationId", });
+    internal_static_OobResponse_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_OobResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_OobResponse_descriptor,
+        new java.lang.String[] { "CorrelationId", "MessageBytes", });
+    internal_static_OobMessage_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_OobMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_OobMessage_descriptor,
+        new java.lang.String[] { "MessageBytes", });
+    internal_static_WirePayload_descriptor =
+      getDescriptor().getMessageTypes().get(8);
+    internal_static_WirePayload_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_WirePayload_descriptor,
+        new java.lang.String[] { "ConnectRequest", "ConnectResponse", "RpcRequest", "RpcResponse", "RpcError", "RpcCancel", "OobResponse", "OobMessage", "TransparentMessage", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
