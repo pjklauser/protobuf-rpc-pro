@@ -42,6 +42,7 @@ import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPongS
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
+import com.googlecode.protobuf.pro.duplex.logging.NullLogger;
 import com.googlecode.protobuf.pro.duplex.timeout.RpcTimeoutChecker;
 import com.googlecode.protobuf.pro.duplex.timeout.RpcTimeoutExecutor;
 import com.googlecode.protobuf.pro.duplex.timeout.TimeoutChecker;
@@ -88,6 +89,9 @@ public class DuplexPingPongClient {
         	
         	clientFactory.setSslContext(sslCtx);
         }
+
+        NullLogger logger = new NullLogger();
+        clientFactory.setRpcLogger(logger);
 
         RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(1,5);
 		RpcTimeoutChecker checker = new TimeoutChecker();
