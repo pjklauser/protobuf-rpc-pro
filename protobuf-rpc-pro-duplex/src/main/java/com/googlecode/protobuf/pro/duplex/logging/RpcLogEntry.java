@@ -8,10 +8,10 @@ public final class RpcLogEntry {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface PayloadContentOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface PayloadContentOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:PayloadContent)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required string uuid = 1;
     /**
      * <code>required string uuid = 1;</code>
      *
@@ -38,7 +38,6 @@ public final class RpcLogEntry {
     com.google.protobuf.ByteString
         getUuidBytes();
 
-    // required string content = 2;
     /**
      * <code>required string content = 2;</code>
      *
@@ -69,8 +68,9 @@ public final class RpcLogEntry {
    * Protobuf type {@code PayloadContent}
    */
   public static final class PayloadContent extends
-      com.google.protobuf.GeneratedMessage
-      implements PayloadContentOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:PayloadContent)
+      PayloadContentOrBuilder {
     // Use PayloadContent.newBuilder() to construct.
     private PayloadContent(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -117,13 +117,15 @@ public final class RpcLogEntry {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              uuid_ = input.readBytes();
+              uuid_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              content_ = input.readBytes();
+              content_ = bs;
               break;
             }
           }
@@ -166,7 +168,6 @@ public final class RpcLogEntry {
     }
 
     private int bitField0_;
-    // required string uuid = 1;
     public static final int UUID_FIELD_NUMBER = 1;
     private java.lang.Object uuid_;
     /**
@@ -221,7 +222,6 @@ public final class RpcLogEntry {
       }
     }
 
-    // required string content = 2;
     public static final int CONTENT_FIELD_NUMBER = 2;
     private java.lang.Object content_;
     /**
@@ -283,7 +283,8 @@ public final class RpcLogEntry {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasUuid()) {
         memoizedIsInitialized = 0;
@@ -405,8 +406,9 @@ public final class RpcLogEntry {
      * Protobuf type {@code PayloadContent}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContentOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:PayloadContent)
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.PayloadContentOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_PayloadContent_descriptor;
@@ -540,7 +542,6 @@ public final class RpcLogEntry {
       }
       private int bitField0_;
 
-      // required string uuid = 1;
       private java.lang.Object uuid_ = "";
       /**
        * <code>required string uuid = 1;</code>
@@ -562,9 +563,12 @@ public final class RpcLogEntry {
       public java.lang.String getUuid() {
         java.lang.Object ref = uuid_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          uuid_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            uuid_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -638,7 +642,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // required string content = 2;
       private java.lang.Object content_ = "";
       /**
        * <code>required string content = 2;</code>
@@ -660,9 +663,12 @@ public final class RpcLogEntry {
       public java.lang.String getContent() {
         java.lang.Object ref = content_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          content_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            content_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -747,10 +753,10 @@ public final class RpcLogEntry {
     // @@protoc_insertion_point(class_scope:PayloadContent)
   }
 
-  public interface RpcPayloadInfoOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface RpcPayloadInfoOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:RpcPayloadInfo)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int64 ts = 1;
     /**
      * <code>required int64 ts = 1;</code>
      */
@@ -760,7 +766,6 @@ public final class RpcLogEntry {
      */
     long getTs();
 
-    // optional int32 size = 2;
     /**
      * <code>optional int32 size = 2;</code>
      */
@@ -770,7 +775,6 @@ public final class RpcLogEntry {
      */
     int getSize();
 
-    // optional string uuid = 3;
     /**
      * <code>optional string uuid = 3;</code>
      *
@@ -801,8 +805,9 @@ public final class RpcLogEntry {
    * Protobuf type {@code RpcPayloadInfo}
    */
   public static final class RpcPayloadInfo extends
-      com.google.protobuf.GeneratedMessage
-      implements RpcPayloadInfoOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:RpcPayloadInfo)
+      RpcPayloadInfoOrBuilder {
     // Use RpcPayloadInfo.newBuilder() to construct.
     private RpcPayloadInfo(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -859,8 +864,9 @@ public final class RpcLogEntry {
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              uuid_ = input.readBytes();
+              uuid_ = bs;
               break;
             }
           }
@@ -903,7 +909,6 @@ public final class RpcLogEntry {
     }
 
     private int bitField0_;
-    // required int64 ts = 1;
     public static final int TS_FIELD_NUMBER = 1;
     private long ts_;
     /**
@@ -919,7 +924,6 @@ public final class RpcLogEntry {
       return ts_;
     }
 
-    // optional int32 size = 2;
     public static final int SIZE_FIELD_NUMBER = 2;
     private int size_;
     /**
@@ -935,7 +939,6 @@ public final class RpcLogEntry {
       return size_;
     }
 
-    // optional string uuid = 3;
     public static final int UUID_FIELD_NUMBER = 3;
     private java.lang.Object uuid_;
     /**
@@ -998,7 +1001,8 @@ public final class RpcLogEntry {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasTs()) {
         memoizedIsInitialized = 0;
@@ -1123,8 +1127,9 @@ public final class RpcLogEntry {
      * Protobuf type {@code RpcPayloadInfo}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:RpcPayloadInfo)
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_RpcPayloadInfo_descriptor;
@@ -1261,7 +1266,6 @@ public final class RpcLogEntry {
       }
       private int bitField0_;
 
-      // required int64 ts = 1;
       private long ts_ ;
       /**
        * <code>required int64 ts = 1;</code>
@@ -1294,7 +1298,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // optional int32 size = 2;
       private int size_ ;
       /**
        * <code>optional int32 size = 2;</code>
@@ -1327,7 +1330,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // optional string uuid = 3;
       private java.lang.Object uuid_ = "";
       /**
        * <code>optional string uuid = 3;</code>
@@ -1349,9 +1351,12 @@ public final class RpcLogEntry {
       public java.lang.String getUuid() {
         java.lang.Object ref = uuid_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          uuid_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            uuid_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -1436,10 +1441,10 @@ public final class RpcLogEntry {
     // @@protoc_insertion_point(class_scope:RpcPayloadInfo)
   }
 
-  public interface RpcCallOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface RpcCallOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:RpcCall)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 duration = 1;
     /**
      * <code>required int32 duration = 1;</code>
      *
@@ -1457,7 +1462,6 @@ public final class RpcLogEntry {
      */
     int getDuration();
 
-    // required string server = 2;
     /**
      * <code>required string server = 2;</code>
      */
@@ -1472,7 +1476,6 @@ public final class RpcLogEntry {
     com.google.protobuf.ByteString
         getServerBytes();
 
-    // required string signature = 3;
     /**
      * <code>required string signature = 3;</code>
      */
@@ -1487,7 +1490,6 @@ public final class RpcLogEntry {
     com.google.protobuf.ByteString
         getSignatureBytes();
 
-    // required string client = 4;
     /**
      * <code>required string client = 4;</code>
      */
@@ -1502,7 +1504,6 @@ public final class RpcLogEntry {
     com.google.protobuf.ByteString
         getClientBytes();
 
-    // required int32 corId = 5;
     /**
      * <code>required int32 corId = 5;</code>
      */
@@ -1512,7 +1513,6 @@ public final class RpcLogEntry {
      */
     int getCorId();
 
-    // optional string error = 6;
     /**
      * <code>optional string error = 6;</code>
      */
@@ -1527,7 +1527,6 @@ public final class RpcLogEntry {
     com.google.protobuf.ByteString
         getErrorBytes();
 
-    // optional .RpcPayloadInfo request = 7;
     /**
      * <code>optional .RpcPayloadInfo request = 7;</code>
      */
@@ -1541,7 +1540,6 @@ public final class RpcLogEntry {
      */
     com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder getRequestOrBuilder();
 
-    // optional .RpcPayloadInfo response = 8;
     /**
      * <code>optional .RpcPayloadInfo response = 8;</code>
      */
@@ -1559,8 +1557,9 @@ public final class RpcLogEntry {
    * Protobuf type {@code RpcCall}
    */
   public static final class RpcCall extends
-      com.google.protobuf.GeneratedMessage
-      implements RpcCallOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:RpcCall)
+      RpcCallOrBuilder {
     // Use RpcCall.newBuilder() to construct.
     private RpcCall(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -1612,18 +1611,21 @@ public final class RpcLogEntry {
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              server_ = input.readBytes();
+              server_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              signature_ = input.readBytes();
+              signature_ = bs;
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              client_ = input.readBytes();
+              client_ = bs;
               break;
             }
             case 40: {
@@ -1632,8 +1634,9 @@ public final class RpcLogEntry {
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              error_ = input.readBytes();
+              error_ = bs;
               break;
             }
             case 58: {
@@ -1702,7 +1705,6 @@ public final class RpcLogEntry {
     }
 
     private int bitField0_;
-    // required int32 duration = 1;
     public static final int DURATION_FIELD_NUMBER = 1;
     private int duration_;
     /**
@@ -1726,7 +1728,6 @@ public final class RpcLogEntry {
       return duration_;
     }
 
-    // required string server = 2;
     public static final int SERVER_FIELD_NUMBER = 2;
     private java.lang.Object server_;
     /**
@@ -1769,7 +1770,6 @@ public final class RpcLogEntry {
       }
     }
 
-    // required string signature = 3;
     public static final int SIGNATURE_FIELD_NUMBER = 3;
     private java.lang.Object signature_;
     /**
@@ -1812,7 +1812,6 @@ public final class RpcLogEntry {
       }
     }
 
-    // required string client = 4;
     public static final int CLIENT_FIELD_NUMBER = 4;
     private java.lang.Object client_;
     /**
@@ -1855,7 +1854,6 @@ public final class RpcLogEntry {
       }
     }
 
-    // required int32 corId = 5;
     public static final int CORID_FIELD_NUMBER = 5;
     private int corId_;
     /**
@@ -1871,7 +1869,6 @@ public final class RpcLogEntry {
       return corId_;
     }
 
-    // optional string error = 6;
     public static final int ERROR_FIELD_NUMBER = 6;
     private java.lang.Object error_;
     /**
@@ -1914,7 +1911,6 @@ public final class RpcLogEntry {
       }
     }
 
-    // optional .RpcPayloadInfo request = 7;
     public static final int REQUEST_FIELD_NUMBER = 7;
     private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo request_;
     /**
@@ -1936,7 +1932,6 @@ public final class RpcLogEntry {
       return request_;
     }
 
-    // optional .RpcPayloadInfo response = 8;
     public static final int RESPONSE_FIELD_NUMBER = 8;
     private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo response_;
     /**
@@ -1971,7 +1966,8 @@ public final class RpcLogEntry {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasDuration()) {
         memoizedIsInitialized = 0;
@@ -2159,8 +2155,9 @@ public final class RpcLogEntry {
      * Protobuf type {@code RpcCall}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCallOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:RpcCall)
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcCallOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_RpcCall_descriptor;
@@ -2394,7 +2391,6 @@ public final class RpcLogEntry {
       }
       private int bitField0_;
 
-      // required int32 duration = 1;
       private int duration_ ;
       /**
        * <code>required int32 duration = 1;</code>
@@ -2443,7 +2439,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // required string server = 2;
       private java.lang.Object server_ = "";
       /**
        * <code>required string server = 2;</code>
@@ -2457,9 +2452,12 @@ public final class RpcLogEntry {
       public java.lang.String getServer() {
         java.lang.Object ref = server_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          server_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            server_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2517,7 +2515,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // required string signature = 3;
       private java.lang.Object signature_ = "";
       /**
        * <code>required string signature = 3;</code>
@@ -2531,9 +2528,12 @@ public final class RpcLogEntry {
       public java.lang.String getSignature() {
         java.lang.Object ref = signature_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          signature_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            signature_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2591,7 +2591,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // required string client = 4;
       private java.lang.Object client_ = "";
       /**
        * <code>required string client = 4;</code>
@@ -2605,9 +2604,12 @@ public final class RpcLogEntry {
       public java.lang.String getClient() {
         java.lang.Object ref = client_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          client_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            client_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2665,7 +2667,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // required int32 corId = 5;
       private int corId_ ;
       /**
        * <code>required int32 corId = 5;</code>
@@ -2698,7 +2699,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // optional string error = 6;
       private java.lang.Object error_ = "";
       /**
        * <code>optional string error = 6;</code>
@@ -2712,9 +2712,12 @@ public final class RpcLogEntry {
       public java.lang.String getError() {
         java.lang.Object ref = error_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          error_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            error_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2772,7 +2775,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // optional .RpcPayloadInfo request = 7;
       private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo request_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> requestBuilder_;
@@ -2881,7 +2883,7 @@ public final class RpcLogEntry {
         if (requestBuilder_ == null) {
           requestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder>(
-                  request_,
+                  getRequest(),
                   getParentForChildren(),
                   isClean());
           request_ = null;
@@ -2889,7 +2891,6 @@ public final class RpcLogEntry {
         return requestBuilder_;
       }
 
-      // optional .RpcPayloadInfo response = 8;
       private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo response_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> responseBuilder_;
@@ -2998,7 +2999,7 @@ public final class RpcLogEntry {
         if (responseBuilder_ == null) {
           responseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder>(
-                  response_,
+                  getResponse(),
                   getParentForChildren(),
                   isClean());
           response_ = null;
@@ -3017,10 +3018,10 @@ public final class RpcLogEntry {
     // @@protoc_insertion_point(class_scope:RpcCall)
   }
 
-  public interface OobResponseOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface OobResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:OobResponse)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required string server = 1;
     /**
      * <code>required string server = 1;</code>
      */
@@ -3035,7 +3036,6 @@ public final class RpcLogEntry {
     com.google.protobuf.ByteString
         getServerBytes();
 
-    // required string signature = 2;
     /**
      * <code>required string signature = 2;</code>
      */
@@ -3050,7 +3050,6 @@ public final class RpcLogEntry {
     com.google.protobuf.ByteString
         getSignatureBytes();
 
-    // required string client = 3;
     /**
      * <code>required string client = 3;</code>
      */
@@ -3065,7 +3064,6 @@ public final class RpcLogEntry {
     com.google.protobuf.ByteString
         getClientBytes();
 
-    // required int32 corId = 4;
     /**
      * <code>required int32 corId = 4;</code>
      */
@@ -3075,7 +3073,6 @@ public final class RpcLogEntry {
      */
     int getCorId();
 
-    // optional .RpcPayloadInfo event = 5;
     /**
      * <code>optional .RpcPayloadInfo event = 5;</code>
      */
@@ -3093,8 +3090,9 @@ public final class RpcLogEntry {
    * Protobuf type {@code OobResponse}
    */
   public static final class OobResponse extends
-      com.google.protobuf.GeneratedMessage
-      implements OobResponseOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:OobResponse)
+      OobResponseOrBuilder {
     // Use OobResponse.newBuilder() to construct.
     private OobResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -3141,18 +3139,21 @@ public final class RpcLogEntry {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              server_ = input.readBytes();
+              server_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              signature_ = input.readBytes();
+              signature_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              client_ = input.readBytes();
+              client_ = bs;
               break;
             }
             case 32: {
@@ -3213,7 +3214,6 @@ public final class RpcLogEntry {
     }
 
     private int bitField0_;
-    // required string server = 1;
     public static final int SERVER_FIELD_NUMBER = 1;
     private java.lang.Object server_;
     /**
@@ -3256,7 +3256,6 @@ public final class RpcLogEntry {
       }
     }
 
-    // required string signature = 2;
     public static final int SIGNATURE_FIELD_NUMBER = 2;
     private java.lang.Object signature_;
     /**
@@ -3299,7 +3298,6 @@ public final class RpcLogEntry {
       }
     }
 
-    // required string client = 3;
     public static final int CLIENT_FIELD_NUMBER = 3;
     private java.lang.Object client_;
     /**
@@ -3342,7 +3340,6 @@ public final class RpcLogEntry {
       }
     }
 
-    // required int32 corId = 4;
     public static final int CORID_FIELD_NUMBER = 4;
     private int corId_;
     /**
@@ -3358,7 +3355,6 @@ public final class RpcLogEntry {
       return corId_;
     }
 
-    // optional .RpcPayloadInfo event = 5;
     public static final int EVENT_FIELD_NUMBER = 5;
     private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo event_;
     /**
@@ -3390,7 +3386,8 @@ public final class RpcLogEntry {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasServer()) {
         memoizedIsInitialized = 0;
@@ -3547,8 +3544,9 @@ public final class RpcLogEntry {
      * Protobuf type {@code OobResponse}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponseOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:OobResponse)
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_OobResponse_descriptor;
@@ -3734,7 +3732,6 @@ public final class RpcLogEntry {
       }
       private int bitField0_;
 
-      // required string server = 1;
       private java.lang.Object server_ = "";
       /**
        * <code>required string server = 1;</code>
@@ -3748,9 +3745,12 @@ public final class RpcLogEntry {
       public java.lang.String getServer() {
         java.lang.Object ref = server_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          server_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            server_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3808,7 +3808,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // required string signature = 2;
       private java.lang.Object signature_ = "";
       /**
        * <code>required string signature = 2;</code>
@@ -3822,9 +3821,12 @@ public final class RpcLogEntry {
       public java.lang.String getSignature() {
         java.lang.Object ref = signature_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          signature_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            signature_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3882,7 +3884,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // required string client = 3;
       private java.lang.Object client_ = "";
       /**
        * <code>required string client = 3;</code>
@@ -3896,9 +3897,12 @@ public final class RpcLogEntry {
       public java.lang.String getClient() {
         java.lang.Object ref = client_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          client_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            client_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3956,7 +3960,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // required int32 corId = 4;
       private int corId_ ;
       /**
        * <code>required int32 corId = 4;</code>
@@ -3989,7 +3992,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // optional .RpcPayloadInfo event = 5;
       private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo event_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> eventBuilder_;
@@ -4098,7 +4100,7 @@ public final class RpcLogEntry {
         if (eventBuilder_ == null) {
           eventBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder>(
-                  event_,
+                  getEvent(),
                   getParentForChildren(),
                   isClean());
           event_ = null;
@@ -4117,10 +4119,10 @@ public final class RpcLogEntry {
     // @@protoc_insertion_point(class_scope:OobResponse)
   }
 
-  public interface OobMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface OobMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:OobMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required string server = 1;
     /**
      * <code>required string server = 1;</code>
      */
@@ -4135,7 +4137,6 @@ public final class RpcLogEntry {
     com.google.protobuf.ByteString
         getServerBytes();
 
-    // required string client = 2;
     /**
      * <code>required string client = 2;</code>
      */
@@ -4150,7 +4151,6 @@ public final class RpcLogEntry {
     com.google.protobuf.ByteString
         getClientBytes();
 
-    // optional .RpcPayloadInfo event = 3;
     /**
      * <code>optional .RpcPayloadInfo event = 3;</code>
      */
@@ -4168,8 +4168,9 @@ public final class RpcLogEntry {
    * Protobuf type {@code OobMessage}
    */
   public static final class OobMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements OobMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:OobMessage)
+      OobMessageOrBuilder {
     // Use OobMessage.newBuilder() to construct.
     private OobMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -4216,13 +4217,15 @@ public final class RpcLogEntry {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              server_ = input.readBytes();
+              server_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              client_ = input.readBytes();
+              client_ = bs;
               break;
             }
             case 26: {
@@ -4278,7 +4281,6 @@ public final class RpcLogEntry {
     }
 
     private int bitField0_;
-    // required string server = 1;
     public static final int SERVER_FIELD_NUMBER = 1;
     private java.lang.Object server_;
     /**
@@ -4321,7 +4323,6 @@ public final class RpcLogEntry {
       }
     }
 
-    // required string client = 2;
     public static final int CLIENT_FIELD_NUMBER = 2;
     private java.lang.Object client_;
     /**
@@ -4364,7 +4365,6 @@ public final class RpcLogEntry {
       }
     }
 
-    // optional .RpcPayloadInfo event = 3;
     public static final int EVENT_FIELD_NUMBER = 3;
     private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo event_;
     /**
@@ -4394,7 +4394,8 @@ public final class RpcLogEntry {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasServer()) {
         memoizedIsInitialized = 0;
@@ -4529,8 +4530,9 @@ public final class RpcLogEntry {
      * Protobuf type {@code OobMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:OobMessage)
+        com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.OobMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.internal_static_OobMessage_descriptor;
@@ -4688,7 +4690,6 @@ public final class RpcLogEntry {
       }
       private int bitField0_;
 
-      // required string server = 1;
       private java.lang.Object server_ = "";
       /**
        * <code>required string server = 1;</code>
@@ -4702,9 +4703,12 @@ public final class RpcLogEntry {
       public java.lang.String getServer() {
         java.lang.Object ref = server_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          server_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            server_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4762,7 +4766,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // required string client = 2;
       private java.lang.Object client_ = "";
       /**
        * <code>required string client = 2;</code>
@@ -4776,9 +4779,12 @@ public final class RpcLogEntry {
       public java.lang.String getClient() {
         java.lang.Object ref = client_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          client_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            client_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4836,7 +4842,6 @@ public final class RpcLogEntry {
         return this;
       }
 
-      // optional .RpcPayloadInfo event = 3;
       private com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo event_ = com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder> eventBuilder_;
@@ -4945,7 +4950,7 @@ public final class RpcLogEntry {
         if (eventBuilder_ == null) {
           eventBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfo.Builder, com.googlecode.protobuf.pro.duplex.logging.RpcLogEntry.RpcPayloadInfoOrBuilder>(
-                  event_,
+                  getEvent(),
                   getParentForChildren(),
                   isClean());
           event_ = null;
@@ -4964,27 +4969,27 @@ public final class RpcLogEntry {
     // @@protoc_insertion_point(class_scope:OobMessage)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_PayloadContent_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_PayloadContent_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_RpcPayloadInfo_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_RpcPayloadInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_RpcCall_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_RpcCall_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_OobResponse_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_OobResponse_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_OobMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -5015,47 +5020,47 @@ public final class RpcLogEntry {
       "LogEntryH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_PayloadContent_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_PayloadContent_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_PayloadContent_descriptor,
-              new java.lang.String[] { "Uuid", "Content", });
-          internal_static_RpcPayloadInfo_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_RpcPayloadInfo_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_RpcPayloadInfo_descriptor,
-              new java.lang.String[] { "Ts", "Size", "Uuid", });
-          internal_static_RpcCall_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_RpcCall_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_RpcCall_descriptor,
-              new java.lang.String[] { "Duration", "Server", "Signature", "Client", "CorId", "Error", "Request", "Response", });
-          internal_static_OobResponse_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_OobResponse_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_OobResponse_descriptor,
-              new java.lang.String[] { "Server", "Signature", "Client", "CorId", "Event", });
-          internal_static_OobMessage_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_OobMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_OobMessage_descriptor,
-              new java.lang.String[] { "Server", "Client", "Event", });
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
+    internal_static_PayloadContent_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_PayloadContent_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_PayloadContent_descriptor,
+        new java.lang.String[] { "Uuid", "Content", });
+    internal_static_RpcPayloadInfo_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_RpcPayloadInfo_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_RpcPayloadInfo_descriptor,
+        new java.lang.String[] { "Ts", "Size", "Uuid", });
+    internal_static_RpcCall_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_RpcCall_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_RpcCall_descriptor,
+        new java.lang.String[] { "Duration", "Server", "Signature", "Client", "CorId", "Error", "Request", "Response", });
+    internal_static_OobResponse_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_OobResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_OobResponse_descriptor,
+        new java.lang.String[] { "Server", "Signature", "Client", "CorId", "Event", });
+    internal_static_OobMessage_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_OobMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_OobMessage_descriptor,
+        new java.lang.String[] { "Server", "Client", "Event", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
