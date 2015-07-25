@@ -20,6 +20,8 @@ import io.netty.util.concurrent.EventExecutorGroup;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,7 @@ public class CleanShutdownHandler {
 
 	private static Logger log = LoggerFactory.getLogger(CleanShutdownHandler.class);
 	
+	private final ReentrantLock shutdownLOCK = new ReentrantLock();
 	private List<EventExecutorGroup> bootstraps = new LinkedList<EventExecutorGroup>();
 	private List<ExecutorService> executors = new LinkedList<ExecutorService>();
 	
@@ -43,15 +46,7 @@ public class CleanShutdownHandler {
 			
 			@Override
 			public void run() {
-				log.debug("Releasing " + bootstraps.size() + " Client Bootstrap.");
-				for( EventExecutorGroup bootstrap : getBootstraps() ) {
-					bootstrap.shutdownGracefully();
-				}
-				
-				log.debug("Releasing " + executors.size() + " Executors.");
-				for( ExecutorService executor : getExecutors() ) {
-					executor.shutdown();
-				}
+				performShutdown();
 			}
 		} ));
 	}
@@ -94,5 +89,41 @@ public class CleanShutdownHandler {
 	 */
 	public void setBootstraps(List<EventExecutorGroup> bootstraps) {
 		this.bootstraps = bootstraps;
+	}
+	
+	/**
+	 * Shutdown all attached resources without waiting on the thread
+	 * @return 
+	 */
+	public void shutdown() {
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		executor.submit(createShutdown());
+	}
+	
+	private Runnable createShutdown() {
+		return new Runnable() {
+			@Override
+			public void run() {
+				performShutdown();
+			}
+		};
+	}
+	
+	private void performShutdown() {
+		shutdownLOCK.lock();
+		try {
+			log.debug("Releasing " + bootstraps.size() + " Client Bootstrap.");
+			for( EventExecutorGroup bootstrap : getBootstraps() ) {
+				bootstrap.shutdownGracefully();
+			}
+			
+			log.debug("Releasing " + executors.size() + " Executors.");
+			for( ExecutorService executor : getExecutors() ) {
+				executor.shutdown();
+			}
+		}
+		finally {
+			shutdownLOCK.unlock();
+		}
 	}
 }
