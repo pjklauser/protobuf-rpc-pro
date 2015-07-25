@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * Registers a JVM shutdown hook to cleanly shutdown any
  * Client or Server Bootstraps, and TimeoutCheckers or TimeoutExecutors.
  * 
- * @author Peter Klauser
+ * @author Peter Klauser, Gabriel Schlozer
  *
  */
 public class CleanShutdownHandler {
