@@ -19,8 +19,11 @@ import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
@@ -46,7 +49,7 @@ public class CleanShutdownHandler {
 			
 			@Override
 			public void run() {
-				performShutdown();
+				performShutdown(0);
 			}
 		} ));
 	}
@@ -97,19 +100,30 @@ public class CleanShutdownHandler {
 	 */
 	public void shutdown() {
 		ExecutorService executor = Executors.newSingleThreadExecutor();
-		executor.submit(createShutdown());
+		executor.submit(createShutdown(0));
 	}
 	
-	private Runnable createShutdown() {
-		return new Runnable() {
+	/**
+	 * Shutdown all attached resources synchronously
+	 * @param timeoutForEach time out for each resource independently (5 resources = max 5x value)
+	 * @return Future which give global timeout result (true=no timeout, false=at least one timeout)
+	 */
+	public Future<Boolean> shutdownAwaiting(long timeoutForEach) {
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		return executor.submit(createShutdown(timeoutForEach));
+	}
+	
+	private Callable<Boolean> createShutdown(final long timeoutForEach) {
+		return new Callable<Boolean>() {
 			@Override
-			public void run() {
-				performShutdown();
+			public Boolean call() throws Exception {
+				return performShutdown(timeoutForEach);
 			}
 		};
 	}
 	
-	private void performShutdown() {
+	private boolean performShutdown(long timeoutForEach) {
+		boolean success = true;
 		shutdownLOCK.lock();
 		try {
 			log.debug("Releasing " + bootstraps.size() + " Client Bootstrap.");
@@ -121,9 +135,34 @@ public class CleanShutdownHandler {
 			for( ExecutorService executor : getExecutors() ) {
 				executor.shutdown();
 			}
+			
+			if (timeoutForEach > 0) {
+				for( EventExecutorGroup bootstrap : getBootstraps() ) {
+					try {
+						if (!bootstrap.awaitTermination(timeoutForEach, TimeUnit.MILLISECONDS)) {
+							success = false;
+						}
+					}
+					catch (InterruptedException e) {
+						success = false;
+					}
+				}
+				for( ExecutorService executor : getExecutors() ) {
+					try {
+						if (!executor.awaitTermination(timeoutForEach, TimeUnit.MILLISECONDS)) {
+							success = false;
+						}
+					}
+					catch (InterruptedException e) {
+						success = false;
+					}
+				}
+			}
 		}
 		finally {
 			shutdownLOCK.unlock();
 		}
+		
+		return success;
 	}
 }
