@@ -38,6 +38,13 @@ import com.google.protobuf.Service;
  */
 public class RpcServiceRegistry {
 	
+	public class DuplicateServiceNameError extends IllegalStateException {
+		private static final long serialVersionUID = -8122573769997670977L;
+		public DuplicateServiceNameError(String s) {
+			super(s);
+		}
+	}
+	
 	private static Logger log = LoggerFactory.getLogger(RpcServiceRegistry.class);
 	
 	private Map<String, ServiceDescriptor> serviceNameMap = new HashMap<String, ServiceDescriptor>();
@@ -141,7 +148,7 @@ public class RpcServiceRegistry {
 	private String addService(boolean allowTimeout, Service serviceImplementation) {
 		String serviceName = getServiceName(serviceImplementation.getDescriptorForType());
 		if ( serviceNameMap.containsKey(serviceName) ) {
-			throw new IllegalStateException("Duplicate serviceName "+ serviceName);
+			throw new DuplicateServiceNameError("Duplicate serviceName "+ serviceName);
 		}
 		serviceNameMap.put(serviceName, new ServiceDescriptor(allowTimeout, serviceImplementation));
 		log.info("Registered NonBlocking " + serviceName +" allowTimeout="+(allowTimeout?"Y":"N"));
@@ -152,7 +159,7 @@ public class RpcServiceRegistry {
 	private String addService(boolean allowTimeout, BlockingService serviceImplementation) {
 		String serviceName = getServiceName(serviceImplementation.getDescriptorForType());
 		if ( serviceNameMap.containsKey(serviceName) ) {
-			throw new IllegalStateException("Duplicate serviceName "+ serviceName);
+			throw new DuplicateServiceNameError("Duplicate serviceName "+ serviceName);
 		}
 		serviceNameMap.put(serviceName, new ServiceDescriptor(allowTimeout, serviceImplementation));
 		log.info("Registered Blocking " + serviceName + " allowTimeout="+(allowTimeout?"Y":"N"));
