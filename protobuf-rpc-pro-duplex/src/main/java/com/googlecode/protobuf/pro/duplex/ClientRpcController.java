@@ -144,8 +144,9 @@ public class ClientRpcController implements RpcController, LocalCallVariableHold
 	}
 	
 	/**
+	 * Handle the receipt of the OOB response.
 	 * 
-	 * @param msg
+	 * @param msg the out-of-band response
 	 * @return true the message processed, null if none processed.
 	 */
 	public Message receiveOobResponse(OobResponse msg) {

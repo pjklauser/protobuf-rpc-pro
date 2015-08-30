@@ -26,13 +26,14 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientPipelineFactory;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.ConnectResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
 /**
  * The ClientConnectResponseHandler waits for a ConnectResponse
  * from the server's {@link ServerConnectRequestHandler} and
- * supplies this to the {@link DuplexTcpClientBootstrap} who
+ * supplies this to the {@link DuplexTcpClientPipelineFactory} who
  * calls the {@link #getConnectResponse(long)}.
  * 
  * Once the server's ConnectResponse has been made, this handler

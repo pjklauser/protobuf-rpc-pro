@@ -39,7 +39,6 @@ public interface RpcServerCallExecutor extends ExecutorService {
 	 * Note execution could actually start and even FINISH before returning.
 	 * 
 	 * @param call
-	 * @param executorCallback
 	 */
 	public void execute( PendingServerCallState call );
 	

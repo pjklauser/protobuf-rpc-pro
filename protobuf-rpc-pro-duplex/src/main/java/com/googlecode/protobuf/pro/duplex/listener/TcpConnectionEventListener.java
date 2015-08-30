@@ -35,7 +35,7 @@ public interface TcpConnectionEventListener {
 	 * problem. The underlying reason for RpcClientChannel closure is not
 	 * discernible.
 	 * 
-	 * @param client
+	 * @param clientChannel
 	 */
 	public void connectionClosed( RpcClientChannel clientChannel );
 	

@@ -33,7 +33,8 @@ import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
  * JVM. More precisely it is not possible (currently) for running JAVA process
  * to ascertain it's PID ( unless using native calls ). It is possible to pass
  * a PID of a startup script to a child JAVA process as a "-Dpid=$$".
- * {@linkplain http://blog.igorminar.com/2007/03/how-java-application-can-discover-its.html}
+ * 
+ * @see <a href="http://blog.igorminar.com/2007/03/how-java-application-can-discover-its.html">http://blog.igorminar.com/2007/03/how-java-application-can-discover-its.html</a>
  * 
  * @author Peter Klauser
  *

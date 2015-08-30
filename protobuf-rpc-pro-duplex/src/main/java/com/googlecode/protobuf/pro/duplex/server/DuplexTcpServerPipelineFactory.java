@@ -223,7 +223,7 @@ public class DuplexTcpServerPipelineFactory extends ChannelInitializer<Channel> 
 	/**
 	 * Set the WirelinePayload's extension registry.
 	 * 
-	 * @param extensionRegistry
+	 * @param wirelinePayloadExtensionRegistry
 	 */
 	public void setWirelinePayloadExtensionRegistry( ExtensionRegistry wirelinePayloadExtensionRegistry ) {
 		this.wirelinePayloadExtensionRegistry = wirelinePayloadExtensionRegistry;

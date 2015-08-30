@@ -47,7 +47,7 @@ import java.util.Collection;
  * <p><code>openssl x509 -in YOUR.CERT -out YOUR.CERT.der -outform  der</code></p>
  * 
  * <p>Import key and certificate:</p>
- * <p><code>java com.googlecode.protobuf.pro.duplex.util.KeyStoreImportUtil YOUR.KEY.der YOUR.CERT.der YOUR.KEYSTORE.out keystorePass keyAlias</code></p><br />
+ * <p><code>java com.googlecode.protobuf.pro.duplex.util.KeyStoreImportUtil YOUR.KEY.der YOUR.CERT.der YOUR.KEYSTORE.out keystorePass keyAlias</code></p>
  *
  * <p><em>Caution:</em> the old <code>YOUR.KEYSTORE.out</code> file is
  * deleted and replaced with a keystore only containing <code>YOUR.KEY</code>

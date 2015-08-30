@@ -97,8 +97,6 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 	 * Create a factory for RpcClients.
 	 * 
 	 * To force use of a specific local port binding use {@link #setClientInfo(PeerInfo)}.
-	 * 
-	 * @param clientInfo
 	 */
     public DuplexTcpClientPipelineFactory() {
     	this.clientInfo = new PeerInfo();
@@ -345,7 +343,7 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 	}
 
 	/**
-	 * @param rpcCallExecutor the rpcCallExecutor to set
+	 * @param rpcServerCallExecutor the rpcCallExecutor to set
 	 */
 	public void setRpcServerCallExecutor(RpcServerCallExecutor rpcServerCallExecutor) {
 		this.rpcServerCallExecutor = rpcServerCallExecutor;
@@ -403,7 +401,7 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 	/**
 	 * Set the WirelinePayload's extension registry.
 	 * 
-	 * @param extensionRegistry
+	 * @param wirelinePayloadExtensionRegistry
 	 */
 	public void setWirelinePayloadExtensionRegistry( ExtensionRegistry wirelinePayloadExtensionRegistry ) {
 		this.wirelinePayloadExtensionRegistry = wirelinePayloadExtensionRegistry;

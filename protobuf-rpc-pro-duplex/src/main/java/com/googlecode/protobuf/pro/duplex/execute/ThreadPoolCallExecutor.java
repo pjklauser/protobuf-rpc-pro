@@ -40,7 +40,7 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  * Thread separation between IO-Layer threads and threads calling the RPC methods is only needed if
  * the RPC method call is going to make an RPC call back to the SAME client who the call is servicing.
  * If other threads than the IO-Layer threads are calling the server's RPC clients, then the 
- * {@link SameTheadExecutor} is sufficient.
+ * {@link SameThreadExecutor} is sufficient.
  * 
  * It is necessary to use separate threads to handle server RPC calls than the threads which serve
  * the RPC client calls, in order to avoid deadlock on the single Netty Channel.

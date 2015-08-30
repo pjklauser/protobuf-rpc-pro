@@ -96,7 +96,6 @@ public class CleanShutdownHandler {
 	
 	/**
 	 * Shutdown all attached resources without waiting on the thread
-	 * @return 
 	 */
 	public void shutdown() {
 		ExecutorService executor = Executors.newSingleThreadExecutor();

@@ -291,7 +291,7 @@ public class RpcClient implements RpcClientChannel {
 	 * A blocking call thread calls this method in 
 	 * {@link #callBlockingMethod(MethodDescriptor, RpcController, Message, Message)}
 	 * 
-	 * @param correlationid
+	 * @param correlationId
 	 */
 	public void blockingCallTimeout( int correlationId ) {
 		RpcError rpcTimeout = RpcError.newBuilder().setCorrelationId(correlationId).setErrorMessage("Timeout").build();
@@ -492,7 +492,7 @@ public class RpcClient implements RpcClientChannel {
 	/**
 	 * Logger all information about the received OobResponse of an RPC call.
 	 * @param state
-	 * @param response
+	 * @param oobResponse
 	 */
 	protected void doLogOobResponseInbound( PendingClientCallState state, Message oobResponse) {
 		if ( rpcLogger != null ) {
@@ -502,8 +502,9 @@ public class RpcClient implements RpcClientChannel {
 	
 	/**
 	 * Logger all information about the received OobResponse of an RPC call.
-	 * @param state
-	 * @param response
+	 * @param serviceName
+	 * @param correlationId
+	 * @param oobResponse
 	 */
 	protected void doLogOobResponseOutbound( String serviceName, int correlationId, Message oobResponse) {
 		if ( rpcLogger != null ) {
