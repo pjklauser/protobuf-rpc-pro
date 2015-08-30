@@ -310,7 +310,8 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 
 	/**
 	 * There can be only one peering with a single server if this method is used to
-	 * set a specific client peerInfo.
+	 * set a specific client peerInfo. You will need to wait out TCP's TIME_WAIT state 
+	 * before reconnection is possible. 
 	 * 
 	 * If you want to use a free client port each time, then use the default constructor and
 	 * never set this clientInfo.

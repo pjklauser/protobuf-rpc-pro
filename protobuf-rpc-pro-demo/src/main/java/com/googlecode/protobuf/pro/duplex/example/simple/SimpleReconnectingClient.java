@@ -133,7 +133,7 @@ public class SimpleReconnectingClient {
 
 			RpcClientConnectionWatchdog watchdog = new RpcClientConnectionWatchdog(clientFactory,bootstrap);
 			rpcEventNotifier.addEventListener(watchdog);
-	        //watchdog.start();
+	        watchdog.start();
 
 			CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
 			shutdownHandler.addResource(workers);
@@ -169,11 +169,12 @@ public class SimpleReconnectingClient {
 					if ( ext == null || ext != 111) {
 						log.warn("Extension not parsed. Value=", ext);
 					}
+					
+					channel.close();
 				} catch ( ServiceException e ) {
 					log.warn("Call failed.", e);
 				}
 				
-				channel.close();
 				
 				Thread.sleep(10000);
 				
