@@ -15,8 +15,6 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
-import io.netty.util.concurrent.EventExecutorGroup;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -28,6 +26,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.googlecode.protobuf.pro.duplex.client.RpcClientConnectionWatchdog;
+
+import io.netty.util.concurrent.EventExecutorGroup;
 
 /**
  * Registers a JVM shutdown hook to cleanly shutdown any
@@ -43,6 +45,7 @@ public class CleanShutdownHandler {
 	private final ReentrantLock shutdownLOCK = new ReentrantLock();
 	private List<EventExecutorGroup> bootstraps = new LinkedList<EventExecutorGroup>();
 	private List<ExecutorService> executors = new LinkedList<ExecutorService>();
+	private List<RpcClientConnectionWatchdog> watchdogs = new LinkedList<>();
 	
 	public CleanShutdownHandler() {
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -52,6 +55,10 @@ public class CleanShutdownHandler {
 				performShutdown(0);
 			}
 		} ));
+	}
+	
+	public void addResource( RpcClientConnectionWatchdog watchdog ) {
+		watchdogs.add(watchdog);
 	}
 	
 	public void addResource( EventExecutorGroup bootstrap ) {
@@ -64,6 +71,10 @@ public class CleanShutdownHandler {
 	
 	public void removeResource( ExecutorService executor ) {
 		executors.remove(executor);
+	}
+
+	public void removeResource( RpcClientConnectionWatchdog watchdog ) {
+		watchdogs.remove(watchdog);
 	}
 
 	/**
@@ -94,6 +105,14 @@ public class CleanShutdownHandler {
 		this.bootstraps = bootstraps;
 	}
 	
+	public List<RpcClientConnectionWatchdog> getWatchdogs() {
+		return watchdogs;
+	}
+
+	public void setWatchdogs(List<RpcClientConnectionWatchdog> watchdogs) {
+		this.watchdogs = watchdogs;
+	}
+
 	/**
 	 * Shutdown all attached resources without waiting on the thread
 	 */
@@ -125,6 +144,11 @@ public class CleanShutdownHandler {
 		boolean success = true;
 		shutdownLOCK.lock();
 		try {
+			log.debug("Releasing " + watchdogs.size() + " Client Watchdogs.");
+			for( RpcClientConnectionWatchdog watchdog : getWatchdogs() ) {
+				watchdog.stop();
+			}
+			
 			log.debug("Releasing " + bootstraps.size() + " Client Bootstrap.");
 			for( EventExecutorGroup bootstrap : getBootstraps() ) {
 				bootstrap.shutdownGracefully();

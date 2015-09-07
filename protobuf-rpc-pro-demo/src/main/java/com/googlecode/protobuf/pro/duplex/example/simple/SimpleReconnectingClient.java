@@ -65,14 +65,14 @@ public class SimpleReconnectingClient {
 		String clientHostname = args[2];
 		int clientPort = Integer.parseInt(args[3]);
 
-		PeerInfo client = new PeerInfo(clientHostname, clientPort);
+		//PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
 
 		try {
 			DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory();
 			// force the use of a local port
 			// - normally you don't need this
-			clientFactory.setClientInfo(client);
+			//clientFactory.setClientInfo(client);
 			
 	    	ExtensionRegistry r = ExtensionRegistry.newInstance();
 			PingPong.registerAllExtensions(r);
@@ -138,6 +138,7 @@ public class SimpleReconnectingClient {
 			CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
 			shutdownHandler.addResource(workers);
 			shutdownHandler.addResource(rpcExecutor);
+			shutdownHandler.addResource(watchdog);
 			
 	        clientFactory.peerWith(server, bootstrap);
 			
