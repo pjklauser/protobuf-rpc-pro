@@ -15,11 +15,8 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelPipeline;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,6 +44,10 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelPipeline;
+
 /**
  * The RpcClient allows clients to send RpcRequests to an RpcServer
  * over the IO-Layer. The RpcClient will handle incoming RpcResponse
@@ -73,6 +74,7 @@ public class RpcClient implements RpcClientChannel {
 	private final PeerInfo serverInfo;
 	private final boolean compression;
 	private final ExtensionRegistry extensionRegistry;
+	private final Map<String,Object> attributes = new HashMap<>();
 	
 	private Message onOobMessagePrototype;
 	private RpcCallback<Message> onOobMessageFunction;
@@ -440,6 +442,14 @@ public class RpcClient implements RpcClientChannel {
 		channel.close().awaitUninterruptibly();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#isClosed()
+	 */
+	@Override
+	public boolean isClosed() {
+		return !channel.isOpen();
+	}
+	
 	public void handleClosure() {
 		do {
 			//Defect Nr.8 Race condition with new client request being received on closure.
@@ -466,6 +476,16 @@ public class RpcClient implements RpcClientChannel {
 		return channel.pipeline();
 	}
 	
+	@Override
+	public void setAttribute(String name, Object attributeValue) {
+		attributes.put(name, attributeValue);
+	}
+
+	@Override
+	public Object getAttribute(String name) {
+		return attributes.get(name);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#setOobMessageCallback(com.google.protobuf.Message, com.google.protobuf.RpcCallback)
 	 */

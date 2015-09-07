@@ -211,6 +211,11 @@ public class RpcConnectionEventNotifier implements
 			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
 		}
 
+		@Override
+		public boolean isClosed() {
+			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
+		}
+		
 		/* (non-Javadoc)
 		 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#setOobMessageCallback(com.google.protobuf.Message, com.google.protobuf.RpcCallback)
 		 */
@@ -227,6 +232,16 @@ public class RpcConnectionEventNotifier implements
 		public ChannelFuture sendOobMessage(Message message) {
 			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
 		}
-		
+
+		@Override
+		public void setAttribute(String name, Object attributeValue) {
+			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
+		}
+
+		@Override
+		public Object getAttribute(String name) {
+			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
+		}
+
 	}
 }

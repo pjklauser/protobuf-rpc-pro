@@ -65,6 +65,26 @@ public interface RpcClientChannel extends com.google.protobuf.RpcChannel, com.go
 	public void close();
 	
 	/**
+	 * True if the underlying channel is closed.
+	 * @return true if the underlying channel is closed.
+	 */
+	public boolean isClosed();
+	
+	/**
+	 * Set the RpcClientAttribute value.
+	 * @param name
+	 * @param attributeValue
+	 */
+	public void setAttribute( String name, Object attributeValue );
+	
+	/**
+	 * Get a RpcClientChannel attribute value.
+	 * @param name
+	 * @return a RpcClientChannel attribute value with the name, or null if not present.
+	 */
+	public Object getAttribute( String name );
+	
+	/**
 	 * Return the clients underlying Netty Pipeline.
 	 * 
 	 * On a client, the RpcClient can customize the Netty Pipeline directly after the 
