@@ -158,6 +158,6 @@
 	</repositories>
 	<properties>
 		<netty.version>4.0.31.Final</netty.version>
-		<protobufprcpro.version>3.3.2</protobufprcpro.version>
+		<protobufprcpro.version>3.3.3</protobufprcpro.version>
 	</properties>
 </project>
