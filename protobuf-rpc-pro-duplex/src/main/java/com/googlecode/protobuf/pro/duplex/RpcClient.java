@@ -16,6 +16,7 @@
 package com.googlecode.protobuf.pro.duplex;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -485,6 +486,12 @@ public class RpcClient implements RpcClientChannel {
 	public Object getAttribute(String name) {
 		return attributes.get(name);
 	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		return Collections.unmodifiableMap(attributes);
+	}
+
 
 	/* (non-Javadoc)
 	 * @see com.googlecode.protobuf.pro.duplex.RpcClientChannel#setOobMessageCallback(com.google.protobuf.Message, com.google.protobuf.RpcCallback)

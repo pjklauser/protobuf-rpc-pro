@@ -243,5 +243,10 @@ public class RpcConnectionEventNotifier implements
 			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
 		}
 
+		@Override
+		public Map<String, Object> getAttributes() {
+			throw new IllegalStateException("method not supported on detached RpcClientChannel.");
+		}
+
 	}
 }

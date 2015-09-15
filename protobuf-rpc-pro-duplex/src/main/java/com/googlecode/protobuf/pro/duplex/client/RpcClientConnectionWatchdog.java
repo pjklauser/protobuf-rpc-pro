@@ -178,7 +178,7 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 			state.lastRetryTime = System.currentTimeMillis();
 			try {
 				log.info("Retry connecting " + serverInfo );
-				watchdog.getPipelineFactory().peerWith(serverInfo,watchdog.getBootstrap());
+				watchdog.getPipelineFactory().peerWith(serverInfo,watchdog.getBootstrap(), disconnectedClient.getAttributes());
 				log.info("Retry succeeded " + serverInfo );
 				watchdog.removeRetryState(state);
 			} catch ( IOException e ) {

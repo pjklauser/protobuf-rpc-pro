@@ -15,14 +15,16 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelPipeline;
+import java.util.Map;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.googlecode.protobuf.pro.duplex.client.DuplexTcpClientPipelineFactory;
 import com.googlecode.protobuf.pro.duplex.listener.TcpConnectionEventListener;
 import com.googlecode.protobuf.pro.duplex.server.DuplexTcpServerPipelineFactory;
+
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelPipeline;
 
 /**
  * An RpcClientChannel is constructed once when a connection is established
@@ -83,6 +85,12 @@ public interface RpcClientChannel extends com.google.protobuf.RpcChannel, com.go
 	 * @return a RpcClientChannel attribute value with the name, or null if not present.
 	 */
 	public Object getAttribute( String name );
+	
+	/**
+	 * Get an imutable copy of the RpcClientChannel's attributes.
+	 * @return
+	 */
+	public Map<String,Object> getAttributes();
 	
 	/**
 	 * Return the clients underlying Netty Pipeline.

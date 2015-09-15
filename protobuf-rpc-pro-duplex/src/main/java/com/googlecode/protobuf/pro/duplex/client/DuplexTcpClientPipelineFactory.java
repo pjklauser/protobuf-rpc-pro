@@ -33,6 +33,8 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -102,28 +104,81 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
     	this.clientInfo = new PeerInfo();
     }
 
+    /**
+     * Create a new client to the remoteAddress.
+     * 
+     * @param serverInfo
+     * @param bootstrap
+     * @return
+     * @throws IOException
+     */
 	public RpcClient peerWith( PeerInfo serverInfo, Bootstrap bootstrap ) throws IOException {
+		return peerWith(serverInfo, bootstrap, null);
+	}
+	
+	/**
+	 * Create a new client with the provided attributes to the remoteAddress.
+	 * @param serverInfo
+	 * @param bootstrap
+	 * @param attributes
+	 * @return
+	 * @throws IOException
+	 */
+	public RpcClient peerWith( PeerInfo serverInfo, Bootstrap bootstrap, Map<String,Object> attributes ) throws IOException {
         // Make a new connection.
 		InetSocketAddress remoteAddress = new InetSocketAddress(serverInfo.getHostName(), serverInfo.getPort());
-		return peerWith(remoteAddress, bootstrap);
+		return peerWith(remoteAddress, bootstrap, attributes);
 	}
 
+	/**
+	 * Create a new client to the remoteAddress.
+	 * 
+	 * @param host
+	 * @param port
+	 * @param bootstrap
+	 * @return
+	 * @throws IOException
+	 */
 	public RpcClient peerWith( String host, int port, Bootstrap bootstrap ) throws IOException {
+		return peerWith(host,  port, null);
+	}
+	
+	/**
+	 * Create a new client with the given attributes to the remoteAddress.
+	 * @param host
+	 * @param port
+	 * @param bootstrap
+	 * @param attributes
+	 * @return
+	 * @throws IOException
+	 */
+	public RpcClient peerWith( String host, int port, Bootstrap bootstrap, Map<String,Object> attributes ) throws IOException {
         // Make a new connection.
 		InetSocketAddress remoteAddress = new InetSocketAddress(host, port);
-		return peerWith(remoteAddress, bootstrap);
+		return peerWith(remoteAddress, bootstrap, attributes);
 	}
 
-    /**
-     * Attempts a new connection with the specified {@code remoteAddress}.
-     *
-     * @return a future object which notifies when this connection attempt
-     *         succeeds or fails
-     *
-     * @throws IOException
-     *         if the peering failed.
-     */
+	/**
+	 * Creates a new client to the remoteAddress.
+	 * 
+	 * @param remoteAddress
+	 * @param bootstrap
+	 * @return
+	 * @throws IOException
+	 */
     public RpcClient peerWith(InetSocketAddress remoteAddress, Bootstrap bootstrap ) throws IOException {
+    	return peerWith(remoteAddress, bootstrap, null);
+    }
+
+    /**
+     * Creates a new client with the provided channel attributes to the remoteAddress.
+     * @param remoteAddress
+     * @param bootstrap
+     * @param attributes
+     * @return
+     * @throws IOException
+     */
+    public RpcClient peerWith(InetSocketAddress remoteAddress, Bootstrap bootstrap, Map<String,Object> attributes ) throws IOException {
         if (remoteAddress == null) {
             throw new NullPointerException("remotedAddress");
         }
@@ -187,7 +242,12 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 		}
 		
 		RpcClient rpcClient = new RpcClient(channel, effectiveClientInfo, serverInfo, connectResponse.getCompress(), getRpcLogger(), getExtensionRegistry());
-		
+		if ( attributes != null ) {
+			// transfer the input attributes to the channel before we state it's opened.
+			for( Entry<String,Object> attr : attributes.entrySet()) {
+				rpcClient.setAttribute(attr.getKey(), attr.getValue());
+			}
+		}
 		RpcClientHandler rpcClientHandler = completePipeline(rpcClient);
 		rpcClientHandler.notifyOpened();
 		
