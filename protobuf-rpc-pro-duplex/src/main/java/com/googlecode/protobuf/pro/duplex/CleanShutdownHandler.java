@@ -117,7 +117,7 @@ public class CleanShutdownHandler {
 	 * Shutdown all attached resources without waiting on the thread
 	 */
 	public void shutdown() {
-		ExecutorService executor = Executors.newSingleThreadExecutor();
+		ExecutorService executor = Executors.newScheduledThreadPool(0);
 		executor.submit(createShutdown(0));
 	}
 	
@@ -127,7 +127,8 @@ public class CleanShutdownHandler {
 	 * @return Future which give global timeout result (true=no timeout, false=at least one timeout)
 	 */
 	public Future<Boolean> shutdownAwaiting(long timeoutForEach) {
-		ExecutorService executor = Executors.newSingleThreadExecutor();
+		ExecutorService executor = Executors.newScheduledThreadPool(0);
+		
 		return executor.submit(createShutdown(timeoutForEach));
 	}
 	
