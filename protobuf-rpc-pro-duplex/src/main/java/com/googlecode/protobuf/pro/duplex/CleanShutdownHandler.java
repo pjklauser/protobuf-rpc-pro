@@ -15,6 +15,7 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -47,70 +48,81 @@ public class CleanShutdownHandler {
 	private List<ExecutorService> executors = new LinkedList<ExecutorService>();
 	private List<RpcClientConnectionWatchdog> watchdogs = new LinkedList<>();
 	
+	private boolean shutdownHookRegistered = false;
+	private Thread shutdownThread = new Thread(new Runnable() {
+		
+		@Override
+		public void run() {
+			performShutdown(0);
+		}
+	} );
+	
 	public CleanShutdownHandler() {
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				performShutdown(0);
+	}
+
+	private synchronized void registerHook() {
+		if ( !shutdownHookRegistered ) {
+			if ( !bootstraps.isEmpty() || !executors.isEmpty() || !watchdogs.isEmpty()) {
+				Runtime.getRuntime().addShutdownHook(shutdownThread);
+				shutdownHookRegistered = true;
 			}
-		} ));
+		} else {
+			if ( bootstraps.isEmpty() && executors.isEmpty() && watchdogs.isEmpty()) {
+				Runtime.getRuntime().removeShutdownHook(shutdownThread);
+				shutdownHookRegistered = false;
+			}
+		}
 	}
-	
-	public void addResource( RpcClientConnectionWatchdog watchdog ) {
-		watchdogs.add(watchdog);
-	}
-	
+
 	public void addResource( EventExecutorGroup bootstrap ) {
 		bootstraps.add(bootstrap);
+		registerHook();
+	}
+	
+	public void removeResource( EventExecutorGroup bootstrap ) {
+		bootstraps.remove(bootstrap);
+		registerHook();
 	}
 	
 	public void addResource( ExecutorService executor ) {
 		executors.add(executor);
+		registerHook();
 	}
 	
 	public void removeResource( ExecutorService executor ) {
 		executors.remove(executor);
+		registerHook();
 	}
 
+	public void addResource( RpcClientConnectionWatchdog watchdog ) {
+		watchdogs.add(watchdog);
+		registerHook();
+	}
+	
 	public void removeResource( RpcClientConnectionWatchdog watchdog ) {
 		watchdogs.remove(watchdog);
+		registerHook();
 	}
 
 	/**
 	 * @return the executors
 	 */
 	public List<ExecutorService> getExecutors() {
-		return executors;
-	}
-
-	/**
-	 * @param executors the executors to set
-	 */
-	public void setExecutors(List<ExecutorService> executors) {
-		this.executors = executors;
+		return Collections.unmodifiableList(executors);
 	}
 
 	/**
 	 * @return the bootstraps
 	 */
 	public List<EventExecutorGroup> getBootstraps() {
-		return bootstraps;
+		return Collections.unmodifiableList(bootstraps);
 	}
 
 	/**
-	 * @param bootstraps the bootstraps to set
+	 * @return the watchdogs
 	 */
-	public void setBootstraps(List<EventExecutorGroup> bootstraps) {
-		this.bootstraps = bootstraps;
-	}
-	
 	public List<RpcClientConnectionWatchdog> getWatchdogs() {
-		return watchdogs;
-	}
-
-	public void setWatchdogs(List<RpcClientConnectionWatchdog> watchdogs) {
-		this.watchdogs = watchdogs;
+		return Collections.unmodifiableList(watchdogs);
 	}
 
 	/**
@@ -187,6 +199,11 @@ public class CleanShutdownHandler {
 			shutdownLOCK.unlock();
 		}
 		
+		// if it is not the shutdown thread shutting down the jvm then we need to remove the
+		// shutdown hook
+		if ( Thread.currentThread() != shutdownThread ) {
+			Runtime.getRuntime().removeShutdownHook(shutdownThread);
+		}
 		return success;
 	}
 }
