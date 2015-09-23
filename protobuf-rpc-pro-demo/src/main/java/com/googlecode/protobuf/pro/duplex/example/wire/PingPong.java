@@ -8,7 +8,10 @@ public final class PingPong {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
     registry.add(com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPing.extendedIntField);
+    registry.add(com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPing.throwNPE);
+    registry.add(com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPing.throwNPEonPong);
     registry.add(com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPong.extendedIntField);
+    registry.add(com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPong.throwNPE);
   }
   public interface PingOrBuilder extends
       // @@protoc_insertion_point(interface_extends:Ping)
@@ -3660,6 +3663,32 @@ public final class PingPong {
           0,
           java.lang.Integer.class,
           null);
+    public static final int THROWNPE_FIELD_NUMBER = 101;
+    /**
+     * <code>extend .Ping { ... }</code>
+     */
+    public static final
+      com.google.protobuf.GeneratedMessage.GeneratedExtension<
+        com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Ping,
+        java.lang.Boolean> throwNPE = com.google.protobuf.GeneratedMessage
+            .newMessageScopedGeneratedExtension(
+          com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPing.getDefaultInstance(),
+          1,
+          java.lang.Boolean.class,
+          null);
+    public static final int THROWNPEONPONG_FIELD_NUMBER = 102;
+    /**
+     * <code>extend .Ping { ... }</code>
+     */
+    public static final
+      com.google.protobuf.GeneratedMessage.GeneratedExtension<
+        com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Ping,
+        java.lang.Boolean> throwNPEonPong = com.google.protobuf.GeneratedMessage
+            .newMessageScopedGeneratedExtension(
+          com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPing.getDefaultInstance(),
+          2,
+          java.lang.Boolean.class,
+          null);
   }
 
   public interface ExtendedPongOrBuilder extends
@@ -3985,6 +4014,19 @@ public final class PingPong {
           com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPong.getDefaultInstance(),
           0,
           java.lang.Integer.class,
+          null);
+    public static final int THROWNPE_FIELD_NUMBER = 101;
+    /**
+     * <code>extend .Pong { ... }</code>
+     */
+    public static final
+      com.google.protobuf.GeneratedMessage.GeneratedExtension<
+        com.googlecode.protobuf.pro.duplex.example.wire.PingPong.Pong,
+        java.lang.Boolean> throwNPE = com.google.protobuf.GeneratedMessage
+            .newMessageScopedGeneratedExtension(
+          com.googlecode.protobuf.pro.duplex.example.wire.PingPong.ExtendedPong.getDefaultInstance(),
+          1,
+          java.lang.Boolean.class,
           null);
   }
 
@@ -4974,15 +5016,17 @@ public final class PingPong {
       "\022\022\n\nsequenceNo\030\002 \001(\005\022*\n\002op\030\003 \001(\0162\036.Perce" +
       "ntComplete.OperationName\"#\n\rOperationNam" +
       "e\022\010\n\004PING\020\000\022\010\n\004PONG\020\001\"\031\n\006Status\022\017\n\007messa" +
-      "ge\030\001 \002(\t\"/\n\014ExtendedPing2\037\n\020extendedIntF" +
-      "ield\022\005.Ping\030d \001(\005\"/\n\014ExtendedPong2\037\n\020ext" +
-      "endedIntField\022\005.Pong\030d \001(\0052+\n\023BlockingPi" +
-      "ngService\022\024\n\004ping\022\005.Ping\032\005.Pong2.\n\026NonBl" +
-      "ockingPingService\022\024\n\004ping\022\005.Ping\032\005.Pong2" +
-      "+\n\023BlockingPongService\022\024\n\004pong\022\005.Pong\032\005." +
-      "Ping2.\n\026NonBlockingPongService\022\024\n\004pong\022\005",
-      ".Pong\032\005.PingB>\n/com.googlecode.protobuf." +
-      "pro.duplex.example.wireB\010PingPong\210\001\001"
+      "ge\030\001 \002(\t\"g\n\014ExtendedPing2\037\n\020extendedIntF" +
+      "ield\022\005.Ping\030d \001(\0052\027\n\010throwNPE\022\005.Ping\030e \001" +
+      "(\0102\035\n\016throwNPEonPong\022\005.Ping\030f \001(\010\"H\n\014Ext" +
+      "endedPong2\037\n\020extendedIntField\022\005.Pong\030d \001" +
+      "(\0052\027\n\010throwNPE\022\005.Pong\030e \001(\0102+\n\023BlockingP" +
+      "ingService\022\024\n\004ping\022\005.Ping\032\005.Pong2.\n\026NonB" +
+      "lockingPingService\022\024\n\004ping\022\005.Ping\032\005.Pong",
+      "2+\n\023BlockingPongService\022\024\n\004pong\022\005.Pong\032\005" +
+      ".Ping2.\n\026NonBlockingPongService\022\024\n\004pong\022" +
+      "\005.Pong\032\005.PingB>\n/com.googlecode.protobuf" +
+      ".pro.duplex.example.wireB\010PingPong\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

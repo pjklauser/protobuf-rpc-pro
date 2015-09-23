@@ -45,12 +45,15 @@ message Status {
 message ExtendedPing {
   extend Ping {
     optional int32 extendedIntField = 100;
+    optional bool throwNPE = 101;
+    optional bool throwNPEonPong = 102;
   }
 }
 
 message ExtendedPong {
   extend Pong {
     optional int32 extendedIntField = 100;
+    optional bool throwNPE = 101;
   }
 }
 

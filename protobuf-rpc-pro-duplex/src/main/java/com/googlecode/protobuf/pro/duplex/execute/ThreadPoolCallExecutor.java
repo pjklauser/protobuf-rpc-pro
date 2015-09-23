@@ -157,7 +157,16 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 				}
 			} else {
 				if ( !runner.getServiceCallback().isDone() ) {
-					log.warn("RpcCallRunner did not finish RpcCall afterExecute. RpcCallRunner expected to complete calls, not offload them.");
+					if ( t != null ) {
+						// finish the call after RuntimeException
+						String errorMsg = t.getClass().getName() + ": " + t.getMessage();
+						if ( t.getCause() != null ) {
+							errorMsg += ". " + t.getCause().getMessage();
+						}
+						controller.setFailed(errorMsg);
+					} else {
+						log.warn("RpcCallRunner did not finish RpcCall afterExecute. RpcCallRunner expected to complete calls, not offload them.");
+					}
 				}
 				runner.getCall().getExecutorCallback().onFinish(runner.getCall().getController().getCorrelationId(), runner.getServiceCallback().getMessage());
 			}

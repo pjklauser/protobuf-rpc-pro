@@ -263,7 +263,7 @@ public class RpcServer implements RpcServerExecutorCallback {
 			} else {
 				String errorMessage = state.getController().getFailed();
 				if ( errorMessage == null ) {
-					errorMessage = "null";
+					errorMessage = "Inconsistent state - we should always to have an error message on failure!";
 				}
 				RpcError rpcError = RpcError.newBuilder()
 						.setCorrelationId(correlationId)

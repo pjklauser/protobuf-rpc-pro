@@ -111,6 +111,10 @@ public class PingPongServiceFactory {
 			} else {
 				doProcessing(controller, request.getPingDurationMs());
 			}
+			Boolean npe = request.getExtension(ExtendedPing.throwNPE);
+			if ( npe == Boolean.TRUE) {
+				throw new NullPointerException();
+			}
 			
 			Pong response = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongData(request.getPingPayload()).build();
 			return response;
@@ -125,6 +129,10 @@ public class PingPongServiceFactory {
 				doPercentCompleteProcessing(controller,request.getPongDurationMs(),OperationName.PONG, request.getSequenceNo());
 			} else {
 				doProcessing(controller, request.getPongDurationMs());
+			}
+			Boolean npe = request.getExtension(ExtendedPong.throwNPE);
+			if ( npe == Boolean.TRUE) {
+				throw new NullPointerException();
 			}
 			
 			Ping response = Ping.newBuilder().setSequenceNo(request.getSequenceNo()).setPingPayload(request.getPongData()).build();
@@ -147,6 +155,10 @@ public class PingPongServiceFactory {
 				done.run(null);
 				return;
 			}
+			Boolean npe = request.getExtension(ExtendedPong.throwNPE);
+			if ( npe == Boolean.TRUE) {
+				throw new NullPointerException();
+			}
 			Ping response = Ping.newBuilder().setSequenceNo(request.getSequenceNo()).setPingPayload(request.getPongData()).build();
 			done.run(response);
 		}
@@ -167,6 +179,11 @@ public class PingPongServiceFactory {
 				done.run(null);
 				return;
 			}
+			Boolean npe = request.getExtension(ExtendedPing.throwNPE);
+			if ( npe == Boolean.TRUE) {
+				throw new NullPointerException();
+			}
+			
 			Pong response = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongData(request.getPingPayload()).build();
 			done.run(response);
 		}
@@ -196,6 +213,10 @@ public class PingPongServiceFactory {
 			}
 			
 			Integer ext = request.getExtension(ExtendedPing.extendedIntField);
+			Boolean npe = request.getExtension(ExtendedPing.throwNPE);
+			if ( npe == Boolean.TRUE) {
+				throw new NullPointerException();
+			}
 			
 			// must call the blocking or non blocking pong of the client calling ping.
 			if ( request.getPongRequired() ) {
@@ -211,6 +232,10 @@ public class PingPongServiceFactory {
 						Pong.Builder clientRequestBuilder = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload());
 						if ( ext != null ) {
 							clientRequestBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+						}
+						Boolean pongNpe = request.getExtension(ExtendedPing.throwNPEonPong);
+						if ( pongNpe != null ) {
+							clientRequestBuilder.setExtension(ExtendedPong.throwNPE, pongNpe);
 						}
 						Pong clientRequest = clientRequestBuilder.build();
 						
@@ -244,6 +269,10 @@ public class PingPongServiceFactory {
 						Pong.Builder clientRequestBuilder = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload());
 						if ( ext != null ) {
 							clientRequestBuilder.setExtension(ExtendedPong.extendedIntField, ext);
+						}
+						Boolean pongNpe = request.getExtension(ExtendedPing.throwNPEonPong);
+						if ( pongNpe != null ) {
+							clientRequestBuilder.setExtension(ExtendedPong.throwNPE, pongNpe);
 						}
 						Pong clientRequest = clientRequestBuilder.build();
 
@@ -303,6 +332,10 @@ public class PingPongServiceFactory {
 				return null;
 			}
 			
+			Boolean npe = request.getExtension(ExtendedPing.throwNPE);
+			if ( npe == Boolean.TRUE) {
+				throw new NullPointerException();
+			}
 			Integer ext = request.getExtension(ExtendedPing.extendedIntField);
 			
 			Pong response = null;
@@ -314,6 +347,10 @@ public class PingPongServiceFactory {
 					clientController.setTimeoutMs(request.getPongTimeoutMs());
 					
 					Pong.Builder clientRequestBuilder = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload());
+					Boolean pongNpe = request.getExtension(ExtendedPing.throwNPEonPong);
+					if ( pongNpe != null ) {
+						clientRequestBuilder.setExtension(ExtendedPong.throwNPE, pongNpe);
+					}
 					if ( ext != null ) {
 						clientRequestBuilder.setExtension(ExtendedPong.extendedIntField, ext);
 					}
@@ -340,6 +377,10 @@ public class PingPongServiceFactory {
 					clientController.setTimeoutMs(request.getPongTimeoutMs());
 					
 					Pong.Builder clientRequestBuilder = Pong.newBuilder().setSequenceNo(request.getSequenceNo()).setPongDurationMs(request.getPongDurationMs()).setPongData(request.getPingPayload());
+					Boolean pongNpe = request.getExtension(ExtendedPing.throwNPEonPong);
+					if ( pongNpe != null ) {
+						clientRequestBuilder.setExtension(ExtendedPong.throwNPE, pongNpe);
+					}
 					if ( ext != null ) {
 						clientRequestBuilder.setExtension(ExtendedPong.extendedIntField, ext);
 					}

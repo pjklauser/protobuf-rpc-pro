@@ -93,7 +93,7 @@ public class SameThreadExecutor implements RpcServerCallExecutor {
 			} catch ( com.google.protobuf.ServiceException se ) {
 				log.warn("BlockingService threw ServiceException.", se);
 				callback.run(null);
-				call.getController().setFailed("ServiceException");
+				call.getController().setFailed("ServiceException: " + se.getMessage());
 			}
 		}
 		
