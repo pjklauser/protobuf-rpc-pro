@@ -132,6 +132,7 @@ public class SimpleReconnectingClient {
 	        bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
 
 			RpcClientConnectionWatchdog watchdog = new RpcClientConnectionWatchdog(clientFactory,bootstrap);
+			watchdog.setThreadName("watchdog"); // #48
 			rpcEventNotifier.addEventListener(watchdog);
 	        watchdog.start();
 

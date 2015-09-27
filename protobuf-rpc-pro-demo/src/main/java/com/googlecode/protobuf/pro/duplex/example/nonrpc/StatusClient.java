@@ -94,7 +94,7 @@ public class StatusClient {
 				public void connectionOpened(RpcClientChannel clientChannel) {
 					log.info("connectionOpened " + clientChannel);
 					channel = clientChannel;
-					clientChannel.setOobMessageCallback(PingPong.Status.getDefaultInstance(), serverStatusCallback);
+					channel.setOobMessageCallback(PingPong.Status.getDefaultInstance(), serverStatusCallback);
 				}
 				
 				@Override
@@ -106,6 +106,7 @@ public class StatusClient {
 				public void connectionChanged(RpcClientChannel clientChannel) {
 					log.info("connectionChanged " + clientChannel);
 					channel = clientChannel;
+					channel.setOobMessageCallback(PingPong.Status.getDefaultInstance(), serverStatusCallback);
 				}
 			};
 			rpcEventNotifier.addEventListener(listener);

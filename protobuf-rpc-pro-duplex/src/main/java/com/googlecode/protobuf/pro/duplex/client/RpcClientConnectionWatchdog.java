@@ -46,6 +46,8 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 	private final Bootstrap bootstrap;
 	
 	private Thread thread;
+	private String threadName;// #48 make thread name settable
+
 	private WatchdogThread watchdogThread;
 	private long retryIntervalMillis = 10000;
 	
@@ -57,6 +59,7 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 	public void start() {
 		watchdogThread = new WatchdogThread(this);
 		thread = new Thread(watchdogThread);
+		thread.setName(getThreadName());
 		thread.setDaemon(true);
 		thread.start();
 	}
@@ -234,4 +237,12 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 		return bootstrap;
 	}
 	
+	public String getThreadName() {
+		return threadName;
+	}
+
+	public void setThreadName(String threadName) {
+		this.threadName = threadName;
+	}
+
 }
