@@ -58,8 +58,10 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  * requests. If a RPC call comes in where a Thread is not ready to handle, you will receive
  * a "Server Overload" error.
  * 
- * TODO find out the queue type which is linked and not blocking unlimited size.
- *  
+ * Alternatively use {@link java.util.concurrent.LinkedBlockingQueue} without specifying any fixed capacity
+ * to allow any number of pending requests queued indefinitely. This opens up the possibility of eventual
+ * out of memory problems.
+ * 
  * @author Peter Klauser
  *
  */

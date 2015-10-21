@@ -15,20 +15,12 @@
 */
 package com.googlecode.protobuf.pro.duplex.server;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.compression.ZlibCodecFactory;
-import io.netty.handler.codec.compression.ZlibWrapper;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
-import io.netty.handler.codec.protobuf.ProtobufEncoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
-import io.netty.handler.ssl.SslHandler;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ExtensionRegistry;
 import com.googlecode.protobuf.pro.duplex.PeerInfo;
@@ -48,9 +40,20 @@ import com.googlecode.protobuf.pro.duplex.logging.CategoryPerServiceLogger;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
 import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.handler.codec.compression.ZlibCodecFactory;
+import io.netty.handler.codec.compression.ZlibWrapper;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import io.netty.handler.ssl.SslHandler;
+
 public class DuplexTcpServerPipelineFactory extends ChannelInitializer<Channel> {
 
-	//TODO private static Logger log = LoggerFactory.getLogger(DuplexTcpServerPipelineFactory.class);
+	private static Logger log = LoggerFactory.getLogger(DuplexTcpServerPipelineFactory.class);
 	
 	private List<TcpConnectionEventListener> connectionEventListeners = new ArrayList<TcpConnectionEventListener>();
 	
@@ -71,6 +74,10 @@ public class DuplexTcpServerPipelineFactory extends ChannelInitializer<Channel> 
 		}
 		this.serverInfo = serverInfo;
 		this.connectRequestHandler = new ServerConnectRequestHandler(this);
+
+		if ( log.isDebugEnabled()) {
+    		log.debug("constructed " + serverInfo);
+    	}
 	}
 	
 	@Override
@@ -88,6 +95,10 @@ public class DuplexTcpServerPipelineFactory extends ChannelInitializer<Channel> 
         p.addLast(Handler.PROTOBUF_ENCODER, new ProtobufEncoder());
 
         p.addLast(Handler.SERVER_CONNECT, connectRequestHandler); // one instance shared by all channels
+
+        if ( log.isDebugEnabled()) {
+    		log.debug("initChannel " + ch);
+    	}
 	}
     
     public RpcClientHandler completePipeline( RpcClient rpcClient ) {
@@ -119,6 +130,10 @@ public class DuplexTcpServerPipelineFactory extends ChannelInitializer<Channel> 
     	RpcServer rpcServer = new RpcServer(rpcClient, getRpcServiceRegistry(), getRpcServerCallExecutor(), getLogger()); 
     	RpcServerHandler rpcServerHandler = new RpcServerHandler(rpcServer,getRpcClientRegistry());
     	p.addAfter(Handler.RPC_CLIENT, Handler.RPC_SERVER, rpcServerHandler);
+    	
+    	if ( log.isDebugEnabled()) {
+    		log.debug("completed Pipeline to " + rpcClient.getPeerInfo());
+    	}
     	return rpcClientHandler;
     }
 

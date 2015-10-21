@@ -162,9 +162,9 @@ public class RpcClient implements RpcClientChannel {
 			RpcController controller, Message request, Message responsePrototype)
 			throws ServiceException {
 		ClientRpcController rpcController = (ClientRpcController)controller;
-		long deadlineTSNano = 0;
+		long deadlineTS = 0;
 		if ( rpcController.getTimeoutMs() > 0 ) {
-			deadlineTSNano = System.nanoTime() + rpcController.getTimeoutNanos();
+			deadlineTS = System.currentTimeMillis() + rpcController.getTimeoutMs();
 		}
 		
 		BlockingRpcCallback callback = new BlockingRpcCallback();
@@ -173,9 +173,9 @@ public class RpcClient implements RpcClientChannel {
         boolean interrupted = false;
 		while(!callback.isDone()) {
 			try {
-				if ( deadlineTSNano > 0 ) {
-					long timeToDeadlineNano = deadlineTSNano - System.nanoTime();
-					if ( timeToDeadlineNano <= 0 ) {
+				if ( deadlineTS > 0 ) {
+					long timeToDeadlineMs = deadlineTS - System.currentTimeMillis();
+					if ( timeToDeadlineMs <= 0 ) {
 						rpcController.getRpcClient().blockingCallTimeout(rpcController.getCorrelationId());
 						// this will pre-emptively timeout this call and set the callback done flag before returning.
 						// Issue25: infinite loop, assumption was race condition of timeout handling with correct response.
@@ -186,12 +186,10 @@ public class RpcClient implements RpcClientChannel {
 							break;
 						}
 					} else {
-						int timeToDeadlineMs = (int)(timeToDeadlineNano / 1000000l);
-						int remainderNano = (int)(timeToDeadlineNano - (timeToDeadlineMs*1000000l));
 						// we wait at most until the deadline.
 						synchronized(callback) {
 							if ( !callback.isDone() ) {
-								callback.wait(timeToDeadlineMs,remainderNano);
+								callback.wait(timeToDeadlineMs);
 							}
 						}
 					}
@@ -265,8 +263,6 @@ public class RpcClient implements RpcClientChannel {
 				
 			} catch ( InvalidProtocolBufferException e ) {
 				String errorMessage = "Invalid UncorrelatedMessage Protobuf.";
-				
-				//TODO doLog( state, rpcResponse, errorMessage );
 				
 				log.warn(errorMessage, e);
 			}			

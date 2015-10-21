@@ -187,13 +187,6 @@ public class ClientRpcController implements RpcController, LocalCallVariableHold
 	}
 
 	/**
-	 * @return the timeoutNanos
-	 */
-	public long getTimeoutNanos() {
-		return timeoutMs*1000000l;
-	}
-
-	/**
 	 * @param timeoutMs the timeoutMs to set
 	 */
 	public void setTimeoutMs(int timeoutMs) {

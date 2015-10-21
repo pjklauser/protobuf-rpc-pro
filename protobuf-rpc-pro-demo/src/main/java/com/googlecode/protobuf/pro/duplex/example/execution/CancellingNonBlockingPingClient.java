@@ -98,7 +98,7 @@ public class CancellingNonBlockingPingClient implements ExecutableClient {
 				} else {
 					nonBlockingService.ping(controller, ping, callback);
 				}
-				Thread.sleep(config.getPingCall().getDurationMs());
+				Thread.sleep(config.getPingCall().getDurationMs() / 2);
 				controller.startCancel();
 
 				while( controller.getCallLocalVariable("failure") == null ) {
