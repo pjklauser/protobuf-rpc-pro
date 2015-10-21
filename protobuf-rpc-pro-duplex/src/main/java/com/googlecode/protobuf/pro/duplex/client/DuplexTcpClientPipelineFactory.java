@@ -140,7 +140,7 @@ public class DuplexTcpClientPipelineFactory extends ChannelInitializer<Channel> 
 	 * @throws IOException
 	 */
 	public RpcClient peerWith( String host, int port, Bootstrap bootstrap ) throws IOException {
-		return peerWith(host,  port, null);
+		return peerWith(host,  port, null, null);
 	}
 	
 	/**
