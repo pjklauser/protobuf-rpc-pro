@@ -31,8 +31,6 @@ import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
 /**
  * The idea is for someone to try to keep a connection alive
  * 
- * TODO investigate using a "DelayQueue" for this.
- * 
  * @author Peter Klauser
  *
  */
@@ -59,7 +57,10 @@ public class RpcClientConnectionWatchdog implements RpcConnectionEventListener {
 	public void start() {
 		watchdogThread = new WatchdogThread(this);
 		thread = new Thread(watchdogThread);
-		thread.setName(getThreadName());
+		if ( getThreadName() != null ) {
+			// #48 avoid NPE if name not set.
+			thread.setName(getThreadName());
+		}
 		thread.setDaemon(true);
 		thread.start();
 	}
