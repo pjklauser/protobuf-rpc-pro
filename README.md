@@ -29,7 +29,7 @@ protobuf-rpc-pro is available via the maven central repository http://repo1.mave
 		<dependency>
 			<groupId>com.googlecode.protobuf-rpc-pro</groupId>
 			<artifactId>protobuf-rpc-pro-duplex</artifactId>
-			<version>3.3.3</version>
+			<version>3.3.4</version>
 			<type>jar</type>
 		</dependency>
 ```
