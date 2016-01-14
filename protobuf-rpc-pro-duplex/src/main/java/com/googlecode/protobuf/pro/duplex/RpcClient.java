@@ -15,39 +15,23 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.protobuf.Descriptors.MethodDescriptor;
-import com.google.protobuf.ExtensionRegistry;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Message;
-import com.google.protobuf.RpcCallback;
-import com.google.protobuf.RpcController;
-import com.google.protobuf.ServiceException;
+import com.google.protobuf.*;
 import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
 import com.googlecode.protobuf.pro.duplex.handler.RpcClientHandler;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
 import com.googlecode.protobuf.pro.duplex.timeout.RpcTimeoutExecutor;
-import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage;
-import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse;
-import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel;
-import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
-import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest;
-import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse;
-import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
-
+import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
+import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelPipeline;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The RpcClient allows clients to send RpcRequests to an RpcServer
@@ -69,8 +53,10 @@ public class RpcClient implements RpcClientChannel {
 	
 	private AtomicInteger correlationId = new AtomicInteger(1);
 
-	private final Map<Integer, PendingClientCallState> pendingRequestMap = new ConcurrentHashMap<Integer, PendingClientCallState>();
-	
+    private static ScheduledExecutorService RPC_CALL_TIMEOUT_SCHEDULER = Executors.newScheduledThreadPool(1, new RenamingThreadFactoryProxy("RpcCallTimeoutScheduler", Executors.defaultThreadFactory()));
+    private final Map<Integer, PendingClientCallState> pendingRequestMap = new ConcurrentHashMap<Integer, PendingClientCallState>();
+
+
 	private final PeerInfo clientInfo;
 	private final PeerInfo serverInfo;
 	private final boolean compression;
@@ -86,7 +72,7 @@ public class RpcClient implements RpcClientChannel {
 	private final Channel channel;
 	private final String channelName;
 	
-	public RpcClient( Channel channel, PeerInfo clientInfo, PeerInfo serverInfo, boolean compression, RpcLogger logger, ExtensionRegistry extensionRegistry ) {
+	public RpcClient(Channel channel, PeerInfo clientInfo, PeerInfo serverInfo, boolean compression, RpcLogger logger, ExtensionRegistry extensionRegistry) {
 		this.channel = channel;
 		this.clientInfo = clientInfo;
 		this.serverInfo = serverInfo;
@@ -335,9 +321,12 @@ public class RpcClient implements RpcClientChannel {
 			try {
 				response = state.getResponsePrototype().newBuilderForType().mergeFrom(rpcResponse.getResponseBytes(),getExtensionRegistry()).build();
 
-				doLogRpc( state, response, null );
+				doLogRpc(state, response, null);
 				
 				state.handleResponse( response );
+                if (state.getTimeoutFuture() != null){
+                    state.getTimeoutFuture().cancel(false);
+                }
 			} catch ( InvalidProtocolBufferException e ) {
 				String errorMessage = "Invalid Response Protobuf.";
 				
@@ -557,11 +546,27 @@ public class RpcClient implements RpcClientChannel {
 		return correlationId.getAndIncrement();
 	}
 	
-	private void registerPendingRequest(int seqId, PendingClientCallState state) {
+	private void registerPendingRequest(final int seqId, PendingClientCallState state) {
 		if (pendingRequestMap.containsKey(seqId)) {
 			throw new IllegalArgumentException("State already registered");
 		}
 		pendingRequestMap.put(seqId, state);
+
+        if (state.getController().getTimeoutMs() == 0){
+            return;
+        }
+
+        ScheduledFuture<?> timeoutFuture = RPC_CALL_TIMEOUT_SCHEDULER.schedule(new Runnable() {
+            @Override
+            public void run() {
+                PendingClientCallState callState = removePendingRequest(seqId);
+                if (callState != null){
+                    callState.handleFailure("RpcCallTimeout");
+                }
+            }
+        }, state.getController().getTimeoutMs(), TimeUnit.MILLISECONDS);
+
+        state.setTimeoutFuture(timeoutFuture);
 	}
 
 	private PendingClientCallState removePendingRequest(int seqId) {
@@ -604,7 +609,7 @@ public class RpcClient implements RpcClientChannel {
 		private final Message responsePrototype;
 		private final long startTimestamp;
 		private final Message request;
-		
+		private volatile ScheduledFuture<?> timeoutFuture;
 		public PendingClientCallState(ClientRpcController controller, MethodDescriptor methodDesc, Message responsePrototype, Message request, RpcCallback<Message> callback) {
 			this.controller = controller;
 			this.methodDesc = methodDesc;
@@ -675,7 +680,15 @@ public class RpcClient implements RpcClientChannel {
 		public Message getResponsePrototype() {
 			return responsePrototype;
 		}
-	}
+
+        public ScheduledFuture<?> getTimeoutFuture() {
+            return timeoutFuture;
+        }
+
+        public void setTimeoutFuture(ScheduledFuture<?> timeoutFuture) {
+            this.timeoutFuture = timeoutFuture;
+        }
+    }
 
 	/**
 	 * @return the clientInfo

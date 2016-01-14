@@ -1,6 +1,12 @@
+*.class
+
 /protobuf-rpc-pro-duplex/.settings
 /protobuf-rpc-pro-duplex/.classpath
 /protobuf-rpc-pro-duplex/.project
 /protobuf-rpc-pro-demo/.settings
 /protobuf-rpc-pro-demo/.classpath
 /protobuf-rpc-pro-demo/.project
+
+
+/protobuf-rpc-pro-demo/.idea
+/protobuf-rpc-pro-duplex/.idea
