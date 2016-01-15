@@ -15,23 +15,44 @@
 */
 package com.googlecode.protobuf.pro.duplex;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.protobuf.Descriptors.MethodDescriptor;
-import com.google.protobuf.*;
+import com.google.protobuf.ExtensionRegistry;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+import com.google.protobuf.RpcCallback;
+import com.google.protobuf.RpcController;
+import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.execute.ServerRpcController;
 import com.googlecode.protobuf.pro.duplex.handler.RpcClientHandler;
 import com.googlecode.protobuf.pro.duplex.logging.RpcLogger;
 import com.googlecode.protobuf.pro.duplex.timeout.RpcTimeoutExecutor;
 import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
-import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.*;
+import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobMessage;
+import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.OobResponse;
+import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcCancel;
+import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
+import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcRequest;
+import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcResponse;
+import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.WirePayload;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelPipeline;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The RpcClient allows clients to send RpcRequests to an RpcServer
@@ -43,7 +64,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * before the RpcResponse or RpcError has been received. The RpcCancel
  * is sent over the IO-Layer to the server. The ongoing client call
  * is immediately failed.
- * 
+ *  
  * @author Peter Klauser
  *
  */
@@ -148,10 +169,6 @@ public class RpcClient implements RpcClientChannel {
 			RpcController controller, Message request, Message responsePrototype)
 			throws ServiceException {
 		ClientRpcController rpcController = (ClientRpcController)controller;
-		long deadlineTS = 0;
-		if ( rpcController.getTimeoutMs() > 0 ) {
-			deadlineTS = System.currentTimeMillis() + rpcController.getTimeoutMs();
-		}
 		
 		BlockingRpcCallback callback = new BlockingRpcCallback();
 		
@@ -159,32 +176,10 @@ public class RpcClient implements RpcClientChannel {
         boolean interrupted = false;
 		while(!callback.isDone()) {
 			try {
-				if ( deadlineTS > 0 ) {
-					long timeToDeadlineMs = deadlineTS - System.currentTimeMillis();
-					if ( timeToDeadlineMs <= 0 ) {
-						rpcController.getRpcClient().blockingCallTimeout(rpcController.getCorrelationId());
-						// this will pre-emptively timeout this call and set the callback done flag before returning.
-						// Issue25: infinite loop, assumption was race condition of timeout handling with correct response.
-						// so we moved synchronization inside the loop, and make sure we exit.
-						if ( !callback.isDone() ) {
-							log.error("Issue25: not fixed - callback after timeout handling not finished. Please re-open issue.");
-							// probably return null - since callback run() is not completed.
-							break;
-						}
-					} else {
-						// we wait at most until the deadline.
-						synchronized(callback) {
-							if ( !callback.isDone() ) {
-								callback.wait(timeToDeadlineMs);
-							}
-						}
-					}
-				} else {
-					// we wait indefinitely ( no timeout defined ).
-					synchronized(callback) {
-						if ( !callback.isDone() ) {
-							callback.wait();
-						}
+				// we wait indefinitely if no timeout is triggered in the async call.
+				synchronized(callback) {
+					if ( !callback.isDone() ) {
+						callback.wait();
 					}
 				}
 			} catch (InterruptedException e) {
@@ -546,11 +541,11 @@ public class RpcClient implements RpcClientChannel {
 		return correlationId.getAndIncrement();
 	}
 	
-	private void registerPendingRequest(final int seqId, final PendingClientCallState state) {
-		if (pendingRequestMap.containsKey(seqId)) {
+	private void registerPendingRequest(final int correlationId, final PendingClientCallState state) {
+		if (pendingRequestMap.containsKey(correlationId)) {
 			throw new IllegalArgumentException("State already registered");
 		}
-		pendingRequestMap.put(seqId, state);
+		pendingRequestMap.put(correlationId, state);
 
         if (state.getController().getTimeoutMs() == 0){
             return;
@@ -559,12 +554,7 @@ public class RpcClient implements RpcClientChannel {
         ScheduledFuture<?> timeoutFuture = RPC_CALL_TIMEOUT_SCHEDULER.schedule(new Runnable() {
             @Override
             public void run() {
-                PendingClientCallState callState = removePendingRequest(seqId);
-                if (callState != null){
-                    callState.handleFailure("RpcCallTimeout " + state.getController().getTimeoutMs() + "ms");
-                    //TODO
-                    // send cancel request to server?
-                }
+                blockingCallTimeout(correlationId);
             }
         }, state.getController().getTimeoutMs(), TimeUnit.MILLISECONDS);
 
@@ -638,7 +628,9 @@ public class RpcClient implements RpcClientChannel {
 		}
 		
 		public void handleFailure( String message ) {
-            log.error("handleFailure|channelName=" + controller.getRpcClient().getChannelName() + "|message=" +message);
+			if ( log.isDebugEnabled() ) {
+	            log.debug("handleFailure|channelName=" + controller.getRpcClient().getChannelName() + "|message=" +message);
+			}
 			controller.setFailed(message);
             callback(null);
 		}
