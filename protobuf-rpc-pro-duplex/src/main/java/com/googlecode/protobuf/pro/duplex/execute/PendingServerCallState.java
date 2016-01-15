@@ -20,6 +20,8 @@ import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.Service;
 
+import java.util.concurrent.ScheduledFuture;
+
 /**
  * @author Peter Klauser
  *
@@ -34,7 +36,8 @@ public class PendingServerCallState {
 	private final Message request;
 	private final long startTS;
 	private final int timeoutMs;
-	
+    private volatile ScheduledFuture<?> timeoutFuture;
+
 	/**
 	 * The executor is set by the RpcServerCallExecutor before starting the call,
 	 * and removed by the RpcServerCallExecutor after call completion, but before 
@@ -140,5 +143,11 @@ public class PendingServerCallState {
 		return timeoutMs;
 	}
 
+    public ScheduledFuture<?> getTimeoutFuture() {
+        return timeoutFuture;
+    }
 
+    public void setTimeoutFuture(ScheduledFuture<?> timeoutFuture) {
+        this.timeoutFuture = timeoutFuture;
+    }
 }

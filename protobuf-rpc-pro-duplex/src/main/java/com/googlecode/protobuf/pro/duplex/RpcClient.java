@@ -546,7 +546,7 @@ public class RpcClient implements RpcClientChannel {
 		return correlationId.getAndIncrement();
 	}
 	
-	private void registerPendingRequest(final int seqId, PendingClientCallState state) {
+	private void registerPendingRequest(final int seqId, final PendingClientCallState state) {
 		if (pendingRequestMap.containsKey(seqId)) {
 			throw new IllegalArgumentException("State already registered");
 		}
@@ -561,7 +561,9 @@ public class RpcClient implements RpcClientChannel {
             public void run() {
                 PendingClientCallState callState = removePendingRequest(seqId);
                 if (callState != null){
-                    callState.handleFailure("RpcCallTimeout");
+                    callState.handleFailure("RpcCallTimeout " + state.getController().getTimeoutMs() + "ms");
+                    //TODO
+                    // send cancel request to server?
                 }
             }
         }, state.getController().getTimeoutMs(), TimeUnit.MILLISECONDS);
@@ -636,8 +638,9 @@ public class RpcClient implements RpcClientChannel {
 		}
 		
 		public void handleFailure( String message ) {
+            log.error("handleFailure|channelName=" + controller.getRpcClient().getChannelName() + "|message=" +message);
 			controller.setFailed(message);
-			callback(null);
+            callback(null);
 		}
 
 		private void callback(Message message) {

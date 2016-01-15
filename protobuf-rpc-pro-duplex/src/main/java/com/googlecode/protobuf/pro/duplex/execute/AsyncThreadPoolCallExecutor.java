@@ -1,18 +1,4 @@
-/**
- *   Copyright 2010-2014 Peter Klauser
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
-*/
+
 package com.googlecode.protobuf.pro.duplex.execute;
 
 import com.google.protobuf.Message;
@@ -25,37 +11,7 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 /**
- * A ThreadPoolCallExecutor uses a pool of threads to handle the running of server side RPC calls.
- * This executor provides a cancellation facility where a running RPC callState can be interrupted before
- * it finishes, because a RPC cancel which comes logically after the RPC callState can be processed.
- * 
- * Thread separation between IO-Layer threads and threads calling the RPC methods is only needed if
- * the RPC method callState is going to make an RPC callState back to the SAME client who the callState is servicing.
- * If other threads than the IO-Layer threads are calling the server's RPC clients, then the 
- * {@link SameThreadExecutor} is sufficient.
- * 
- * It is necessary to use separate threads to handle server RPC calls than the threads which serve
- * the RPC client calls, in order to avoid deadlock on the single Netty Channel.
- * 
- * You can choose bounds for number of Threads to service the calls, and the BlockingQueue size and
- * implementation through the choice of constructors. {@link ThreadPoolExecutor}
- * discusses the choices here in detail.
- *
- * By default we use {@link ArrayBlockingQueue} to begin to throttle inbound calls
- * without building up a significant backlog ( introducing latency ). The ArrayBlockingQueue gives less
- * "Server Overload" issues due to thread scheduling situations ( thread not yet reading from queue when
- * the RPC inbound callState is entered ).
- *
- * Alternatively use {@link java.util.concurrent.SynchronousQueue} to avoid building up a backlog of queued
- * requests. If a RPC callState comes in where a Thread is not ready to handle, you will receive
- * a "Server Overload" error.
- *
- * Alternatively use {@link java.util.concurrent.LinkedBlockingQueue} without specifying any fixed capacity
- * to allow any number of pending requests queued indefinitely. This opens up the possibility of eventual
- * out of memory problems.
- *
- * @author Peter Klauser
- *
+ * Created by lubin on 01/14/16.
  */
 public class AsyncThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcServerCallExecutor, RejectedExecutionHandler {
 
@@ -63,7 +19,10 @@ public class AsyncThreadPoolCallExecutor extends ThreadPoolExecutor implements R
 
 	Map<AsyncRpcCallRunner,AsyncRpcCallRunner> runningCalls = new ConcurrentHashMap<AsyncRpcCallRunner, AsyncRpcCallRunner>();
 
-	public AsyncThreadPoolCallExecutor(int corePoolSize, int maximumPoolSize) {
+    private static ScheduledExecutorService RPC_EXECUTOR_TIMEOUT_SCHEDULER = Executors.newScheduledThreadPool(1, new RenamingThreadFactoryProxy("RpcExecutorTimeoutScheduler", Executors.defaultThreadFactory()));
+
+
+    public AsyncThreadPoolCallExecutor(int corePoolSize, int maximumPoolSize) {
 		this(corePoolSize, maximumPoolSize, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(corePoolSize, false), new RenamingThreadFactoryProxy("rpc", Executors.defaultThreadFactory()) );
 	}
 
@@ -83,12 +42,33 @@ public class AsyncThreadPoolCallExecutor extends ThreadPoolExecutor implements R
 	 * @see com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor#execute(com.googlecode.protobuf.pro.duplex.execute.PendingServerCallState)
 	 */
 	@Override
-	public void execute(PendingServerCallState callState) {
-		AsyncRpcCallRunner runner = new AsyncRpcCallRunner(callState, this);
-		runningCalls.put(runner, runner);
-		callState.setExecutor(runner);
-		execute(runner);
+	public void execute(final PendingServerCallState callState) {
+		final AsyncRpcCallRunner asyncRpcCallRunner = new AsyncRpcCallRunner(callState, this);
+		runningCalls.put(asyncRpcCallRunner, asyncRpcCallRunner);
+		callState.setExecutor(asyncRpcCallRunner);
+        execute(asyncRpcCallRunner);
+
+        if (callState.getTimeoutMs() > 0){
+            ScheduledFuture<?> timeoutFuture = RPC_EXECUTOR_TIMEOUT_SCHEDULER.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    AsyncRpcCallRunner runner = runningCalls.remove(asyncRpcCallRunner);
+                    if(runner != null){
+                        callState.getController().setFailed("RpcExecutorTimeout " + callState.getTimeoutMs() + "ms");
+                        callState.getExecutorCallback().onFinish(callState.getController().getCorrelationId(), null);
+                    }
+                }
+            }, callState.getTimeoutMs(), TimeUnit.MILLISECONDS);
+            callState.setTimeoutFuture(timeoutFuture);
+        }
 	}
+
+    private void cancelRpcExecutorTimeoutFuture(PendingServerCallState callState){
+        ScheduledFuture<?> timeoutFuture = callState.getTimeoutFuture();
+        if(timeoutFuture != null){
+            timeoutFuture.cancel(false);
+        }
+    }
 
 	/* (non-Javadoc)
 	 * @see com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor#cancel(java.lang.Runnable)
@@ -98,7 +78,6 @@ public class AsyncThreadPoolCallExecutor extends ThreadPoolExecutor implements R
 		AsyncRpcCallRunner runner = runningCalls.remove(executor);
 		if ( runner != null ) {
 			PendingServerCallState callState = runner.getCallState();
-			
 			// set the controller's cancel indicator
 			callState.getController().startCancel();
 			
@@ -108,6 +87,8 @@ public class AsyncThreadPoolCallExecutor extends ThreadPoolExecutor implements R
 			if ( threadToCancel != null ) {
 				threadToCancel.interrupt();
 			}
+
+            cancelRpcExecutorTimeoutFuture(callState);
 		}
 		// the running task, still should finish by returning "null" to the RPC done
 		// callback.
@@ -136,6 +117,8 @@ public class AsyncThreadPoolCallExecutor extends ThreadPoolExecutor implements R
 			PendingServerCallState callState = runner.getCallState();
             callState.getController().setFailed("Server Overload");
             callState.getExecutorCallback().onFinish(callState.getController().getCorrelationId(), null);
+
+            cancelRpcExecutorTimeoutFuture(callState);
 			// if we didn't even start to run, we don't have to worry about on cancel notify because
 			// the cancel notification callback could never have been set!
 		}
@@ -146,6 +129,7 @@ public class AsyncThreadPoolCallExecutor extends ThreadPoolExecutor implements R
         AsyncRpcCallRunner runner = runningCalls.remove(r);
         if ( runner != null ) {
             ServerRpcController controller = runner.getCallState().getController();
+            PendingServerCallState callState = runner.getCallState();
             if ( controller.isCanceled() ) {
                 // we don't care if there was a response created or error, the
                 // client is not interested anymore. Just to the notification
@@ -159,7 +143,9 @@ public class AsyncThreadPoolCallExecutor extends ThreadPoolExecutor implements R
                 if ( !runner.getAsyncRpcCallback().isDone() ) {
                     log.warn("RpcCallRunner did not finish RpcCall afterExecute. RpcCallRunner expected to complete calls, not offload them.");
                 }
-                runner.getCallState().getExecutorCallback().onFinish(runner.getCallState().getController().getCorrelationId(), runner.getAsyncRpcCallback().getMessage());
+
+                callState.getExecutorCallback().onFinish(runner.getCallState().getController().getCorrelationId(), runner.getAsyncRpcCallback().getMessage());
+                cancelRpcExecutorTimeoutFuture(callState);
             }
         } else {
             if ( log.isDebugEnabled() ) {
