@@ -19,7 +19,7 @@ This project provides an java implementation for Google's Protocol Buffer RPC se
 
 ## WIKI / Documentation ##
 
-for more information [http://pjklauser.github.io/protobuf-rpc-pro/]
+for more information http://pjklauser.github.io/protobuf-rpc-pro/
 
 ## Maven Dependency ##
 
