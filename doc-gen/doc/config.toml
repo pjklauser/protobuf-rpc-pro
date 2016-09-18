@@ -51,18 +51,18 @@ googleAnalytics = "UA-18238203-1"
 	weight = 0
 
 [[menu.main]]
-	name   = "Features"
-	url    = "features/"
+	name   = "Internals"
+	url    = "internals/"
 	weight = 10
 
 [[menu.main]]
-	name   = "Internals"
-	url    = "internals/"
+	name   = "Release Notes"
+	url    = "release-notes/"
 	weight = 20
 
 [[menu.main]]
-	name   = "Download"
-	url    = "download/"
+	name   = "Maven Dependencies"
+	url    = "dependencies/"
 	weight = 30
 
 

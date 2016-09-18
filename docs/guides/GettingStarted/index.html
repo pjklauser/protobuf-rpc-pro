@@ -193,23 +193,6 @@
 
 
 
-<a  title="Features" href="http://pjklauser.github.io/protobuf-rpc-pro/features/">
-	
-	Features
-</a>
-
-
-  
-</li>
-
-
-
-<li>
-  
-    
-
-
-
 <a  title="Internals" href="http://pjklauser.github.io/protobuf-rpc-pro/internals/">
 	
 	Internals
@@ -227,9 +210,26 @@
 
 
 
-<a  title="Download" href="http://pjklauser.github.io/protobuf-rpc-pro/download/">
+<a  title="Release Notes" href="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/">
 	
-	Download
+	Release Notes
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Maven Dependencies" href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/">
+	
+	Maven Dependencies
 </a>
 
 
@@ -346,6 +346,11 @@
 
 <h2 id="server-code">Server Code</h2>
 
+<p>Make sure that you define the following option in the protobuf IDL files which you use &ldquo;protoc&rdquo; to convert into Java stubs. Without this option, no RPC services will be generated.</p>
+
+<pre><code>option java_generic_services = true;
+</code></pre>
+
 <p>The server side is pretty similar to the client above. The server needs to know &ldquo;who&rdquo; it is, and be given a port on which to bind to on the machine it is running on. Note you can configure a local address to bind onto also ( multi-homing support ) through the Netty localAddress option. The server&rsquo;s hostname should normally be the server&rsquo;s hostname which resolves in DNS to the server machine, however it is just a name ( like the client&rsquo;s port is just a name ).</p>
 
 <pre><code>        PeerInfo serverInfo = new PeerInfo(&quot;serverHostname&quot;, 8080);
@@ -406,27 +411,6 @@
 
 <p>Both client and server bootstraps have a RpcServiceRegistry. Secondly the server code needs to get hold of a RpcClientChannel to communicate back to the client. This is possible through the RpcController on the server side which is available during server call processing, or through the server&rsquo;s RpcClientRegistry at any time.</p>
 
-<h2 id="runtime-dependencies">Runtime Dependencies</h2>
-
-<p>The external dependencies have been kept to a minimum. Netty, slf4j and protobuf-java are the only compile time dependencies. Compiled against java 1.7. The dependencies can be seen in the project&rsquo;s maven pom.xml.</p>
-
-<pre><code>        &lt;dependency&gt;
-            &lt;groupId&gt;com.google.protobuf&lt;/groupId&gt;
-            &lt;artifactId&gt;protobuf-java&lt;/artifactId&gt;
-            &lt;version&gt;2.6.1&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;io.netty&lt;/groupId&gt;
-            &lt;artifactId&gt;netty&lt;/artifactId&gt;
-            &lt;version&gt;4.0.23.Final&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
-            &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
-            &lt;version&gt;1.7.2&lt;/version&gt;
-        &lt;/dependency&gt;
-</code></pre>
-
 
 			<aside class="copyright" role="note">
 				
@@ -464,7 +448,7 @@
 
   <div class="next">
   
-      <a href="http://pjklauser.github.io/protobuf-rpc-pro/download/MavenDependency/" title="Maven Dependency">
+      <a href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/MavenDependency/" title="Maven Dependency">
         <span class="direction">
           Next
         </span>

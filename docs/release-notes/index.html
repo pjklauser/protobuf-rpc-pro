@@ -9,18 +9,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
-    <title>SpringFramework - protobuf-rpc-pro</title>
+    <title>Release-notes - protobuf-rpc-pro</title>
     <meta name="generator" content="Hugo 0.16" />
 
     
     <meta name="description" content="a java implementation of Google&#39;s Protocol Buffer RPC services">
     
-    <link rel="canonical" href="http://pjklauser.github.io/protobuf-rpc-pro/guides/SpringConfigGuide/">
+    <link rel="canonical" href="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/">
     
     <meta name="author" content="Peter Klauser">
     
 
-    <meta property="og:url" content="http://pjklauser.github.io/protobuf-rpc-pro/guides/SpringConfigGuide/">
+    <meta property="og:url" content="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/">
     <meta property="og:title" content="protobuf-rpc-pro">
     
     <meta name="apple-mobile-web-app-title" content="protobuf-rpc-pro">
@@ -69,14 +69,12 @@
     <script src="http://pjklauser.github.io/protobuf-rpc-pro/javascripts/modernizr.js"></script>
 
     
+    <link href="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/index.xml" rel="alternate" type="application/rss+xml" title="protobuf-rpc-pro" />
+    <link href="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/index.xml" rel="feed" type="application/rss+xml" title="protobuf-rpc-pro" />
+    
 
   </head>
   <body class="palette-primary-red palette-accent-light-green">
-
-
-
-	
-	
 
 
 <div class="backdrop">
@@ -97,7 +95,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        SpringFramework
+        Release-note
       </div>
     </div>
 
@@ -135,9 +133,6 @@
       
       <div class="name">
         <strong>protobuf-rpc-pro <span class="version">3.3.4</span></strong>
-        
-          <br>
-          pjklauser/protobuf-rpc-pro
         
       </div>
     </div>
@@ -210,11 +205,14 @@
 
 
 
-<a  title="Release Notes" href="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/">
+<a class="current" title="Release Notes" href="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/">
 	
 	Release Notes
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
   
 </li>
@@ -265,129 +263,18 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>SpringFramework </h1>
+			<h1>Pages in Release-note</h1>
 
 			
+			<a href="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/ReleaseNotes/" title="Release Notes">
+				<h2>Release Notes</h2>
+			</a>
 
-<p>Thanks to Dieter Mayrhofer for contributing this example code. It shows one way to configure a server side implementation using spring. The code and runner is checked into the ( <a href="http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-demo/src/main/java/com/googlecode/protobuf/pro/duplex/example/spring">demo package</a> ). The example starts a DefaultPingPongServerImpl service which is provided as standalone example.</p>
+			<br>
+			What changes are made from release to release. Check SVN history for more details. 3.3.4 #49 StackOverflowError DuplexTcpClientPipelineFactory.peerWith #48 WatchdogThread is not renamed to a readable thread name #46 CleanShutdownHandler leaves shutdown hook registered when shutdown explicitly Upgrade to Netty 4.0.33.Final 3.3.3 #45 RpcClientChannel support &ldquo;attributes&rdquo; on initial connection (peerWith) #44 CleanShutdownHandler explicit shutdown leaves non daemon threads hanging which prohibit later JVM shutdown. 3.3.2 #37 CleanShutdownHandler to support shutdown on demand.
 
-<h1 id="dependency-on-spring">Dependency on Spring</h1>
-
-<p>Introduce the following maven dependencies to spring.</p>
-
-<pre><code>        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
-            &lt;version&gt;3.0.5.RELEASE&lt;/version&gt;
-            &lt;type&gt;jar&lt;/type&gt;
-            &lt;scope&gt;compile&lt;/scope&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
-            &lt;version&gt;3.0.5.RELEASE&lt;/version&gt;
-            &lt;type&gt;jar&lt;/type&gt;
-            &lt;scope&gt;compile&lt;/scope&gt;
-        &lt;/dependency&gt;
-</code></pre>
-
-<h1 id="server-spring-component">Server Spring Component</h1>
-
-<p>The main spring component uses PostConstruct and PreDestroy annotations to startup and tear down the component cleanly.</p>
-
-<pre><code>package com.googlecode.protobuf.pro.duplex.example.spring;
-...
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-...
-import org.springframework.beans.factory.annotation.Autowired;
-...
-public class PingSpringServer {
-    
-    @Autowired(required = true)
-    private DefaultPingPongServiceImpl pingPongServiceImpl;
-
-    int port;
-    String host;
-
-    protected final Log log = LogFactory.getLog(getClass());
-
-    private DuplexTcpServerBootstrap bootstrap;
-
-    public PingSpringServer(String host, int port) {
-        this.host = host;
-        this.port = port;
-    }
-
-    @PostConstruct
-    public void init() {
-        runServer();
-    }
-
-    public void runServer() {
-        PeerInfo serverInfo = new PeerInfo(host, port);
-        RpcServerCallExecutor executor = new ThreadPoolCallExecutor(10, 10);
-
-        bootstrap = new DuplexTcpServerBootstrap(serverInfo,
-                new NioServerSocketChannelFactory(
-                        Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()), executor);
-        log.info(&quot;Proto Serverbootstrap created&quot;);
-
-        // Register Ping Service
-        Service pingService = PingService.newReflectiveService(pingPongServiceImpl);
-
-        bootstrap.getRpcServiceRegistry().registerService(pingService);
-        log.info(&quot;Proto Ping Registerservice executed&quot;);
-
-        bootstrap.bind();
-        log.info(&quot;Proto Ping Server Bound to port &quot; + port);
-    }
-
-    @PreDestroy
-    protected void unbind() throws Throwable {
-        super.finalize();
-        bootstrap.releaseExternalResources();
-        log.info(&quot;Proto Ping Server Unbound&quot;);
-    }
-}
-</code></pre>
-
-<h1 id="spring-configuration">Spring Configuration</h1>
-
-<p>The following configuration is used to setup the server component on localhost, port 8090. Note: other examples use port 8080.</p>
-
-<pre><code>public class SpringConfig {
-    private static String PROTOSERVERHOST = &quot;localhost&quot;;
-    private static int PROTOSERVERPORT = 8090;
-
-    // Implementation of the Service Interface
-    @Bean(name = &quot;pingPongServiceImpl&quot;)
-    public DefaultPingPongServiceImpl pingPongServiceImpl() {
-        return new DefaultPingPongServiceImpl();
-    }
-
-    // Will start the server
-    @Bean(name = &quot;pingSpringServer&quot;)
-    public PingSpringServer pingSpringServer() {
-        return new PingSpringServer(PROTOSERVERHOST, PROTOSERVERPORT);
-    }
-}
-</code></pre>
-
-<h1 id="running-in-standalone-jvm">Running in Standalone JVM</h1>
-
-<p>The following code starts the entire spring application and stops it after 10s.</p>
-
-<pre><code>    public static void main(String[] args) throws Exception {
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
-
-        Thread.sleep(10000);
-        
-        System.exit(0);
-    }
-</code></pre>
-
+			<hr>
+			
 
 			<aside class="copyright" role="note">
 				
@@ -398,57 +285,6 @@ public class PingSpringServer {
 				using the
 				<a href="http://github.com/digitalcraftsman/hugo-material-docs" target="_blank">Material</a> theme.
 			</aside>
-
-			<footer class="footer">
-				
-
-<nav class="pagination" aria-label="Footer">
-  <div class="previous">
-  
-      <a href="http://pjklauser.github.io/protobuf-rpc-pro/guides/SSLGuide/" title="SSL Guide">
-        <span class="direction">
-          Previous
-        </span>
-        <div class="page">
-          <div class="button button-previous" role="button" aria-label="Previous">
-            <i class="icon icon-back"></i>
-          </div>
-          <div class="stretch">
-            <div class="title">
-              SSL Guide
-            </div>
-          </div>
-        </div>
-      </a>
-  
-  </div>
-
-  <div class="next">
-  
-      <a href="http://pjklauser.github.io/protobuf-rpc-pro/" title="protobuf-rpc-pro">
-        <span class="direction">
-          Next
-        </span>
-        <div class="page">
-          <div class="stretch">
-            <div class="title">
-              protobuf-rpc-pro
-            </div>
-          </div>
-          <div class="button button-next" role="button" aria-label="Next">
-            <i class="icon icon-forward"></i>
-          </div>
-        </div>
-      </a>
-  
-  </div>
-</nav>
-
-
-
-
-
-			</footer>
 		</div>
 	</article>
 
@@ -464,8 +300,8 @@ public class PingSpringServer {
 
     <script>
     
-      var base_url = 'http:\/\/pjklauser.github.io\/protobuf-rpc-pro\/';
-      var repo_id  = 'pjklauser\/protobuf-rpc-pro';
+      var base_url = '';
+      var repo_id  = '';
     
     </script>
 

@@ -9,18 +9,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
-    <title>SpringFramework - protobuf-rpc-pro</title>
+    <title>Dependencies - protobuf-rpc-pro</title>
     <meta name="generator" content="Hugo 0.16" />
 
     
     <meta name="description" content="a java implementation of Google&#39;s Protocol Buffer RPC services">
     
-    <link rel="canonical" href="http://pjklauser.github.io/protobuf-rpc-pro/guides/SpringConfigGuide/">
+    <link rel="canonical" href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/">
     
     <meta name="author" content="Peter Klauser">
     
 
-    <meta property="og:url" content="http://pjklauser.github.io/protobuf-rpc-pro/guides/SpringConfigGuide/">
+    <meta property="og:url" content="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/">
     <meta property="og:title" content="protobuf-rpc-pro">
     
     <meta name="apple-mobile-web-app-title" content="protobuf-rpc-pro">
@@ -69,14 +69,12 @@
     <script src="http://pjklauser.github.io/protobuf-rpc-pro/javascripts/modernizr.js"></script>
 
     
+    <link href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/index.xml" rel="alternate" type="application/rss+xml" title="protobuf-rpc-pro" />
+    <link href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/index.xml" rel="feed" type="application/rss+xml" title="protobuf-rpc-pro" />
+    
 
   </head>
   <body class="palette-primary-red palette-accent-light-green">
-
-
-
-	
-	
 
 
 <div class="backdrop">
@@ -97,7 +95,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        SpringFramework
+        Dependency
       </div>
     </div>
 
@@ -135,9 +133,6 @@
       
       <div class="name">
         <strong>protobuf-rpc-pro <span class="version">3.3.4</span></strong>
-        
-          <br>
-          pjklauser/protobuf-rpc-pro
         
       </div>
     </div>
@@ -227,11 +222,14 @@
 
 
 
-<a  title="Maven Dependencies" href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/">
+<a class="current" title="Maven Dependencies" href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/">
 	
 	Maven Dependencies
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
   
 </li>
@@ -265,129 +263,27 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>SpringFramework </h1>
+			<h1>Pages in Dependency</h1>
 
 			
+			<a href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/MavenDependency/" title="Maven Dependency">
+				<h2>Maven Dependency</h2>
+			</a>
 
-<p>Thanks to Dieter Mayrhofer for contributing this example code. It shows one way to configure a server side implementation using spring. The code and runner is checked into the ( <a href="http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-demo/src/main/java/com/googlecode/protobuf/pro/duplex/example/spring">demo package</a> ). The example starts a DefaultPingPongServerImpl service which is provided as standalone example.</p>
+			<br>
+			protobuf-rpc-pro is available via the maven central repository <a href="http://repo1.maven.org/maven2">http://repo1.maven.org/maven2</a>. The demo examples are available under the artifactId &ldquo;protocol-rpc-pro-demo&rdquo;. &lt;dependency&gt; &lt;groupId&gt;com.googlecode.protobuf-rpc-pro&lt;/groupId&gt; &lt;artifactId&gt;protobuf-rpc-pro-duplex&lt;/artifactId&gt; &lt;version&gt;3.3.4&lt;/version&gt; &lt;type&gt;jar&lt;/type&gt; &lt;/dependency&gt;
 
-<h1 id="dependency-on-spring">Dependency on Spring</h1>
+			<hr>
+			
+			<a href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/RuntimeDependencies/" title="Runtime Dependencies">
+				<h2>Runtime Dependencies</h2>
+			</a>
 
-<p>Introduce the following maven dependencies to spring.</p>
+			<br>
+			The external dependencies have been kept to a minimum. Netty, slf4j and protobuf-java are the only compile time dependencies. Compiled against java 1.7. The dependencies can be seen in the project&rsquo;s maven pom.xml. &lt;dependency&gt; &lt;groupId&gt;com.google.protobuf&lt;/groupId&gt; &lt;artifactId&gt;protobuf-java&lt;/artifactId&gt; &lt;version&gt;2.6.1&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;io.netty&lt;/groupId&gt; &lt;artifactId&gt;netty&lt;/artifactId&gt; &lt;version&gt;4.0.23.Final&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.slf4j&lt;/groupId&gt; &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt; &lt;version&gt;1.7.2&lt;/version&gt; &lt;/dependency&gt;
 
-<pre><code>        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
-            &lt;version&gt;3.0.5.RELEASE&lt;/version&gt;
-            &lt;type&gt;jar&lt;/type&gt;
-            &lt;scope&gt;compile&lt;/scope&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
-            &lt;version&gt;3.0.5.RELEASE&lt;/version&gt;
-            &lt;type&gt;jar&lt;/type&gt;
-            &lt;scope&gt;compile&lt;/scope&gt;
-        &lt;/dependency&gt;
-</code></pre>
-
-<h1 id="server-spring-component">Server Spring Component</h1>
-
-<p>The main spring component uses PostConstruct and PreDestroy annotations to startup and tear down the component cleanly.</p>
-
-<pre><code>package com.googlecode.protobuf.pro.duplex.example.spring;
-...
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-...
-import org.springframework.beans.factory.annotation.Autowired;
-...
-public class PingSpringServer {
-    
-    @Autowired(required = true)
-    private DefaultPingPongServiceImpl pingPongServiceImpl;
-
-    int port;
-    String host;
-
-    protected final Log log = LogFactory.getLog(getClass());
-
-    private DuplexTcpServerBootstrap bootstrap;
-
-    public PingSpringServer(String host, int port) {
-        this.host = host;
-        this.port = port;
-    }
-
-    @PostConstruct
-    public void init() {
-        runServer();
-    }
-
-    public void runServer() {
-        PeerInfo serverInfo = new PeerInfo(host, port);
-        RpcServerCallExecutor executor = new ThreadPoolCallExecutor(10, 10);
-
-        bootstrap = new DuplexTcpServerBootstrap(serverInfo,
-                new NioServerSocketChannelFactory(
-                        Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()), executor);
-        log.info(&quot;Proto Serverbootstrap created&quot;);
-
-        // Register Ping Service
-        Service pingService = PingService.newReflectiveService(pingPongServiceImpl);
-
-        bootstrap.getRpcServiceRegistry().registerService(pingService);
-        log.info(&quot;Proto Ping Registerservice executed&quot;);
-
-        bootstrap.bind();
-        log.info(&quot;Proto Ping Server Bound to port &quot; + port);
-    }
-
-    @PreDestroy
-    protected void unbind() throws Throwable {
-        super.finalize();
-        bootstrap.releaseExternalResources();
-        log.info(&quot;Proto Ping Server Unbound&quot;);
-    }
-}
-</code></pre>
-
-<h1 id="spring-configuration">Spring Configuration</h1>
-
-<p>The following configuration is used to setup the server component on localhost, port 8090. Note: other examples use port 8080.</p>
-
-<pre><code>public class SpringConfig {
-    private static String PROTOSERVERHOST = &quot;localhost&quot;;
-    private static int PROTOSERVERPORT = 8090;
-
-    // Implementation of the Service Interface
-    @Bean(name = &quot;pingPongServiceImpl&quot;)
-    public DefaultPingPongServiceImpl pingPongServiceImpl() {
-        return new DefaultPingPongServiceImpl();
-    }
-
-    // Will start the server
-    @Bean(name = &quot;pingSpringServer&quot;)
-    public PingSpringServer pingSpringServer() {
-        return new PingSpringServer(PROTOSERVERHOST, PROTOSERVERPORT);
-    }
-}
-</code></pre>
-
-<h1 id="running-in-standalone-jvm">Running in Standalone JVM</h1>
-
-<p>The following code starts the entire spring application and stops it after 10s.</p>
-
-<pre><code>    public static void main(String[] args) throws Exception {
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
-
-        Thread.sleep(10000);
-        
-        System.exit(0);
-    }
-</code></pre>
-
+			<hr>
+			
 
 			<aside class="copyright" role="note">
 				
@@ -398,57 +294,6 @@ public class PingSpringServer {
 				using the
 				<a href="http://github.com/digitalcraftsman/hugo-material-docs" target="_blank">Material</a> theme.
 			</aside>
-
-			<footer class="footer">
-				
-
-<nav class="pagination" aria-label="Footer">
-  <div class="previous">
-  
-      <a href="http://pjklauser.github.io/protobuf-rpc-pro/guides/SSLGuide/" title="SSL Guide">
-        <span class="direction">
-          Previous
-        </span>
-        <div class="page">
-          <div class="button button-previous" role="button" aria-label="Previous">
-            <i class="icon icon-back"></i>
-          </div>
-          <div class="stretch">
-            <div class="title">
-              SSL Guide
-            </div>
-          </div>
-        </div>
-      </a>
-  
-  </div>
-
-  <div class="next">
-  
-      <a href="http://pjklauser.github.io/protobuf-rpc-pro/" title="protobuf-rpc-pro">
-        <span class="direction">
-          Next
-        </span>
-        <div class="page">
-          <div class="stretch">
-            <div class="title">
-              protobuf-rpc-pro
-            </div>
-          </div>
-          <div class="button button-next" role="button" aria-label="Next">
-            <i class="icon icon-forward"></i>
-          </div>
-        </div>
-      </a>
-  
-  </div>
-</nav>
-
-
-
-
-
-			</footer>
 		</div>
 	</article>
 
@@ -464,8 +309,8 @@ public class PingSpringServer {
 
     <script>
     
-      var base_url = 'http:\/\/pjklauser.github.io\/protobuf-rpc-pro\/';
-      var repo_id  = 'pjklauser\/protobuf-rpc-pro';
+      var base_url = '';
+      var repo_id  = '';
     
     </script>
 

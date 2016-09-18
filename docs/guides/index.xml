@@ -94,6 +94,11 @@
 
 &lt;h2 id=&#34;server-code&#34;&gt;Server Code&lt;/h2&gt;
 
+&lt;p&gt;Make sure that you define the following option in the protobuf IDL files which you use &amp;ldquo;protoc&amp;rdquo; to convert into Java stubs. Without this option, no RPC services will be generated.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;option java_generic_services = true;
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;p&gt;The server side is pretty similar to the client above. The server needs to know &amp;ldquo;who&amp;rdquo; it is, and be given a port on which to bind to on the machine it is running on. Note you can configure a local address to bind onto also ( multi-homing support ) through the Netty localAddress option. The server&amp;rsquo;s hostname should normally be the server&amp;rsquo;s hostname which resolves in DNS to the server machine, however it is just a name ( like the client&amp;rsquo;s port is just a name ).&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;        PeerInfo serverInfo = new PeerInfo(&amp;quot;serverHostname&amp;quot;, 8080);
@@ -153,27 +158,6 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Both client and server bootstraps have a RpcServiceRegistry. Secondly the server code needs to get hold of a RpcClientChannel to communicate back to the client. This is possible through the RpcController on the server side which is available during server call processing, or through the server&amp;rsquo;s RpcClientRegistry at any time.&lt;/p&gt;
-
-&lt;h2 id=&#34;runtime-dependencies&#34;&gt;Runtime Dependencies&lt;/h2&gt;
-
-&lt;p&gt;The external dependencies have been kept to a minimum. Netty, slf4j and protobuf-java are the only compile time dependencies. Compiled against java 1.7. The dependencies can be seen in the project&amp;rsquo;s maven pom.xml.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;com.google.protobuf&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;protobuf-java&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;2.6.1&amp;lt;/version&amp;gt;
-        &amp;lt;/dependency&amp;gt;
-        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;io.netty&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;netty&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;4.0.23.Final&amp;lt;/version&amp;gt;
-        &amp;lt;/dependency&amp;gt;
-        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;org.slf4j&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;slf4j-api&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;1.7.2&amp;lt;/version&amp;gt;
-        &amp;lt;/dependency&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     

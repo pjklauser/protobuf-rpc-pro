@@ -196,23 +196,6 @@
 
 
 
-<a  title="Features" href="http://pjklauser.github.io/protobuf-rpc-pro/features/">
-	
-	Features
-</a>
-
-
-  
-</li>
-
-
-
-<li>
-  
-    
-
-
-
 <a  title="Internals" href="http://pjklauser.github.io/protobuf-rpc-pro/internals/">
 	
 	Internals
@@ -230,9 +213,26 @@
 
 
 
-<a  title="Download" href="http://pjklauser.github.io/protobuf-rpc-pro/download/">
+<a  title="Release Notes" href="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/">
 	
-	Download
+	Release Notes
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Maven Dependencies" href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/">
+	
+	Maven Dependencies
 </a>
 
 
@@ -275,21 +275,51 @@
 
 <p>This project provides an java implementation for Google&rsquo;s Protocol Buffer RPC services. The implementation builds upon Netty for low-level NIO.</p>
 
-<h2 id="features">Features</h2>
+<h1 id="features">Features</h1>
 
-<ul>
-<li>TCP connection keep-alive.</li>
-<li>Bi-directional RPC calls from client to server and server to client.</li>
-<li>SSL socket layer encryption option.</li>
-<li>Data Compression option.</li>
-<li>RPC call cancellation.</li>
-<li>RPC call timeout.</li>
-<li>Out-of-Band RPC server replies to client.</li>
-<li>Non RPC Protocol Buffer messaging for peer to peer communication.</li>
-<li>Protocol Buffer wire protocol.</li>
-<li>Semantics for calls handling on TCP connection closure.</li>
-<li>Pluggable logging facility.</li>
-</ul>
+<h2 id="tcp-connection-re-use">TCP connection re-use</h2>
+
+<p>RPC calls from an RPC client can be multiplexed over a single TCP socket to an RPC server. The RPC client has full control of the TCP socket, which is kept open between calls. This avoids the extra overhead of TCP connection establishment for each call ( SYN, SSL handshake ).</p>
+
+<h2 id="bi-directional-rpc-calls-client-to-server-and-server-to-client">Bi-directional RPC calls client to server and server to client</h2>
+
+<p>It features a bidirectional architecture, in which a client can itself be a server and vice versa. In security conscious &ldquo;zoned&rdquo; environments, it is typical that TCP connectivity between zones is restricted to one direction ( normally client to server ). Firewall configurations are always a pain to setup and change, so being able to communicate as equal &ldquo;peers&rdquo; in either direction using Protocol Buffer services is handy. In particular when multiplexing calls over the same TCP connection. This is interesting because if the connection breaks, both client and server (eventually) realize that their peering is broken and both can have a common understanding of their respective states. It is even possible for a server to perform a blocking RPC call to the client who&rsquo;s blocking call it is currently servicing. It is possible for a client to open a connection to a server and then the server starts acting as client to the client which then acts as server, without the client ever having called a server call. This is enabled due to notifications issued on connection establishment, loss,  and reestablishment. Apart from the initiation of the TCP connection to a remote server, the RPC client and server are equivalent &ldquo;Peers&rdquo;.</p>
+
+<h2 id="ssl-socket-layer-encryption-option">SSL socket layer encryption option</h2>
+
+<p>Encrypting all data traffic between client and server is as easy as configuring a certificate truststore and keystore on both client and server. Both client and server authentication is used.</p>
+
+<h2 id="data-compression">Data Compression</h2>
+
+<p>Clients can choose whether data communications between client and server are compressed or not. The server can accept both compressing and un-compressing clients simultaneously. Compression sacrifices CPU resources ( and increases response times ) for IO usage reduction.</p>
+
+<h2 id="rpc-call-cancellation">RPC call cancellation</h2>
+
+<p>Fairly tricky to get right, but RPC call cancellation is supported with full semantics on both client and server sides. In process client calls are immediately failed, irrespective of whether the server side call processing is cancelled. The server side call will be cancelled on receipt of the client cancellation. This involves interrupting any thread which is currently processing the call. The processing thread can stop processing when the server controller indicates that cancellation has taken place. The RPC implementation will not return any reply message to the client after cancellation has been received on the server side. The RPC layer performs the appropriate cancel notification to the callbacks registered by the service implementation.</p>
+
+<h2 id="rpc-call-timeout">RPC call timeout</h2>
+
+<p>Although not specified in the protobuf RPC API, we support setting a timeout for RPC calls at the client. The semantics of RPC call timeout are almost identical to RPC call cancellation and more information is provided in the wiki.</p>
+
+<h2 id="out-of-band-rpc-server-replies-to-client">Out-of-Band RPC server replies to client</h2>
+
+<p>Enables parts of responses to be transferred from server to client before a call ends. For example a percent complete indicator for long running calls, or chunks of later data transfers.</p>
+
+<h2 id="non-rpc-one-way-protocol-buffer-messaging">Non RPC / One-way Protocol Buffer messaging</h2>
+
+<p>General purpose one way messaging between peers is enabled with &ldquo;Out-of-Band&rdquo; messages which are not correlated to any RPC calls. See &ldquo;StatusServer&rdquo; and &ldquo;StatusClient&rdquo; demo.</p>
+
+<h2 id="semantics-for-calls-handling-on-tcp-connection-closure">Semantics for calls handling on TCP connection closure</h2>
+
+<p>When an underlying TCP socket &ldquo;breaks&rdquo; or is closed by either client or server, all pending client calls are immediately failed towards the client. On the server side, pending calls are immediately cancelled.</p>
+
+<h2 id="pluggable-logging-facility">Pluggable logging facility</h2>
+
+<p>A pluggable logging facility is included to log RPC calls and their outcomes in Protocol Buffer format.</p>
+
+<h2 id="protocol-buffer-wire-protocol">Protocol Buffer wire protocol</h2>
+
+<p>The wire-protocol is Protocol Buffer defined, so as to be potentially cross-platform.</p>
 
 			
 

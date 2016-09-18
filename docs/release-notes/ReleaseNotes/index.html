@@ -9,18 +9,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
-    <title>SSL Guide - protobuf-rpc-pro</title>
+    <title>Release Notes - protobuf-rpc-pro</title>
     <meta name="generator" content="Hugo 0.16" />
 
     
     <meta name="description" content="a java implementation of Google&#39;s Protocol Buffer RPC services">
     
-    <link rel="canonical" href="http://pjklauser.github.io/protobuf-rpc-pro/guides/SSLGuide/">
+    <link rel="canonical" href="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/ReleaseNotes/">
     
     <meta name="author" content="Peter Klauser">
     
 
-    <meta property="og:url" content="http://pjklauser.github.io/protobuf-rpc-pro/guides/SSLGuide/">
+    <meta property="og:url" content="http://pjklauser.github.io/protobuf-rpc-pro/release-notes/ReleaseNotes/">
     <meta property="og:title" content="protobuf-rpc-pro">
     
     <meta name="apple-mobile-web-app-title" content="protobuf-rpc-pro">
@@ -97,7 +97,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        SSL Guide
+        Release Note
       </div>
     </div>
 
@@ -265,222 +265,185 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>SSL Guide </h1>
+			<h1>Release Notes </h1>
 
 			
 
-<p>This guide explains how to setup keystores and certificate truststores in order to secure TCP communications between RPC client and server. The code required to secure communications is trivial and shown below for both client and server. The effort or price for the additional security is the effort and maintenance involved in managing the &ldquo;trusted material&rdquo; ie. keys, certificates and keystores.</p>
+<p>What changes are made from release to release. Check SVN history for more details.</p>
 
-<h2 id="client-code">Client Code</h2>
+<h1 id="3-3-4">3.3.4</h1>
 
-<p>The client must initialize a RpcSSLContext and register this with the bootstrap prior to peering with the server. The RpcSSLContext must be pointed to the client&rsquo;s keystore and it&rsquo;s truststore.</p>
+<p><a href="https://github.com/pjklauser/protobuf-rpc-pro/issues/49">#49</a> StackOverflowError DuplexTcpClientPipelineFactory.peerWith</p>
 
-<pre><code>        RpcSSLContext sslCtx = new RpcSSLContext();
-        sslCtx.setKeystorePassword(&quot;changeme&quot;);
-        sslCtx.setKeystorePath(&quot;../lib/client.keystore&quot;);
-        sslCtx.setTruststorePassword(&quot;changeme&quot;);
-        sslCtx.setTruststorePath(&quot;../lib/truststore&quot;);
-        sslCtx.init();
-        
-    DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(...);
+<p><a href="https://github.com/pjklauser/protobuf-rpc-pro/issues/48">#48</a> WatchdogThread is not renamed to a readable thread name</p>
 
-    bootstrap.setSslContext(sslCtx);
-</code></pre>
+<p><a href="https://github.com/pjklauser/protobuf-rpc-pro/issues/46">#46</a> CleanShutdownHandler leaves shutdown hook registered when shutdown explicitly</p>
 
-<h2 id="server-code">Server Code</h2>
+<p>Upgrade to Netty 4.0.33.Final</p>
 
-<p>On the server, similarly to the client, a RpcSSLContext needs initializing, where it points to the server&rsquo;s keystore and it&rsquo;s truststore.</p>
+<h1 id="3-3-3">3.3.3</h1>
 
-<pre><code>        RpcSSLContext sslCtx = new RpcSSLContext();
-        sslCtx.setKeystorePassword(&quot;changeme&quot;);
-        sslCtx.setKeystorePath(&quot;../lib/server.keystore&quot;);
-        sslCtx.setTruststorePassword(&quot;changeme&quot;);
-        sslCtx.setTruststorePath(&quot;../lib/truststore&quot;);
-        sslCtx.init();
-        
-        DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(...);
-        
-        bootstrap.setSslContext(sslCtx);
-</code></pre>
+<p><a href="https://github.com/pjklauser/protobuf-rpc-pro/issues/45">#45</a> RpcClientChannel support &ldquo;attributes&rdquo; on initial connection (peerWith)</p>
 
-<p>Only connections bound after setSslContext has been done are secured.</p>
+<p><a href="https://github.com/pjklauser/protobuf-rpc-pro/issues/44">#44</a> CleanShutdownHandler explicit shutdown leaves non daemon threads hanging which prohibit later JVM shutdown.</p>
 
-<h2 id="security-architecture">Security Architecture</h2>
+<h1 id="3-3-2">3.3.2</h1>
 
-<p>As soon as a RPC client and server connect via TCP, the SSL handshake takes place. The SSL engines  of the participants are configured for each to want to check the other&rsquo;s certificate. So we get mutual authentication.</p>
+<p><a href="https://github.com/pjklauser/protobuf-rpc-pro/pull/37">#37</a> CleanShutdownHandler to support shutdown on demand.</p>
 
-<p>Each client is issued with a certificate which is issued by the server. We put the server&rsquo;s certificate in the client&rsquo;s truststore. The client will check the server&rsquo;s certificate against it&rsquo;s truststore during the SSL handshake. This means the client will trust ( and allow secure connection ) to only the server ( or servers setup with the same keys and certificates ).</p>
+<p><a href="https://github.com/pjklauser/protobuf-rpc-pro/issues/42">#42</a> CleanShutdownHandler to shutdown RpcClientConnectionWatchdog.</p>
 
-<p>The server will request and check the client&rsquo;s certificate. The client supplies it&rsquo;s certificate which is in the client keystore during SSL handshake. The server checks the client&rsquo;s certificates against the server&rsquo;s truststore. The server&rsquo;s certificate is in it&rsquo;s own truststore, and the server certificate signed the client&rsquo;s so it is trusted.</p>
+<p><a href="https://github.com/pjklauser/protobuf-rpc-pro/issues/43">#43</a> RpcClientChannel support &ldquo;attributes&rdquo; and isClosed method.</p>
 
-<p>Different clients can be given different certificates signed by the server, they will all be trusted. The clients do not need to share the same certificate.</p>
+<p>Upgrade to Netty 4.0.31.Final</p>
 
-<p>In summary the setup is as follows</p>
+<h1 id="3-3-1">3.3.1</h1>
 
-<ul>
-<li>client keystore: private key + public certificate of client(signed by the server).</li>
+<p>Completed move from google code to GitHub.</p>
 
-<li><p>client truststore: public certificate of server(signed by certification authority) + certificationauthority certificate</p></li>
+<p>Upgrade to Netty 4.0.27.Final</p>
 
-<li><p>server keystore: private key + public certificate of server</p></li>
+<h1 id="3-3">3.3</h1>
 
-<li><p>server truststore: public certificate of server(signed by certification authority) + certificationauthority certificate</p></li>
-</ul>
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=34">Issue 34</a>: upgrade to protobuf-java 2.6. Since the protoc 2.6 introduces new java stubs and requires an upgrade to protobuf-java 2.6, i&rsquo;ve decided to call this a minor release upgrade, rather than a micro-release upgrade.</p>
 
-<h2 id="prerequisites">Prerequisites</h2>
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=35">Issue 35</a>: provide a means to avoid logging. See NullLogger.</p>
 
-<p>In order to generate and sign certificates, OpenSSL should be installed and usable. ( On windows, you can use Cygwin&rsquo;s openssl ). We also generate and use a self-signed root Certificate-Authority which we use as the root truster of the certificates which we generate. You can create such a certificate by following these steps</p>
+<p>Upgrade to Netty 4.0.23.Final</p>
 
-<pre><code>1] generate a 2048 bit RSA key which is encrypted using Triple-DES and stored in a 
-PEM format so that it is readable as ASCII text.
+<h1 id="3-2-3">3.2.3</h1>
 
-$ openssl genrsa -des3 -out certificateauthority.key 2048
-providing a passphrase ( changeme )
+<p>Upgrade to Netty 4.0.19.Final</p>
 
-2] self sign it with a long validity
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=33">Issue 33</a>: added remove blocking service from RpcServiceRegistry.</p>
 
-$ openssl req -new -x509 -days 1000 -key certificateauthority.key -out certificateauthority.crt
-...Common Name (eg, YOUR name) []:ca
-Email Address []:ca@trustworthy-inc.com
+<h1 id="3-2-2">3.2.2</h1>
 
-3] remove passhprase from private key
+<p>Upgrade to Netty 4.0.15.Final</p>
 
-$ cp certificateauthority.key certificateauthority.key.original
-$ openssl rsa -in certificateauthority.key.original -out certificateauthority.key
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=31">Issue 31</a>: debug loggig for timeout checker</p>
 
-</code></pre>
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25">Issue 25</a>: refix to wait correct number of nanos on client timeout.</p>
 
-<h1 id="setup">Setup</h1>
+<h1 id="3-2-1">3.2.1</h1>
 
-<h2 id="server-keystore">Server Keystore</h2>
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=29">Issue 29</a>: RpcServiceRegistry to use service&rsquo;s fullName for indexing to avoid duplicate name registration problems.
+(don&rsquo;t use 3.2 it is broken for this issue)</p>
 
-<p>Follow the steps here to create a server keypair, and sign the server public certificate with our trusted CA.</p>
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=30">Issue 30</a>: changed the constructor of DuplexTcpClientPipelineFactory to not require a clientInfo for the local address. If a clientInfo is provided, by calling #setClientInfo instead, then a strict local port binding is performed ( and the factory can only create one connection at a time with #peerWith ). Probably you don&rsquo;t need this and can never set the clientInfo explicitly, then you get a new free local port used for each connection created with #peerWith.</p>
 
-<pre><code>1] need to create a server keypair
+<h1 id="3-1-0">3.1.0</h1>
 
-$ openssl genrsa -des3 -out server.key 2048
-Generating RSA private key, 2048 bit long modulus
-...Enter pass phrase for server.key:(changeme)
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=28">Issue 28</a>: Fix issues with protobuf extension registry to decode extensions.</p>
 
-2] generate a certificate signing request CSR
+<p>Upgrade to Netty.4.0.14.Final</p>
 
-$ openssl req -new -key server.key -out server.csr 
-Enter pass phrase for server.key:
-...Common Name (eg, YOUR name) []:server
-Email Address []:server@myorganization.com
+<h1 id="3-0-9">3.0.9</h1>
 
-3] remove passhprase from private key
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=23">Issue 23</a>: Depend on specific netty modules instead of netty-all to get better OSGI bundling.</p>
 
-$ cp server.key server.key.original
-$ openssl rsa -in server.key.original -out server.key
+<p>Upgrade to Netty.4.0.13.Final</p>
 
-4] sign the CSR with our CA cert.
+<h1 id="3-0-8">3.0.8</h1>
 
-$ openssl x509 -req -days 365 -in server.csr -CAkey certificateauthority.key -CA certificateauthority.crt -set_serial 01 -out server.crt
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=22">Issue 22</a>: Allow use of JdkZLib compression as an alternative to JZLib. The JZLib dependency is optional now.</p>
 
-5] transform private key to DER for for inporting into a JKS keystore
+<p>Upgrade to Netty.4.0.10.Final</p>
 
-$ openssl pkcs8 -topk8 -nocrypt -in server.key -out server.key.der -outform der
+<h1 id="3-0-7">3.0.7</h1>
 
-6] transform public key to DER format for inporting into the JKS keystore
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25">Issue 25</a>: Fix part3 - integer overflow in timeout calculation ( don&rsquo;t use 3.0.6 ).</p>
 
-$ openssl x509 -in server.crt -out server.crt.der -outform der
+<h1 id="3-0-6">3.0.6</h1>
 
-7] add both the public and private keys into the server.keystore
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25">Issue 25</a>: Fix part2 - timeout after microseconds instead of nanoseconds.</p>
 
-$ ./RunKeyTool.cmd server.key.der server.crt.der server.keystore changeme server-key
+<h1 id="3-0-5">3.0.5</h1>
 
-8] verify the result
+<p>Upgrade to Java1.7 compile and bytecode</p>
 
-$ &quot;$JAVA_HOME/bin/keytool&quot; -list -keystore server.keystore
-Enter keystore password:  changeme
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=23">Issue 23</a>: Upgrade to Netty 4.0.6.Final</p>
 
-Keystore type: JKS
-Keystore provider: SUN
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25">Issue 25</a>: Fix infinite loop after timeout on RpcClient.callBlockingMethod.</p>
 
-Your keystore contains 1 entry
+<h1 id="3-0-4">3.0.4</h1>
 
-server-key, Aug 23, 2010, PrivateKeyEntry, 
-Certificate fingerprint (MD5): 3C:E9:38:06:23:DC:3D:0B:EA:F1:B3:4C:EC:BC:6D:5F
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=11">Issue 11</a>: Provided OSGI bundle.
+Upgraded to Netty 4.0.0.CR1.</p>
 
-</code></pre>
+<h1 id="3-0-3">3.0.3</h1>
 
-<h2 id="client-keystore">Client Keystore</h2>
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=16">Issue 16</a>: Upgrade to Netty 4.0.0.Beta2. There is a difference in the Bootstrap code which clients and servers use to construct their components. Checkout the changed examples.</p>
 
-<p>We create now a client keypair which is signed by our server certificate. This means that the client certificate is trusted by the server certificate.</p>
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=19">Issue 19</a>: Upgrade dependency to Protobuf 2.5. New protoc idl compiler required for clients.</p>
 
-<pre><code>
-1] generate a client private key ( giving passphrase 'changeme' )
+<p>Out-of-Band messaging now allows client code do success evaluation and/or blocking until completion. See RpcClientChannel#sendOobMessage and ServerRpcController#sendOobResponse methods returning ChannelFuture .</p>
 
-$ openssl genrsa -des3 -out client.key 2048
+<h1 id="3-0-2">3.0.2</h1>
 
-2] create a CSR for the client
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=17">Issue 17</a>: stackoverflow - infinite loop calling RpcClient.getPipeline().</p>
 
-$ openssl req -new -key client.key -out client.csr
-...Common Name (eg, YOUR name) []:client
-Email Address []:client@myorganization.com
+<h1 id="3-0-1">3.0.1</h1>
 
-3] remove passhprase from private key
+<p><a href="https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=10">Issue 10</a>: replace commons logging with slf4j-api. Demo classes use logback-classic dependency configured by VM arguments adding system property -Dlogback.configurationFile=&ldquo;./lib/logback.xml&rdquo;.</p>
 
-$ cp client.key client.key.original
-$ openssl rsa -in client.key.original -out client.key
+<p>Dependency Update: upgraded to Netty version 3.6.0 Final.</p>
 
-4] sign client certificate with our SERVER cert.
+<h1 id="3-0-0">3.0.0</h1>
 
-$ openssl x509 -req -days 364 -in client.csr -CAkey server.key -CA server.crt -set_serial 01 -out client.crt
+<p>Feature: RPC timeout. See wiki page &ldquo;RpcTimeout&rdquo; for more info.</p>
 
-5] convert client key to DER form
+<p>Fix: refactor Bootstrap client and server classes to be more symetric.</p>
 
-$ openssl pkcs8 -topk8 -nocrypt -in client.key -out client.key.der -outform der
+<p>Feature: new utility AvailablePortFinder utility to allow selection of availible server TCP ports for PeerInfo.</p>
 
-6] convert client public cert to DER form
+<p>Fix 14: replacement of PeerInfo&rsquo;s PID with UUID.</p>
 
-$ openssl x509 -in client.crt -out client.crt.der -outform der
+<p>Dependency Update: upgraded to Netty version 3.5.10 Final.</p>
 
-7] add both private and public client keys into the JKS client keystore
+<h1 id="2-0-1">2.0.1</h1>
 
-$ ./RunKeyTool.cmd client.key.der client.crt.der client.keystore changeme client-key
+<p>Dependency Update: upgraded to Netty version 3.5.3 Final.</p>
 
-d:\Development\Workspace\protobuf-rpc-pro\protobuf-rpc-pro-duplex\ssl&gt;java -classpath ..\target\protobuf-rpc-pro-duplex-1.1.0.jar com.googlecode.protobuf.pro.duplex.util.KeyStoreImportUtil client.key.der client.crt.der client.keystore pwd client-key 
-Using keystore-file : client.keystore
-One certificate, no chain.
-Key and certificate stored.
-Alias:client-key  Password:changeme
+<p>Fix: don&rsquo;t allow further sending over closed RpcClient, so closure is not starved.</p>
 
-</code></pre>
+<h1 id="2-0-0">2.0.0</h1>
 
-<h2 id="truststore">Truststore</h2>
+<p>Feature: Out-of-Band Protobuf Messaging between peers.</p>
 
-<p>We need to put our CA and server certificates into a truststore.</p>
+<p>Feature: Out-of-Band RPC server replies</p>
 
-<pre><code>1] create a truststore with the RootCA in it.
+<p>Feature: provide &ldquo;transparent&rdquo; messages through Netty pipeline</p>
 
-$ &quot;$JAVA_HOME/bin/keytool&quot; -import -alias rootca -file certificateauthority.crt -trustcacerts -keystore truststore -storepass changeme 
-....
-Trust this certificate? [no]:  yes
-Certificate was added to keystore
+<p>Feature: allow registration of BlockingServices in servers.</p>
 
-2] add the server certificate to the truststore.
+<p>Feature: provide easy access to the Netty pipeline.</p>
 
-$ &quot;$JAVA_HOME/bin/keytool&quot; -import -alias server -file server.crt -trustcacerts -keystore truststore -storepass changeme 
-Certificate was added to keystore
+<p>Feature: Provide WirePayload ( wire protocol ) extension possibility.</p>
 
-3] verify both are in the truststore
+<p>Fix#9: reversed logging roles</p>
 
-$ &quot;$JAVA_HOME/bin/keytool&quot; -list -keystore truststore            
-Enter keystore password:  changeme
+<p>Discontinued: protobuf-streamer-pro is discontinued since the Out-of-Band messaging features can be used to allow pull of large files from Server to Client, making the separate library obsolete.</p>
 
-Keystore type: JKS
-Keystore provider: SUN
+<p>Dependency Update: Netty 3.5.2.Final</p>
 
-Your keystore contains 2 entries
+<h1 id="1-2-2">1.2.2</h1>
 
-rootca, Aug 23, 2010, trustedCertEntry,
-Certificate fingerprint (MD5): 00:13:D2:E5:7B:9F:63:A5:88:F0:AE:69:94:44:4F:33
-server, Aug 23, 2010, trustedCertEntry,
-Certificate fingerprint (MD5): 75:EC:46:5D:52:AD:C0:D4:9A:82:0F:1E:E3:3F:AE:01
+<p>Fix#8: fix for hanging due to close race condition.</p>
 
-</code></pre>
+<h1 id="1-2-1">1.2.1</h1>
+
+<p>Fix: improve asynchronicity of reply calls.</p>
+
+<h1 id="1-2-0">1.2.0</h1>
+
+<p>Feature: Introduced compression</p>
+
+<p>Made availible on maven central repository.</p>
+
+<h1 id="1-0-0">1.0.0</h1>
+
+<p>Initial version.</p>
 
 
 			<aside class="copyright" role="note">
@@ -499,7 +462,7 @@ Certificate fingerprint (MD5): 75:EC:46:5D:52:AD:C0:D4:9A:82:0F:1E:E3:3F:AE:01
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/RuntimeDependencies/" title="Runtime Dependencies">
+      <a href="http://pjklauser.github.io/protobuf-rpc-pro/internals/RpcTimeout/" title="RPC Timeout">
         <span class="direction">
           Previous
         </span>
@@ -509,7 +472,7 @@ Certificate fingerprint (MD5): 75:EC:46:5D:52:AD:C0:D4:9A:82:0F:1E:E3:3F:AE:01
           </div>
           <div class="stretch">
             <div class="title">
-              Runtime Dependencies
+              RPC Timeout
             </div>
           </div>
         </div>
@@ -519,14 +482,14 @@ Certificate fingerprint (MD5): 75:EC:46:5D:52:AD:C0:D4:9A:82:0F:1E:E3:3F:AE:01
 
   <div class="next">
   
-      <a href="http://pjklauser.github.io/protobuf-rpc-pro/guides/SpringConfigGuide/" title="SpringFramework">
+      <a href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/RuntimeDependencies/" title="Runtime Dependencies">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              SpringFramework
+              Runtime Dependencies
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

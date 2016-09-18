@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dependencies on protobuf-rpc-pro</title>
+    <link>http://pjklauser.github.io/protobuf-rpc-pro/dependencies/</link>
+    <description>Recent content in Dependencies on protobuf-rpc-pro</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 18 Sep 2016 14:57:52 +0200</lastBuildDate>
+    <atom:link href="http://pjklauser.github.io/protobuf-rpc-pro/dependencies/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Maven Dependency</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/dependencies/MavenDependency/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/dependencies/MavenDependency/</guid>
+      <description>&lt;p&gt;protobuf-rpc-pro is available via the maven central repository &lt;a href=&#34;http://repo1.maven.org/maven2&#34;&gt;http://repo1.maven.org/maven2&lt;/a&gt;. The demo examples are available under the artifactId &amp;ldquo;protocol-rpc-pro-demo&amp;rdquo;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;com.googlecode.protobuf-rpc-pro&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;protobuf-rpc-pro-duplex&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.3.4&amp;lt;/version&amp;gt;
+            &amp;lt;type&amp;gt;jar&amp;lt;/type&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Runtime Dependencies</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/dependencies/RuntimeDependencies/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/dependencies/RuntimeDependencies/</guid>
+      <description>&lt;p&gt;The external dependencies have been kept to a minimum. Netty, slf4j and protobuf-java are the only compile time dependencies. Compiled against java 1.7. The dependencies can be seen in the project&amp;rsquo;s maven pom.xml.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;com.google.protobuf&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;protobuf-java&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;2.6.1&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;io.netty&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;netty&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;4.0.23.Final&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.slf4j&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;slf4j-api&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;1.7.2&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
