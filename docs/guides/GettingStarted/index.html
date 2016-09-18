@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+  
+  
+  
+  
+   <html class="no-js"> 
+
+  <head lang="en-us">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <title>Getting Started - protobuf-rpc-pro</title>
+    <meta name="generator" content="Hugo 0.16" />
+
+    
+    <meta name="description" content="a java implementation of Google&#39;s Protocol Buffer RPC services">
+    
+    <link rel="canonical" href="http://pjklauser.github.io/protobuf-rpc-pro/guides/GettingStarted/">
+    
+    <meta name="author" content="Peter Klauser">
+    
+
+    <meta property="og:url" content="http://pjklauser.github.io/protobuf-rpc-pro/guides/GettingStarted/">
+    <meta property="og:title" content="protobuf-rpc-pro">
+    
+    <meta name="apple-mobile-web-app-title" content="protobuf-rpc-pro">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="shortcut icon" type="image/x-icon" href="http://pjklauser.github.io/protobuf-rpc-pro/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://pjklauser.github.io/protobuf-rpc-pro/images/favicon.ico">
+
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('http://pjklauser.github.io/protobuf-rpc-pro/fonts/icon.eot?52m981');
+        src: url('http://pjklauser.github.io/protobuf-rpc-pro/fonts/icon.eot?#iefix52m981')
+               format('embedded-opentype'),
+             url('http://pjklauser.github.io/protobuf-rpc-pro/fonts/icon.woff?52m981')
+               format('woff'),
+             url('http://pjklauser.github.io/protobuf-rpc-pro/fonts/icon.ttf?52m981')
+               format('truetype'),
+             url('http://pjklauser.github.io/protobuf-rpc-pro/fonts/icon.svg?52m981#icon')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://pjklauser.github.io/protobuf-rpc-pro/stylesheets/application.css">
+    <link rel="stylesheet" href="http://pjklauser.github.io/protobuf-rpc-pro/stylesheets/temporary.css">
+    <link rel="stylesheet" href="http://pjklauser.github.io/protobuf-rpc-pro/stylesheets/palettes.css">
+    <link rel="stylesheet" href="http://pjklauser.github.io/protobuf-rpc-pro/stylesheets/highlight/highlight.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ubuntu:400,700|Ubuntu&#43;Mono">
+    <style>
+      body, input {
+        font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Ubuntu Mono', 'Courier New', 'Courier', monospace;
+      }
+    </style>
+
+    
+    <script src="http://pjklauser.github.io/protobuf-rpc-pro/javascripts/modernizr.js"></script>
+
+    
+
+  </head>
+  <body class="palette-primary-red palette-accent-light-green">
+
+
+
+	
+	
+
+
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        Getting Started
+      </div>
+    </div>
+
+    
+
+    
+    <div class="button button-github" role="button" aria-label="GitHub">
+      <a href="https://github.com/pjklauser" title="@pjklauser on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+    </div>
+    
+    
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
+
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="https://github.com/pjklauser/protobuf-rpc-pro" class="project">
+    <div class="banner">
+      
+      <div class="name">
+        <strong>protobuf-rpc-pro <span class="version">3.3.4</span></strong>
+        
+          <br>
+          pjklauser/protobuf-rpc-pro
+        
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://github.com/pjklauser/protobuf-rpc-pro/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/pjklauser/protobuf-rpc-pro/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+
+      <div class="toc">
+        
+        <ul>
+          
+
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Guides" href="http://pjklauser.github.io/protobuf-rpc-pro/guides/">
+	
+	Guides
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Features" href="http://pjklauser.github.io/protobuf-rpc-pro/features/">
+	
+	Features
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Internals" href="http://pjklauser.github.io/protobuf-rpc-pro/internals/">
+	
+	Internals
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Download" href="http://pjklauser.github.io/protobuf-rpc-pro/download/">
+	
+	Download
+</a>
+
+
+  
+</li>
+
+
+        </ul>
+        
+
+        
+        <hr>
+        <span class="section">The author</span>
+        
+        <ul>
+          
+
+          
+          <li>
+            <a href="https://github.com/pjklauser" target="_blank" title="@pjklauser on GitHub">
+              @pjklauser on GitHub
+            </a>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			<h1>Getting Started </h1>
+
+			
+
+<p>The <a href="http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-demo/src/main/java/com/googlecode/protobuf/pro/duplex/example/">example</a> source package contains several runnable examples.</p>
+
+<p>The examples use a simple <a href="http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-duplex/src/test/protos/pingpong.proto">PingPong</a> service where a client can call &ldquo;ping&rdquo; on a server.</p>
+
+<h2 id="client-code">Client Code</h2>
+
+<p>Firstly we declare who the client is and who the server is that we&rsquo;re going to connect to. Note that the client does not actually bind to port 1234, it is just used as a &ldquo;name&rdquo;.</p>
+
+<pre><code>    PeerInfo client = new PeerInfo(&quot;clientHostname&quot;, 1234);
+    PeerInfo server = new PeerInfo(&quot;serverHostname&quot;, 8080);
+</code></pre>
+
+<p>The main client class to start with is a DuplexTcpClientPipelineFactory  which works together with Netty Bootsrap to construct client channels.</p>
+
+<pre><code>    DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory(client);
+</code></pre>
+
+<p>If a client is also going to be acting as a server, it is necessary to setup an RpcCallExecutor who&rsquo;s purpose it is to run the calls ( using threads separate from the IO Threads ).</p>
+
+<pre><code>    RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 100);
+    clientFactory.setRpcServerCallExecutor(executor);
+</code></pre>
+
+<p>In order to customize TCP settings, you can use all Netty socket options and the &ldquo;connectResponseTimeoutMillis&rdquo; which is introduced to put an upper bound on the &ldquo;peering&rdquo; time.</p>
+
+<pre><code>    clientFactory.setConnectResponseTimeoutMillis(10000);
+</code></pre>
+
+<p>In order to compress all data traffic to and from the server, you can switch on compression.</p>
+
+<pre><code>        clientFactory.setCompression(true);
+</code></pre>
+
+<p>Refer to this <a href="http://fasterdata.es.net/TCP-tuning/">tuning-guide</a> for buffer size tuning help. <a href="http://en.wikipedia.org/wiki/Nagle's_algorithm">Nagle&rsquo;s Algorithm</a> can be disabled by setting tcpNoDelay to true.</p>
+
+<pre><code>    Bootstrap bootstrap = new Bootstrap();
+        bootstrap.group(new NioEventLoopGroup());
+        bootstrap.handler(clientFactory);
+        bootstrap.channel(NioSocketChannel.class);
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
+        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,10000);
+        bootstrap.option(ChannelOption.SO_SNDBUF, 1048576);
+        bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
+</code></pre>
+
+<p>In order to open a TCP connection to the server it is necessary to &ldquo;peerWith&rdquo; it. A server will not allow the same client &ldquo;named&rdquo; to connect multiple times. ( You can still make more than one connection to the same server from the same &ldquo;Process&rdquo;, just choose different ports to name them and separate Bootstraps ).</p>
+
+<pre><code>        RpcClientChannel channel = clientFactory.peerWith(server, bootstrap);
+</code></pre>
+
+<p>Then you can use the pretty much standard Protocol Buffer services which you have like this.</p>
+
+<pre><code>    BlockingInterface pingpongService = PingPongService.newBlockingStub(channel);
+    RpcController controller = channel.newRpcController();
+            
+    Ping request = Ping.newBuilder().set....build();
+    Pong pong = pingpongService.ping(controller, request);
+</code></pre>
+
+<p>The same RpcClientChannel can be used multiple times for calls to the server, using any Service which the server handles.</p>
+
+<p>In order to service RPC calls on the client side, you just need to register a service implementation with the bootstrap.</p>
+
+<pre><code>        clientFactory.getRpcServiceRegistry().registerService(new PingPongServiceImpl());
+</code></pre>
+
+<p>Service implementations can be added and removed at runtime. Service methods are looked up by &ldquo;shortname&rdquo; so the server and client &ldquo;packaging&rdquo; need not be identical.</p>
+
+<p>Finally to close the RpcClientChannel so it cannot be used anymore do, call close. On shutdown of the client application you need to call release resources to stop the low-level IO-Threads.</p>
+
+<pre><code>    channel.close();
+</code></pre>
+
+<p>You can register all Bootstraps and DuplexTcpClientPipelineFactory with an instance of the CleanShutdownHandler utility class to perform a clean shutdown on exit.</p>
+
+<h2 id="server-code">Server Code</h2>
+
+<p>The server side is pretty similar to the client above. The server needs to know &ldquo;who&rdquo; it is, and be given a port on which to bind to on the machine it is running on. Note you can configure a local address to bind onto also ( multi-homing support ) through the Netty localAddress option. The server&rsquo;s hostname should normally be the server&rsquo;s hostname which resolves in DNS to the server machine, however it is just a name ( like the client&rsquo;s port is just a name ).</p>
+
+<pre><code>        PeerInfo serverInfo = new PeerInfo(&quot;serverHostname&quot;, 8080);
+</code></pre>
+
+<p>You need then to create a DuplexTcpServerBootstrap and provide it an RpcCallExecutor.</p>
+
+<pre><code>        RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 200);
+        
+        DuplexTcpServerPipelineFactory serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
+        serverFactory.setRpcServerCallExecutor(executor);
+</code></pre>
+
+<p>Now the DuplexTcpServerPipelineFactory needs to be registered as a child ChannelInitializer handler of the Netty ServerBootstrap.</p>
+
+<pre><code>        ServerBootstrap bootstrap = new ServerBootstrap();
+        bootstrap.group(new NioEventLoopGroup(0,new RenamingThreadFactoryProxy(&quot;boss&quot;, Executors.defaultThreadFactory())),
+                new NioEventLoopGroup(0,new RenamingThreadFactoryProxy(&quot;worker&quot;, Executors.defaultThreadFactory()))
+                );
+        bootstrap.channel(NioServerSocketChannel.class);
+        bootstrap.childHandler(serverFactory);
+        bootstrap.localAddress(serverInfo.getPort());
+</code></pre>
+
+<p>The Netty ServerBootstrap can be used to set all TCP/IP settings.</p>
+
+<pre><code>        bootstrap.option(ChannelOption.SO_SNDBUF, 1048576);
+        bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
+        bootstrap.childOption(ChannelOption.SO_RCVBUF, 1048576);
+        bootstrap.childOption(ChannelOption.SO_SNDBUF, 1048576);
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
+</code></pre>
+
+<p>Then you need to register your server side services with the bootstrap. Again here the registration is dynamic and can change at runtime.</p>
+
+<pre><code>        serverFactory.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
+</code></pre>
+
+<p>Finally binding the bootstrap to the TCP port will start off the socket accepting and clients can start to connect.</p>
+
+<pre><code>        bootstrap.bind();
+</code></pre>
+
+<p>If you want to track the RPC peering events with clients, use a RpcClientConnectionRegistry or a TcpConnectionEventListener for TCP connection events. This is the mechanism you can use to &ldquo;discover&rdquo; RPC clients before they &ldquo;call&rdquo; any service.</p>
+
+<pre><code>        RpcClientConnectionRegistry clientRegistry = new RpcClientConnectionRegistry();
+        serverFactory.registerConnectionEventListener(clientRegistry);
+</code></pre>
+
+<p>You can then also close the server by closing the channel which the bootstrap is bound to and finally releaseExternalResources on final shutdown. Also here you can use the CleanShutdownHandler to perform a clean close on exit.</p>
+
+<h2 id="reverse-rpc">Reverse RPC</h2>
+
+<p>The client and server examples above show how a client can call a RPC service registered at the serverFactory. In order to enable a server to call a client, it is necessary first for there to be a RPC service registered at the client.</p>
+
+<pre><code>        clientFactory.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
+</code></pre>
+
+<p>Both client and server bootstraps have a RpcServiceRegistry. Secondly the server code needs to get hold of a RpcClientChannel to communicate back to the client. This is possible through the RpcController on the server side which is available during server call processing, or through the server&rsquo;s RpcClientRegistry at any time.</p>
+
+<h2 id="runtime-dependencies">Runtime Dependencies</h2>
+
+<p>The external dependencies have been kept to a minimum. Netty, slf4j and protobuf-java are the only compile time dependencies. Compiled against java 1.7. The dependencies can be seen in the project&rsquo;s maven pom.xml.</p>
+
+<pre><code>        &lt;dependency&gt;
+            &lt;groupId&gt;com.google.protobuf&lt;/groupId&gt;
+            &lt;artifactId&gt;protobuf-java&lt;/artifactId&gt;
+            &lt;version&gt;2.6.1&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;io.netty&lt;/groupId&gt;
+            &lt;artifactId&gt;netty&lt;/artifactId&gt;
+            &lt;version&gt;4.0.23.Final&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+            &lt;version&gt;1.7.2&lt;/version&gt;
+        &lt;/dependency&gt;
+</code></pre>
+
+
+			<aside class="copyright" role="note">
+				
+				&copy; 2016 Released under the Apache License 2.0 &ndash;
+				
+				Documentation built with
+				<a href="https://www.gohugo.io" target="_blank">Hugo</a>
+				using the
+				<a href="http://github.com/digitalcraftsman/hugo-material-docs" target="_blank">Material</a> theme.
+			</aside>
+
+			<footer class="footer">
+				
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  
+      <a href="http://pjklauser.github.io/protobuf-rpc-pro/features/Features/" title="Features">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              Features
+            </div>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+
+  <div class="next">
+  
+      <a href="http://pjklauser.github.io/protobuf-rpc-pro/download/MavenDependency/" title="Maven Dependency">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Maven Dependency
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+</nav>
+
+
+
+
+
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+    
+      var base_url = 'http:\/\/pjklauser.github.io\/protobuf-rpc-pro\/';
+      var repo_id  = 'pjklauser\/protobuf-rpc-pro';
+    
+    </script>
+
+    <script src="http://pjklauser.github.io/protobuf-rpc-pro/javascripts/application.js"></script>
+    
+
+    <script>
+      /* Add headers to scrollspy */
+      var headers   = document.getElementsByTagName("h2");
+      var scrollspy = document.getElementById('scrollspy');
+
+      if(scrollspy) {
+        if(headers.length > 0) {
+          for(var i = 0; i < headers.length; i++) {
+            var li = document.createElement("li");
+            li.setAttribute("class", "anchor");
+
+            var a  = document.createElement("a");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", headers[i].innerHTML);
+            a.innerHTML = headers[i].innerHTML;
+            
+            li.appendChild(a)
+            scrollspy.appendChild(li);
+          }
+        } else {
+          scrollspy.parentElement.removeChild(scrollspy)
+        }
+        
+
+        /* Add permanent link next to the headers */
+        var headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+        for(var i = 0; i < headers.length; i++) {
+            var a = document.createElement("a");
+            a.setAttribute("class", "headerlink");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", "Permanent link")
+            a.innerHTML = "#";
+            headers[i].appendChild(a);
+        }
+      }
+    </script>
+
+    
+      <script>
+        (function(i,s,o,g,r,a,m){
+          i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||
+          []).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;
+          m.parentNode.insertBefore(a,m)
+        })(window, document,
+          'script', '//www.google-analytics.com/analytics.js', 'ga');
+         
+        ga('create', 'UA-18238203-1', 'auto');
+        ga('set', 'anonymizeIp', true);
+        ga('send', 'pageview');
+         
+        var buttons = document.querySelectorAll('a');
+        Array.prototype.map.call(buttons, function(item) {
+          if (item.host != document.location.host) {
+            item.addEventListener('click', function() {
+              var action = item.getAttribute('data-action') || 'follow';
+              ga('send', 'event', 'outbound', action, item.href);
+            });
+          }
+        });
+         
+        var query = document.querySelector('.query');
+        query.addEventListener('blur', function() {
+          if (this.value) {
+            var path = document.location.pathname;
+            ga('send', 'pageview', path + '?q=' + this.value);
+          }
+        });
+      </script>
+    
+
+    <script src="//gohugo.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+  
+  
+  
+  
+   <html class="no-js"> 
+
+  <head lang="en-us">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <title>SSL Guide - protobuf-rpc-pro</title>
+    <meta name="generator" content="Hugo 0.16" />
+
+    
+    <meta name="description" content="a java implementation of Google&#39;s Protocol Buffer RPC services">
+    
+    <link rel="canonical" href="http://pjklauser.github.io/protobuf-rpc-pro/guides/SSLGuide/">
+    
+    <meta name="author" content="Peter Klauser">
+    
+
+    <meta property="og:url" content="http://pjklauser.github.io/protobuf-rpc-pro/guides/SSLGuide/">
+    <meta property="og:title" content="protobuf-rpc-pro">
+    
+    <meta name="apple-mobile-web-app-title" content="protobuf-rpc-pro">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="shortcut icon" type="image/x-icon" href="http://pjklauser.github.io/protobuf-rpc-pro/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://pjklauser.github.io/protobuf-rpc-pro/images/favicon.ico">
+
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('http://pjklauser.github.io/protobuf-rpc-pro/fonts/icon.eot?52m981');
+        src: url('http://pjklauser.github.io/protobuf-rpc-pro/fonts/icon.eot?#iefix52m981')
+               format('embedded-opentype'),
+             url('http://pjklauser.github.io/protobuf-rpc-pro/fonts/icon.woff?52m981')
+               format('woff'),
+             url('http://pjklauser.github.io/protobuf-rpc-pro/fonts/icon.ttf?52m981')
+               format('truetype'),
+             url('http://pjklauser.github.io/protobuf-rpc-pro/fonts/icon.svg?52m981#icon')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://pjklauser.github.io/protobuf-rpc-pro/stylesheets/application.css">
+    <link rel="stylesheet" href="http://pjklauser.github.io/protobuf-rpc-pro/stylesheets/temporary.css">
+    <link rel="stylesheet" href="http://pjklauser.github.io/protobuf-rpc-pro/stylesheets/palettes.css">
+    <link rel="stylesheet" href="http://pjklauser.github.io/protobuf-rpc-pro/stylesheets/highlight/highlight.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ubuntu:400,700|Ubuntu&#43;Mono">
+    <style>
+      body, input {
+        font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Ubuntu Mono', 'Courier New', 'Courier', monospace;
+      }
+    </style>
+
+    
+    <script src="http://pjklauser.github.io/protobuf-rpc-pro/javascripts/modernizr.js"></script>
+
+    
+
+  </head>
+  <body class="palette-primary-red palette-accent-light-green">
+
+
+
+	
+	
+
+
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        SSL Guide
+      </div>
+    </div>
+
+    
+
+    
+    <div class="button button-github" role="button" aria-label="GitHub">
+      <a href="https://github.com/pjklauser" title="@pjklauser on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+    </div>
+    
+    
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
+
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="https://github.com/pjklauser/protobuf-rpc-pro" class="project">
+    <div class="banner">
+      
+      <div class="name">
+        <strong>protobuf-rpc-pro <span class="version">3.3.4</span></strong>
+        
+          <br>
+          pjklauser/protobuf-rpc-pro
+        
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://github.com/pjklauser/protobuf-rpc-pro/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/pjklauser/protobuf-rpc-pro/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+
+      <div class="toc">
+        
+        <ul>
+          
+
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Guides" href="http://pjklauser.github.io/protobuf-rpc-pro/guides/">
+	
+	Guides
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Features" href="http://pjklauser.github.io/protobuf-rpc-pro/features/">
+	
+	Features
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Internals" href="http://pjklauser.github.io/protobuf-rpc-pro/internals/">
+	
+	Internals
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Download" href="http://pjklauser.github.io/protobuf-rpc-pro/download/">
+	
+	Download
+</a>
+
+
+  
+</li>
+
+
+        </ul>
+        
+
+        
+        <hr>
+        <span class="section">The author</span>
+        
+        <ul>
+          
+
+          
+          <li>
+            <a href="https://github.com/pjklauser" target="_blank" title="@pjklauser on GitHub">
+              @pjklauser on GitHub
+            </a>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			<h1>SSL Guide </h1>
+
+			
+
+<p>This guide explains how to setup keystores and certificate truststores in order to secure TCP communications between RPC client and server. The code required to secure communications is trivial and shown below for both client and server. The effort or price for the additional security is the effort and maintenance involved in managing the &ldquo;trusted material&rdquo; ie. keys, certificates and keystores.</p>
+
+<h2 id="client-code">Client Code</h2>
+
+<p>The client must initialize a RpcSSLContext and register this with the bootstrap prior to peering with the server. The RpcSSLContext must be pointed to the client&rsquo;s keystore and it&rsquo;s truststore.</p>
+
+<pre><code>        RpcSSLContext sslCtx = new RpcSSLContext();
+        sslCtx.setKeystorePassword(&quot;changeme&quot;);
+        sslCtx.setKeystorePath(&quot;../lib/client.keystore&quot;);
+        sslCtx.setTruststorePassword(&quot;changeme&quot;);
+        sslCtx.setTruststorePath(&quot;../lib/truststore&quot;);
+        sslCtx.init();
+        
+    DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(...);
+
+    bootstrap.setSslContext(sslCtx);
+</code></pre>
+
+<h2 id="server-code">Server Code</h2>
+
+<p>On the server, similarly to the client, a RpcSSLContext needs initializing, where it points to the server&rsquo;s keystore and it&rsquo;s truststore.</p>
+
+<pre><code>        RpcSSLContext sslCtx = new RpcSSLContext();
+        sslCtx.setKeystorePassword(&quot;changeme&quot;);
+        sslCtx.setKeystorePath(&quot;../lib/server.keystore&quot;);
+        sslCtx.setTruststorePassword(&quot;changeme&quot;);
+        sslCtx.setTruststorePath(&quot;../lib/truststore&quot;);
+        sslCtx.init();
+        
+        DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(...);
+        
+        bootstrap.setSslContext(sslCtx);
+</code></pre>
+
+<p>Only connections bound after setSslContext has been done are secured.</p>
+
+<h2 id="security-architecture">Security Architecture</h2>
+
+<p>As soon as a RPC client and server connect via TCP, the SSL handshake takes place. The SSL engines  of the participants are configured for each to want to check the other&rsquo;s certificate. So we get mutual authentication.</p>
+
+<p>Each client is issued with a certificate which is issued by the server. We put the server&rsquo;s certificate in the client&rsquo;s truststore. The client will check the server&rsquo;s certificate against it&rsquo;s truststore during the SSL handshake. This means the client will trust ( and allow secure connection ) to only the server ( or servers setup with the same keys and certificates ).</p>
+
+<p>The server will request and check the client&rsquo;s certificate. The client supplies it&rsquo;s certificate which is in the client keystore during SSL handshake. The server checks the client&rsquo;s certificates against the server&rsquo;s truststore. The server&rsquo;s certificate is in it&rsquo;s own truststore, and the server certificate signed the client&rsquo;s so it is trusted.</p>
+
+<p>Different clients can be given different certificates signed by the server, they will all be trusted. The clients do not need to share the same certificate.</p>
+
+<p>In summary the setup is as follows</p>
+
+<ul>
+<li>client keystore: private key + public certificate of client(signed by the server).</li>
+
+<li><p>client truststore: public certificate of server(signed by certification authority) + certificationauthority certificate</p></li>
+
+<li><p>server keystore: private key + public certificate of server</p></li>
+
+<li><p>server truststore: public certificate of server(signed by certification authority) + certificationauthority certificate</p></li>
+</ul>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>In order to generate and sign certificates, OpenSSL should be installed and usable. ( On windows, you can use Cygwin&rsquo;s openssl ). We also generate and use a self-signed root Certificate-Authority which we use as the root truster of the certificates which we generate. You can create such a certificate by following these steps</p>
+
+<pre><code>1] generate a 2048 bit RSA key which is encrypted using Triple-DES and stored in a 
+PEM format so that it is readable as ASCII text.
+
+$ openssl genrsa -des3 -out certificateauthority.key 2048
+providing a passphrase ( changeme )
+
+2] self sign it with a long validity
+
+$ openssl req -new -x509 -days 1000 -key certificateauthority.key -out certificateauthority.crt
+...Common Name (eg, YOUR name) []:ca
+Email Address []:ca@trustworthy-inc.com
+
+3] remove passhprase from private key
+
+$ cp certificateauthority.key certificateauthority.key.original
+$ openssl rsa -in certificateauthority.key.original -out certificateauthority.key
+
+</code></pre>
+
+<h1 id="setup">Setup</h1>
+
+<h2 id="server-keystore">Server Keystore</h2>
+
+<p>Follow the steps here to create a server keypair, and sign the server public certificate with our trusted CA.</p>
+
+<pre><code>1] need to create a server keypair
+
+$ openssl genrsa -des3 -out server.key 2048
+Generating RSA private key, 2048 bit long modulus
+...Enter pass phrase for server.key:(changeme)
+
+2] generate a certificate signing request CSR
+
+$ openssl req -new -key server.key -out server.csr 
+Enter pass phrase for server.key:
+...Common Name (eg, YOUR name) []:server
+Email Address []:server@myorganization.com
+
+3] remove passhprase from private key
+
+$ cp server.key server.key.original
+$ openssl rsa -in server.key.original -out server.key
+
+4] sign the CSR with our CA cert.
+
+$ openssl x509 -req -days 365 -in server.csr -CAkey certificateauthority.key -CA certificateauthority.crt -set_serial 01 -out server.crt
+
+5] transform private key to DER for for inporting into a JKS keystore
+
+$ openssl pkcs8 -topk8 -nocrypt -in server.key -out server.key.der -outform der
+
+6] transform public key to DER format for inporting into the JKS keystore
+
+$ openssl x509 -in server.crt -out server.crt.der -outform der
+
+7] add both the public and private keys into the server.keystore
+
+$ ./RunKeyTool.cmd server.key.der server.crt.der server.keystore changeme server-key
+
+8] verify the result
+
+$ &quot;$JAVA_HOME/bin/keytool&quot; -list -keystore server.keystore
+Enter keystore password:  changeme
+
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+server-key, Aug 23, 2010, PrivateKeyEntry, 
+Certificate fingerprint (MD5): 3C:E9:38:06:23:DC:3D:0B:EA:F1:B3:4C:EC:BC:6D:5F
+
+</code></pre>
+
+<h2 id="client-keystore">Client Keystore</h2>
+
+<p>We create now a client keypair which is signed by our server certificate. This means that the client certificate is trusted by the server certificate.</p>
+
+<pre><code>
+1] generate a client private key ( giving passphrase 'changeme' )
+
+$ openssl genrsa -des3 -out client.key 2048
+
+2] create a CSR for the client
+
+$ openssl req -new -key client.key -out client.csr
+...Common Name (eg, YOUR name) []:client
+Email Address []:client@myorganization.com
+
+3] remove passhprase from private key
+
+$ cp client.key client.key.original
+$ openssl rsa -in client.key.original -out client.key
+
+4] sign client certificate with our SERVER cert.
+
+$ openssl x509 -req -days 364 -in client.csr -CAkey server.key -CA server.crt -set_serial 01 -out client.crt
+
+5] convert client key to DER form
+
+$ openssl pkcs8 -topk8 -nocrypt -in client.key -out client.key.der -outform der
+
+6] convert client public cert to DER form
+
+$ openssl x509 -in client.crt -out client.crt.der -outform der
+
+7] add both private and public client keys into the JKS client keystore
+
+$ ./RunKeyTool.cmd client.key.der client.crt.der client.keystore changeme client-key
+
+d:\Development\Workspace\protobuf-rpc-pro\protobuf-rpc-pro-duplex\ssl&gt;java -classpath ..\target\protobuf-rpc-pro-duplex-1.1.0.jar com.googlecode.protobuf.pro.duplex.util.KeyStoreImportUtil client.key.der client.crt.der client.keystore pwd client-key 
+Using keystore-file : client.keystore
+One certificate, no chain.
+Key and certificate stored.
+Alias:client-key  Password:changeme
+
+</code></pre>
+
+<h2 id="truststore">Truststore</h2>
+
+<p>We need to put our CA and server certificates into a truststore.</p>
+
+<pre><code>1] create a truststore with the RootCA in it.
+
+$ &quot;$JAVA_HOME/bin/keytool&quot; -import -alias rootca -file certificateauthority.crt -trustcacerts -keystore truststore -storepass changeme 
+....
+Trust this certificate? [no]:  yes
+Certificate was added to keystore
+
+2] add the server certificate to the truststore.
+
+$ &quot;$JAVA_HOME/bin/keytool&quot; -import -alias server -file server.crt -trustcacerts -keystore truststore -storepass changeme 
+Certificate was added to keystore
+
+3] verify both are in the truststore
+
+$ &quot;$JAVA_HOME/bin/keytool&quot; -list -keystore truststore            
+Enter keystore password:  changeme
+
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 2 entries
+
+rootca, Aug 23, 2010, trustedCertEntry,
+Certificate fingerprint (MD5): 00:13:D2:E5:7B:9F:63:A5:88:F0:AE:69:94:44:4F:33
+server, Aug 23, 2010, trustedCertEntry,
+Certificate fingerprint (MD5): 75:EC:46:5D:52:AD:C0:D4:9A:82:0F:1E:E3:3F:AE:01
+
+</code></pre>
+
+
+			<aside class="copyright" role="note">
+				
+				&copy; 2016 Released under the Apache License 2.0 &ndash;
+				
+				Documentation built with
+				<a href="https://www.gohugo.io" target="_blank">Hugo</a>
+				using the
+				<a href="http://github.com/digitalcraftsman/hugo-material-docs" target="_blank">Material</a> theme.
+			</aside>
+
+			<footer class="footer">
+				
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  
+      <a href="http://pjklauser.github.io/protobuf-rpc-pro/download/ReleaseNotes/" title="Release Notes">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              Release Notes
+            </div>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+
+  <div class="next">
+  
+      <a href="http://pjklauser.github.io/protobuf-rpc-pro/guides/SpringConfigGuide/" title="SpringFramework">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              SpringFramework
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+</nav>
+
+
+
+
+
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+    
+      var base_url = 'http:\/\/pjklauser.github.io\/protobuf-rpc-pro\/';
+      var repo_id  = 'pjklauser\/protobuf-rpc-pro';
+    
+    </script>
+
+    <script src="http://pjklauser.github.io/protobuf-rpc-pro/javascripts/application.js"></script>
+    
+
+    <script>
+      /* Add headers to scrollspy */
+      var headers   = document.getElementsByTagName("h2");
+      var scrollspy = document.getElementById('scrollspy');
+
+      if(scrollspy) {
+        if(headers.length > 0) {
+          for(var i = 0; i < headers.length; i++) {
+            var li = document.createElement("li");
+            li.setAttribute("class", "anchor");
+
+            var a  = document.createElement("a");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", headers[i].innerHTML);
+            a.innerHTML = headers[i].innerHTML;
+            
+            li.appendChild(a)
+            scrollspy.appendChild(li);
+          }
+        } else {
+          scrollspy.parentElement.removeChild(scrollspy)
+        }
+        
+
+        /* Add permanent link next to the headers */
+        var headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+        for(var i = 0; i < headers.length; i++) {
+            var a = document.createElement("a");
+            a.setAttribute("class", "headerlink");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", "Permanent link")
+            a.innerHTML = "#";
+            headers[i].appendChild(a);
+        }
+      }
+    </script>
+
+    
+      <script>
+        (function(i,s,o,g,r,a,m){
+          i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||
+          []).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;
+          m.parentNode.insertBefore(a,m)
+        })(window, document,
+          'script', '//www.google-analytics.com/analytics.js', 'ga');
+         
+        ga('create', 'UA-18238203-1', 'auto');
+        ga('set', 'anonymizeIp', true);
+        ga('send', 'pageview');
+         
+        var buttons = document.querySelectorAll('a');
+        Array.prototype.map.call(buttons, function(item) {
+          if (item.host != document.location.host) {
+            item.addEventListener('click', function() {
+              var action = item.getAttribute('data-action') || 'follow';
+              ga('send', 'event', 'outbound', action, item.href);
+            });
+          }
+        });
+         
+        var query = document.querySelector('.query');
+        query.addEventListener('blur', function() {
+          if (this.value) {
+            var path = document.location.pathname;
+            ga('send', 'pageview', path + '?q=' + this.value);
+          }
+        });
+      </script>
+    
+
+    <script src="//gohugo.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>

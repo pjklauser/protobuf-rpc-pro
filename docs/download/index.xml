@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Downloads on protobuf-rpc-pro</title>
+    <link>http://pjklauser.github.io/protobuf-rpc-pro/download/</link>
+    <description>Recent content in Downloads on protobuf-rpc-pro</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 18 Sep 2016 14:57:52 +0200</lastBuildDate>
+    <atom:link href="http://pjklauser.github.io/protobuf-rpc-pro/download/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Maven Dependency</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/download/MavenDependency/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/download/MavenDependency/</guid>
+      <description>&lt;p&gt;protobuf-rpc-pro is available via the maven central repository &lt;a href=&#34;http://repo1.maven.org/maven2&#34;&gt;http://repo1.maven.org/maven2&lt;/a&gt;. The demo examples are available under the artifactId &amp;ldquo;protocol-rpc-pro-demo&amp;rdquo;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;com.googlecode.protobuf-rpc-pro&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;protobuf-rpc-pro-duplex&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.3.4&amp;lt;/version&amp;gt;
+            &amp;lt;type&amp;gt;jar&amp;lt;/type&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Release Notes</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/download/ReleaseNotes/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/download/ReleaseNotes/</guid>
+      <description>
+
+&lt;p&gt;What changes are made from release to release. Check SVN history for more details.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-3-4&#34;&gt;3.3.4&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/49&#34;&gt;#49&lt;/a&gt; StackOverflowError DuplexTcpClientPipelineFactory.peerWith&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/48&#34;&gt;#48&lt;/a&gt; WatchdogThread is not renamed to a readable thread name&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/46&#34;&gt;#46&lt;/a&gt; CleanShutdownHandler leaves shutdown hook registered when shutdown explicitly&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.33.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-3-3&#34;&gt;3.3.3&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/45&#34;&gt;#45&lt;/a&gt; RpcClientChannel support &amp;ldquo;attributes&amp;rdquo; on initial connection (peerWith)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/44&#34;&gt;#44&lt;/a&gt; CleanShutdownHandler explicit shutdown leaves non daemon threads hanging which prohibit later JVM shutdown.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-3-2&#34;&gt;3.3.2&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/pull/37&#34;&gt;#37&lt;/a&gt; CleanShutdownHandler to support shutdown on demand.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/42&#34;&gt;#42&lt;/a&gt; CleanShutdownHandler to shutdown RpcClientConnectionWatchdog.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/43&#34;&gt;#43&lt;/a&gt; RpcClientChannel support &amp;ldquo;attributes&amp;rdquo; and isClosed method.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.31.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-3-1&#34;&gt;3.3.1&lt;/h1&gt;
+
+&lt;p&gt;Completed move from google code to GitHub.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.27.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-3&#34;&gt;3.3&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=34&#34;&gt;Issue 34&lt;/a&gt;: upgrade to protobuf-java 2.6. Since the protoc 2.6 introduces new java stubs and requires an upgrade to protobuf-java 2.6, i&amp;rsquo;ve decided to call this a minor release upgrade, rather than a micro-release upgrade.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=35&#34;&gt;Issue 35&lt;/a&gt;: provide a means to avoid logging. See NullLogger.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.23.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-2-3&#34;&gt;3.2.3&lt;/h1&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.19.Final&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=33&#34;&gt;Issue 33&lt;/a&gt;: added remove blocking service from RpcServiceRegistry.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-2-2&#34;&gt;3.2.2&lt;/h1&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.15.Final&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=31&#34;&gt;Issue 31&lt;/a&gt;: debug loggig for timeout checker&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25&#34;&gt;Issue 25&lt;/a&gt;: refix to wait correct number of nanos on client timeout.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-2-1&#34;&gt;3.2.1&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=29&#34;&gt;Issue 29&lt;/a&gt;: RpcServiceRegistry to use service&amp;rsquo;s fullName for indexing to avoid duplicate name registration problems.
+(don&amp;rsquo;t use 3.2 it is broken for this issue)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=30&#34;&gt;Issue 30&lt;/a&gt;: changed the constructor of DuplexTcpClientPipelineFactory to not require a clientInfo for the local address. If a clientInfo is provided, by calling #setClientInfo instead, then a strict local port binding is performed ( and the factory can only create one connection at a time with #peerWith ). Probably you don&amp;rsquo;t need this and can never set the clientInfo explicitly, then you get a new free local port used for each connection created with #peerWith.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-1-0&#34;&gt;3.1.0&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=28&#34;&gt;Issue 28&lt;/a&gt;: Fix issues with protobuf extension registry to decode extensions.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty.4.0.14.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-9&#34;&gt;3.0.9&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=23&#34;&gt;Issue 23&lt;/a&gt;: Depend on specific netty modules instead of netty-all to get better OSGI bundling.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty.4.0.13.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-8&#34;&gt;3.0.8&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=22&#34;&gt;Issue 22&lt;/a&gt;: Allow use of JdkZLib compression as an alternative to JZLib. The JZLib dependency is optional now.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty.4.0.10.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-7&#34;&gt;3.0.7&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25&#34;&gt;Issue 25&lt;/a&gt;: Fix part3 - integer overflow in timeout calculation ( don&amp;rsquo;t use 3.0.6 ).&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-6&#34;&gt;3.0.6&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25&#34;&gt;Issue 25&lt;/a&gt;: Fix part2 - timeout after microseconds instead of nanoseconds.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-5&#34;&gt;3.0.5&lt;/h1&gt;
+
+&lt;p&gt;Upgrade to Java1.7 compile and bytecode&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=23&#34;&gt;Issue 23&lt;/a&gt;: Upgrade to Netty 4.0.6.Final&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25&#34;&gt;Issue 25&lt;/a&gt;: Fix infinite loop after timeout on RpcClient.callBlockingMethod.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-4&#34;&gt;3.0.4&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=11&#34;&gt;Issue 11&lt;/a&gt;: Provided OSGI bundle.
+Upgraded to Netty 4.0.0.CR1.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-3&#34;&gt;3.0.3&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=16&#34;&gt;Issue 16&lt;/a&gt;: Upgrade to Netty 4.0.0.Beta2. There is a difference in the Bootstrap code which clients and servers use to construct their components. Checkout the changed examples.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=19&#34;&gt;Issue 19&lt;/a&gt;: Upgrade dependency to Protobuf 2.5. New protoc idl compiler required for clients.&lt;/p&gt;
+
+&lt;p&gt;Out-of-Band messaging now allows client code do success evaluation and/or blocking until completion. See RpcClientChannel#sendOobMessage and ServerRpcController#sendOobResponse methods returning ChannelFuture .&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-2&#34;&gt;3.0.2&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=17&#34;&gt;Issue 17&lt;/a&gt;: stackoverflow - infinite loop calling RpcClient.getPipeline().&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-1&#34;&gt;3.0.1&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=10&#34;&gt;Issue 10&lt;/a&gt;: replace commons logging with slf4j-api. Demo classes use logback-classic dependency configured by VM arguments adding system property -Dlogback.configurationFile=&amp;ldquo;./lib/logback.xml&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Dependency Update: upgraded to Netty version 3.6.0 Final.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-0&#34;&gt;3.0.0&lt;/h1&gt;
+
+&lt;p&gt;Feature: RPC timeout. See wiki page &amp;ldquo;RpcTimeout&amp;rdquo; for more info.&lt;/p&gt;
+
+&lt;p&gt;Fix: refactor Bootstrap client and server classes to be more symetric.&lt;/p&gt;
+
+&lt;p&gt;Feature: new utility AvailablePortFinder utility to allow selection of availible server TCP ports for PeerInfo.&lt;/p&gt;
+
+&lt;p&gt;Fix 14: replacement of PeerInfo&amp;rsquo;s PID with UUID.&lt;/p&gt;
+
+&lt;p&gt;Dependency Update: upgraded to Netty version 3.5.10 Final.&lt;/p&gt;
+
+&lt;h1 id=&#34;2-0-1&#34;&gt;2.0.1&lt;/h1&gt;
+
+&lt;p&gt;Dependency Update: upgraded to Netty version 3.5.3 Final.&lt;/p&gt;
+
+&lt;p&gt;Fix: don&amp;rsquo;t allow further sending over closed RpcClient, so closure is not starved.&lt;/p&gt;
+
+&lt;h1 id=&#34;2-0-0&#34;&gt;2.0.0&lt;/h1&gt;
+
+&lt;p&gt;Feature: Out-of-Band Protobuf Messaging between peers.&lt;/p&gt;
+
+&lt;p&gt;Feature: Out-of-Band RPC server replies&lt;/p&gt;
+
+&lt;p&gt;Feature: provide &amp;ldquo;transparent&amp;rdquo; messages through Netty pipeline&lt;/p&gt;
+
+&lt;p&gt;Feature: allow registration of BlockingServices in servers.&lt;/p&gt;
+
+&lt;p&gt;Feature: provide easy access to the Netty pipeline.&lt;/p&gt;
+
+&lt;p&gt;Feature: Provide WirePayload ( wire protocol ) extension possibility.&lt;/p&gt;
+
+&lt;p&gt;Fix#9: reversed logging roles&lt;/p&gt;
+
+&lt;p&gt;Discontinued: protobuf-streamer-pro is discontinued since the Out-of-Band messaging features can be used to allow pull of large files from Server to Client, making the separate library obsolete.&lt;/p&gt;
+
+&lt;p&gt;Dependency Update: Netty 3.5.2.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;1-2-2&#34;&gt;1.2.2&lt;/h1&gt;
+
+&lt;p&gt;Fix#8: fix for hanging due to close race condition.&lt;/p&gt;
+
+&lt;h1 id=&#34;1-2-1&#34;&gt;1.2.1&lt;/h1&gt;
+
+&lt;p&gt;Fix: improve asynchronicity of reply calls.&lt;/p&gt;
+
+&lt;h1 id=&#34;1-2-0&#34;&gt;1.2.0&lt;/h1&gt;
+
+&lt;p&gt;Feature: Introduced compression&lt;/p&gt;
+
+&lt;p&gt;Made availible on maven central repository.&lt;/p&gt;
+
+&lt;h1 id=&#34;1-0-0&#34;&gt;1.0.0&lt;/h1&gt;
+
+&lt;p&gt;Initial version.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

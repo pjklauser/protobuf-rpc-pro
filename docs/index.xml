@@ -1,0 +1,944 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>protobuf-rpc-pro</title>
+    <link>http://pjklauser.github.io/protobuf-rpc-pro/</link>
+    <description>Recent content on protobuf-rpc-pro</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 18 Sep 2016 14:57:52 +0200</lastBuildDate>
+    <atom:link href="http://pjklauser.github.io/protobuf-rpc-pro/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Architecture</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/internals/ComponentArchitecture/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/internals/ComponentArchitecture/</guid>
+      <description>&lt;p&gt;The protobuf-rpc-pro libraries primary function is to enable fully duplex RPC calls multiplexed over a single TCP/IP socket connection. Due to this duplex nature, the component architecture is almost symetric on client and server sides. The picture below shows the libraries internal architecture.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/pjklauser/protobuf-rpc-pro/master/protobuf-rpc-pro-duplex/doc/protobuf-rpc-pro.png&#34; alt=&#34;Architecture Diagram&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;DuplexTcpClient/ServerBootstraps - These are the factories for client and server connections.
+
+&lt;ul&gt;
+&lt;li&gt;PeerInfo -  The identity of the client and server respectively, provided by hostname and port which is bound.&lt;/li&gt;
+&lt;li&gt;ChannelFactory - Netty&amp;rsquo;s configurer of the NIO socket layer and the Thread factories which handle the low level IO activities.&lt;/li&gt;
+&lt;li&gt;RpcLogger - The logging implementation which logs each call.&lt;/li&gt;
+&lt;li&gt;ChannelPipelineFactory - An implementation of Netty&amp;rsquo;s ChannelPipelineFactory which sets up the Netty channel for clients connecting to servers, and for the server when clients connect.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;RpcClient - the primary object which a client will use, which implements the google protobuf API&amp;rsquo;s RpcClientChannel. The RpcClient keeps track of which RPC calls are ongoing towards the RpcServer at the other end of the Channel. Each RPC messages sent from client to server has a correlationId which is unique and increasing for the Channel.&lt;/li&gt;
+&lt;li&gt;RpcServer - the object calls a previously registered RpcService at the RpcServiceRegistry using the RpcServerCallExecutor, when RPC client calls come up the Channel. The RpcServer keeps a map of the ongoing RPC calls which are being processed. This way, it is possible to interrupt and cancel ongoing server calls on receipt of client cancellations.&lt;/li&gt;
+&lt;li&gt;Channel - the Netty channel representing a bidirectional Socket connection between client and server peers. The Channel is optionally configured with encryption and compression. The Channel handles serialization and deserialization of the WirePayload which is a protobuf format for RPC or Oob messages between the client and server.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Features</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/features/Features/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/features/Features/</guid>
+      <description>
+
+&lt;h2 id=&#34;tcp-connection-re-use&#34;&gt;TCP connection re-use&lt;/h2&gt;
+
+&lt;p&gt;RPC calls from an RPC client can be multiplexed over a single TCP socket to an RPC server. The RPC client has full control of the TCP socket, which is kept open between calls. This avoids the extra overhead of TCP connection establishment for each call ( SYN, SSL handshake ).&lt;/p&gt;
+
+&lt;h2 id=&#34;bi-directional-rpc-calls-client-to-server-and-server-to-client&#34;&gt;Bi-directional RPC calls client to server and server to client&lt;/h2&gt;
+
+&lt;p&gt;It features a bidirectional architecture, in which a client can itself be a server and vice versa. In security conscious &amp;ldquo;zoned&amp;rdquo; environments, it is typical that TCP connectivity between zones is restricted to one direction ( normally client to server ). Firewall configurations are always a pain to setup and change, so being able to communicate as equal &amp;ldquo;peers&amp;rdquo; in either direction using Protocol Buffer services is handy. In particular when multiplexing calls over the same TCP connection. This is interesting because if the connection breaks, both client and server (eventually) realize that their peering is broken and both can have a common understanding of their respective states. It is even possible for a server to perform a blocking RPC call to the client who&amp;rsquo;s blocking call it is currently servicing. It is possible for a client to open a connection to a server and then the server starts acting as client to the client which then acts as server, without the client ever having called a server call. This is enabled due to notifications issued on connection establishment, loss,  and reestablishment. Apart from the initiation of the TCP connection to a remote server, the RPC client and server are equivalent &amp;ldquo;Peers&amp;rdquo;.&lt;/p&gt;
+
+&lt;h2 id=&#34;ssl-socket-layer-encryption-option&#34;&gt;SSL socket layer encryption option&lt;/h2&gt;
+
+&lt;p&gt;Encrypting all data traffic between client and server is as easy as configuring a certificate truststore and keystore on both client and server. Both client and server authentication is used.&lt;/p&gt;
+
+&lt;h2 id=&#34;data-compression&#34;&gt;Data Compression&lt;/h2&gt;
+
+&lt;p&gt;Clients can choose whether data communications between client and server are compressed or not. The server can accept both compressing and un-compressing clients simultaneously. Compression sacrifices CPU resources ( and increases response times ) for IO usage reduction.&lt;/p&gt;
+
+&lt;h2 id=&#34;rpc-call-cancellation&#34;&gt;RPC call cancellation&lt;/h2&gt;
+
+&lt;p&gt;Fairly tricky to get right, but RPC call cancellation is supported with full semantics on both client and server sides. In process client calls are immediately failed, irrespective of whether the server side call processing is cancelled. The server side call will be cancelled on receipt of the client cancellation. This involves interrupting any thread which is currently processing the call. The processing thread can stop processing when the server controller indicates that cancellation has taken place. The RPC implementation will not return any reply message to the client after cancellation has been received on the server side. The RPC layer performs the appropriate cancel notification to the callbacks registered by the service implementation.&lt;/p&gt;
+
+&lt;h2 id=&#34;rpc-call-timeout&#34;&gt;RPC call timeout&lt;/h2&gt;
+
+&lt;p&gt;Although not specified in the protobuf RPC API, we support setting a timeout for RPC calls at the client. The semantics of RPC call timeout are almost identical to RPC call cancellation and more information is provided in the wiki.&lt;/p&gt;
+
+&lt;h2 id=&#34;out-of-band-rpc-server-replies-to-client&#34;&gt;Out-of-Band RPC server replies to client&lt;/h2&gt;
+
+&lt;p&gt;Enables parts of responses to be transferred from server to client before a call ends. For example a percent complete indicator for long running calls, or chunks of later data transfers.&lt;/p&gt;
+
+&lt;h2 id=&#34;non-rpc-one-way-protocol-buffer-messaging&#34;&gt;Non RPC / One-way Protocol Buffer messaging&lt;/h2&gt;
+
+&lt;p&gt;General purpose one way messaging between peers is enabled with &amp;ldquo;Out-of-Band&amp;rdquo; messages which are not correlated to any RPC calls. See &amp;ldquo;StatusServer&amp;rdquo; and &amp;ldquo;StatusClient&amp;rdquo; demo.&lt;/p&gt;
+
+&lt;h2 id=&#34;semantics-for-calls-handling-on-tcp-connection-closure&#34;&gt;Semantics for calls handling on TCP connection closure&lt;/h2&gt;
+
+&lt;p&gt;When an underlying TCP socket &amp;ldquo;breaks&amp;rdquo; or is closed by either client or server, all pending client calls are immediately failed towards the client. On the server side, pending calls are immediately cancelled.&lt;/p&gt;
+
+&lt;h2 id=&#34;pluggable-logging-facility&#34;&gt;Pluggable logging facility&lt;/h2&gt;
+
+&lt;p&gt;A pluggable logging facility is included to log RPC calls and their outcomes in Protocol Buffer format.&lt;/p&gt;
+
+&lt;h2 id=&#34;protocol-buffer-wire-protocol&#34;&gt;Protocol Buffer wire protocol&lt;/h2&gt;
+
+&lt;p&gt;The wire-protocol is Protocol Buffer defined, so as to be potentially cross-platform.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Getting Started</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/guides/GettingStarted/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/guides/GettingStarted/</guid>
+      <description>
+
+&lt;p&gt;The &lt;a href=&#34;http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-demo/src/main/java/com/googlecode/protobuf/pro/duplex/example/&#34;&gt;example&lt;/a&gt; source package contains several runnable examples.&lt;/p&gt;
+
+&lt;p&gt;The examples use a simple &lt;a href=&#34;http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-duplex/src/test/protos/pingpong.proto&#34;&gt;PingPong&lt;/a&gt; service where a client can call &amp;ldquo;ping&amp;rdquo; on a server.&lt;/p&gt;
+
+&lt;h2 id=&#34;client-code&#34;&gt;Client Code&lt;/h2&gt;
+
+&lt;p&gt;Firstly we declare who the client is and who the server is that we&amp;rsquo;re going to connect to. Note that the client does not actually bind to port 1234, it is just used as a &amp;ldquo;name&amp;rdquo;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    PeerInfo client = new PeerInfo(&amp;quot;clientHostname&amp;quot;, 1234);
+    PeerInfo server = new PeerInfo(&amp;quot;serverHostname&amp;quot;, 8080);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The main client class to start with is a DuplexTcpClientPipelineFactory  which works together with Netty Bootsrap to construct client channels.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory(client);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If a client is also going to be acting as a server, it is necessary to setup an RpcCallExecutor who&amp;rsquo;s purpose it is to run the calls ( using threads separate from the IO Threads ).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 100);
+    clientFactory.setRpcServerCallExecutor(executor);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In order to customize TCP settings, you can use all Netty socket options and the &amp;ldquo;connectResponseTimeoutMillis&amp;rdquo; which is introduced to put an upper bound on the &amp;ldquo;peering&amp;rdquo; time.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    clientFactory.setConnectResponseTimeoutMillis(10000);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In order to compress all data traffic to and from the server, you can switch on compression.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        clientFactory.setCompression(true);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Refer to this &lt;a href=&#34;http://fasterdata.es.net/TCP-tuning/&#34;&gt;tuning-guide&lt;/a&gt; for buffer size tuning help. &lt;a href=&#34;http://en.wikipedia.org/wiki/Nagle&#39;s_algorithm&#34;&gt;Nagle&amp;rsquo;s Algorithm&lt;/a&gt; can be disabled by setting tcpNoDelay to true.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    Bootstrap bootstrap = new Bootstrap();
+        bootstrap.group(new NioEventLoopGroup());
+        bootstrap.handler(clientFactory);
+        bootstrap.channel(NioSocketChannel.class);
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
+        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,10000);
+        bootstrap.option(ChannelOption.SO_SNDBUF, 1048576);
+        bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In order to open a TCP connection to the server it is necessary to &amp;ldquo;peerWith&amp;rdquo; it. A server will not allow the same client &amp;ldquo;named&amp;rdquo; to connect multiple times. ( You can still make more than one connection to the same server from the same &amp;ldquo;Process&amp;rdquo;, just choose different ports to name them and separate Bootstraps ).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        RpcClientChannel channel = clientFactory.peerWith(server, bootstrap);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then you can use the pretty much standard Protocol Buffer services which you have like this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    BlockingInterface pingpongService = PingPongService.newBlockingStub(channel);
+    RpcController controller = channel.newRpcController();
+            
+    Ping request = Ping.newBuilder().set....build();
+    Pong pong = pingpongService.ping(controller, request);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The same RpcClientChannel can be used multiple times for calls to the server, using any Service which the server handles.&lt;/p&gt;
+
+&lt;p&gt;In order to service RPC calls on the client side, you just need to register a service implementation with the bootstrap.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        clientFactory.getRpcServiceRegistry().registerService(new PingPongServiceImpl());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Service implementations can be added and removed at runtime. Service methods are looked up by &amp;ldquo;shortname&amp;rdquo; so the server and client &amp;ldquo;packaging&amp;rdquo; need not be identical.&lt;/p&gt;
+
+&lt;p&gt;Finally to close the RpcClientChannel so it cannot be used anymore do, call close. On shutdown of the client application you need to call release resources to stop the low-level IO-Threads.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    channel.close();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can register all Bootstraps and DuplexTcpClientPipelineFactory with an instance of the CleanShutdownHandler utility class to perform a clean shutdown on exit.&lt;/p&gt;
+
+&lt;h2 id=&#34;server-code&#34;&gt;Server Code&lt;/h2&gt;
+
+&lt;p&gt;The server side is pretty similar to the client above. The server needs to know &amp;ldquo;who&amp;rdquo; it is, and be given a port on which to bind to on the machine it is running on. Note you can configure a local address to bind onto also ( multi-homing support ) through the Netty localAddress option. The server&amp;rsquo;s hostname should normally be the server&amp;rsquo;s hostname which resolves in DNS to the server machine, however it is just a name ( like the client&amp;rsquo;s port is just a name ).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        PeerInfo serverInfo = new PeerInfo(&amp;quot;serverHostname&amp;quot;, 8080);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You need then to create a DuplexTcpServerBootstrap and provide it an RpcCallExecutor.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 200);
+        
+        DuplexTcpServerPipelineFactory serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
+        serverFactory.setRpcServerCallExecutor(executor);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now the DuplexTcpServerPipelineFactory needs to be registered as a child ChannelInitializer handler of the Netty ServerBootstrap.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        ServerBootstrap bootstrap = new ServerBootstrap();
+        bootstrap.group(new NioEventLoopGroup(0,new RenamingThreadFactoryProxy(&amp;quot;boss&amp;quot;, Executors.defaultThreadFactory())),
+                new NioEventLoopGroup(0,new RenamingThreadFactoryProxy(&amp;quot;worker&amp;quot;, Executors.defaultThreadFactory()))
+                );
+        bootstrap.channel(NioServerSocketChannel.class);
+        bootstrap.childHandler(serverFactory);
+        bootstrap.localAddress(serverInfo.getPort());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The Netty ServerBootstrap can be used to set all TCP/IP settings.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        bootstrap.option(ChannelOption.SO_SNDBUF, 1048576);
+        bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
+        bootstrap.childOption(ChannelOption.SO_RCVBUF, 1048576);
+        bootstrap.childOption(ChannelOption.SO_SNDBUF, 1048576);
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then you need to register your server side services with the bootstrap. Again here the registration is dynamic and can change at runtime.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        serverFactory.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally binding the bootstrap to the TCP port will start off the socket accepting and clients can start to connect.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        bootstrap.bind();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you want to track the RPC peering events with clients, use a RpcClientConnectionRegistry or a TcpConnectionEventListener for TCP connection events. This is the mechanism you can use to &amp;ldquo;discover&amp;rdquo; RPC clients before they &amp;ldquo;call&amp;rdquo; any service.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        RpcClientConnectionRegistry clientRegistry = new RpcClientConnectionRegistry();
+        serverFactory.registerConnectionEventListener(clientRegistry);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can then also close the server by closing the channel which the bootstrap is bound to and finally releaseExternalResources on final shutdown. Also here you can use the CleanShutdownHandler to perform a clean close on exit.&lt;/p&gt;
+
+&lt;h2 id=&#34;reverse-rpc&#34;&gt;Reverse RPC&lt;/h2&gt;
+
+&lt;p&gt;The client and server examples above show how a client can call a RPC service registered at the serverFactory. In order to enable a server to call a client, it is necessary first for there to be a RPC service registered at the client.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        clientFactory.getRpcServiceRegistry().registerService(new DefaultPingPongServiceImpl());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Both client and server bootstraps have a RpcServiceRegistry. Secondly the server code needs to get hold of a RpcClientChannel to communicate back to the client. This is possible through the RpcController on the server side which is available during server call processing, or through the server&amp;rsquo;s RpcClientRegistry at any time.&lt;/p&gt;
+
+&lt;h2 id=&#34;runtime-dependencies&#34;&gt;Runtime Dependencies&lt;/h2&gt;
+
+&lt;p&gt;The external dependencies have been kept to a minimum. Netty, slf4j and protobuf-java are the only compile time dependencies. Compiled against java 1.7. The dependencies can be seen in the project&amp;rsquo;s maven pom.xml.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;com.google.protobuf&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;protobuf-java&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;2.6.1&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;io.netty&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;netty&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;4.0.23.Final&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.slf4j&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;slf4j-api&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;1.7.2&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Maven Dependency</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/download/MavenDependency/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/download/MavenDependency/</guid>
+      <description>&lt;p&gt;protobuf-rpc-pro is available via the maven central repository &lt;a href=&#34;http://repo1.maven.org/maven2&#34;&gt;http://repo1.maven.org/maven2&lt;/a&gt;. The demo examples are available under the artifactId &amp;ldquo;protocol-rpc-pro-demo&amp;rdquo;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;com.googlecode.protobuf-rpc-pro&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;protobuf-rpc-pro-duplex&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.3.4&amp;lt;/version&amp;gt;
+            &amp;lt;type&amp;gt;jar&amp;lt;/type&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Performance Tips</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/guides/PerformanceTips/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/guides/PerformanceTips/</guid>
+      <description>
+
+&lt;h1 id=&#34;netty&#34;&gt;Netty&lt;/h1&gt;
+
+&lt;p&gt;Since protobuf-rpc-pro uses Netty to provide the io over TCP, optimization of Netty will help increase performance. Here is a good article giving ideas how to squeeze the most out of Netty. &lt;a href=&#34;http://gleamynode.net/articles/2232/&#34;&gt;http://gleamynode.net/articles/2232/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;JVM options
+&lt;strong&gt;-server -Xms2048m -Xmx2048m -XX:+UseParallelGC -XX:+AggressiveOpts -XX:+UseFastAccessorMethods&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Using the JVM options described increased throughput by 15% under certain conditions&lt;code&gt;*&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;protobuf-rpc-pro-configuration&#34;&gt;protobuf-rpc-pro configuration&lt;/h1&gt;
+
+&lt;p&gt;If you do not call a client RPC method from within the processing of a server side RPC call then configure your server side DuplexTcpServerBootstrap with a SameThreadExecutor. This can increase the throughput by 25%&lt;code&gt;*&lt;/code&gt;, since the thread context switching is avoided.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;*&lt;/code&gt; - for calls which require basically no processing time on the server side.&lt;/p&gt;
+
+&lt;h1 id=&#34;disabling-logging&#34;&gt;Disabling Logging&lt;/h1&gt;
+
+&lt;p&gt;One way to reduce logging is to reduce the logging data of the logger registered at the DuplexTcpClientPipelineFactory or DuplexTcpServerPipelineFactory
+.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; // RPC payloads are uncompressed when logged - so reduce logging
+ CategoryPerServiceLogger logger = new CategoryPerServiceLogger();
+ logger.setLogRequestProto(false);
+ logger.setLogResponseProto(false);
+ factory.setRpcLogger(logger);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or alternatively a com.googlecode.protobuf.pro.duplex.logging.NullLogger can be used instead of the CategoryPerServiceLogger which will not log anything.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>RPC Timeout</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/internals/RpcTimeout/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/internals/RpcTimeout/</guid>
+      <description>
+
+&lt;p&gt;The RPC timeout feature allows a client to specify a time in milliseconds for the maximum allowed duration of a RPC call ( irrespective of whether the call is called using a blocking or non blocking method ).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    final ClientRpcController controller = channel.newRpcController();
+    controller.setTimeoutMs(1000);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To enable monitoring of RpcServer side timeouts and RpcClient non blocking timeouts, it is necessary to register a RpcTimeoutChecker with the respective Bootstrap. The frequency of timeout checking and sizing of thread pool executors is configurable. For example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(1,5);
+    RpcTimeoutChecker checker = new TimeoutChecker();
+    checker.setTimeoutExecutor(timeoutExecutor);
+    checker.startChecking(bootstrap.getRpcClientRegistry());
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since the original Google RPC API does not specify any semantics for RPC timeout, it is prudent to define here exactly the behaviour of the library.&lt;/p&gt;
+
+&lt;h2 id=&#34;rpcclient&#34;&gt;RpcClient&lt;/h2&gt;
+
+&lt;p&gt;The client can determine the RPC timeout value per call, by using the ClientRpcControllers.setTimeoutMs() method. If a controller is &amp;ldquo;reset&amp;rdquo;, then the timeout values is also cleared ( setting to 0 means infinite timeout ).&lt;/p&gt;
+
+&lt;p&gt;If a timeout takes place on the client, the RPC result is always a failed result with errorReason(&amp;ldquo;Timeout&amp;rdquo;);&lt;/p&gt;
+
+&lt;p&gt;The RPC timeout management is different depending on whether a client is using blocking or non blocking calls.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;For blocking calls, the calling thread blocks for at most the timeout value and will timeout with a high accuracy, therefore the blocking call timeout values can be made arbitrarily small. On timeout the RPC method ends with ServiceException with reason &amp;ldquo;Timeout&amp;rdquo;;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;For non blocking calls, the RPC timeout is monitored by a RpcTimeoutChecker thread, which periodially scans to see if there are non blocking client calls which have not received a response yet but have exceeded their timeout. The RpcTimeoutChecker then uses a RpcTimeoutExecutor thread pool to &amp;ldquo;timeout&amp;rdquo; the non blocking call. The RpcCallback handling is identical to the &amp;ldquo;cancel&amp;rdquo; handling ( callback with null ) and the errorText is &amp;ldquo;Timeout&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;For both blocking and non blocking client calls, the RPC timeout value is transmitted from client to server. There is no explicit communication with the server once a timeout occurs on the client. The server handles a call timeout as if the client would send a cancellation ( but without the client sending anything ). How the server side handles the call timeout is described below in the RpcServer section. There is no communication back to the client if the server accertains that the call has taken longer than the timeout duration at the server.&lt;/p&gt;
+
+&lt;p&gt;Due to the symetry of the duplex client server, the RpcServer timeout handling on the TCP client side of the connection and the RpcClient side timeout handling of the TCP server side are identical to the handling on the opposite TCP sides.&lt;/p&gt;
+
+&lt;h2 id=&#34;rpcserver&#34;&gt;RpcServer&lt;/h2&gt;
+
+&lt;p&gt;your application code registers service implementations at the ServerBootstrap&amp;rsquo;s RpcServiceRegistry. It is possible to define how the server will handle timeouts and cancellations per Service implementation. When registering a service you stipulate with &amp;ldquo;allowTimeout&amp;rdquo; ( default true ) what to do when the server&amp;rsquo;s processing time of a client call exceeds the timeout.
+&amp;gt; true  - the server call is &amp;ldquo;cancelled&amp;rdquo; ( equivalent of a client issueing an explicit cancel ). The running thread is &amp;ldquo;interrupted&amp;rdquo; which might cause transactional rollback.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;false - the server call is not cancelled and allowed to finish.
+If an RPC server call has timed out before starting processing due to buffering in the RpcServerCallExecutor, the service implementation will not be called, and the received data silently discarded.
+When a RPC server call completes and the timeout of the call has exceeded the client&amp;rsquo;s timeout, NO response will be transferred to the client.  This mandates that the client sets up an RpcTimeoutChecker on the client side for both blocking and nonblocking calls.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The mechanism that timeouts are monitored on the server side does not depend on whether blocking server calls are implemented or nonblocking calls( reflexive service vs blocking service ), in the same way that client cancellation is handled the same way in both.&lt;/p&gt;
+
+&lt;p&gt;The server&amp;rsquo;s RpcTimeoutChecker will periodically scan all on-going server calls and use it&amp;rsquo;s RpcTimeoutExecutor to initiate timeout of individual calls ( subject to the service&amp;rsquo;s timeout policy ). This periodic sweeping mechanism is designed to be less accurate but providing more efficiency given that the server side number of calls can be very high, and it is expected that timeouts are rare. Also, if timeouts are very small, the overhead of &amp;ldquo;cancellation&amp;rdquo; theoretically outweighs the time which would take to complete but just not send the reply to the client.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Release Notes</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/download/ReleaseNotes/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/download/ReleaseNotes/</guid>
+      <description>
+
+&lt;p&gt;What changes are made from release to release. Check SVN history for more details.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-3-4&#34;&gt;3.3.4&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/49&#34;&gt;#49&lt;/a&gt; StackOverflowError DuplexTcpClientPipelineFactory.peerWith&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/48&#34;&gt;#48&lt;/a&gt; WatchdogThread is not renamed to a readable thread name&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/46&#34;&gt;#46&lt;/a&gt; CleanShutdownHandler leaves shutdown hook registered when shutdown explicitly&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.33.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-3-3&#34;&gt;3.3.3&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/45&#34;&gt;#45&lt;/a&gt; RpcClientChannel support &amp;ldquo;attributes&amp;rdquo; on initial connection (peerWith)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/44&#34;&gt;#44&lt;/a&gt; CleanShutdownHandler explicit shutdown leaves non daemon threads hanging which prohibit later JVM shutdown.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-3-2&#34;&gt;3.3.2&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/pull/37&#34;&gt;#37&lt;/a&gt; CleanShutdownHandler to support shutdown on demand.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/42&#34;&gt;#42&lt;/a&gt; CleanShutdownHandler to shutdown RpcClientConnectionWatchdog.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/pjklauser/protobuf-rpc-pro/issues/43&#34;&gt;#43&lt;/a&gt; RpcClientChannel support &amp;ldquo;attributes&amp;rdquo; and isClosed method.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.31.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-3-1&#34;&gt;3.3.1&lt;/h1&gt;
+
+&lt;p&gt;Completed move from google code to GitHub.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.27.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-3&#34;&gt;3.3&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=34&#34;&gt;Issue 34&lt;/a&gt;: upgrade to protobuf-java 2.6. Since the protoc 2.6 introduces new java stubs and requires an upgrade to protobuf-java 2.6, i&amp;rsquo;ve decided to call this a minor release upgrade, rather than a micro-release upgrade.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=35&#34;&gt;Issue 35&lt;/a&gt;: provide a means to avoid logging. See NullLogger.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.23.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-2-3&#34;&gt;3.2.3&lt;/h1&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.19.Final&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=33&#34;&gt;Issue 33&lt;/a&gt;: added remove blocking service from RpcServiceRegistry.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-2-2&#34;&gt;3.2.2&lt;/h1&gt;
+
+&lt;p&gt;Upgrade to Netty 4.0.15.Final&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=31&#34;&gt;Issue 31&lt;/a&gt;: debug loggig for timeout checker&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25&#34;&gt;Issue 25&lt;/a&gt;: refix to wait correct number of nanos on client timeout.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-2-1&#34;&gt;3.2.1&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=29&#34;&gt;Issue 29&lt;/a&gt;: RpcServiceRegistry to use service&amp;rsquo;s fullName for indexing to avoid duplicate name registration problems.
+(don&amp;rsquo;t use 3.2 it is broken for this issue)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=30&#34;&gt;Issue 30&lt;/a&gt;: changed the constructor of DuplexTcpClientPipelineFactory to not require a clientInfo for the local address. If a clientInfo is provided, by calling #setClientInfo instead, then a strict local port binding is performed ( and the factory can only create one connection at a time with #peerWith ). Probably you don&amp;rsquo;t need this and can never set the clientInfo explicitly, then you get a new free local port used for each connection created with #peerWith.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-1-0&#34;&gt;3.1.0&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=28&#34;&gt;Issue 28&lt;/a&gt;: Fix issues with protobuf extension registry to decode extensions.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty.4.0.14.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-9&#34;&gt;3.0.9&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=23&#34;&gt;Issue 23&lt;/a&gt;: Depend on specific netty modules instead of netty-all to get better OSGI bundling.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty.4.0.13.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-8&#34;&gt;3.0.8&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=22&#34;&gt;Issue 22&lt;/a&gt;: Allow use of JdkZLib compression as an alternative to JZLib. The JZLib dependency is optional now.&lt;/p&gt;
+
+&lt;p&gt;Upgrade to Netty.4.0.10.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-7&#34;&gt;3.0.7&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25&#34;&gt;Issue 25&lt;/a&gt;: Fix part3 - integer overflow in timeout calculation ( don&amp;rsquo;t use 3.0.6 ).&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-6&#34;&gt;3.0.6&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25&#34;&gt;Issue 25&lt;/a&gt;: Fix part2 - timeout after microseconds instead of nanoseconds.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-5&#34;&gt;3.0.5&lt;/h1&gt;
+
+&lt;p&gt;Upgrade to Java1.7 compile and bytecode&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=23&#34;&gt;Issue 23&lt;/a&gt;: Upgrade to Netty 4.0.6.Final&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=25&#34;&gt;Issue 25&lt;/a&gt;: Fix infinite loop after timeout on RpcClient.callBlockingMethod.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-4&#34;&gt;3.0.4&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=11&#34;&gt;Issue 11&lt;/a&gt;: Provided OSGI bundle.
+Upgraded to Netty 4.0.0.CR1.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-3&#34;&gt;3.0.3&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=16&#34;&gt;Issue 16&lt;/a&gt;: Upgrade to Netty 4.0.0.Beta2. There is a difference in the Bootstrap code which clients and servers use to construct their components. Checkout the changed examples.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=19&#34;&gt;Issue 19&lt;/a&gt;: Upgrade dependency to Protobuf 2.5. New protoc idl compiler required for clients.&lt;/p&gt;
+
+&lt;p&gt;Out-of-Band messaging now allows client code do success evaluation and/or blocking until completion. See RpcClientChannel#sendOobMessage and ServerRpcController#sendOobResponse methods returning ChannelFuture .&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-2&#34;&gt;3.0.2&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=17&#34;&gt;Issue 17&lt;/a&gt;: stackoverflow - infinite loop calling RpcClient.getPipeline().&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-1&#34;&gt;3.0.1&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/protobuf-rpc-pro/issues/detail?id=10&#34;&gt;Issue 10&lt;/a&gt;: replace commons logging with slf4j-api. Demo classes use logback-classic dependency configured by VM arguments adding system property -Dlogback.configurationFile=&amp;ldquo;./lib/logback.xml&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Dependency Update: upgraded to Netty version 3.6.0 Final.&lt;/p&gt;
+
+&lt;h1 id=&#34;3-0-0&#34;&gt;3.0.0&lt;/h1&gt;
+
+&lt;p&gt;Feature: RPC timeout. See wiki page &amp;ldquo;RpcTimeout&amp;rdquo; for more info.&lt;/p&gt;
+
+&lt;p&gt;Fix: refactor Bootstrap client and server classes to be more symetric.&lt;/p&gt;
+
+&lt;p&gt;Feature: new utility AvailablePortFinder utility to allow selection of availible server TCP ports for PeerInfo.&lt;/p&gt;
+
+&lt;p&gt;Fix 14: replacement of PeerInfo&amp;rsquo;s PID with UUID.&lt;/p&gt;
+
+&lt;p&gt;Dependency Update: upgraded to Netty version 3.5.10 Final.&lt;/p&gt;
+
+&lt;h1 id=&#34;2-0-1&#34;&gt;2.0.1&lt;/h1&gt;
+
+&lt;p&gt;Dependency Update: upgraded to Netty version 3.5.3 Final.&lt;/p&gt;
+
+&lt;p&gt;Fix: don&amp;rsquo;t allow further sending over closed RpcClient, so closure is not starved.&lt;/p&gt;
+
+&lt;h1 id=&#34;2-0-0&#34;&gt;2.0.0&lt;/h1&gt;
+
+&lt;p&gt;Feature: Out-of-Band Protobuf Messaging between peers.&lt;/p&gt;
+
+&lt;p&gt;Feature: Out-of-Band RPC server replies&lt;/p&gt;
+
+&lt;p&gt;Feature: provide &amp;ldquo;transparent&amp;rdquo; messages through Netty pipeline&lt;/p&gt;
+
+&lt;p&gt;Feature: allow registration of BlockingServices in servers.&lt;/p&gt;
+
+&lt;p&gt;Feature: provide easy access to the Netty pipeline.&lt;/p&gt;
+
+&lt;p&gt;Feature: Provide WirePayload ( wire protocol ) extension possibility.&lt;/p&gt;
+
+&lt;p&gt;Fix#9: reversed logging roles&lt;/p&gt;
+
+&lt;p&gt;Discontinued: protobuf-streamer-pro is discontinued since the Out-of-Band messaging features can be used to allow pull of large files from Server to Client, making the separate library obsolete.&lt;/p&gt;
+
+&lt;p&gt;Dependency Update: Netty 3.5.2.Final&lt;/p&gt;
+
+&lt;h1 id=&#34;1-2-2&#34;&gt;1.2.2&lt;/h1&gt;
+
+&lt;p&gt;Fix#8: fix for hanging due to close race condition.&lt;/p&gt;
+
+&lt;h1 id=&#34;1-2-1&#34;&gt;1.2.1&lt;/h1&gt;
+
+&lt;p&gt;Fix: improve asynchronicity of reply calls.&lt;/p&gt;
+
+&lt;h1 id=&#34;1-2-0&#34;&gt;1.2.0&lt;/h1&gt;
+
+&lt;p&gt;Feature: Introduced compression&lt;/p&gt;
+
+&lt;p&gt;Made availible on maven central repository.&lt;/p&gt;
+
+&lt;h1 id=&#34;1-0-0&#34;&gt;1.0.0&lt;/h1&gt;
+
+&lt;p&gt;Initial version.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SSL Guide</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/guides/SSLGuide/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/guides/SSLGuide/</guid>
+      <description>
+
+&lt;p&gt;This guide explains how to setup keystores and certificate truststores in order to secure TCP communications between RPC client and server. The code required to secure communications is trivial and shown below for both client and server. The effort or price for the additional security is the effort and maintenance involved in managing the &amp;ldquo;trusted material&amp;rdquo; ie. keys, certificates and keystores.&lt;/p&gt;
+
+&lt;h2 id=&#34;client-code&#34;&gt;Client Code&lt;/h2&gt;
+
+&lt;p&gt;The client must initialize a RpcSSLContext and register this with the bootstrap prior to peering with the server. The RpcSSLContext must be pointed to the client&amp;rsquo;s keystore and it&amp;rsquo;s truststore.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        RpcSSLContext sslCtx = new RpcSSLContext();
+        sslCtx.setKeystorePassword(&amp;quot;changeme&amp;quot;);
+        sslCtx.setKeystorePath(&amp;quot;../lib/client.keystore&amp;quot;);
+        sslCtx.setTruststorePassword(&amp;quot;changeme&amp;quot;);
+        sslCtx.setTruststorePath(&amp;quot;../lib/truststore&amp;quot;);
+        sslCtx.init();
+        
+    DuplexTcpClientBootstrap bootstrap = new DuplexTcpClientBootstrap(...);
+
+    bootstrap.setSslContext(sslCtx);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;server-code&#34;&gt;Server Code&lt;/h2&gt;
+
+&lt;p&gt;On the server, similarly to the client, a RpcSSLContext needs initializing, where it points to the server&amp;rsquo;s keystore and it&amp;rsquo;s truststore.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        RpcSSLContext sslCtx = new RpcSSLContext();
+        sslCtx.setKeystorePassword(&amp;quot;changeme&amp;quot;);
+        sslCtx.setKeystorePath(&amp;quot;../lib/server.keystore&amp;quot;);
+        sslCtx.setTruststorePassword(&amp;quot;changeme&amp;quot;);
+        sslCtx.setTruststorePath(&amp;quot;../lib/truststore&amp;quot;);
+        sslCtx.init();
+        
+        DuplexTcpServerBootstrap bootstrap = new DuplexTcpServerBootstrap(...);
+        
+        bootstrap.setSslContext(sslCtx);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Only connections bound after setSslContext has been done are secured.&lt;/p&gt;
+
+&lt;h2 id=&#34;security-architecture&#34;&gt;Security Architecture&lt;/h2&gt;
+
+&lt;p&gt;As soon as a RPC client and server connect via TCP, the SSL handshake takes place. The SSL engines  of the participants are configured for each to want to check the other&amp;rsquo;s certificate. So we get mutual authentication.&lt;/p&gt;
+
+&lt;p&gt;Each client is issued with a certificate which is issued by the server. We put the server&amp;rsquo;s certificate in the client&amp;rsquo;s truststore. The client will check the server&amp;rsquo;s certificate against it&amp;rsquo;s truststore during the SSL handshake. This means the client will trust ( and allow secure connection ) to only the server ( or servers setup with the same keys and certificates ).&lt;/p&gt;
+
+&lt;p&gt;The server will request and check the client&amp;rsquo;s certificate. The client supplies it&amp;rsquo;s certificate which is in the client keystore during SSL handshake. The server checks the client&amp;rsquo;s certificates against the server&amp;rsquo;s truststore. The server&amp;rsquo;s certificate is in it&amp;rsquo;s own truststore, and the server certificate signed the client&amp;rsquo;s so it is trusted.&lt;/p&gt;
+
+&lt;p&gt;Different clients can be given different certificates signed by the server, they will all be trusted. The clients do not need to share the same certificate.&lt;/p&gt;
+
+&lt;p&gt;In summary the setup is as follows&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;client keystore: private key + public certificate of client(signed by the server).&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;client truststore: public certificate of server(signed by certification authority) + certificationauthority certificate&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;server keystore: private key + public certificate of server&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;server truststore: public certificate of server(signed by certification authority) + certificationauthority certificate&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h2&gt;
+
+&lt;p&gt;In order to generate and sign certificates, OpenSSL should be installed and usable. ( On windows, you can use Cygwin&amp;rsquo;s openssl ). We also generate and use a self-signed root Certificate-Authority which we use as the root truster of the certificates which we generate. You can create such a certificate by following these steps&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1] generate a 2048 bit RSA key which is encrypted using Triple-DES and stored in a 
+PEM format so that it is readable as ASCII text.
+
+$ openssl genrsa -des3 -out certificateauthority.key 2048
+providing a passphrase ( changeme )
+
+2] self sign it with a long validity
+
+$ openssl req -new -x509 -days 1000 -key certificateauthority.key -out certificateauthority.crt
+...Common Name (eg, YOUR name) []:ca
+Email Address []:ca@trustworthy-inc.com
+
+3] remove passhprase from private key
+
+$ cp certificateauthority.key certificateauthority.key.original
+$ openssl rsa -in certificateauthority.key.original -out certificateauthority.key
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;setup&#34;&gt;Setup&lt;/h1&gt;
+
+&lt;h2 id=&#34;server-keystore&#34;&gt;Server Keystore&lt;/h2&gt;
+
+&lt;p&gt;Follow the steps here to create a server keypair, and sign the server public certificate with our trusted CA.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1] need to create a server keypair
+
+$ openssl genrsa -des3 -out server.key 2048
+Generating RSA private key, 2048 bit long modulus
+...Enter pass phrase for server.key:(changeme)
+
+2] generate a certificate signing request CSR
+
+$ openssl req -new -key server.key -out server.csr 
+Enter pass phrase for server.key:
+...Common Name (eg, YOUR name) []:server
+Email Address []:server@myorganization.com
+
+3] remove passhprase from private key
+
+$ cp server.key server.key.original
+$ openssl rsa -in server.key.original -out server.key
+
+4] sign the CSR with our CA cert.
+
+$ openssl x509 -req -days 365 -in server.csr -CAkey certificateauthority.key -CA certificateauthority.crt -set_serial 01 -out server.crt
+
+5] transform private key to DER for for inporting into a JKS keystore
+
+$ openssl pkcs8 -topk8 -nocrypt -in server.key -out server.key.der -outform der
+
+6] transform public key to DER format for inporting into the JKS keystore
+
+$ openssl x509 -in server.crt -out server.crt.der -outform der
+
+7] add both the public and private keys into the server.keystore
+
+$ ./RunKeyTool.cmd server.key.der server.crt.der server.keystore changeme server-key
+
+8] verify the result
+
+$ &amp;quot;$JAVA_HOME/bin/keytool&amp;quot; -list -keystore server.keystore
+Enter keystore password:  changeme
+
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+server-key, Aug 23, 2010, PrivateKeyEntry, 
+Certificate fingerprint (MD5): 3C:E9:38:06:23:DC:3D:0B:EA:F1:B3:4C:EC:BC:6D:5F
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;client-keystore&#34;&gt;Client Keystore&lt;/h2&gt;
+
+&lt;p&gt;We create now a client keypair which is signed by our server certificate. This means that the client certificate is trusted by the server certificate.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+1] generate a client private key ( giving passphrase &#39;changeme&#39; )
+
+$ openssl genrsa -des3 -out client.key 2048
+
+2] create a CSR for the client
+
+$ openssl req -new -key client.key -out client.csr
+...Common Name (eg, YOUR name) []:client
+Email Address []:client@myorganization.com
+
+3] remove passhprase from private key
+
+$ cp client.key client.key.original
+$ openssl rsa -in client.key.original -out client.key
+
+4] sign client certificate with our SERVER cert.
+
+$ openssl x509 -req -days 364 -in client.csr -CAkey server.key -CA server.crt -set_serial 01 -out client.crt
+
+5] convert client key to DER form
+
+$ openssl pkcs8 -topk8 -nocrypt -in client.key -out client.key.der -outform der
+
+6] convert client public cert to DER form
+
+$ openssl x509 -in client.crt -out client.crt.der -outform der
+
+7] add both private and public client keys into the JKS client keystore
+
+$ ./RunKeyTool.cmd client.key.der client.crt.der client.keystore changeme client-key
+
+d:\Development\Workspace\protobuf-rpc-pro\protobuf-rpc-pro-duplex\ssl&amp;gt;java -classpath ..\target\protobuf-rpc-pro-duplex-1.1.0.jar com.googlecode.protobuf.pro.duplex.util.KeyStoreImportUtil client.key.der client.crt.der client.keystore pwd client-key 
+Using keystore-file : client.keystore
+One certificate, no chain.
+Key and certificate stored.
+Alias:client-key  Password:changeme
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;truststore&#34;&gt;Truststore&lt;/h2&gt;
+
+&lt;p&gt;We need to put our CA and server certificates into a truststore.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1] create a truststore with the RootCA in it.
+
+$ &amp;quot;$JAVA_HOME/bin/keytool&amp;quot; -import -alias rootca -file certificateauthority.crt -trustcacerts -keystore truststore -storepass changeme 
+....
+Trust this certificate? [no]:  yes
+Certificate was added to keystore
+
+2] add the server certificate to the truststore.
+
+$ &amp;quot;$JAVA_HOME/bin/keytool&amp;quot; -import -alias server -file server.crt -trustcacerts -keystore truststore -storepass changeme 
+Certificate was added to keystore
+
+3] verify both are in the truststore
+
+$ &amp;quot;$JAVA_HOME/bin/keytool&amp;quot; -list -keystore truststore            
+Enter keystore password:  changeme
+
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 2 entries
+
+rootca, Aug 23, 2010, trustedCertEntry,
+Certificate fingerprint (MD5): 00:13:D2:E5:7B:9F:63:A5:88:F0:AE:69:94:44:4F:33
+server, Aug 23, 2010, trustedCertEntry,
+Certificate fingerprint (MD5): 75:EC:46:5D:52:AD:C0:D4:9A:82:0F:1E:E3:3F:AE:01
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SpringFramework</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/guides/SpringConfigGuide/</link>
+      <pubDate>Sun, 18 Sep 2016 14:57:52 +0200</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/guides/SpringConfigGuide/</guid>
+      <description>
+
+&lt;p&gt;Thanks to Dieter Mayrhofer for contributing this example code. It shows one way to configure a server side implementation using spring. The code and runner is checked into the ( &lt;a href=&#34;http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-demo/src/main/java/com/googlecode/protobuf/pro/duplex/example/spring&#34;&gt;demo package&lt;/a&gt; ). The example starts a DefaultPingPongServerImpl service which is provided as standalone example.&lt;/p&gt;
+
+&lt;h1 id=&#34;dependency-on-spring&#34;&gt;Dependency on Spring&lt;/h1&gt;
+
+&lt;p&gt;Introduce the following maven dependencies to spring.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;spring-core&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.0.5.RELEASE&amp;lt;/version&amp;gt;
+            &amp;lt;type&amp;gt;jar&amp;lt;/type&amp;gt;
+            &amp;lt;scope&amp;gt;compile&amp;lt;/scope&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;spring-context&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.0.5.RELEASE&amp;lt;/version&amp;gt;
+            &amp;lt;type&amp;gt;jar&amp;lt;/type&amp;gt;
+            &amp;lt;scope&amp;gt;compile&amp;lt;/scope&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;server-spring-component&#34;&gt;Server Spring Component&lt;/h1&gt;
+
+&lt;p&gt;The main spring component uses PostConstruct and PreDestroy annotations to startup and tear down the component cleanly.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package com.googlecode.protobuf.pro.duplex.example.spring;
+...
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+...
+import org.springframework.beans.factory.annotation.Autowired;
+...
+public class PingSpringServer {
+    
+    @Autowired(required = true)
+    private DefaultPingPongServiceImpl pingPongServiceImpl;
+
+    int port;
+    String host;
+
+    protected final Log log = LogFactory.getLog(getClass());
+
+    private DuplexTcpServerBootstrap bootstrap;
+
+    public PingSpringServer(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
+    @PostConstruct
+    public void init() {
+        runServer();
+    }
+
+    public void runServer() {
+        PeerInfo serverInfo = new PeerInfo(host, port);
+        RpcServerCallExecutor executor = new ThreadPoolCallExecutor(10, 10);
+
+        bootstrap = new DuplexTcpServerBootstrap(serverInfo,
+                new NioServerSocketChannelFactory(
+                        Executors.newCachedThreadPool(),
+                        Executors.newCachedThreadPool()), executor);
+        log.info(&amp;quot;Proto Serverbootstrap created&amp;quot;);
+
+        // Register Ping Service
+        Service pingService = PingService.newReflectiveService(pingPongServiceImpl);
+
+        bootstrap.getRpcServiceRegistry().registerService(pingService);
+        log.info(&amp;quot;Proto Ping Registerservice executed&amp;quot;);
+
+        bootstrap.bind();
+        log.info(&amp;quot;Proto Ping Server Bound to port &amp;quot; + port);
+    }
+
+    @PreDestroy
+    protected void unbind() throws Throwable {
+        super.finalize();
+        bootstrap.releaseExternalResources();
+        log.info(&amp;quot;Proto Ping Server Unbound&amp;quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;spring-configuration&#34;&gt;Spring Configuration&lt;/h1&gt;
+
+&lt;p&gt;The following configuration is used to setup the server component on localhost, port 8090. Note: other examples use port 8080.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public class SpringConfig {
+    private static String PROTOSERVERHOST = &amp;quot;localhost&amp;quot;;
+    private static int PROTOSERVERPORT = 8090;
+
+    // Implementation of the Service Interface
+    @Bean(name = &amp;quot;pingPongServiceImpl&amp;quot;)
+    public DefaultPingPongServiceImpl pingPongServiceImpl() {
+        return new DefaultPingPongServiceImpl();
+    }
+
+    // Will start the server
+    @Bean(name = &amp;quot;pingSpringServer&amp;quot;)
+    public PingSpringServer pingSpringServer() {
+        return new PingSpringServer(PROTOSERVERHOST, PROTOSERVERPORT);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;running-in-standalone-jvm&#34;&gt;Running in Standalone JVM&lt;/h1&gt;
+
+&lt;p&gt;The following code starts the entire spring application and stops it after 10s.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    public static void main(String[] args) throws Exception {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
+
+        Thread.sleep(10000);
+        
+        System.exit(0);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>protobuf-rpc-pro</title>
+      <link>http://pjklauser.github.io/protobuf-rpc-pro/</link>
+      <pubDate>Sun, 18 Sep 2016 00:00:00 +0100</pubDate>
+      
+      <guid>http://pjklauser.github.io/protobuf-rpc-pro/</guid>
+      <description>
+
+&lt;p&gt;This project provides an java implementation for Google&amp;rsquo;s Protocol Buffer RPC services. The implementation builds upon Netty for low-level NIO.&lt;/p&gt;
+
+&lt;h2 id=&#34;features&#34;&gt;Features&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;TCP connection keep-alive.&lt;/li&gt;
+&lt;li&gt;Bi-directional RPC calls from client to server and server to client.&lt;/li&gt;
+&lt;li&gt;SSL socket layer encryption option.&lt;/li&gt;
+&lt;li&gt;Data Compression option.&lt;/li&gt;
+&lt;li&gt;RPC call cancellation.&lt;/li&gt;
+&lt;li&gt;RPC call timeout.&lt;/li&gt;
+&lt;li&gt;Out-of-Band RPC server replies to client.&lt;/li&gt;
+&lt;li&gt;Non RPC Protocol Buffer messaging for peer to peer communication.&lt;/li&gt;
+&lt;li&gt;Protocol Buffer wire protocol.&lt;/li&gt;
+&lt;li&gt;Semantics for calls handling on TCP connection closure.&lt;/li&gt;
+&lt;li&gt;Pluggable logging facility.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
