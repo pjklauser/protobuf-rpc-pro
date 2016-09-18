@@ -1,0 +1,74 @@
+baseurl = "http://pjklauser.github.io/protobuf-rpc-pro/"
+languageCode = "en-us"
+title = "protobuf-rpc-pro"
+theme = "hugo-material-docs"
+
+#metadataformat = "yaml"
+canonifyurls = true
+# Enable Google Analytics by entering your tracking id
+googleAnalytics = "UA-18238203-1"
+
+[params]
+	# General information
+	author = "Peter Klauser"
+	description = "a java implementation of Google's Protocol Buffer RPC services"
+	copyright = "Released under the Apache License 2.0"
+
+	# Repository
+	provider = "GitHub"
+	repo_url = "https://github.com/pjklauser/protobuf-rpc-pro"
+
+	version = "3.3.4"
+	logo = ""
+	favicon = ""
+
+	permalink = "#"
+
+	# Custom assets
+	custom_css = []
+	custom_js  = []
+
+	# Syntax highlighting theme
+	highlight_css  = ""
+
+	[params.palette]
+    	primary = "red"
+    	accent  = "light-green"
+
+    [params.font]
+    	text = "Ubuntu"
+    	code = "Ubuntu Mono"
+
+
+[social]
+	twitter = ""
+	github  = "pjklauser"
+
+
+[[menu.main]]
+	name   = "Guides"
+	url    = "guides/"
+	weight = 0
+
+[[menu.main]]
+	name   = "Features"
+	url    = "features/"
+	weight = 10
+
+[[menu.main]]
+	name   = "Internals"
+	url    = "internals/"
+	weight = 20
+
+[[menu.main]]
+	name   = "Download"
+	url    = "download/"
+	weight = 30
+
+
+
+[blackfriday]
+	smartypants	= true
+	fractions = true
+	smartDashes = true
+	plainIDAnchors = true
