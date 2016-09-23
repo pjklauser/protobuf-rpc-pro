@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
+import com.google.protobuf.ServiceException;
 
 /**
  * An RpcServerCallExecutor which directly calls the RPC service using the same
@@ -90,10 +91,14 @@ public class SameThreadExecutor implements RpcServerCallExecutor {
 			try {
 				Message response = call.getBlockingService().callBlockingMethod(call.getMethodDesc(), call.getController(), call.getRequest());
 				callback.run(response);
-			} catch ( com.google.protobuf.ServiceException se ) {
-				log.warn("BlockingService threw ServiceException.", se);
+			} catch ( ServiceException se ) {
+                log.warn("BlockingService threw ServiceException|msg=" + se.getMessage(), se);
+                String errorMsg = se.getClass().getName() + ": " + se.getMessage();
+                if ( se.getCause() != null ) {
+                    errorMsg += ". " + se.getCause().getMessage();
+                }
 				callback.run(null);
-				call.getController().setFailed("ServiceException: " + se.getMessage());
+				call.getController().setFailed(errorMsg);
 			}
 		}
 		

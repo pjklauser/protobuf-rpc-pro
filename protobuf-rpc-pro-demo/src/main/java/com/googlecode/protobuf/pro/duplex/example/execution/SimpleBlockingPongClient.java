@@ -99,7 +99,7 @@ public class SimpleBlockingPongClient implements ExecutableClient {
 						}
 					}
 				} catch ( ServiceException e ) {
-					if ( "Timeout".equals(e.getMessage())) {
+					if ( e.getMessage() != null && e.getMessage().contains("Timeout")) {
 						// actual roundTripTime >= roundTripTime, we don't know by how much, but we add a 1s safety factor
 						int roundTripTime = config.getPongCall().getDurationMs();
 						roundTripTime += 1000;

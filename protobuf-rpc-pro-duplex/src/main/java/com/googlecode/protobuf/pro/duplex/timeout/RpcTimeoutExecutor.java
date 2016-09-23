@@ -26,6 +26,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
 /**
  * @author Peter Klauser
  *
+ * @deprecated
  */
 public interface RpcTimeoutExecutor extends ExecutorService {
 

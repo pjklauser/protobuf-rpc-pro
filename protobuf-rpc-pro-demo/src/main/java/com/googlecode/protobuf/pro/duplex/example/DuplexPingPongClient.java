@@ -39,6 +39,7 @@ import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPingServ
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPongService;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPingService;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPongService;
+import com.googlecode.protobuf.pro.duplex.execute.AsyncThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
@@ -71,7 +72,7 @@ public class DuplexPingPongClient {
 		PeerInfo client = new PeerInfo(clientHostname, clientPort);
 		PeerInfo server = new PeerInfo(serverHostname, serverPort);
     	
-		RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 100 );
+		RpcServerCallExecutor executor = new AsyncThreadPoolCallExecutor(3, 100 );
 
 		DuplexTcpClientPipelineFactory clientFactory = new DuplexTcpClientPipelineFactory();
 		clientFactory.setClientInfo(client); // forces a local port nr.
@@ -93,15 +94,8 @@ public class DuplexPingPongClient {
         NullLogger logger = new NullLogger();
         clientFactory.setRpcLogger(logger);
 
-        RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(1,5);
-		RpcTimeoutChecker checker = new TimeoutChecker();
-		checker.setTimeoutExecutor(timeoutExecutor);
-		checker.startChecking(clientFactory.getRpcClientRegistry());
-		
         CleanShutdownHandler shutdownHandler = new CleanShutdownHandler();
         shutdownHandler.addResource(executor);
-        shutdownHandler.addResource(checker);
-        shutdownHandler.addResource(timeoutExecutor);
         
         // setup a RPC event listener - it just logs what happens
         RpcConnectionEventNotifier rpcEventNotifier = new RpcConnectionEventNotifier();

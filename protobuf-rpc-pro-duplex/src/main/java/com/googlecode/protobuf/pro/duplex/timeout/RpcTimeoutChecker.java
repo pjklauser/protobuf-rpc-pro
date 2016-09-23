@@ -23,6 +23,7 @@ import com.googlecode.protobuf.pro.duplex.server.RpcClientRegistry;
 /**
  * @author Peter Klauser
  *
+ * @deprecated
  */
 public interface RpcTimeoutChecker extends ExecutorService {
 

@@ -68,7 +68,7 @@ public class AsyncThreadPoolCallExecutor extends ThreadPoolExecutor implements R
                 public void run() {
                     AsyncRpcCallRunner runner = runningCalls.remove(asyncRpcCallRunner);
                     if(runner != null){
-                        callState.getController().setFailed("RpcExecutorTimeout " + callState.getTimeoutMs() + "ms");
+                        callState.getController().setFailed("Timeout");
                         callState.getExecutorCallback().onFinish(callState.getController().getCorrelationId(), null);
                     }
                 }
@@ -172,13 +172,11 @@ public class AsyncThreadPoolCallExecutor extends ThreadPoolExecutor implements R
 
 		private final PendingServerCallState callState;
 		private final AsyncRpcCallback asyncRpcCallback;
-        private final AsyncThreadPoolCallExecutor threadPoolCallExecutor;
         private final Runnable onFinish;
         private Thread runningThread = null;
 		
 		public AsyncRpcCallRunner(final PendingServerCallState callState, final AsyncThreadPoolCallExecutor threadPoolCallExecutor) {
 			this.callState = callState;
-            this.threadPoolCallExecutor = threadPoolCallExecutor;
             this.onFinish = new Runnable() {
                 @Override
                 public void run() {

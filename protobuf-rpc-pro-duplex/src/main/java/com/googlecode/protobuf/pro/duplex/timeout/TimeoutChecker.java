@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.googlecode.protobuf.pro.duplex.RpcClient;
 import com.googlecode.protobuf.pro.duplex.RpcClientChannel;
+import com.googlecode.protobuf.pro.duplex.execute.AsyncThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.server.RpcClientRegistry;
 import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
 
@@ -36,6 +37,7 @@ import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
  * 
  * @author Peter Klauser
  *
+ * @deprecated use {@link AsyncThreadPoolCallExecutor}
  */
 public class TimeoutChecker extends ScheduledThreadPoolExecutor implements RpcTimeoutChecker {
 

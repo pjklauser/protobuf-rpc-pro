@@ -37,6 +37,7 @@ import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPingServ
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.BlockingPongService;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPingService;
 import com.googlecode.protobuf.pro.duplex.example.wire.PingPong.NonBlockingPongService;
+import com.googlecode.protobuf.pro.duplex.execute.AsyncThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.RpcServerCallExecutor;
 import com.googlecode.protobuf.pro.duplex.execute.ThreadPoolCallExecutor;
 import com.googlecode.protobuf.pro.duplex.listener.RpcConnectionEventListener;
@@ -70,7 +71,7 @@ public class DuplexPingPongServer {
 		
     	PeerInfo serverInfo = new PeerInfo(serverHostname, serverPort);
 
-    	RpcServerCallExecutor executor = new ThreadPoolCallExecutor(3, 200);
+    	RpcServerCallExecutor executor = new AsyncThreadPoolCallExecutor(3, 200);
     	
     	DuplexTcpServerPipelineFactory serverFactory = new DuplexTcpServerPipelineFactory(serverInfo);
     	serverFactory.setRpcServerCallExecutor(executor);
@@ -88,11 +89,6 @@ public class DuplexPingPongServer {
         NullLogger logger = new NullLogger();
         serverFactory.setLogger(logger);
         
-        RpcTimeoutExecutor timeoutExecutor = new TimeoutExecutor(1,5);
-		RpcTimeoutChecker timeoutChecker = new TimeoutChecker();
-		timeoutChecker.setTimeoutExecutor(timeoutExecutor);
-		timeoutChecker.startChecking(serverFactory.getRpcClientRegistry());
-
         // setup a RPC event listener - it just logs what happens
         RpcConnectionEventNotifier rpcEventNotifier = new RpcConnectionEventNotifier();
         RpcConnectionEventListener listener = new RpcConnectionEventListener() {
@@ -153,8 +149,6 @@ public class DuplexPingPongServer {
         shutdownHandler.addResource(boss);
         shutdownHandler.addResource(workers);
         shutdownHandler.addResource(executor);
-        shutdownHandler.addResource(timeoutChecker);
-        shutdownHandler.addResource(timeoutExecutor);
         
         bootstrap.bind();
         

@@ -107,7 +107,7 @@ public class SimpleBlockingPingClient implements ExecutableClient {
 						}
 					}
 				} catch ( ServiceException e ) {
-					if ( "Timeout".equals(e.getMessage())) {
+					if ( e.getMessage() != null && e.getMessage().contains("Timeout")) {
 						long callEndTS = System.currentTimeMillis();
 						// actual roundTripTime >= roundTripTime, we don't know by how much, but we add a 1s safety factor
 						long roundTripTime = callEndTS - callStartTS;

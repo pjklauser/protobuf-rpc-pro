@@ -48,6 +48,7 @@ import com.googlecode.protobuf.pro.duplex.wire.DuplexProtocol.RpcError;
  * 
  * @author Peter Klauser
  *
+ * @deprecated
  */
 public class TimeoutExecutor extends ThreadPoolExecutor implements RpcTimeoutExecutor {
 

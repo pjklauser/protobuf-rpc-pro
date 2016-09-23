@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
+import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.pro.duplex.util.RenamingThreadFactoryProxy;
 
 /**
@@ -244,10 +245,14 @@ public class ThreadPoolCallExecutor extends ThreadPoolExecutor implements RpcSer
 				try {
 					Message responseMessage = call.getBlockingService().callBlockingMethod(call.getMethodDesc(), call.getController(), call.getRequest());
 					serviceCallback.run(responseMessage);
-				} catch ( com.google.protobuf.ServiceException se ) {
-					log.warn("BlockingService threw ServiceException.", se);
-					serviceCallback.run(null);
-					call.getController().setFailed(se.getMessage());
+				} catch ( ServiceException se ) {
+	                log.warn("BlockingService threw ServiceException|msg=" + se.getMessage(), se);
+	                String errorMsg = se.getClass().getName() + ": " + se.getMessage();
+	                if ( se.getCause() != null ) {
+	                    errorMsg += ". " + se.getCause().getMessage();
+	                }
+	                serviceCallback.run(null);
+					call.getController().setFailed(errorMsg);
 				}
 			}
 			if ( Thread.interrupted() ) {
