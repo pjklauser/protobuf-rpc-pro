@@ -152,6 +152,9 @@ public class DuplexTcpServerPipelineFactory extends ChannelInitializer<Channel> 
 	}
 	
 	public void registerConnectionEventListener( TcpConnectionEventListener listener ) {
+		if (listener == null) {
+			throw new NullPointerException("Can not register null listener");
+		}
 		getConnectionEventListeners().add(listener);
 	}
 	
