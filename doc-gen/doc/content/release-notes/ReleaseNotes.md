@@ -1,11 +1,16 @@
-+++
-date = "2016-09-18T14:57:52+02:00"
-draft = false
-title = "Release Notes"
-
-+++
+---
+date : 2017-11-12T14:57:52+02:00
+draft : false
+title : Release Notes
+---
 
 What changes are made from release to release. Check SVN history for more details.
+
+# 3.3.5 #
+
+[#38](https://github.com/pjklauser/protobuf-rpc-pro/issues/38) Upgrade to Protobuf 3.4.0
+
+Upgrade to Netty 4.0.53.Final
 
 # 3.3.4 #
 

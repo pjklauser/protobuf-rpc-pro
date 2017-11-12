@@ -1,9 +1,8 @@
-+++
-date = "2016-09-18T14:57:52+02:00"
-draft = false
-title = "SpringFramework"
-
-+++
+---
+date : 2016-09-18T14:57:52+02:00
+draft : false
+title : SpringFramework
+---
 
 Thanks to Dieter Mayrhofer for contributing this example code. It shows one way to configure a server side implementation using spring. The code and runner is checked into the ( [demo package](http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-demo/src/main/java/com/googlecode/protobuf/pro/duplex/example/spring) ). The example starts a DefaultPingPongServerImpl service which is provided as standalone example.
 

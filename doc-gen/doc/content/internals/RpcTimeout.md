@@ -1,9 +1,8 @@
-+++
-date = "2016-09-18T14:57:52+02:00"
-draft = false
-title = "RPC Timeout"
-
-+++
+---
+date : 2016-09-18T14:57:52+02:00
+draft : false
+title : RPC Timeout
+---
 The RPC timeout feature allows a client to specify a time in milliseconds for the maximum allowed duration of a RPC call ( irrespective of whether the call is called using a blocking or non blocking method ).
 ```
 	final ClientRpcController controller = channel.newRpcController();

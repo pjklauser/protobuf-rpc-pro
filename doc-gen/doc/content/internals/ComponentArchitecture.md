@@ -1,9 +1,8 @@
-+++
-date = "2016-09-18T14:57:52+02:00"
-draft = false
-title = "Architecture"
-
-+++
+---
+date : 2016-09-18T14:57:52+02:00
+draft : false
+title : Architecture
+---
 The protobuf-rpc-pro libraries primary function is to enable fully duplex RPC calls multiplexed over a single TCP/IP socket connection. Due to this duplex nature, the component architecture is almost symetric on client and server sides. The picture below shows the libraries internal architecture.
 
 ![Architecture Diagram](https://raw.githubusercontent.com/pjklauser/protobuf-rpc-pro/master/protobuf-rpc-pro-duplex/doc/protobuf-rpc-pro.png)

@@ -1,9 +1,9 @@
-+++
-date = "2016-09-18T14:57:52+02:00"
-draft = false
-title = "SSL Guide"
+---
+date : 2016-09-18T14:57:52+02:00
+draft : false
+title : SSL Guide
+---
 
-+++
 This guide explains how to setup keystores and certificate truststores in order to secure TCP communications between RPC client and server. The code required to secure communications is trivial and shown below for both client and server. The effort or price for the additional security is the effort and maintenance involved in managing the "trusted material" ie. keys, certificates and keystores.
 
 ## Client Code ##

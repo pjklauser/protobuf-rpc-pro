@@ -1,9 +1,9 @@
-+++
-date   = "2016-09-18T00:00:00+01:00"
-title  = "protobuf-rpc-pro"
-type   = "index"
-weight = 0
-+++
+---
+date   : 2016-09-18T00:00:00+01:00
+title  : protobuf-rpc-pro
+type   : index
+weight : 0
+---
 This project provides an java implementation for Google's Protocol Buffer RPC services. The implementation builds upon Netty for low-level NIO.
 
 # Features #

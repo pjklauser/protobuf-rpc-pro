@@ -1,9 +1,8 @@
-+++
-date = "2016-09-18T14:57:52+02:00"
-draft = false
-title = "Getting Started"
-
-+++
+---
+date : 2016-09-18T14:57:52+02:00
+draft : false
+title : Getting Started
+---
 The [example](http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-demo/src/main/java/com/googlecode/protobuf/pro/duplex/example/) source package contains several runnable examples.
 
 The examples use a simple [PingPong](http://protobuf-rpc-pro.googlecode.com/svn/trunk/protobuf-rpc-pro-duplex/src/test/protos/pingpong.proto) service where a client can call "ping" on a server.

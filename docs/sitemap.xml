@@ -1,59 +1,84 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://pjklauser.github.io/protobuf-rpc-pro/</loc>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/internals/componentarchitecture/</loc>
     <lastmod>2016-09-18T14:57:52+02:00</lastmod>
   </url>
   
   <url>
-    <loc>http://pjklauser.github.io/protobuf-rpc-pro/internals/ComponentArchitecture/</loc>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/guides/gettingstarted/</loc>
     <lastmod>2016-09-18T14:57:52+02:00</lastmod>
   </url>
   
   <url>
-    <loc>http://pjklauser.github.io/protobuf-rpc-pro/guides/GettingStarted/</loc>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/dependencies/mavendependency/</loc>
     <lastmod>2016-09-18T14:57:52+02:00</lastmod>
   </url>
   
   <url>
-    <loc>http://pjklauser.github.io/protobuf-rpc-pro/dependencies/MavenDependency/</loc>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/guides/performancetips/</loc>
     <lastmod>2016-09-18T14:57:52+02:00</lastmod>
   </url>
   
   <url>
-    <loc>http://pjklauser.github.io/protobuf-rpc-pro/guides/PerformanceTips/</loc>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/internals/rpctimeout/</loc>
     <lastmod>2016-09-18T14:57:52+02:00</lastmod>
   </url>
   
   <url>
-    <loc>http://pjklauser.github.io/protobuf-rpc-pro/internals/RpcTimeout/</loc>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/dependencies/runtimedependencies/</loc>
     <lastmod>2016-09-18T14:57:52+02:00</lastmod>
   </url>
   
   <url>
-    <loc>http://pjklauser.github.io/protobuf-rpc-pro/release-notes/ReleaseNotes/</loc>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/guides/sslguide/</loc>
     <lastmod>2016-09-18T14:57:52+02:00</lastmod>
   </url>
   
   <url>
-    <loc>http://pjklauser.github.io/protobuf-rpc-pro/dependencies/RuntimeDependencies/</loc>
-    <lastmod>2016-09-18T14:57:52+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://pjklauser.github.io/protobuf-rpc-pro/guides/SSLGuide/</loc>
-    <lastmod>2016-09-18T14:57:52+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://pjklauser.github.io/protobuf-rpc-pro/guides/SpringConfigGuide/</loc>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/guides/springconfigguide/</loc>
     <lastmod>2016-09-18T14:57:52+02:00</lastmod>
   </url>
   
   <url>
     <loc>http://pjklauser.github.io/protobuf-rpc-pro/</loc>
     <lastmod>2016-09-18T00:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/dependencies/</loc>
+    <lastmod>2016-09-18T14:57:52+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/guides/</loc>
+    <lastmod>2016-09-18T14:57:52+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/internals/</loc>
+    <lastmod>2016-09-18T14:57:52+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://pjklauser.github.io/protobuf-rpc-pro/</loc>
+    <lastmod>2016-09-18T14:57:52+02:00</lastmod>
+    <priority>0</priority>
   </url>
   
 </urlset>
