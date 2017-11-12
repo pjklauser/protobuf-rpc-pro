@@ -112,11 +112,10 @@ public class StatusServer {
         EventLoopGroup workers = new NioEventLoopGroup(16,new RenamingThreadFactoryProxy("worker", Executors.defaultThreadFactory()));
         bootstrap.group(boss,workers);
         bootstrap.channel(NioServerSocketChannel.class);
-        bootstrap.option(ChannelOption.SO_SNDBUF, 1048576);
         bootstrap.option(ChannelOption.SO_RCVBUF, 1048576);
         bootstrap.childOption(ChannelOption.SO_RCVBUF, 1048576);
         bootstrap.childOption(ChannelOption.SO_SNDBUF, 1048576);
-        bootstrap.option(ChannelOption.TCP_NODELAY, true);
+        bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
         bootstrap.childHandler(serverFactory);
         bootstrap.localAddress(serverInfo.getPort());
 
