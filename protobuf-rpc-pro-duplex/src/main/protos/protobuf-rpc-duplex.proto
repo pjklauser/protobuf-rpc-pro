@@ -9,6 +9,7 @@
 //  remember TcpClient can be both RpcClient or RpcServer
 //  and a TcpServer can be both RpcClient or RpcServer
 
+syntax = "proto2";
 option java_package = "com.googlecode.protobuf.pro.duplex.wire";
 option java_outer_classname = "DuplexProtocol";
 

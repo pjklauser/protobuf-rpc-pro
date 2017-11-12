@@ -7,18 +7,13 @@
 	<version>3.3.4</version>
 	<name>Protobuf RPC Pro Implementation</name>
 	<description>Protobuf RPC Pro is a java protocol buffers RPC implementation featuring bidirectional RPC calls and TCP socket connection re-use and the option of secure communications.</description>
-	<url>http://code.google.com/p/protobuf-rpc-pro/</url>
+	<url>https://github.com/pjklauser/protobuf-rpc-pro</url>
 	<!-- clean javadoc:jar deploy -->
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 	</parent>
-	<scm>
-		<url>http://protobuf-rpc-pro.googlecode.com/svn/trunk/</url>
-		<connection>scm:svn:http://protobuf-rpc-pro.googlecode.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://protobuf-rpc-pro.googlecode.com/svn/trunk/</developerConnection>
-	</scm>
  	<properties>
  		<developer.email>pjklauser@gmail.com</developer.email>
 		<netty.version>4.0.33.Final</netty.version>
@@ -131,7 +126,7 @@
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>2.6.1</version>
+			<version>3.4.0</version>
 		</dependency>
 		<dependency>
             <groupId>io.netty</groupId>

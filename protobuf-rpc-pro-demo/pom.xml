@@ -7,18 +7,13 @@
 	<version>${protobufprcpro.version}</version>
 	<name>Protobuf RPC Pro Implementation</name>
 	<description>Demo code for protobuf-rpc-pro.</description>
-	<url>http://code.google.com/p/protobuf-rpc-pro/</url>
+	<url>https://github.com/pjklauser/protobuf-rpc-pro</url>
 	<!-- clean javadoc:jar deploy -->
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 	</parent>
-	<scm>
-		<url>http://protobuf-rpc-pro.googlecode.com/svn/trunk/</url>
-		<connection>scm:svn:http://protobuf-rpc-pro.googlecode.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://protobuf-rpc-pro.googlecode.com/svn/trunk/</developerConnection>
-	</scm>
 	<developers>
 		<developer>
 		<id>klp</id>
@@ -77,7 +72,7 @@
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>2.6.1</version>
+			<version>3.4.0</version>
 		</dependency>
 		<dependency>
             <groupId>io.netty</groupId>

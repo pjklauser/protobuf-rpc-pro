@@ -1,5 +1,5 @@
 // Copyright (c) 2010 Peter Klauser
-
+syntax = "proto2";
 option java_package = "com.googlecode.protobuf.pro.duplex.logging";
 option java_outer_classname = "RpcLogEntry";
 

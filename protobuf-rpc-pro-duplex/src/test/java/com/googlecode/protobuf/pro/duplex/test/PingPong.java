@@ -6,12 +6,18 @@ package com.googlecode.protobuf.pro.duplex.test;
 public final class PingPong {
   private PingPong() {}
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
+      com.google.protobuf.ExtensionRegistryLite registry) {
   }
-  public interface PingOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
 
-    // required int32 processingTime = 1;
+  public static void registerAllExtensions(
+      com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions(
+        (com.google.protobuf.ExtensionRegistryLite) registry);
+  }
+  public interface PingOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:Ping)
+      com.google.protobuf.MessageOrBuilder {
+
     /**
      * <code>required int32 processingTime = 1;</code>
      */
@@ -21,7 +27,6 @@ public final class PingPong {
      */
     int getProcessingTime();
 
-    // required int32 pongDataLength = 2;
     /**
      * <code>required int32 pongDataLength = 2;</code>
      */
@@ -31,7 +36,6 @@ public final class PingPong {
      */
     int getPongDataLength();
 
-    // required bytes pingData = 3;
     /**
      * <code>required bytes pingData = 3;</code>
      */
@@ -44,36 +48,31 @@ public final class PingPong {
   /**
    * Protobuf type {@code Ping}
    */
-  public static final class Ping extends
-      com.google.protobuf.GeneratedMessage
-      implements PingOrBuilder {
+  public  static final class Ping extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:Ping)
+      PingOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use Ping.newBuilder() to construct.
-    private Ping(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private Ping(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private Ping(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final Ping defaultInstance;
-    public static Ping getDefaultInstance() {
-      return defaultInstance;
+    private Ping() {
+      processingTime_ = 0;
+      pongDataLength_ = 0;
+      pingData_ = com.google.protobuf.ByteString.EMPTY;
     }
 
-    public Ping getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private Ping(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -86,8 +85,8 @@ public final class PingPong {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -113,7 +112,7 @@ public final class PingPong {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -124,30 +123,14 @@ public final class PingPong {
       return com.googlecode.protobuf.pro.duplex.test.PingPong.internal_static_Ping_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return com.googlecode.protobuf.pro.duplex.test.PingPong.internal_static_Ping_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               com.googlecode.protobuf.pro.duplex.test.PingPong.Ping.class, com.googlecode.protobuf.pro.duplex.test.PingPong.Ping.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<Ping> PARSER =
-        new com.google.protobuf.AbstractParser<Ping>() {
-      public Ping parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Ping(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<Ping> getParserForType() {
-      return PARSER;
-    }
-
     private int bitField0_;
-    // required int32 processingTime = 1;
     public static final int PROCESSINGTIME_FIELD_NUMBER = 1;
     private int processingTime_;
     /**
@@ -163,7 +146,6 @@ public final class PingPong {
       return processingTime_;
     }
 
-    // required int32 pongDataLength = 2;
     public static final int PONGDATALENGTH_FIELD_NUMBER = 2;
     private int pongDataLength_;
     /**
@@ -179,7 +161,6 @@ public final class PingPong {
       return pongDataLength_;
     }
 
-    // required bytes pingData = 3;
     public static final int PINGDATA_FIELD_NUMBER = 3;
     private com.google.protobuf.ByteString pingData_;
     /**
@@ -195,15 +176,11 @@ public final class PingPong {
       return pingData_;
     }
 
-    private void initFields() {
-      processingTime_ = 0;
-      pongDataLength_ = 0;
-      pingData_ = com.google.protobuf.ByteString.EMPTY;
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasProcessingTime()) {
         memoizedIsInitialized = 0;
@@ -223,7 +200,6 @@ public final class PingPong {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeInt32(1, processingTime_);
       }
@@ -233,12 +209,11 @@ public final class PingPong {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, pingData_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
@@ -254,18 +229,76 @@ public final class PingPong {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, pingData_);
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.googlecode.protobuf.pro.duplex.test.PingPong.Ping)) {
+        return super.equals(obj);
+      }
+      com.googlecode.protobuf.pro.duplex.test.PingPong.Ping other = (com.googlecode.protobuf.pro.duplex.test.PingPong.Ping) obj;
+
+      boolean result = true;
+      result = result && (hasProcessingTime() == other.hasProcessingTime());
+      if (hasProcessingTime()) {
+        result = result && (getProcessingTime()
+            == other.getProcessingTime());
+      }
+      result = result && (hasPongDataLength() == other.hasPongDataLength());
+      if (hasPongDataLength()) {
+        result = result && (getPongDataLength()
+            == other.getPongDataLength());
+      }
+      result = result && (hasPingData() == other.hasPingData());
+      if (hasPingData()) {
+        result = result && getPingData()
+            .equals(other.getPingData());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
     }
 
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasProcessingTime()) {
+        hash = (37 * hash) + PROCESSINGTIME_FIELD_NUMBER;
+        hash = (53 * hash) + getProcessingTime();
+      }
+      if (hasPongDataLength()) {
+        hash = (37 * hash) + PONGDATALENGTH_FIELD_NUMBER;
+        hash = (53 * hash) + getPongDataLength();
+      }
+      if (hasPingData()) {
+        hash = (37 * hash) + PINGDATA_FIELD_NUMBER;
+        hash = (53 * hash) + getPingData().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.googlecode.protobuf.pro.duplex.test.PingPong.Ping parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.googlecode.protobuf.pro.duplex.test.PingPong.Ping parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Ping parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -289,46 +322,57 @@ public final class PingPong {
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Ping parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Ping parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Ping parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Ping parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Ping parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Ping parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.googlecode.protobuf.pro.duplex.test.PingPong.Ping prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(com.googlecode.protobuf.pro.duplex.test.PingPong.Ping prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -336,14 +380,15 @@ public final class PingPong {
      * Protobuf type {@code Ping}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.test.PingPong.PingOrBuilder {
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:Ping)
+        com.googlecode.protobuf.pro.duplex.test.PingPong.PingOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.test.PingPong.internal_static_Ping_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return com.googlecode.protobuf.pro.duplex.test.PingPong.internal_static_Ping_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -356,18 +401,15 @@ public final class PingPong {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         processingTime_ = 0;
@@ -377,10 +419,6 @@ public final class PingPong {
         pingData_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -421,6 +459,32 @@ public final class PingPong {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.googlecode.protobuf.pro.duplex.test.PingPong.Ping) {
           return mergeFrom((com.googlecode.protobuf.pro.duplex.test.PingPong.Ping)other);
@@ -441,21 +505,19 @@ public final class PingPong {
         if (other.hasPingData()) {
           setPingData(other.getPingData());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasProcessingTime()) {
-          
           return false;
         }
         if (!hasPongDataLength()) {
-          
           return false;
         }
         if (!hasPingData()) {
-          
           return false;
         }
         return true;
@@ -470,7 +532,7 @@ public final class PingPong {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (com.googlecode.protobuf.pro.duplex.test.PingPong.Ping) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -480,7 +542,6 @@ public final class PingPong {
       }
       private int bitField0_;
 
-      // required int32 processingTime = 1;
       private int processingTime_ ;
       /**
        * <code>required int32 processingTime = 1;</code>
@@ -513,7 +574,6 @@ public final class PingPong {
         return this;
       }
 
-      // required int32 pongDataLength = 2;
       private int pongDataLength_ ;
       /**
        * <code>required int32 pongDataLength = 2;</code>
@@ -546,7 +606,6 @@ public final class PingPong {
         return this;
       }
 
-      // required bytes pingData = 3;
       private com.google.protobuf.ByteString pingData_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>required bytes pingData = 3;</code>
@@ -581,22 +640,59 @@ public final class PingPong {
         onChanged();
         return this;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:Ping)
     }
 
+    // @@protoc_insertion_point(class_scope:Ping)
+    private static final com.googlecode.protobuf.pro.duplex.test.PingPong.Ping DEFAULT_INSTANCE;
     static {
-      defaultInstance = new Ping(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new com.googlecode.protobuf.pro.duplex.test.PingPong.Ping();
     }
 
-    // @@protoc_insertion_point(class_scope:Ping)
+    public static com.googlecode.protobuf.pro.duplex.test.PingPong.Ping getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<Ping>
+        PARSER = new com.google.protobuf.AbstractParser<Ping>() {
+      public Ping parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Ping(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<Ping> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Ping> getParserForType() {
+      return PARSER;
+    }
+
+    public com.googlecode.protobuf.pro.duplex.test.PingPong.Ping getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
-  public interface PongOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface PongOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:Pong)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required bytes pongData = 1;
     /**
      * <code>required bytes pongData = 1;</code>
      */
@@ -609,36 +705,29 @@ public final class PingPong {
   /**
    * Protobuf type {@code Pong}
    */
-  public static final class Pong extends
-      com.google.protobuf.GeneratedMessage
-      implements PongOrBuilder {
+  public  static final class Pong extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:Pong)
+      PongOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use Pong.newBuilder() to construct.
-    private Pong(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private Pong(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private Pong(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final Pong defaultInstance;
-    public static Pong getDefaultInstance() {
-      return defaultInstance;
+    private Pong() {
+      pongData_ = com.google.protobuf.ByteString.EMPTY;
     }
 
-    public Pong getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private Pong(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -651,8 +740,8 @@ public final class PingPong {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -668,7 +757,7 @@ public final class PingPong {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -679,30 +768,14 @@ public final class PingPong {
       return com.googlecode.protobuf.pro.duplex.test.PingPong.internal_static_Pong_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return com.googlecode.protobuf.pro.duplex.test.PingPong.internal_static_Pong_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               com.googlecode.protobuf.pro.duplex.test.PingPong.Pong.class, com.googlecode.protobuf.pro.duplex.test.PingPong.Pong.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<Pong> PARSER =
-        new com.google.protobuf.AbstractParser<Pong>() {
-      public Pong parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Pong(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<Pong> getParserForType() {
-      return PARSER;
-    }
-
     private int bitField0_;
-    // required bytes pongData = 1;
     public static final int PONGDATA_FIELD_NUMBER = 1;
     private com.google.protobuf.ByteString pongData_;
     /**
@@ -718,13 +791,11 @@ public final class PingPong {
       return pongData_;
     }
 
-    private void initFields() {
-      pongData_ = com.google.protobuf.ByteString.EMPTY;
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasPongData()) {
         memoizedIsInitialized = 0;
@@ -736,16 +807,14 @@ public final class PingPong {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeBytes(1, pongData_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
@@ -753,18 +822,58 @@ public final class PingPong {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(1, pongData_);
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.googlecode.protobuf.pro.duplex.test.PingPong.Pong)) {
+        return super.equals(obj);
+      }
+      com.googlecode.protobuf.pro.duplex.test.PingPong.Pong other = (com.googlecode.protobuf.pro.duplex.test.PingPong.Pong) obj;
+
+      boolean result = true;
+      result = result && (hasPongData() == other.hasPongData());
+      if (hasPongData()) {
+        result = result && getPongData()
+            .equals(other.getPongData());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
     }
 
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasPongData()) {
+        hash = (37 * hash) + PONGDATA_FIELD_NUMBER;
+        hash = (53 * hash) + getPongData().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.googlecode.protobuf.pro.duplex.test.PingPong.Pong parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.googlecode.protobuf.pro.duplex.test.PingPong.Pong parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Pong parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -788,46 +897,57 @@ public final class PingPong {
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Pong parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Pong parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Pong parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Pong parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Pong parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static com.googlecode.protobuf.pro.duplex.test.PingPong.Pong parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.googlecode.protobuf.pro.duplex.test.PingPong.Pong prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(com.googlecode.protobuf.pro.duplex.test.PingPong.Pong prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -835,14 +955,15 @@ public final class PingPong {
      * Protobuf type {@code Pong}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.googlecode.protobuf.pro.duplex.test.PingPong.PongOrBuilder {
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:Pong)
+        com.googlecode.protobuf.pro.duplex.test.PingPong.PongOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.googlecode.protobuf.pro.duplex.test.PingPong.internal_static_Pong_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return com.googlecode.protobuf.pro.duplex.test.PingPong.internal_static_Pong_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -855,27 +976,20 @@ public final class PingPong {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         pongData_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -908,6 +1022,32 @@ public final class PingPong {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.googlecode.protobuf.pro.duplex.test.PingPong.Pong) {
           return mergeFrom((com.googlecode.protobuf.pro.duplex.test.PingPong.Pong)other);
@@ -922,13 +1062,13 @@ public final class PingPong {
         if (other.hasPongData()) {
           setPongData(other.getPongData());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasPongData()) {
-          
           return false;
         }
         return true;
@@ -943,7 +1083,7 @@ public final class PingPong {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (com.googlecode.protobuf.pro.duplex.test.PingPong.Pong) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -953,7 +1093,6 @@ public final class PingPong {
       }
       private int bitField0_;
 
-      // required bytes pongData = 1;
       private com.google.protobuf.ByteString pongData_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <code>required bytes pongData = 1;</code>
@@ -988,16 +1127,53 @@ public final class PingPong {
         onChanged();
         return this;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:Pong)
     }
 
+    // @@protoc_insertion_point(class_scope:Pong)
+    private static final com.googlecode.protobuf.pro.duplex.test.PingPong.Pong DEFAULT_INSTANCE;
     static {
-      defaultInstance = new Pong(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new com.googlecode.protobuf.pro.duplex.test.PingPong.Pong();
     }
 
-    // @@protoc_insertion_point(class_scope:Pong)
+    public static com.googlecode.protobuf.pro.duplex.test.PingPong.Pong getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<Pong>
+        PARSER = new com.google.protobuf.AbstractParser<Pong>() {
+      public Pong parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Pong(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<Pong> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Pong> getParserForType() {
+      return PARSER;
+    }
+
+    public com.googlecode.protobuf.pro.duplex.test.PingPong.Pong getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   /**
@@ -1303,22 +1479,22 @@ public final class PingPong {
     // @@protoc_insertion_point(class_scope:PingPongService)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_Ping_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Ping_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_Pong_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Pong_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }
-  private static com.google.protobuf.Descriptors.FileDescriptor
+  private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
     java.lang.String[] descriptorData = {
@@ -1330,29 +1506,29 @@ public final class PingPong {
       "otobuf.pro.duplex.testB\010PingPong\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_Ping_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_Ping_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_Ping_descriptor,
-              new java.lang.String[] { "ProcessingTime", "PongDataLength", "PingData", });
-          internal_static_Pong_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_Pong_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_Pong_descriptor,
-              new java.lang.String[] { "PongData", });
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
+    internal_static_Ping_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_Ping_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_Ping_descriptor,
+        new java.lang.String[] { "ProcessingTime", "PongDataLength", "PingData", });
+    internal_static_Pong_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_Pong_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_Pong_descriptor,
+        new java.lang.String[] { "PongData", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

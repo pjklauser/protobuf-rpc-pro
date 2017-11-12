@@ -1,5 +1,5 @@
 // Copyright (c) 2010 Peter Klauser
-
+syntax = "proto2";
 option java_generic_services = true;
 option java_package = "com.googlecode.protobuf.pro.duplex.example.wire";
 option java_outer_classname = "PingPong";
